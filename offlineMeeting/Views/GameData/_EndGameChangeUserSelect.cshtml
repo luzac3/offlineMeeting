@@ -1,0 +1,39 @@
+﻿@using offlineMeeting.Models.DBProperty;
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    var horaKind = Model.EndHandPostEntity?.HoraKind ?? 0;
+    List<UsersEntity> usersEntityList = new List<UsersEntity>();
+}
+
+@if (Model.GameEntity?.Users?.Count() > 0)
+{
+    // userのDictionaryをIndex(VideoNo)順に並べ替える
+    usersEntityList = Model.GameUsersDataEntityList
+        .OrderBy(x => x.VideoNumber)
+        .Join(
+            Model.GameEntity!.Users,
+            x => x.UserCd,
+            y => y.UserCd,
+            (gudel, u) => u
+        ).ToList();
+
+                // usercd: {direction usename}
+    @if (horaKind == 1 || horaKind == 2)
+    {
+        @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @usersEntityList)
+        {
+            <option value="@user.UserCd">@user.UserName</option>
+        }
+
+    }
+    else if (horaKind == 30)
+    {
+        @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @usersEntityList)
+        {
+            <label>@user.UserName</label>
+            <input class="tenpai" type='checkbox' name='tenpai' value="@user.UserCd" />
+        }
+
+    }
+}

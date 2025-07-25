@@ -1,0 +1,55 @@
+@model List<offlineMeeting.Models.Entity.GameData.ShowPointResultEntity>;
+
+@{
+    var showPointResultEntityList = Model.OrderBy(x=>x.VideoNumber).ToList();
+
+    int handNumber = showPointResultEntityList?.First().HandNumber ??
+        throw new Exception("invalid handNumber");
+
+    int handSubNumber = showPointResultEntityList?.First().HandSubNumber ??
+        throw new Exception("invalid handSubNumber");
+
+    int nowLeachCount = showPointResultEntityList?.First().NowLeachCount ??
+        throw new Exception("invalid NowLeachCount");
+
+    List<string> directionList = new List<string> { "東", "南", "西", "北" };
+
+    int fieldDirectionIndex = (handNumber - 1) / 4;
+
+    int fieldHandNumber = (handNumber - 1) % 4 + 1;
+
+    <div id="showPointModalHeader" class="modalHeader">
+        <span>現在状況</span>
+    </div>
+    <div id="showPointModalContents" class="result modalContents">
+        <div id="showPointResult" class="flex-box">
+            <div>
+                <span>@directionList[fieldDirectionIndex]</span>
+                <span>@fieldHandNumber</span>
+                <span>局</span>
+            </div>
+            @if(handSubNumber > 0)
+            {
+                <span>@(handSubNumber)本場</span>
+            }
+            @if(nowLeachCount > 0)
+            {
+                <span>供託：@(nowLeachCount)本</span>
+            }
+            <div id="showPointResultWrapper" class="resultWrapper flex-box">
+                @foreach (var showPointResultEntity in showPointResultEntityList)
+                {
+                    <div class="resultUser">
+                        <p>@directionList[showPointResultEntity.Direction - 1]</p>
+                        <p>@showPointResultEntity.Point</p>
+                        <p>@showPointResultEntity.UserTitle</p>
+                        <p>@showPointResultEntity.UserName</p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="showPointModalButtons" class="modalButtons">
+            <button id="showPointConfirm" class="closeModal" type='button' value='closeModal'>確認</button>
+        </div>
+    </div>
+}

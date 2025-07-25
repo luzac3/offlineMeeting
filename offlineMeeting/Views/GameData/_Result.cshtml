@@ -1,0 +1,176 @@
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    // そもそもこの辺がNullだったら落とす
+    var endHandResultEntityList = Model.EndHandResultEntityList ??
+        throw new Exception("no endHandResult");
+
+    int horaKind = Model.EndHandRegisterPostEntity?.HoraKind ?? 
+        throw new Exception("invalid horaKind");
+
+    int parent = Model.EndHandRegisterPostEntity?.Parent ??
+        throw new Exception("invalid parent");
+
+    int handNumber = Model.EndHandResultEntityList?.First().NowHandNumber ??
+        throw new Exception("invalid handNumber");
+
+    int nextHandNumber = Model.EndHandResultEntityList?.First().NextHandNumber ??
+        throw new Exception("invalid handNumber");
+
+    int handSubNumber = Model.EndHandResultEntityList?.First().NowHandSubNumber ??
+        throw new Exception("invalid handSubNumber");
+
+    int nextHandSubNumber = Model.EndHandResultEntityList?.First().NextHandSubNumber ??
+        throw new Exception("invalid handSubNumber");
+
+    int nowLeachCount = Model.EndHandResultEntityList?.First().NowLeachCount ??
+        throw new Exception("invalid handSubNumber");
+
+    int nextLeachCount = Model.EndHandResultEntityList?.First().NextLeachCount ??
+        throw new Exception("invalid handSubNumber");
+
+    List<string> directionList = new List<string> { "東", "南", "西", "北" };
+
+    int fieldDirectionIndex = (handNumber - 1) / 4;
+    int nextFieldDirectionIndex = (nextHandNumber - 1) / 4;
+
+    int fieldHandNumber = (handNumber - 1) % 4 + 1;
+    int nextFieldHandNumber = (nextHandNumber - 1) % 4 + 1;
+
+    Dictionary<int, string> horaKindDic = new Dictionary<int, string> {
+        { 0, "　" },
+        { 1,"ツモ"},
+        { 2,"ロン"},
+        { 30,"流局" },
+        { 33,"四風連打"},
+        { 34,"九種九牌"},
+        { 35,"四家立直"},
+        { 36,"四開槓"},
+        { 21,"ダブロン"},
+        { 22,"トリロン"}
+    };
+
+    Dictionary<int, string> resultCdDic = horaKindDic;
+    // 0:none 1:ツモ 2:ロン  3:放銃  6:責任払い(ツモ) 7:責任払い(ロン) 31:聴牌 32:ノーテン
+    resultCdDic.Add(3, "放銃");
+    resultCdDic.Add(31, "聴牌");
+    resultCdDic.Add(32, "ノーテン");
+
+    <div id="resultModalHeader" class="modalHeader">
+        <span>結果</span>
+    </div>
+    <div id="resultModalContents" class="modalContents">
+        <div id="nowResult" class="result flex-box">
+            <div>
+                <span>@directionList[fieldDirectionIndex]</span>
+                <span>@fieldHandNumber</span>
+                <span>局</span>
+            </div>
+            @if(handSubNumber > 0)
+            {
+                <span>@(handSubNumber)本場</span>
+            }
+            <span>@horaKindDic[horaKind]</span>
+            <div id ="nowResultWrapper" class="resultWrapper flex-box">
+                @foreach (var endHandResultEntity in endHandResultEntityList)
+                {
+                    string pointSymbol = endHandResultEntity.MovingPoint > 0 ? "+" : "";
+
+                    bool isLeach = endHandResultEntity?.IsLeach ??
+                        throw new Exception("invalid handSubNumber");
+
+                    bool isMyao = endHandResultEntity?.IsMyao ??
+                        throw new Exception("invalid handSubNumber");
+
+
+                    <div class="resultUser">
+                        <p><span>@(resultCdDic[endHandResultEntity.ResultCd])</span></p>
+                        @if(horaKind != 0)
+                        {
+                            @if(horaKind < 30)
+                            {
+                                <p>
+                                @if (
+                                   nowLeachCount > 0 &&
+                                   endHandResultEntity.MovingPoint > 0
+                                )
+                                {
+                                    <span>+@(nowLeachCount * 1000)</span>
+                                }else{
+                                    <span>　</span>
+                                }
+                                </p>
+                                <p>
+                                @if (endHandResultEntity.MovingPoint != 0)
+                                {
+                                    <span>@pointSymbol</span>
+                                    <span>@endHandResultEntity.MovingPoint</span>
+                                }else{
+                                    <span>　</span>
+                                }
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                @if (endHandResultEntity.MovingPoint != 0)
+                                {
+                                    <span>@pointSymbol</span>
+                                    <span>@endHandResultEntity.MovingPoint</span>
+                                }else{
+                                    <span>　</span>
+                                }
+                                </p>
+                            }
+                        }
+                        <p class="right">@(endHandResultEntity.Point)</p>
+                        @if (String.IsNullOrEmpty(endHandResultEntity.UserTitle))
+                        {
+                            <p class="right"><span>　</span></p>
+                        }
+                        else
+                        {
+                            <p class="right"><span>@(endHandResultEntity.UserTitle)</span></p>
+                        }
+                        @if (String.IsNullOrEmpty(endHandResultEntity.UserName))
+                        {
+                            <p class="right"><span>　</span></p>
+                        }
+                        else
+                        {
+                            <p class="right"><span>@(endHandResultEntity.UserName)</span></p>
+                        }
+                        @if(isLeach){
+                            <p class="leach">立直</p>
+                        }else if (isMyao)
+                        {
+                            <p class="leach">副露</p>
+                        }else{
+                            <p>面前</p>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="nextResult" class="hidden flex-box">
+            <div>
+                <span>@directionList[nextFieldDirectionIndex]</span>
+                <span>@nextFieldHandNumber</span>
+                <span>局</span>
+            </div>
+            @if (nextHandSubNumber > 0)
+            {
+                <span>@(nextHandSubNumber)本場</span>
+            }
+            @if(nextLeachCount > 0)
+            {
+                <p>供託：@(nextLeachCount)本</p>
+            }
+        </div>
+        <div id="resultModalButtons" class="modalButtons">
+            <button id="nowHand" class="hidden" type='button' value='confirm'>今局</button>
+            <button id="resultConfirm" type='button' value='confirm'>確認</button>
+            <button id="nextHand" type='button' value='confirm'>次局</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,148 @@
+@using offlineMeeting.Models.Entity.GameData;
+@using offlineMeeting.Models.DBProperty;
+
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+<div id="listModalHeader" class="modalHeader">
+    <span>ビデオ管理</span>
+    <span id="listCloseButton" class="closeButton closeModal material-symbols-outlined">close</span>
+</div>
+<div id="listModalContents" class="modalContents">
+    <form>
+        <div>
+            <span>画像表示形式</span>
+            <select id="videoSize" disabled>
+                <option value="filmtsrip">スライド</option>
+            </select>
+        </div>
+        @{
+            var gameUsersDataEntityListVNindex = Model
+            .GameUsersDataEntityList
+            .OrderBy(x => x.VideoNumber)
+            .ToList()
+            ;
+
+            List<UsersEntity> usersEntityList = new List<UsersEntity> { };
+            List<RetVideoEntity>? retVideoEntityList = Model.RetVideoEntityList;
+
+        if (Model.GameEntity?.Users?.Count() > 0)
+            {
+                // userのDictionaryをIndex(VideoNo)順に並べ替える
+                usersEntityList = Model.GameUsersDataEntityList
+                .OrderBy(x => x.VideoNumber)
+                .Join(
+                    Model.GameEntity!.Users,
+                    x => x.UserCd,
+                    y => y.UserCd,
+                (gudel, u) => u
+                ).ToList()
+                ;
+            }
+
+            string selectDisabled = "";
+
+            @if (gameUsersDataEntityListVNindex.Count() > 0)
+            {
+                selectDisabled = "disabled";
+            }
+
+            @for (var i = 0; i <= 4; i++)
+            {
+                <div>
+                    <p class="videoController">
+                        <span>Video @i</span>
+                        @if (i < 4)
+                        {
+                            @if (
+                                gameUsersDataEntityListVNindex!.Count() > 0 &&
+                                gameUsersDataEntityListVNindex?.Count() > i &&
+                               gameUsersDataEntityListVNindex[i].ValidVideo
+                            )
+                            {
+                                <input id="video@(i)Checker" class="videoChecker" type="checkbox" checked disabled/>
+                            }
+                            else
+                            {
+                                <input id="video@(i)Checker" class="videoChecker" type="checkbox" disabled />
+                            }
+                        }
+                        else
+                        {
+                            <input id="video@(i)Checker" class="videoChecker" type="checkbox" disabled />
+                        }
+                        <span>
+                            <select id="userCd@(i)" class="userList" @selectDisabled>
+                                @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @Model.GameEntity?.Users ?? new List<offlineMeeting.Models.DBProperty.UsersEntity> { })
+                                {
+                                    @if (
+                                       gameUsersDataEntityListVNindex?.Count() > i &&
+                                       gameUsersDataEntityListVNindex?[i].UserCd == @user.UserCd
+                                       )
+                                    {
+                                        <option value="@user.UserCd" selected>@user.UserName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@user.UserCd">@user.UserName</option>
+                                    }
+                                }
+                                @if (i >= 4)
+                                {
+                                    <option value="99" selected>天吊</option>
+                                }
+                            </select>
+                        </span>
+                        <span>
+                            立直<input class="leach" type="checkbox" value="@i" />
+                        </span>
+                        <span>
+                            副露<input class="myao" type="checkbox" value="@i" />
+                        </span>
+                        <span>
+                            <select class="directionList" @selectDisabled>
+                                @foreach (KeyValuePair<int, string> direction in @Model.DirectionProperty?.Directions ?? new Dictionary<int, string> { })
+                                {
+                                    @if (
+                                        gameUsersDataEntityListVNindex?.Count() > i &&
+                                        gameUsersDataEntityListVNindex?[i].Direction == @direction.Key
+                                    )
+                                    {
+                                        <option value=@direction.Key selected>@direction.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@direction.Key>@direction.Value</option>
+                                    }
+                                }
+
+                                @if (i >= 4)
+                                {
+                                    <option value="99" selected disabled>天吊</option>
+                                }
+                            </select>
+                        </span>
+                        @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @Model.GameEntity?.Users ?? new List<offlineMeeting.Models.DBProperty.UsersEntity> { })
+                        {
+                            <span class"userTitle hidden">
+                                <input type="text" value="@user.UserCd" class="hidden" />
+                                <input type="text" value="@user.UserTitle" class="hidden" />
+                            </span>
+                        }
+                    </p>
+                </div>
+            }
+            <span>
+                <select id="audioSelector"></select>
+            </span>
+        }
+        <div id="listModalButtons" class="modalButtons">
+            <button id="listEndHandButton" type="button">局終了処理</button>
+            <button id="endGamebutton" type="button">ゲーム終了処理</button>
+            <button id="showPointButton" type="button">状況確認</button>
+        </div>
+        <span><input id="editGameData" type="checkbox" />ゲーム情報編集</span>
+        <button id="checkVideoButton" type="button">映像取得</button>
+        <button id="getMikeDevice" type="button">マイク取得</button>
+        <button id="recordingCommentary" type="button">記録開始</button>
+    </form>
+</div>

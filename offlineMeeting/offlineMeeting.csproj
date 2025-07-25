@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SatelliteResourceLanguages>en-us;jp</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Process\Home\**" />
+    <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="Models\Process\Home\**" />
+    <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="Models\Process\Home\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="Models\Process\Home\**" />
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Templates\Home\" />
+    <Folder Include="Templates\Share\" />
+    <Folder Include="wwwroot\js\dist\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\plugin\material-symbols\material-symbols-outlined.woff2" />
+    <None Include="wwwroot\css\plugin\material-symbols\material-symbols-rounded.woff2" />
+    <None Include="wwwroot\css\plugin\material-symbols\material-symbols-sharp.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
+    <PackageReference Include="Npm" Version="3.5.2" />
+    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.7" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="9.103.9.2" />
+  </ItemGroup>
+	
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="tscompile.bat $(ConfigurationName)" />
+  </Target>
+
+</Project>

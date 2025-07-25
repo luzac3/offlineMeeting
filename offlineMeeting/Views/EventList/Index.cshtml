@@ -1,0 +1,108 @@
+﻿@using offlineMeeting.Models.DBEntity
+@using offlineMeeting.Models.DBProperty
+@{
+    ViewData["Title"] = "EventList";
+}
+@section Scripts {
+    <script src="~/js/dist/EventList.js" defer></script>
+    <link rel="stylesheet" href="~/css/EventList/Index.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.EventListViewModel;
+
+<div class="text-center">
+    <h1 class="display-4">イベントリスト   </h1>
+    <button id="newEvent" type="button">新規作成</button>
+    <div>
+        @{
+            int newEventNumber = 1;
+            foreach (EventDataEntity eventDataEntity in Model.EventDataEntityList ?? new List<EventDataEntity> { })
+            {
+                <p id="event_@eventDataEntity.EventNumber" data-eventNumber="@eventDataEntity.EventNumber">
+                    <span class="listEventNumber">@eventDataEntity.EventNumber</span>
+                    <span class="listEventName">@eventDataEntity.EventName</span>
+                    <span class="listEventDate">@eventDataEntity.EventDate</span>
+                    <textarea class="listTsvUsers hidden"></textarea>
+                    <button type="button" class="edit">編集</button>
+                    <button type="button" class="start">開始</button>
+                    <button type="button" class="management">実況・配信管理</button>
+                    <button type="button" class="streaming">配信</button>
+                </p>
+                newEventNumber++;
+            };
+        }
+    </div>
+</div>
+
+<div id="modalWrapper" class="hidden">
+    <div id="modalWindow">
+        <div id="modalHeader">
+            <span>新規登録</span>
+            <span id="closeButton" class="closeModal material-symbols-outlined">close</span>
+        </div>
+        <div id="modalContents">
+            <form id="registerForm">
+                <p>
+                    <label>イベント番号</label>
+                    <input class="readonly" name="EventNumber" type="number" value="@newEventNumber" data-require="1" readonly="readonly" />
+                </p>
+                <p>
+                    <label>イベント名</label>
+                    <input name="EventName" type="text" />
+                </p>
+                <p>
+                    <label>イベント日</label>
+                    <input name="EventDate" data-require="1" type="date" />
+                </p>
+                <p>
+                    <label>参加者</label>
+                </p>
+                @{
+                    for (var i = 0; i < 4; i++)
+                    {
+                        <p class="UsersCdWrapper">
+                            <select class="UsersCd">
+                                @foreach (
+                                    var usersEntity in
+                                    (
+                                        Model.UsersEntityList ??
+                                        new List<UsersEntity> { }
+                                    ).Select((value, index) => (value, index))
+                                )
+                                {
+                                    <option class="user_@usersEntity.value.UserCd" value="@usersEntity.value.UserCd">@usersEntity.value.UserName</option>
+                                }
+                            </select>
+                        </p>
+                        /*
+                        <p><select class="UsersCd">
+                            @foreach (
+                                var usersEntity in
+                                (
+                                    Model.UsersEntityList ??
+                                    new List<UsersEntity> { }
+                                ).Select((value, index) => (value, index))
+                            )
+                            {
+                                if (usersEntity.index >= i)
+                                {
+                                    <option class="user_@usersEntity.value.UserCd" value="@usersEntity.value.UserCd">@usersEntity.value.UserName</option>
+                                }                                                                          
+                            }
+                        </select></p>
+                        */
+                    }
+                }
+                <button id="addUser" type="button" value="addUser">参加者追加</button>
+                <button id="deleteUser" type="button" value="deleteUser">参加者削除</button>
+                <p>
+                    <label>未登録参加者(カンマ区切り)</label>
+                    <textarea name="TsvUsers"></textarea>
+                </p>
+            </form>
+            <div id="modalButtons">
+                <button id="registerButton" type="button" value="register">登録</button>
+                <button class="closeModal" type="button" value="closeModal">キャンセル</button>
+            </div>
+        </div>
+    </div>
+</div>

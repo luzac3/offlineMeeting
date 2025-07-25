@@ -1,0 +1,13 @@
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+<div id="videoTestModalHeader" class="modalHeader">
+    <span>ビデオ管理</span>
+    <span id="listCloseButton" class="closeButton closeModal material-symbols-outlined">close</span>
+</div>
+<div id="videoTestContents" class="modalContents">
+    <button type="button" id="getTestVideoSelector" value="getCmaeraList">カメラリストの取得</button>
+    <select id="testVideoList"></select>
+    <button id="startTestVideo" type="button" value="startTestVideo" class="hidden">ビデオ再生</button>
+    <video id="testVideo"></video>
+    <button id="endVideoTest" type="button" value="endVideoTest">テスト完了</button>
+</div>

@@ -1,0 +1,164 @@
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    if (Model.GameUsersDataEntityList == null || Model.GameUsersDataEntityList.Count() <= 0)
+    {
+        return;
+    }
+    Dictionary<int, int> userDirectionDic = new Dictionary<int, int> { };
+
+    int horaKind = Model.EndHandPostEntity?.HoraKind ?? 0;
+    int parent = Model.EndHandPostEntity?.Parent ??
+        throw new Exception("invalid parentUserCd");
+    int toUser = Model.EndHandPostEntity.ToUser == null ?
+        Model.GameUsersDataEntityList
+            .OrderBy(x => x.VideoNumber)
+            .ToList()
+            .First()
+            .UserCd :
+        Model.EndHandPostEntity.ToUser ??
+            throw new Exception("invalid ToUser");
+    bool isPao = Model.EndHandPostEntity.IsPao;
+
+    if (Model.GameEntity?.Users?.Count() > 0)
+    {
+        userDirectionDic = Model.GameUsersDataEntityList
+        .OrderBy(x => x.VideoNumber)
+        .ToList()
+        .ToDictionary(x=>x.UserCd, x=>x.Direction);
+    }
+
+    <div>
+        @if(horaKind < 30 && horaKind != 0)
+        {
+            // ツモ及びロン
+            <span>和了者</span>
+            <div>
+                <select class="toUser">
+                    <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                </select>
+                @if(horaKind != 1)
+                {
+                    // ツモの場合は不要
+                    <input type="number" class="point" />
+                    <span>点</span>
+                }
+                @if (horaKind > 20)
+                // ダブロンとトリロン
+                {
+                    <select class="toUser">
+                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                    </select>
+                    <input type="number" class="point" />
+                    <span>点</span>
+                    @if (horaKind == 22)
+                    // トリロン
+                    {
+                        <select class="toUser">
+                            <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                        </select>
+                        <input type="number" class="point" />
+                        <span>点</span>
+                    }
+                }
+            </div>
+            <div>
+                @switch (horaKind)
+                {
+                    case 1:
+                        @if (isPao)
+                        {
+                            <p>
+                                <label>責任払い</label>
+                                <select class="paoUser">
+                                    <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                </select>
+                                <input type="number" class="paoPoint" />
+                                <span>点</span>
+                            </p>
+                        }
+                        else if (parent == toUser || userDirectionDic[toUser] == 1)
+                        {
+                            <input type="number" class="pickPoint" />
+                            <span>点オール</span>
+                        }
+                        else
+                        {
+                            <span>子：</span>
+                            <input type="number" class="pickPoint" />
+                            <span>点</span>
+                            <span>親：</span>
+                            <input type="number" class="pickPoint" />
+                            <span>点</span>
+                        }
+                        break;
+                    case 2:
+                    case 21:
+                    case 22:
+                        <span>放銃者</span>
+                        <select id="fromUser">
+                            <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                        </select>
+                        @if (isPao)
+                        {
+                            @if (horaKind == 2)
+                            {
+                                <p>
+                                    <label>責任払い</label>
+                                    <select class="paoUser">
+                                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                    </select>
+                                    <input type="number" class="paoPoint" />
+                                    <span>点</span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                    <label>責任払い</label>
+                                    <select class="paoUser">
+                                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                    </select>
+                                    <span>→</span>
+                                    <select class="paoUserTo">
+                                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                    </select>
+                                    <input type="number" class="paoPoint" />
+                                    <span>点</span>
+                                </p>
+                                <p>
+                                    <span>責任払い</span>
+                                    <span>有効</span>
+                                    <input type="checkbox" class="paoAble" />
+                                    <select class="paoUser">
+                                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                    </select>
+                                    <span>→</span>
+                                    <select class="paoUserTo">
+                                        <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                                    </select>
+                                    <input type="number" class="paoPoint" />
+                                    <span>点</span>
+                                </p>
+                            }
+                        }
+                        break;
+                }
+            </div>
+        }
+        else
+        {
+            @if (horaKind == 30)
+            {
+                <p>
+                    <span>聴牌者</span>
+                    <partial name="/Views/GameData/_EndGameChangeUserSelect.cshtml" />
+                </p>
+            }
+            else
+            {
+                <span></span>
+            }
+        }
+    </div>
+}

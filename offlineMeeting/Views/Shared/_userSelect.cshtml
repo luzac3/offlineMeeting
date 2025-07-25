@@ -1,0 +1,22 @@
+﻿@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    var users = Model.GameEntity?.Users ?? new List<offlineMeeting.Models.DBProperty.UsersEntity> { };
+    var horaKind = Model.EndHandPostEntity?.HoraKind ?? 0;
+
+    @if (horaKind == 1 || horaKind == 2)
+    {
+        @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @users)
+        {
+            <option value="@user.UserCd">@user.UserName</option>
+        }
+    }
+    else if (horaKind == 30)
+    {
+        @foreach (offlineMeeting.Models.DBProperty.UsersEntity user in @users)
+        {
+            <label>@user.UserName</label>
+            <input class="tenpai" type='checkbox' name='tenpai' value="@user.UserCd" />
+        }
+    }
+}

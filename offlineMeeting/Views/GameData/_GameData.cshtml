@@ -1,0 +1,88 @@
+@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    int handNumber = Model.GameEntity?.HandNumber ?? 1;
+    int handSubNumber = Model.GameEntity?.HandSubNumber ?? 0;
+    List<string> directionList = new List<string> { "東", "南", "西", "北" };
+    int fieldDirectionIndex = (handNumber - 1) / 4;
+    int fieldHandNumber = (handNumber - 1) % 4 + 1;
+
+    List<offlineMeeting.Models.DBProperty.UsersEntity> usersList = new List<offlineMeeting.Models.DBProperty.UsersEntity> { };
+    int? parentUser = null;
+   
+    @if (Model.GameEntity?.Users?.Count() > 0)
+    {
+        usersList = @Model.GameUsersDataEntityList
+            .OrderBy(x => x.Direction)
+            .Join(
+                Model.GameEntity.Users,
+                x => x.UserCd,
+                y => y.UserCd,
+                (gudel, u) => u
+            ).ToList();
+        if (@Model.GameUsersDataEntityList.Count() > 0)
+        {
+            parentUser = @Model.GameUsersDataEntityList
+            .Where(x => x.Direction == 1)
+            .FirstOrDefault()!
+            .UserCd;
+        }
+    }
+}
+
+<form>
+    <h1 class="display-4">
+        <span id="showEventName">@(Model.GameEntity?.EventName ?? "未定")</span>
+        <span id="showDate">@Model.GameEntity?.EventDate</span>
+        <span>第</span>
+        <span id="showGameNumber">@Model.GameEntity?.GameNumber</span>
+        <span>戦</span>
+    </h1>
+    <h2>
+        <input id="eventNumber" class="hidden" type="number" value="@Model.GameEntity?.EventNumber" />
+        <input id="gameNumber" class="hidden" value="@Model.GameEntity?.GameNumber" />
+        <input id="inGame" class="hidden" value="@Model.GameEntity?.InGame" />
+        <span>
+            <span id="showfieldDirection">@directionList[fieldDirectionIndex]</span>
+            <select id="fieldDirection" class="hidden">
+                @{
+                    @for (var i = 0; i < 3; i++)
+                    {
+                        @if (fieldDirectionIndex == i)
+                        {
+                            <option value="@(i + 1)" selected>@directionList[i]</option>
+                        }
+                        <option value="@(i + 1)">@directionList[i]</option>
+                    }
+                }
+            </select>
+        </span>
+        <span>
+            <span id="showHandNumber">@fieldHandNumber</span>
+            <input id="handNumber" class="hidden" type="number" value="@handNumber" />
+            <span>局</span>
+        </span>
+        <span>
+            @if (handSubNumber > 0)
+            {
+                <span id="showHandSubNumber">@(handSubNumber)本場</span>
+            }
+            else
+            {
+                <span id="showHandSubNumber" class="hidden">@(handSubNumber)本場</span>
+            }
+            <input id="handSubNumber" class="hidden" type="number" value="@handSubNumber" />
+        </span>
+        @if (@usersList?.Count() > 0)
+        {
+            <span>
+                <span>親</span>
+                <span id="showParent">@usersList?[0].UserName</span>
+                <input id="parent" class="hidden" type="number" value="@parentUser" />
+                <select id="parentSelect" class="hidden">
+                    <partial name="/Views/Shared/_UserSelect.cshtml" />
+                </select>
+            </span>
+        }
+    </h2>
+</form>

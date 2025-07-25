@@ -1,0 +1,47 @@
+﻿@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="~/js/dist/Streaming.js" defer></script>
+    <link rel="stylesheet" href="~/css/GameData/Index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Streaming/Index.css" asp-append-version="true" />
+}
+
+<div id="mainContents" class="text-center hidden">
+    <partial name="/Views/GameData/_gameData.cshtml" />
+</div>
+
+@{
+    <div id="video">
+        <div id="streamingWrapper" class="streamingWrapper">
+            <video id="videoStreaming" controls></video>
+            <audio id="audioStreaming" class="hidden" controls></audio>
+        </div>
+        <span class="userCd" data-usercd=""></span>
+        <span class="firstDirection hidden" data-firstdirection=""></span>
+        <span class="direction" data-direction="">noName</span>
+    </div>
+}
+
+<div id"test">
+    <p id="timer"></p>
+</div>
+
+<div id="listModalWrapper" class="modalWrapper hidden">
+    <div id="listModalWindow" class="modalWindow">
+        <partial name="/Views/ManagementStreaming/_VideoController.cshtml" />
+    </div>
+</div>
+
+<div id="resultModalWrapper" class="modalWrapper hidden">
+    <div id="resultModalWindow" class="modalWindow">
+    </div>
+</div>
+
+<div id="showPointModalWrapper" class="modalWrapper hidden">
+    <div id="showPointModalWindow" class="modalWindow">
+    </div>
+</div>

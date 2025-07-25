@@ -1,0 +1,18 @@
+<div id="videoRegisterModalHeader" class="modalHeader">
+    <span>ビデオ管理</span>
+    <span id="listCloseButton" class="closeButton closeModal material-symbols-outlined">close</span>
+</div>
+<div id="videoRegisterContents" class="modalContents">
+    <button type="button" id="getRegisterVideoSelectorButton" value="getCmaeraList">カメラリストの取得</button>
+    <select id="registerVideoList"></select>
+    <button id="startRegisterVideoButton" type="button" value="startRegisterVideo" class="hidden">ビデオ再生</button>
+    <video id="registerVideo"></video>
+    <button id="stopRegiterVideoButton" type="button" value="stopRegiterVideo">ビデオ停止</button>
+    <p>
+        <span>カメラ名</span>
+        <span><input id="registerCameraName" type="text"/></span>
+    </p>
+    <p>
+        <button id="registerVideoInformationButton" type="button" value="registerVideoInformation">ビデオ登録</button>
+    </p>
+</div>

@@ -1,0 +1,98 @@
+﻿@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="~/js/dist/ManagementStreaming.js" defer></script>
+    <link rel="stylesheet" href="~/css/GameData/Index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ManagementStreaming/Index.css" asp-append-version="true" />
+}
+
+@{
+    <div id="video">
+        <div id="streamingCanvas" class="filmtsrip">
+            <div id="canvasWrapper" class="canvasWrapper">
+                <canvas id="streamingCanvasVideo" class="streamingCanvasVideo"></canvas>
+            </div>
+        </div>
+        @for (var i = 0; i < 4; i++)
+        {
+            <div id="video@(i)Wrapper" class="videoWrapper filmtsrip" data-videonumber="@i">
+                <div id="streaming@(i)Wrapper" class="streamingWrapper">
+                    <video id="video_@(i)" controls></video>
+                </div>
+                @if (i == 0)
+                {
+                    <input class="selectVideo" type="radio" name="selectVideo" checked />
+                }
+                else
+                {
+                    <input class="selectVideo" type="radio" name="selectVideo" />
+                }
+                <span class="userCd" data-usercd=""></span>
+                <span class="firstDirection hidden" data-firstdirection=""></span>
+                <span class="direction" data-direction="">noName</span>
+            </div>
+        }
+    </div>
+}
+
+<div id="mainContents" class="text-center">
+    <partial name="/Views/GameData/_gameData.cshtml" />
+</div>
+
+<div id="listModalWrapper" class="modalWrapper hidden">
+    <div id="listModalWindow" class="modalWindow">
+        <partial name="/Views/ManagementStreaming/_VideoController.cshtml" />
+    </div>
+</div>
+
+<div id="endHandModalWrapper" class="modalWrapper hidden">
+    <div id="endHandModalWindow" class="modalWindow">
+        <div id="endHandModalHeader" class="modalHeader">
+            <span>局終了処理</span>
+            <span id="endHandCloseButton" class="closeButton closeModal material-symbols-outlined">close</span>
+        </div>
+        <form>
+            <div id="endHandModalContents" class="modalContents">
+                <div>
+                    <p>
+                        <label>局終了の種類</label>
+                        <select id="horaKind" name='horaKind'>
+                            <option value="0">----</option>
+                            <option value="1">ツモ</option>
+                            <option value="2">ロン</option>
+                            <option value="30">流局</option>
+                            <option value="31">四風連打</option>
+                            <option value="32">九種九牌</option>
+                            <option value="33">四家立直</option>
+                            <option value="34">四開槓</option>
+                            <option value="21">ダブロン</option>
+                            <option value="22">トリロン</option>
+                        </select>
+                        <span>包</span><input id="pao" type="checkbox" />
+                    </p>
+                </div>
+                <div id="endGame">
+                    <partial name="/Views/GameData/_EndGameChangeDisplay.cshtml">
+                </div>
+                <div id="endHandModalButtons" class="modalButtons">
+                    <button id="correctModal" type='button' value='correct'>確定</button>
+                    <button class="closeModal" type="button" value="closeModal">キャンセル</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="resultModalWrapper" class="modalWrapper hidden">
+    <div id="resultModalWindow" class="modalWindow">
+    </div>
+</div>
+
+<div id="showPointModalWrapper" class="modalWrapper hidden">
+    <div id="showPointModalWindow" class="modalWindow">
+    </div>
+</div>
