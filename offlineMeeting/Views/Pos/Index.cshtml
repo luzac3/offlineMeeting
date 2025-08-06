@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Pos";
+}
+@section Scripts {
+    <script src="~/js/dist/EventList.js" defer></script>
+    <link rel="stylesheet" href="~/css/EventList/Index.css" asp-append-version="true" />
+}
+
+<div class="text-center">
+    <h1 class="display-4">イベントリスト   </h1>
+    <button id="newEvent" type="button">新規作成</button>
+    <div>
+        <p>item1</p>
+        <p>item2</p>
+        <p>item3</p>
+        <p>item4</p>
+        <p>item5</p>
+        @{
+            /*
+            //上　
+            @using offlineMeeting.Models.DBEntity
+            @using offlineMeeting.Models.DBProperty
+            @model offlineMeeting.Models.ViewModel.PosViewModel;
+            int newEventNumber = 1;
+            foreach (EventDataEntity eventDataEntity in Model.EventDataEntityList ?? new List<EventDataEntity> { })
+            {
+                <p id="event_@eventDataEntity.EventNumber" data-eventNumber="@eventDataEntity.EventNumber">
+                    <span class="listEventNumber">@eventDataEntity.EventNumber</span>
+                    <span class="listEventName">@eventDataEntity.EventName</span>
+                    <span class="listEventDate">@eventDataEntity.EventDate</span>
+                    <textarea class="listTsvUsers hidden"></textarea>
+                    <button type="button" class="edit">編集</button>
+                    <button type="button" class="start">開始</button>
+                    <button type="button" class="management">実況・配信管理</button>
+                    <button type="button" class="streaming">配信</button>
+                </p>
+                newEventNumber++;
+            };
+            */
+        }
+    </div>
+</div>

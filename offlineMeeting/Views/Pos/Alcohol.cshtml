@@ -1,0 +1,34 @@
+﻿@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    ViewData["Title"] = "Alcohol";
+}
+
+@section Scripts {
+    <script src="~/js/dist/pos.js" defer></script>
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+<div class="text-center">
+    <div>
+        @{
+            foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
+            {
+            <p id="alchol_@alcoholDataEntity.AlcoholNumber" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
+            <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
+            <span class="amount">@(alcoholDataEntity.Amount)円</span>
+            <span class="brewery">@alcoholDataEntity.Brewery</span>
+            <span class="prefectures">@alcoholDataEntity.Prefectures</span>
+            <span class="genryoMai">@alcoholDataEntity.GenryoMai</span>
+            <span class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</span>
+            <span class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</span>
+            <span class="sakeMeterValue">@alcoholDataEntity.SakeMeterValue</span>
+            <span class="acidRate">@alcoholDataEntity.AcidRate</span>
+            <span class="abv">@(alcoholDataEntity.Abv)度</span>
+            <span class="rarity">☆@(alcoholDataEntity.Rarity)</span>
+            </p>
+            }
+        }
+    </div>
+</div>
