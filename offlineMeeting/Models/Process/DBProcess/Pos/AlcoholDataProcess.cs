@@ -14,26 +14,11 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
         {
             var columns = json?["Columns"];
 
-
-            var aaaa = columns?.AsArray();
-            var check = aaaa?[14]?[0];
-            var checkB = aaaa?[14]?["ColumnName"];
-            var checkC = aaaa?[14]?["ColumnName"]?.GetValue<string>();
-            var bbbb = aaaa?
-                .Where(x =>
-                {
-                    var ex = x?["ColumnName"]?.GetValue<string>();
-                    return x?["ColumnName"]?.GetValue<string>() == "ClassE";
-                });
-            var cccc = aaaa?
-                .Select(x => x["ColumnName"]?.GetValue<string>());
-            var nnnn = bbbb?.Select(s => s?["ChoicesText"]?.GetValue<string>());
-
             // 特定名称選択肢
             var choicesTexts = columns?.AsArray()
                 .Where(x => x?["ColumnName"]?.GetValue<string>() == "ClassE")
                 .Select(s => s?["ChoicesText"]?.GetValue<string>())
-                .ToString()?
+                .FirstOrDefault()?
                 .Split(",");
 
             Dictionary<int, string> choicesTextDix = new Dictionary<int, string>();
