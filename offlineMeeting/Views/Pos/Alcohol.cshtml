@@ -23,9 +23,14 @@
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
             <p id="alchol_@alcoholDataEntity.AlcoholNumber" class="alcoholOrderList" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
-                <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                        <img src="@(alcoholDataEntity.Image)" class="food_image" />
-                </a>
+                    @if (@alcoholDataEntity.Image == "")
+                    {
+                        <img src="" alt="image" />
+                    }else{
+                        <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                            <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                        </a>
+                    }
                 <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
                 <span class="amount">@(alcoholDataEntity.Amount)円</span>
                 <span class="brewery">@alcoholDataEntity.Brewery</span>
