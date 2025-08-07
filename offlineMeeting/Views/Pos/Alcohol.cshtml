@@ -16,17 +16,17 @@
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
             <p id="alchol_@alcoholDataEntity.AlcoholNumber" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
-            <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
-            <span class="amount">@(alcoholDataEntity.Amount)円</span>
-            <span class="brewery">@alcoholDataEntity.Brewery</span>
-            <span class="prefectures">@alcoholDataEntity.Prefectures</span>
-            <span class="genryoMai">@alcoholDataEntity.GenryoMai</span>
-            <span class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</span>
-            <span class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</span>
-            <span class="sakeMeterValue">@alcoholDataEntity.SakeMeterValue</span>
-            <span class="acidRate">@alcoholDataEntity.AcidRate</span>
-            <span class="abv">@(alcoholDataEntity.Abv)度</span>
-            <span class="rarity">☆@(alcoholDataEntity.Rarity)</span>
+                <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
+                <span class="amount">@(alcoholDataEntity.Amount)円</span>
+                <span class="brewery">@alcoholDataEntity.Brewery</span>
+                <span class="prefectures">@alcoholDataEntity.Prefectures</span>
+                <span class="genryoMai">@alcoholDataEntity.GenryoMai</span>
+                <span class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</span>
+                <span class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</span>
+                <span class="sakeMeterValue">@Convert.ToString(alcoholDataEntity.SakeMeterValue ?? 0).TrimEnd('0').TrimEnd('.')</span>
+                <span class="acidRate">@Convert.ToString(alcoholDataEntity.AcidRate ?? 0).TrimEnd('0').TrimEnd('.')</span>
+                <span class="abv">@(Convert.ToString(alcoholDataEntity.Abv ?? 0).TrimEnd('0').TrimEnd('.'))度</span>
+                <span class="rarity">☆@(alcoholDataEntity.Rarity)</span>
             </p>
             }
         }

@@ -6,9 +6,11 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
 {
     public class AlcoholDataProcess :ResultsProcess
     {
-        private int SiteId = 123;
+        private int SakeSiteId;
 
-        public AlcoholDataProcess() {}
+        public AlcoholDataProcess(int sakeSiteId) {
+            SakeSiteId = sakeSiteId;
+        }
 
         public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
         {
@@ -18,26 +20,22 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
             var choicesTexts = columns?.AsArray()
                 .Where(x => x?["ColumnName"]?.GetValue<string>() == "ClassE")
                 .Select(s => s?["ChoicesText"]?.GetValue<string>())
-                .FirstOrDefault()?
-                .Split(",");
+                .FirstOrDefault() ?
+                .Split(new string[] { "\n" }, StringSplitOptions.None);
 
-            Dictionary<int, string> choicesTextDix = new Dictionary<int, string>();
+            Dictionary<string, string> choicesTextDic = new Dictionary<string, string>();
+
             if(choicesTexts != null)
             {
-                int choicesTextsLength = choicesTexts.Length;
-                for (int i = 0; i < choicesTextsLength; i += 2)
+                foreach (string choicesText in choicesTexts)
                 {
-                    
-                    if(!Int32.TryParse(choicesTexts[i], out int choiceId))
-                    {
-                        break;
-                    }
-                    choicesTextDix.Add(choiceId, choicesTexts[i + 1]);
+                    string[] raw = choicesText.Split(',');
+                    choicesTextDic.Add(raw[0], raw.Length < 2 ? "" : raw[1]);
                 }
             }
 
             List<AlcoholDataEntity> alcoholDataEntityList = new List<AlcoholDataEntity> { };
-            List<ResultsEntity>  results = base.GetFromSiteId(SiteId);
+            List<ResultsEntity>  results = base.GetFromSiteId(SakeSiteId);
             foreach (ResultsEntity result in results)
             {
                 ResultsEntity? brewery = Int32.TryParse(result.ClassC, out int breweryId) ? base.Get(breweryId) : null;
@@ -52,7 +50,7 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                             brewery: breweryName,
                             prefectures: prefectures,
                             genryoMai: result.ClassD,
-                            speciallyDesignated: result.ClassE, // 特定名称
+                            speciallyDesignated: String.IsNullOrEmpty(result.ClassE) ? "" : choicesTextDic[result.ClassE], // 特定名称
                             ricePolishingRatio: Convert.ToInt32(result.NumB),
                             sakeMeterValue: result.NumC,
                             acidRate: result.NumG,
