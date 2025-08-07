@@ -12,3 +12,11 @@
     margin: 3%;
     text-align: center;
 }
+
+.food_image_wrapper {
+    width: 100%;
+}
+
+.food_image {
+    width: 100%;
+}
