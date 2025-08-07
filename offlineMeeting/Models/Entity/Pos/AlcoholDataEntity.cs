@@ -3,6 +3,7 @@
     public class AlcoholDataEntity
     {
         public long? AlcoholNumber {  get; set; }
+        public string? Image {  get; set; }
         public string? AlcoholName { get; set;}
         public int? Amount { get; set; }
         public string? Brewery { get; set; }
@@ -17,6 +18,7 @@
         public AlcoholDataEntity() { }
         public AlcoholDataEntity(
             long? alcoholNumber,
+            string? image,
             string? alcoholName,
             int? amount,
             string? brewery,
@@ -31,6 +33,7 @@
         )
         {
             AlcoholNumber = alcoholNumber;
+            Image = image;
             AlcoholName = alcoholName;
             Amount = amount;
             Brewery = brewery;

@@ -41,10 +41,20 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                 ResultsEntity? brewery = Int32.TryParse(result.ClassC, out int breweryId) ? base.Get(breweryId) : null;
                 string? breweryName = brewery?.Title;
                 string? prefectures = Int32.TryParse(brewery?.ClassB, out int prefectureId) ? base.Get(prefectureId).ClassA : null;
+                string[]? imageSplit = result.DescriptionB?.Split("/");
+                string guid = "";
+                if (imageSplit != null && imageSplit?.Length > 2)
+                {
+                    guid = String.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
+                }
+
+                GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
+                string? image = getBinariesProcess.GetImage(guid);
                 alcoholDataEntityList
                     .Add(
-                        new AlcoholDataEntity(
-                            alcoholNumber: result.ResultId,
+                new AlcoholDataEntity(
+                alcoholNumber: result.ResultId,
+                            image: image == null ? "" : $"data:image/jpeg;base64,{image}",
                             alcoholName: result.ClassA,
                             amount: Convert.ToInt32(result.NumA),
                             brewery: breweryName,
@@ -58,7 +68,6 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                             rarity: Convert.ToInt32(result.NumF)
                         )
                     );
-
             }
             return alcoholDataEntityList;
         }
@@ -68,6 +77,7 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
             ResultsEntity result = base.Get(alcoholNumber);
             return new AlcoholDataEntity(
                 alcoholNumber: result.ResultId,
+                image: result.DescriptionA,
                 alcoholName: result.ClassA,
                 amount: Convert.ToInt32(result.NumA),
                 brewery: result.ClassC,

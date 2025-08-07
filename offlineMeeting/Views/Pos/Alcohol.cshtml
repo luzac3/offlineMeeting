@@ -5,17 +5,27 @@
 }
 
 @section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
     <script src="~/js/dist/pos.js" defer></script>
     <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
 }
 @model offlineMeeting.Models.ViewModel.PosViewModel;
 
 <div class="text-center">
-    <div>
+    <div id="alcoholOrder">
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
-            <p id="alchol_@alcoholDataEntity.AlcoholNumber" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
+            <p id="alchol_@alcoholDataEntity.AlcoholNumber" class="alcoholOrderList" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
+                <a href="@(alcoholDataEntity.Image)" class="js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                    <img src="@(alcoholDataEntity.Image)" />
+                </a>
                 <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
                 <span class="amount">@(alcoholDataEntity.Amount)円</span>
                 <span class="brewery">@alcoholDataEntity.Brewery</span>
