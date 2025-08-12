@@ -17,7 +17,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<SignalRHub> _hubContext;
         private ICompositeViewEngine ViewEngine;
         private GameDataViewModel GameDataViewModel;
-        private DirectionProperty DirectionProperty;
+        private ApiKeyProperty DirectionProperty;
         private SetGameDataProcess SetGameDataEntityProcess;
 
         public ManagementStreamingController(
@@ -29,7 +29,7 @@ namespace offlineMeeting.Controllers
             _logger = logger;
             ViewEngine = viewEngine;
             GameDataViewModel = new GameDataViewModel();
-            DirectionProperty = new DirectionProperty();
+            DirectionProperty = new ApiKeyProperty();
             GameDataViewModel.setDirectionProperty(DirectionProperty);
             SetGameDataEntityProcess = new SetGameDataProcess();
             _hubContext = hubContext;
