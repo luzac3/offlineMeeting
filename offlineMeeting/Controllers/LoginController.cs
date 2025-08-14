@@ -4,6 +4,7 @@ using offlineMeeting.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Controllers
 {
@@ -17,9 +18,12 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index([FromQuery] string UserId)
+        public IActionResult Index([FromQuery] int UserId)
         {
-            return Json(UserId);
+            GenerateQr generateQr = new GenerateQr(userId: UserId);
+            LoginViewModel loginViewModel = new LoginViewModel();
+            loginViewModel.GenerateQr = generateQr;
+            return View(loginViewModel);
         }
 
         [HttpGet]

@@ -1,13 +1,12 @@
+import QRCode from "qrcodejs/qrcodejs";
+
 export class GenerateQr {
     generate = () => {
         const qrObj = document.getElementById('QR');
+        const url = <HTMLInputElement>document.getElementById("qr_input");
         if (qrObj) {
-            // QRコードの出力先をクリア
-            qrObj.textContent = '';
-            let url = "https://sake.wolfslab/Login/";
-
-            var qrcode = new QRCode(qrObj, {
-                text: url,
+            new QRCode(qrObj, {
+                text: url.value,
                 width: 128,
                 height: 128,
                 correctLevel: QRCode.CorrectLevel.H
