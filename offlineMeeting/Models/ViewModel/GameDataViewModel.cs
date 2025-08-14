@@ -6,7 +6,7 @@ namespace offlineMeeting.Models.ViewModel
 {
     public class GameDataViewModel
     {
-        public DirectionProperty DirectionProperty { get; set; }
+        public ApiKeyProperty DirectionProperty { get; set; }
         public EndHandPostEntity EndHandPostEntity { get; set; }
         public GameEntity? GameEntity { get; set; }
         public EndHandRegisterPostEntity? EndHandRegisterPostEntity { get; set; }
@@ -15,12 +15,12 @@ namespace offlineMeeting.Models.ViewModel
         public List<RetVideoEntity>? RetVideoEntityList { get; set; }
         public GameDataViewModel()
         {
-            DirectionProperty = new DirectionProperty();
+            DirectionProperty = new ApiKeyProperty();
             EndHandPostEntity = new EndHandPostEntity();
             GameUsersDataEntityList = new List<GameUsersDataEntity>();
         }
 
-        public void setDirectionProperty(DirectionProperty directionProperty)
+        public void setDirectionProperty(ApiKeyProperty directionProperty)
         {
             DirectionProperty = directionProperty;
         }
