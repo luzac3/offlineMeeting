@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "LogIn";
+}
+@section Scripts {
+    <script src="~/js/dist/LogIn.js" defer></script>
+    <script src="qrcode.min.js"></script>
+    <link rel="stylesheet" href="~/css/Home/LogIn.css" asp-append-version="true" />
+}
+
+<div id="main">
+    <div id="QR" class="container m-4 is-justify-content-center is-flex"></div>
+    <input type="text" name="name" class="nodisplay" value="https://sake.wolfslab.jp/" /> <!--getの内容をここに書き込む-->
+</div>

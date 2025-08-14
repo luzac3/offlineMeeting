@@ -1,6 +1,6 @@
 {
   "name": "offlineMeeting",
-  "version": "1.0.0_beta",
+  "version": "1.0.1_beta",
   "main": "",
   "scripts": {
     "build": "webpack --mode development",
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@microsoft/signalr": "^8.0.0",
+    "@types/qrcodejs": "",
     "install": "^0.13.0",
     "msw": "^0.35.0",
     "npm": "",

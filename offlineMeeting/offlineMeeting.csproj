@@ -22,6 +22,7 @@
     <Folder Include="Templates\Home\" />
     <Folder Include="Templates\Share\" />
     <Folder Include="wwwroot\js\dist\" />
+    <Folder Include="wwwroot\ts\Login\" />
   </ItemGroup>
 
   <ItemGroup>
