@@ -1,0 +1,49 @@
+﻿@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    ViewData["Title"] = "Alcohol";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
+    <script src="~/js/dist/pos.js" defer></script>
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
+}
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+<div class="text-center">
+    <div id="alcoholOrder">
+        @{
+            foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
+            {
+            <p id="alchol_@alcoholDataEntity.AlcoholNumber" class="alcoholOrderList" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
+                    @if (@alcoholDataEntity.Image == "")
+                    {
+                        <img src="" alt="image" />
+                    }else{
+                        <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                            <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                        </a>
+                    }
+                <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
+                <span class="amount">@(alcoholDataEntity.Amount)円</span>
+                <span class="brewery">@alcoholDataEntity.Brewery</span>
+                <span class="prefectures">@alcoholDataEntity.Prefectures</span>
+                <span class="genryoMai">@alcoholDataEntity.GenryoMai</span>
+                <span class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</span>
+                <span class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</span>
+                <span class="sakeMeterValue">@Convert.ToString(alcoholDataEntity.SakeMeterValue ?? 0).TrimEnd('0').TrimEnd('.')</span>
+                <span class="acidRate">@Convert.ToString(alcoholDataEntity.AcidRate ?? 0).TrimEnd('0').TrimEnd('.')</span>
+                <span class="abv">@(Convert.ToString(alcoholDataEntity.Abv ?? 0).TrimEnd('0').TrimEnd('.'))度</span>
+                <span class="rarity">☆@(alcoholDataEntity.Rarity)</span>
+            </p>
+            }
+        }
+    </div>
+</div>

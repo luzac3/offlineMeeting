@@ -1,0 +1,22 @@
+﻿#alcoholOrder {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 98%;
+}
+
+.alcoholOrderList {
+    width: 26%;
+    margin: 3%;
+    text-align: center;
+}
+
+.food_image_wrapper {
+    width: 100%;
+}
+
+.food_image {
+    width: 100%;
+}
