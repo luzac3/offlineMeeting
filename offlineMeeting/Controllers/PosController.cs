@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.DBProcess.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
@@ -12,12 +13,14 @@ namespace offlineMeeting.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private PosViewModel PosViewModel;
-        private int SakeSiteId = 108;
+        private int SakeSiteId;
 
         public PosController(ILogger<HomeController> logger)
         {
             _logger = logger;
             PosViewModel = new PosViewModel();
+            TableIdProperty tableIdProperty = new TableIdProperty();
+            SakeSiteId = tableIdProperty.SakeSiteId;
         }
 
         public IActionResult Index()
