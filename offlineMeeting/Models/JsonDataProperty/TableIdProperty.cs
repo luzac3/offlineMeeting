@@ -14,7 +14,12 @@ namespace offlineMeeting.Models.JsonDataProperty
         public TableIdProperty()
         {
             var readJson = new ReadJson();
-            var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/TableId.json", "utf-8");
+            #if DEBUG
+                var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/TableId_debug.json", "utf-8");
+            #else
+                var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/TableId_release.json", "utf-8");
+            #endif
+
             SakeSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.SakeSiteId ?? throw new NullReferenceException("json read error");
         }
     }
