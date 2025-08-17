@@ -30,7 +30,6 @@
     <Folder Include="Templates\Share\" />
     <Folder Include="wwwroot\js\dist\" />
     <Folder Include="wwwroot\plugins\" />
-    <Folder Include="wwwroot\ts\Pos\" />
   </ItemGroup>
 
   <ItemGroup>
