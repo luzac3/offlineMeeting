@@ -52,11 +52,10 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                 string? image = getBinariesProcess.GetImage(guid);
                 alcoholDataEntityList
                     .Add(
-                new AlcoholDataEntity(
-                alcoholNumber: result.ResultId,
+                        new AlcoholDataEntity(
+                            alcoholNumber: result.ResultId,
                             image: image == null ? "" : $"data:image/jpeg;base64,{image}",
                             alcoholName: result.ClassA,
-                            amount: Convert.ToInt32(result.NumA),
                             brewery: breweryName,
                             prefectures: prefectures,
                             genryoMai: result.ClassD,
@@ -65,7 +64,9 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                             sakeMeterValue: result.NumC,
                             acidRate: result.NumG,
                             abv: result.NumD,
-                            rarity: Convert.ToInt32(result.NumF)
+                            rarity: Convert.ToInt32(result.NumF),
+                            coinNumber: Convert.ToInt32(result.NumI),
+                            leftAmount: Convert.ToInt32(result.NumH)
                         )
                     );
             }
@@ -79,7 +80,6 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                 alcoholNumber: result.ResultId,
                 image: result.DescriptionA,
                 alcoholName: result.ClassA,
-                amount: Convert.ToInt32(result.NumA),
                 brewery: result.ClassC,
                 prefectures: string.Empty,
                 genryoMai: result.ClassD,
@@ -88,7 +88,9 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                 sakeMeterValue: result.NumC,
                 acidRate: result.NumA,
                 abv: result.NumD,
-                rarity: Convert.ToInt32(result.NumF)
+                rarity: Convert.ToInt32(result.NumF),
+                coinNumber: Convert.ToInt32(result.NumI),
+                leftAmount: Convert.ToInt32(result.NumH)
             );
         }
     }
