@@ -3,10 +3,10 @@
     public class OrderPostEntity
     {
         public int EventNumber { get; set; }
-        public string? EventName { get; set; }
-        public DateTime? EventDate { get; set; }
-        public string? TsvUsers { get; set; }
-        public string? UsersCd { get; set; }
+        public int ResultId { get; set; }
+        public int OrderNumber { get; set; }
+        public int OrderCoins { get; set; }
+        public int AlcoholAmount { get; set; }
 
         public OrderPostEntity() { }
     }
