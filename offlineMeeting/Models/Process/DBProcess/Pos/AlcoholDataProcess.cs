@@ -44,7 +44,7 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
                 ResultsEntity? brewery = Int32.TryParse(result.ClassC, out int breweryId) ? base.Get(breweryId) : null;
                 string? breweryName = brewery?.Title;
                 string? prefectures = Int32.TryParse(brewery?.ClassB, out int prefectureId) ? base.Get(prefectureId).ClassA : null;
-                string[]? imageSplit = result.DescriptionB?.Split("/");
+                string[]? imageSplit = result.DescriptionG?.Split("/");
                 string guid = "";
                 if (imageSplit != null && imageSplit?.Length > 2)
                 {
