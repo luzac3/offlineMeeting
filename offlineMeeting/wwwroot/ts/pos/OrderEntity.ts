@@ -1,11 +1,13 @@
 ﻿export class OrderEntity {
-    PurchaseId: string;
+    EventId: number;
+    ResultId: number;
     OrderNumber: number;
     OrderCoins: number;
     AlcoholAmount: number;
 
-    constructor(purchaseId: string, orderNumber: number, orderCoins: number, alcoholAmount: number = 0) {
-        this.PurchaseId = purchaseId;
+    constructor(eventId: number, resultId: number, orderNumber: number, orderCoins: number, alcoholAmount: number = 0) {
+        this.EventId = eventId;
+        this.ResultId = resultId;
         this.OrderNumber = orderNumber;
         this.OrderCoins = orderCoins;
         this.AlcoholAmount = alcoholAmount;

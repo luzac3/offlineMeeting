@@ -22,7 +22,7 @@
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
-                <div id="alchol_@alcoholDataEntity.AlcoholNumber" class="alcohol_order" data-eventNumber="@alcoholDataEntity.AlcoholNumber">
+                <div id="alchol_@alcoholDataEntity.AlcoholNumber" class="alcohol_order" data-result_id="@alcoholDataEntity.AlcoholNumber">
                     <p class="alcohol_detail">
                         @if (@alcoholDataEntity.Image == "")
                         {
