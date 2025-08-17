@@ -14,6 +14,7 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<HomeController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
+        private string hyakusyuEventId = "56275";
 
         public PosController(ILogger<HomeController> logger)
         {
@@ -35,12 +36,10 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Alcohol()
         {
-            // DBからEventListを取得
             AlcoholDataProcess alcoholDataProcess = new AlcoholDataProcess(sakeSiteId: SakeSiteId);
             SiteSettingsProcess siteSettingsProcess = new SiteSettingsProcess(sakeSiteId: SakeSiteId);
 
-            // List化してViewModelにデータを流し込み
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get()));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(), hyakusyuEventId));
             return View(PosViewModel);
         }
 
