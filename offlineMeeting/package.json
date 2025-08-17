@@ -1,6 +1,6 @@
 {
   "name": "offlineMeeting",
-  "version": "1.0.0_beta",
+  "version": "1.1.6_beta",
   "main": "",
   "scripts": {
     "build": "webpack --mode development",
