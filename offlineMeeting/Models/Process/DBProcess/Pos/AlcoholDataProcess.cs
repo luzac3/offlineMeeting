@@ -12,7 +12,7 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
             SakeSiteId = sakeSiteId;
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, string eventId)
         {
             var columns = json?["Columns"];
 
@@ -35,7 +35,10 @@ namespace offlineMeeting.Models.Process.DBProcess.Pos
             }
 
             List<AlcoholDataEntity> alcoholDataEntityList = new List<AlcoholDataEntity> { };
-            List<ResultsEntity>  results = base.GetFromSiteId(SakeSiteId);
+            List<ResultsEntity>  results = base
+                .GetFromSiteId(SakeSiteId)
+                .Where(x=>x.ClassH == eventId)
+                .ToList();
             foreach (ResultsEntity result in results)
             {
                 ResultsEntity? brewery = Int32.TryParse(result.ClassC, out int breweryId) ? base.Get(breweryId) : null;
