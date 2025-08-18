@@ -5,12 +5,18 @@
 }
 @section Scripts {
     <script src="~/js/dist/Login.js" defer></script>
-    <script src="qrcode.min.js"></script>
     <link rel="stylesheet" href="~/css/Home/Login.css" asp-append-version="true" />
 }
-@model offlineMeeting.Models.ViewModel.LoginViewModel;
+@model offlineMeeting.Models.ViewModel.RegisterViewModel;
 
 <div id="main">
     <div id="qr" class="container m-4 is-justify-content-center is-flex"></div>
-    <input type="text" id="qr_input" class="nodisplay" value="https://sake.wolfslab.jp/Login/QrRegister?uid=@(Model?.GenerateQr?.UserId ?? 0)" />
+    @if(Model.RequestResult)
+    {
+        <div>登録完了</div>
+    }
+    else
+    {
+        <div>登録失敗</div>
+    }
 </div>

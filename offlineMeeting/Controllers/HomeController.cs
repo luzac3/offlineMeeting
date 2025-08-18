@@ -15,7 +15,6 @@ namespace offlineMeeting.Controllers
             _logger = logger;
         }
 
-
         [HttpGet]
         public IActionResult Index([FromQuery] string uid, string eid)
         {
