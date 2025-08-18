@@ -1,0 +1,44 @@
+@using offlineMeeting.Models.Entity.Pos;
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+@{
+    foreach (OrderEntity orderEntity in Model.OrderEntityList ?? new List<OrderEntity> { })
+    {
+        <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
+            <p class="order_detail">
+                @if (@orderEntity.AlcoholDataEntity?.Image != null)
+                {
+                    @if ((@orderEntity.AlcoholDataEntity.Image) == "")
+                    {
+                        <img src="" alt="image" />
+                    }
+                    else
+                    {
+                        <a href="@(orderEntity.AlcoholDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                            <img src="@(orderEntity.AlcoholDataEntity.Image)" class="food_image" />
+                        </a>
+                    }
+                    <span class="alcoholName">@orderEntity.AlcoholDataEntity.AlcoholName</span>
+                    <span class="rarity">☆@(orderEntity.AlcoholDataEntity.Rarity)</span>
+                    @switch (orderEntity.OrderPostEntity.AlcoholAmount)
+                    {
+                        case 36:
+                            <span>2勺(36ml)</span>
+                            ;
+                            break;
+                        case 180:
+                            <span>1合(180ml)</span>
+                            ;
+                            break;
+                        default:
+                            <span>全購入(残数購入)</span>
+                            ;
+                            break;
+                    }
+                }
+                <span>注文数:@(orderEntity.OrderPostEntity.OrderNumber)</span>
+                <span>ポンコイン:@(orderEntity.OrderPostEntity.OrderCoins)枚</span>
+            </p>
+        </div>
+    }
+}
