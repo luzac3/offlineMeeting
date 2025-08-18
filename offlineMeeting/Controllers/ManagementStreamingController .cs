@@ -45,7 +45,7 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public IActionResult RecordedComentary([FromBody] RecordedMediaPostEntity recordedMediaPostEntity)
         {
-            Recording recording = new Recording();
+            SetEventId recording = new SetEventId();
             recording.StartRecording(recordedMediaPostEntity, _hubContext, "streaming/", "SendMediaProperty");
             return Json("");
         }

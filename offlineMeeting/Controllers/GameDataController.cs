@@ -38,7 +38,7 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public IActionResult RecordedVideo([FromBody] RecordedMediaPostEntity recordedMediaPostEntity)
         {
-            Recording recording = new Recording();
+            SetEventId recording = new SetEventId();
             recording.StartRecording(recordedMediaPostEntity, _hubContext, "management/", "SendMediaProperty");
             return Json("");
         }

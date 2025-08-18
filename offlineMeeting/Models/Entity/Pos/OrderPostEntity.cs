@@ -2,7 +2,6 @@
 {
     public class OrderPostEntity
     {
-        public int EventNumber { get; set; }
         public int ResultId { get; set; }
         public int OrderNumber { get; set; }
         public int OrderCoins { get; set; }
