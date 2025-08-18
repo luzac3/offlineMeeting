@@ -11,19 +11,26 @@ namespace offlineMeeting.Models.Process.DBProcess
 
         protected ResultsProcess() { }
 
-        protected List<ResultsEntity> Get()
+        protected List<ResultsEntity> GetAll()
         {
             return Results.ToList();
         }
 
         protected List<ResultsEntity> GetFromSiteId(int siteId)
         {
-            var test = Results;
             return Results
                 .Where(x => Convert.ToInt32(x.SiteId) == siteId).ToList();
         }
 
-        protected ResultsEntity Get(int resultId)
+        protected List<ResultsEntity> GetFromSiteId(int siteId, List<int> resultIdList)
+        {
+            return Results
+                .Where(x => Convert.ToInt32(x.SiteId) == siteId)
+                .Where(y => resultIdList.Contains(Convert.ToInt32(y.ResultId)))
+                .ToList();
+        }
+
+        protected ResultsEntity GetSingleRecord(int resultId)
         {
             return Results
                 .Where(x => Convert.ToInt32(x.ResultId) == resultId)

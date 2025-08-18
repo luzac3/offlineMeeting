@@ -1,5 +1,6 @@
-﻿using System.Text.Json;
+﻿using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Share;
+using System.Text.Json;
 
 namespace offlineMeeting.Models.JsonDataProperty
 {
@@ -17,7 +18,12 @@ namespace offlineMeeting.Models.JsonDataProperty
         public DBConnectProperty(string contentRootPath)
         {
             var readJson = new ReadJson();
-            var jsonData = readJson.Get(contentRootPath + "/wwwroot/json/DBConnect.json", "utf-8");
+            #if DEBUG
+                var jsonData = readJson.Get(contentRootPath + "/wwwroot/json/DBConnect_debug.json", "utf-8");
+            #else
+                var jsonData = readJson.Get(contentRootPath + "/wwwroot/json/DBConnect_release.json", "utf-8");
+            #endif
+
             var dbConnectJson = JsonSerializer.Deserialize<DBConnectEntity>(jsonData);
             if ( dbConnectJson != null )
             {

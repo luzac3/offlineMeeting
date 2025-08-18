@@ -2,10 +2,9 @@
 {
     public class AlcoholDataEntity
     {
-        public long? AlcoholNumber {  get; set; }
+        public long? ResultId {  get; set; }
         public string? Image {  get; set; }
         public string? AlcoholName { get; set;}
-        public int? Amount { get; set; }
         public string? Brewery { get; set; }
         public string? Prefectures { get; set; }
         public string? GenryoMai { get; set; }
@@ -15,12 +14,12 @@
         public decimal? AcidRate { get; set; }
         public decimal? Abv { get; set; }
         public int? Rarity { get; set; }
-        public AlcoholDataEntity() { }
+        public int? CoinNumber { get; set; }
+        public int? LeftAmount { get; set; }
         public AlcoholDataEntity(
-            long? alcoholNumber,
+            long? resultId,
             string? image,
             string? alcoholName,
-            int? amount,
             string? brewery,
             string? prefectures,
             string? genryoMai,
@@ -29,13 +28,14 @@
             decimal? sakeMeterValue,
             decimal? acidRate,
             decimal? abv,
-            int? rarity
+            int? rarity,
+            int? coinNumber,
+            int? leftAmount
         )
         {
-            AlcoholNumber = alcoholNumber;
+            ResultId = resultId;
             Image = image;
             AlcoholName = alcoholName;
-            Amount = amount;
             Brewery = brewery;
             Prefectures = prefectures;
             GenryoMai = genryoMai;
@@ -45,6 +45,8 @@
             AcidRate = acidRate;
             Abv = abv;
             Rarity = rarity;
+            CoinNumber = coinNumber;
+            LeftAmount = leftAmount;
         }
     }
 }

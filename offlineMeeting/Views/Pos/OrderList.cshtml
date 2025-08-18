@@ -1,0 +1,22 @@
+﻿@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    ViewData["Title"] = "Alcohol";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
+    <script src="~/js/dist/OrderList.js" defer></script>
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
+}
+
+<div class="text-center">
+    <div id="order_list"></div>
+    <div><button id="send_order" type="button">注文確定</button></div>
+</div>
