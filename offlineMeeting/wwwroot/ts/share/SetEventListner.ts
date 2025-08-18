@@ -6,7 +6,6 @@
         callback: (event: Event) => void,
         atOnce: boolean = false
     ) => {
-
         const returnHandler = (event: Event) => {
             const targetElement = parentElement?.querySelector(targetName);
             if (event.target == targetElement) {

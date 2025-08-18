@@ -1,4 +1,6 @@
-﻿namespace offlineMeeting.Models.Process.DBProcess.Pos
+﻿using offlineMeeting.Models.Process.DBProcess;
+
+namespace offlineMeeting.Models.Process.Share
 {
     public class GetBinariesProcess : BinariesProcess
     {
@@ -6,7 +8,7 @@
 
         public string? GetImage(string guid)
         {
-            byte[]? bin = base.GetBin(guid);
+            byte[]? bin = GetBin(guid);
             if(bin == null)
             {
                 return null;

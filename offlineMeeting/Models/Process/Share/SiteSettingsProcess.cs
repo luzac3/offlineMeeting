@@ -4,7 +4,7 @@ namespace offlineMeeting.Models.Process.Share
 {
     public class SiteSettingsProcess : SitesProcess
     {
-        private int SakeSiteId = 123;
+        private int SakeSiteId;
 
         public SiteSettingsProcess(int sakeSiteId) {
             SakeSiteId = sakeSiteId;
