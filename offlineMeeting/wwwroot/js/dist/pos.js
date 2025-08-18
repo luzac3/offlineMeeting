@@ -3942,6 +3942,115 @@ class CaliculateCoinNumber {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
+/* harmony export */ });
+class OrderEntity {
+    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
+        this.ResultId = resultId;
+        this.OrderNumber = orderNumber;
+        this.OrderCoins = orderCoins;
+        this.AlcoholAmount = alcoholAmount;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/pos/StockOrder.ts":
+/*!**************************************!*\
+  !*** ./wwwroot/ts/pos/StockOrder.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StockOrder: () => (/* binding */ StockOrder)
+/* harmony export */ });
+/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _OrderEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OrderEntity */ "./wwwroot/ts/pos/OrderEntity.ts");
+
+
+
+class StockOrder {
+    constructor() {
+        this.addOrder = () => {
+            Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
+                const htmlElement = element;
+                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "click", ".order_button", async (event) => {
+                    const resultId = parseInt(htmlElement.dataset.result_id);
+                    const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
+                    const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
+                    const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");
+                    let orderEntityList = [];
+                    const orderEntity = new _OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(resultId, orderNumber, coinNumber, alcoholAmount);
+                    if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.check("OrderEntityList")) {
+                        orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.get("OrderEntityList");
+                    }
+                    orderEntityList.push(orderEntity);
+                    _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.set("OrderEntityList", orderEntityList);
+                    window.alert("追加成功");
+                });
+            });
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/LocalStrage.ts":
+/*!*****************************************!*\
+  !*** ./wwwroot/ts/share/LocalStrage.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LocalStrage: () => (/* binding */ LocalStrage)
+/* harmony export */ });
+class LocalStrage {
+    static set(Obj_name, Obj) {
+        window.sessionStorage.setItem(Obj_name, JSON.stringify(Obj));
+    }
+    static get(objName) {
+        const obj = window.sessionStorage.getItem(objName);
+        if (!this.check(objName)) {
+            return false;
+        }
+        if (obj === null) {
+            throw new Error("���m�̃G���[");
+        }
+        const parser = function (_k, v) { return v.toString().indexOf('function') === 0 ? eval('(' + v + ')') : v; };
+        return JSON.parse(obj, parser);
+    }
+    static check(Obj_name) {
+        if (window.sessionStorage.getItem(Obj_name)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    static delete() {
+        window.sessionStorage.clear();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/SetEventListner.ts":
 /*!*********************************************!*\
   !*** ./wwwroot/ts/share/SetEventListner.ts ***!
@@ -4167,12 +4276,16 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+
 
 
 (async () => {
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_1__.CaliculateCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_2__.StockOrder();
     caliculateCoinNumber.setCoin();
+    stockOrder.addOrder();
 })();
 
 })();
