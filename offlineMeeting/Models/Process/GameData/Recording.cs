@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace offlineMeeting.Models.Process.GameData
 {
-    public class Recording
+    public class SetEventId
     {
         public async void StartRecording(
             RecordedMediaPostEntity recordedMediaPostEntity,

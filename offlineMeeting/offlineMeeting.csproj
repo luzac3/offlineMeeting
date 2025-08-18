@@ -8,19 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Process\Home\**" />
     <Compile Remove="wwwroot\lib\**" />
-    <Content Remove="Models\Process\Home\**" />
     <Content Remove="wwwroot\lib\**" />
-    <EmbeddedResource Remove="Models\Process\Home\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
-    <None Remove="Models\Process\Home\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Views\Event\_VideoController.txt" />
-    <Content Include="Views\ManagementStreaming\_VideoController.txt" />
     <Content Include="Views\Streaming\_VideoController.txt" />
   </ItemGroup>
 

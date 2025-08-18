@@ -7,6 +7,7 @@ namespace offlineMeeting.Models.JsonDataProperty
     public class TableIdEntity
     {
         public int SakeSiteId { get; set; }
+        public int OrderSiteId { get; set; }
     }
 
     public class TableIdProperty : TableIdEntity
@@ -21,6 +22,7 @@ namespace offlineMeeting.Models.JsonDataProperty
             #endif
 
             SakeSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.SakeSiteId ?? throw new NullReferenceException("json read error");
+            OrderSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.OrderSiteId ?? throw new NullReferenceException("json read error");
         }
     }
 }
