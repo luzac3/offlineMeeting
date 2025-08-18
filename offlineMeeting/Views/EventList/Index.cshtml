@@ -7,13 +7,14 @@
     <script src="~/js/dist/EventList.js" defer></script>
     <link rel="stylesheet" href="~/css/EventList/Index.css" asp-append-version="true" />
 }
-@model offlineMeeting.Models.ViewModel.EventListViewModel;
+@model offlineMeeting.Models.ViewModel.PosViewModel;
 
 <div class="text-center">
     <h1 class="display-4">イベントリスト   </h1>
     <button id="newEvent" type="button">新規作成</button>
     <div>
         @{
+            /*
             int newEventNumber = 1;
             foreach (EventDataEntity eventDataEntity in Model.EventDataEntityList ?? new List<EventDataEntity> { })
             {
@@ -29,6 +30,7 @@
                 </p>
                 newEventNumber++;
             };
+            */
         }
     </div>
 </div>
@@ -43,7 +45,7 @@
             <form id="registerForm">
                 <p>
                     <label>イベント番号</label>
-                    <input class="readonly" name="EventNumber" type="number" value="@newEventNumber" data-require="1" readonly="readonly" />
+                    <input class="readonly" name="EventNumber" type="number" value="newEventNumber" data-require="1" readonly="readonly" />
                 </p>
                 <p>
                     <label>イベント名</label>
@@ -59,6 +61,7 @@
                 @{
                     for (var i = 0; i < 4; i++)
                     {
+                        /*
                         <p class="UsersCdWrapper">
                             <select class="UsersCd">
                                 @foreach (
@@ -73,7 +76,6 @@
                                 }
                             </select>
                         </p>
-                        /*
                         <p><select class="UsersCd">
                             @foreach (
                                 var usersEntity in
