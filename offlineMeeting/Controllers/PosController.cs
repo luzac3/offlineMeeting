@@ -2,7 +2,7 @@
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.JsonDataProperty;
-using offlineMeeting.Models.Process.DBProcess.Pos;
+using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
@@ -14,7 +14,7 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<HomeController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
-        private string hyakusyuEventId = "56275";
+        private string hyakusyuEventId = "1";
 
         public PosController(ILogger<HomeController> logger)
         {
@@ -43,8 +43,23 @@ namespace offlineMeeting.Controllers
             return View(PosViewModel);
         }
 
+        public IActionResult OrderList()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public string Order([FromBody] OrderPostEntity orderPostEntity)
+        public IActionResult OrderListContents([FromBody] List<OrderPostEntity> orderPostEntityList)
+        {
+            OrderListProcess orderListProcess = new OrderListProcess(orderPostEntityList: orderPostEntityList, sakeSiteId: SakeSiteId);
+            SiteSettingsProcess siteSettingsProcess = new SiteSettingsProcess(sakeSiteId: SakeSiteId);
+
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(), hyakusyuEventId));
+            return PartialView("_OrderListContents", PosViewModel);
+        }
+
+        [HttpPost]
+        public string SendOrder([FromBody] OrderPostEntity orderPostEntityList) // SendOrderPostEntityに修正予定
         {
             // orderを作成してデータを投げる
             // pleasanterの仕様上、更新は1行ずつしかできない・・・BulkUpdate利かないんだよな

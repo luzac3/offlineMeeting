@@ -17,7 +17,7 @@
             boolean |
             FormDataEntryValue |
             null
-        } | string | null,
+        } | { [key: string]: number }[] | string | null,
         //body: any,
         responseKind: string = "json",
         needResponseData: boolean = true

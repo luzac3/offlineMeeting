@@ -15,17 +15,20 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+            <div id="menu" class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">百酒会</a>
-                <span>タヌコイン</span>
-                <input id="event_id" type="text" value="" class="nodisplay" />
+                <span>ポンコイン</span>
+                <input id="event_id" type="text" value="1" class="nodisplay" />
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark dot" asp-area="" asp-controller="Order" asp-action="Index">チュウモン</a>
+                            <a class="nav-link text-dark dot" asp-area="" asp-controller="Pos" asp-action="Index">ショクジ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark dot" asp-area="" asp-controller="Coin" asp-action="Index">コイン</a>
+                            <a class="nav-link text-dark dot" asp-area="" asp-controller="Pos" asp-action="Alcohol">オサケ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark dot" asp-area="" asp-controller="Pos" asp-action="OrderList">チュウモンカクニン</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark dot" asp-area="" asp-controller="Collection" asp-action="Index">ズカン</a>
@@ -57,7 +60,6 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/signalR/hubs"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -5,12 +5,18 @@ namespace offlineMeeting.Models.ViewModel
     public class PosViewModel
     {
         public List<AlcoholDataEntity>? AlcoholDataEntityList { get; set; }
+        public List<OrderEntity>? OrderEntityList { get; set; } 
 
         public PosViewModel() { }
 
         public void setAlcoholDataList(List<AlcoholDataEntity> alcoholDataEntityList)
         {
             AlcoholDataEntityList = alcoholDataEntityList;
+        }
+
+        public void setOrderEntityList(List<OrderEntity> orderEntityList)
+        {
+            OrderEntityList = orderEntityList;
         }
     }
 }
