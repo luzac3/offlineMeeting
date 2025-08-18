@@ -1,5 +1,6 @@
-﻿using offlineMeeting.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using offlineMeeting.Models;
+using offlineMeeting.Models.Share;
 using System.Diagnostics;
 
 namespace offlineMeeting.Controllers
@@ -13,8 +14,15 @@ namespace offlineMeeting.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+
+        [HttpGet]
+        public IActionResult Index([FromQuery] string uid, string eid)
         {
+            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
+            ManageEventId manageEventId = new ManageEventId(HttpContext);
+            manageUserCd.SetUserCd(uid);
+            manageEventId.SetEventId(eid);
+
             return View();
         }
 

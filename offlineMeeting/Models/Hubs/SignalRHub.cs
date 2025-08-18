@@ -33,7 +33,7 @@ namespace offlineMeeting.Models.Hubs
             string targetPath
         )
         {
-            Recording recording = new Recording();
+            SetEventId recording = new SetEventId();
             await recording.FinishRecording(eventNumber, gameSubNumber, targetPath, Clients);
         }
     }

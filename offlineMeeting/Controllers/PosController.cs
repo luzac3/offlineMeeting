@@ -2,7 +2,7 @@
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.JsonDataProperty;
-using offlineMeeting.Models.Process.DBProcess.Pos;
+using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
@@ -14,13 +14,16 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<HomeController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
+        private int OrderSiteId;
 
         public PosController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            PosViewModel = new PosViewModel();
-            TableIdProperty tableIdProperty = new TableIdProperty();
+            PosViewModel = new ();
+            TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
+            OrderSiteId = tableIdProperty.OrderSiteId;
+
         }
 
         public IActionResult Index()
@@ -35,22 +38,34 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Alcohol()
         {
-            // DBからEventListを取得
-            AlcoholDataProcess alcoholDataProcess = new AlcoholDataProcess(sakeSiteId: SakeSiteId);
-            SiteSettingsProcess siteSettingsProcess = new SiteSettingsProcess(sakeSiteId: SakeSiteId);
+            AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
+            SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
 
-            // List化してViewModelにデータを流し込み
             PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get()));
             return View(PosViewModel);
         }
 
-        [HttpPost]
-        public string Order([FromBody] OrderPostEntity orderPostEntity)
+        public IActionResult OrderList()
         {
-            // orderを作成してデータを投げる
-            // pleasanterの仕様上、更新は1行ずつしかできない・・・BulkUpdate利かないんだよな
-            string returnStatus = "1";
-            return returnStatus;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult OrderListContents([FromBody] List<OrderPostEntity> orderPostEntityList)
+        {
+            OrderListProcess orderListProcess = new (orderPostEntityList: orderPostEntityList, sakeSiteId: SakeSiteId, httpContext: HttpContext);
+            SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
+
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get()));
+            return PartialView("_OrderListContents", PosViewModel);
+        }
+
+        [HttpPost]
+        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList) // SendOrderPostEntityに修正予定
+        {
+            SendOrderProcess sendOrderProcess = new (orderPostEntityList, orderSiteId: OrderSiteId, httpContext: HttpContext);
+            bool result = await sendOrderProcess.Send(HttpContext);
+            return result.ToString();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

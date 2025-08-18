@@ -14,7 +14,11 @@ namespace offlineMeeting.Models.JsonDataProperty
         public ApiKeyProperty()
         {
             var readJson = new ReadJson();
-            var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/ApiKey.json", "utf-8");
+            #if DEBUG
+                var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/ApiKey_debug.json", "utf-8");
+            #else
+                var jsonData = readJson.Get(EnvironmentEntity.ContentRootPath + "/wwwroot/json/ApiKey_release.json", "utf-8");
+            #endif
             ApiKey = JsonSerializer.Deserialize<ApiKeyEntity>(jsonData)?.ApiKey ?? throw new NullReferenceException("json read error");
         }
     }
