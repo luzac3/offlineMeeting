@@ -2,7 +2,7 @@
 {
     public class AlcoholDataEntity
     {
-        public long? ResultId {  get; set; }
+        public long? AlcoholNumber {  get; set; }
         public string? Image {  get; set; }
         public string? AlcoholName { get; set;}
         public string? Brewery { get; set; }
@@ -16,8 +16,9 @@
         public int? Rarity { get; set; }
         public int? CoinNumber { get; set; }
         public int? LeftAmount { get; set; }
+        public AlcoholDataEntity() { }
         public AlcoholDataEntity(
-            long? resultId,
+            long? alcoholNumber,
             string? image,
             string? alcoholName,
             string? brewery,
@@ -33,7 +34,7 @@
             int? leftAmount
         )
         {
-            ResultId = resultId;
+            AlcoholNumber = alcoholNumber;
             Image = image;
             AlcoholName = alcoholName;
             Brewery = brewery;
