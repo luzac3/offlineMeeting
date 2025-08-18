@@ -8,20 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Process\Home\**" />
     <Compile Remove="wwwroot\lib\**" />
-    <Content Remove="Models\Process\Home\**" />
     <Content Remove="wwwroot\lib\**" />
-    <EmbeddedResource Remove="Models\Process\Home\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
-    <None Remove="Models\Process\Home\**" />
     <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Views\Event\_VideoController.txt" />
+    <Content Include="Views\Streaming\_VideoController.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\bk\" />
     <Folder Include="Templates\Home\" />
     <Folder Include="Templates\Share\" />
     <Folder Include="wwwroot\js\dist\" />
+    <Folder Include="wwwroot\plugins\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +40,13 @@
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.7" />
     <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="9.103.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\Pos\Index.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 	
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
