@@ -4,7 +4,6 @@ namespace offlineMeeting.Models.ViewModel
 {
     public class LoginViewModel
     {
-        //public List<DBEntity.EventDataEntity>? EventDataEntityList { get; set; }
         public GenerateQr? GenerateQr { get; set; }
 
         public LoginViewModel() { }

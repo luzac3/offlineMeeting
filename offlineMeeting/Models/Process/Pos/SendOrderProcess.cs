@@ -27,7 +27,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         public async Task<bool> Send(HttpContext httpContext)
         {
-            List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
+            List<SendRegisterEntity> sendOrderEntityList = new List<SendRegisterEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
             if(userCd == "0")
