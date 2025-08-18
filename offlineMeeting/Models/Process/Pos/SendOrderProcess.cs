@@ -1,4 +1,5 @@
 ﻿using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 using System.Text.Json;
@@ -27,7 +28,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         public async Task<bool> Send(HttpContext httpContext)
         {
-            List<SendRegisterEntity> sendOrderEntityList = new List<SendRegisterEntity>();
+            List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
             if(userCd == "0")
@@ -50,7 +51,7 @@ namespace offlineMeeting.Models.Process.Pos
                 );
             }
 
-            SendPlesanterApiEntity sendPlesanterApiEntity = new(data: sendOrderEntityList);
+            BulkApiEntity sendPlesanterApiEntity = new(data: sendOrderEntityList.Cast<object>().ToList());
 
             string json = JsonSerializer.Serialize(sendPlesanterApiEntity);
 
@@ -58,7 +59,7 @@ namespace offlineMeeting.Models.Process.Pos
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:59802/api/items/{OrderSiteId}/bulkupsert", content);
 
-            return true;
+            return response.StatusCode.Equals(200);
         }
     }
 }

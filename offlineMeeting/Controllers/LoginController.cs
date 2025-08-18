@@ -1,10 +1,10 @@
 ﻿using offlineMeeting.Models;
-using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Process.Login;
+using System.Threading.Tasks;
 
 namespace offlineMeeting.Controllers
 {
@@ -20,8 +20,8 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public IActionResult Index([FromQuery] int UserId)
         {
-            GenerateQr generateQr = new GenerateQr(userId: UserId);
-            LoginViewModel loginViewModel = new LoginViewModel();
+            GenerateQr generateQr = new (userId: UserId);
+            LoginViewModel loginViewModel = new ();
             loginViewModel.GenerateQr = generateQr;
             return View(loginViewModel);
         }
@@ -29,18 +29,19 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public IActionResult Qr([FromQuery] string uid, string eid)
         {
-            GenerateQr generateQr = new GenerateQr(userId: Int32.TryParse(uid, out int parsedUid) ? parsedUid : 0);
-            LoginViewModel loginViewModel = new LoginViewModel();
+            GenerateQr generateQr = new (userId: Int32.TryParse(uid, out int parsedUid) ? parsedUid : 0);
+            LoginViewModel loginViewModel = new ();
             loginViewModel.GenerateQr = generateQr;
             return View(loginViewModel);
         }
 
         [HttpGet]
-        public IActionResult QrRegister([FromQuery] string uid)
+        public async Task<IActionResult> QrRegister([FromQuery] string uid)
         {
+            SendRegisterProcess sendRegisterProcess = new (userCd: uid);
+            RegisterViewModel registerViewModel = new (await sendRegisterProcess.Send());
 
-
-            return Json("register completed"); // 登録処理
+            return View(registerViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

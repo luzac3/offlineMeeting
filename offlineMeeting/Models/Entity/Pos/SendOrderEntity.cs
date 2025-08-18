@@ -1,12 +1,12 @@
 ﻿namespace offlineMeeting.Models.Entity.Pos
 {
-    public class SendRegisterEntity
+    public class SendOrderEntity
     {
         public ClassHashEntity ClassHash { get; set; }
         public NumHashEntity NumHash { get; set; }
         public CheckHashEntity CheckHash { get; set; }
 
-        public SendRegisterEntity(
+        public SendOrderEntity(
             string eventNumber,
             string userCd,
             string resultId,
