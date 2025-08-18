@@ -12,7 +12,6 @@ export class StockOrder {
                 "click",
                 ".order_button",
                 async (event: Event) => {
-                    const eventId = parseInt((<HTMLInputElement>document.getElementById("event_id"))?.value ?? "0");
                     const resultId = parseInt(htmlElement.dataset.result_id!);
                     const alcoholAmount = parseInt((<HTMLInputElement>htmlElement.querySelector(".alcohol_amount"))?.value ?? "0");
                     const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
@@ -21,7 +20,6 @@ export class StockOrder {
                     let orderEntityList = [];
 
                     const orderEntity = new OrderEntity(
-                        eventId,
                         resultId,
                         orderNumber,
                         coinNumber,

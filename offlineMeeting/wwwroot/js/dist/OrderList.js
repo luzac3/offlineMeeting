@@ -48,6 +48,54 @@ class GetOrderList {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/OrderList/SendOrder.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/OrderList/SendOrder.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SendOrder: () => (/* binding */ SendOrder)
+/* harmony export */ });
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+
+
+class SendOrder {
+    constructor() {
+        this.setOrderList = () => {
+            document.getElementById("send_order")?.addEventListener("click", async () => {
+                let orderEntityList = [];
+                if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.check("OrderEntityList")) {
+                    orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.get("OrderEntityList");
+                }
+                this.send(orderEntityList).then((data) => {
+                    window.alert("注文を送信しました");
+                });
+            });
+        };
+        this.send = async (orderEntityList) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
+            return await fetchApi.send(this.url, this.method, this.headers, orderEntityList, this.responseKind).then(async (data) => {
+                return data;
+            }).catch(e => {
+                throw e;
+            });
+        };
+        this.url = '/Pos/SendOrder';
+        this.method = 'POST';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        this.responseKind = "text";
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/FetchApi.ts":
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
@@ -212,10 +260,14 @@ var __webpack_exports__ = {};
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
+/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+
 
 (async () => {
     const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_0__.GetOrderList();
+    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_1__.SendOrder();
     getOrderList.setOrderList();
+    sendOrder.setOrderList();
 })();
 
 })();

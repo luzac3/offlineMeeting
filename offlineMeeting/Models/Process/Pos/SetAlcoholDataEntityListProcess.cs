@@ -2,26 +2,29 @@
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
+using offlineMeeting.Models.Share;
 
 namespace offlineMeeting.Models.Process.Pos
 {
     public class SetAlcoholDataEntityListProcess : ResultsProcess
     {
         private int SakeSiteId;
+        private string EventId;
         List<AlcoholDataEntity> AlcoholDataEntityList;
 
-        public SetAlcoholDataEntityListProcess(int sakeSiteId) {
+        public SetAlcoholDataEntityListProcess(int sakeSiteId, string eventId) {
+            EventId = eventId;
             SakeSiteId = sakeSiteId;
             AlcoholDataEntityList = new List<AlcoholDataEntity> { };
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, string eventId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
             List<ResultsEntity> results = base
                 .GetFromSiteId(SakeSiteId)
-                .Where(x=>x.ClassH == eventId)
+                .Where(x=>x.ClassH == EventId)
                 .ToList();
 
             GetAlcoholDataEntityList(results, choicesTextDic);
@@ -29,13 +32,13 @@ namespace offlineMeeting.Models.Process.Pos
             return AlcoholDataEntityList;
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, string eventId, List<int> resultId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, List<int> resultId)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
             List<ResultsEntity> results = base
                 .GetFromSiteId(SakeSiteId, resultId)
-                .Where(x => x.ClassH == eventId)
+                .Where(x => x.ClassH == EventId)
                 .ToList();
 
             GetAlcoholDataEntityList(results, choicesTextDic);

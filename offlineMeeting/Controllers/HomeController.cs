@@ -16,10 +16,13 @@ namespace offlineMeeting.Controllers
 
 
         [HttpGet]
-        public IActionResult Index([FromQuery] string uid)
+        public IActionResult Index([FromQuery] string uid, string eid)
         {
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
+            ManageEventId manageEventId = new ManageEventId(HttpContext);
             manageUserCd.SetUserCd(uid);
+            manageEventId.SetEventId(eid);
+
             return View();
         }
 

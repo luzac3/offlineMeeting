@@ -3954,8 +3954,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
 /* harmony export */ });
 class OrderEntity {
-    constructor(eventId, resultId, orderNumber, orderCoins, alcoholAmount = 0) {
-        this.EventId = eventId;
+    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
         this.ResultId = resultId;
         this.OrderNumber = orderNumber;
         this.OrderCoins = orderCoins;
@@ -3989,13 +3988,12 @@ class StockOrder {
             Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
                 const htmlElement = element;
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "click", ".order_button", async (event) => {
-                    const eventId = parseInt(document.getElementById("event_id")?.value ?? "0");
                     const resultId = parseInt(htmlElement.dataset.result_id);
                     const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
                     const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
                     const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");
                     let orderEntityList = [];
-                    const orderEntity = new _OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(eventId, resultId, orderNumber, coinNumber, alcoholAmount);
+                    const orderEntity = new _OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(resultId, orderNumber, coinNumber, alcoholAmount);
                     if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.check("OrderEntityList")) {
                         orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.get("OrderEntityList");
                     }

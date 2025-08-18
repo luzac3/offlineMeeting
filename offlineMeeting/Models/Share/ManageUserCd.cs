@@ -14,10 +14,10 @@
             HttpContext.Response.Cookies.Append("UserCd", userCd ?? "0");
         }
 
-        public int GetUserCd()
+        public string GetUserCd()
         {
             HttpContext.Request.Cookies.TryGetValue("UserCd", out string? userCd);
-            return int.TryParse(userCd, out int parsedUserCd) ? parsedUserCd : 0;
+            return userCd ?? "0";
         }
 
         public void ClearUserCd()
