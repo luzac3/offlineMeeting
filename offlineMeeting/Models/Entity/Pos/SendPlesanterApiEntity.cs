@@ -7,9 +7,9 @@ namespace offlineMeeting.Models.Entity.Pos
     {
         public string ApiVersion { get; set; } = "1.1";
         public new string ApiKey { get; set; }
-        public List<SendOrderEntity> Data { get; set; }
+        public List<SendRegisterEntity> Data { get; set; }
 
-        public SendPlesanterApiEntity(List<SendOrderEntity> data)
+        public SendPlesanterApiEntity(List<SendRegisterEntity> data)
         {
             ApiKey = base.ApiKey!;
             Data = data;

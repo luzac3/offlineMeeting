@@ -27,8 +27,19 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult QrRegister([FromQuery] string UserId)
+        public IActionResult Qr([FromQuery] string uid, string eid)
         {
+            GenerateQr generateQr = new GenerateQr(userId: Int32.TryParse(uid, out int parsedUid) ? parsedUid : 0);
+            LoginViewModel loginViewModel = new LoginViewModel();
+            loginViewModel.GenerateQr = generateQr;
+            return View(loginViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult QrRegister([FromQuery] string uid)
+        {
+
+
             return Json("register completed"); // 登録処理
         }
 
