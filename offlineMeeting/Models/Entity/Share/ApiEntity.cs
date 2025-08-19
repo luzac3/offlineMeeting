@@ -6,12 +6,10 @@ namespace offlineMeeting.Models.Entity.Share
     {
         public string ApiVersion { get; set; } = "1.1";
         public new string ApiKey { get; set; }
-        public object Data { get; set; }
 
-        public ApiEntity(object data)
+        public ApiEntity()
         {
             ApiKey = base.ApiKey!;
-            Data = data;
         }
     }
 }

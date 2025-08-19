@@ -1,8 +1,8 @@
-import QRCode from "qrcodejs/qrcodejs";
+declare var QRCode: any;
 
 export class GenerateQr {
     generate = () => {
-        const qrObj = document.getElementById('QR');
+        const qrObj = document.getElementById('qr');
         const url = <HTMLInputElement>document.getElementById("qr_input");
         if (qrObj) {
             new QRCode(qrObj, {

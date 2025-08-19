@@ -20,7 +20,7 @@ namespace offlineMeeting.Controllers
         {
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             ManageEventId manageEventId = new ManageEventId(HttpContext);
-            CheckUserJoin checkUserJoin = new CheckUserJoin(Int32.TryParse(uid, out int pursedUid) ? pursedUid : 0);
+            CheckUserJoin checkUserJoin = new CheckUserJoin(uid);
             manageUserCd.SetUserCd(uid);
             manageEventId.SetEventId(eid);
 
@@ -31,7 +31,7 @@ namespace offlineMeeting.Controllers
             }
             else
             {
-                return Redirect($"Login/Qr?eid={eid}&uid={uid}");
+                return Redirect($"~/Login/Qr?eid={eid}&uid={uid}");
             }
         }
 
