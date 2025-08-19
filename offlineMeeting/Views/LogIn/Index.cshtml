@@ -1,0 +1,14 @@
+﻿@using offlineMeeting.Models.Entity.Login;
+
+@{
+    ViewData["Title"] = "Login";
+}
+@section Scripts {
+    <script src="~/js/dist/Login.js" defer></script>
+    <link rel="stylesheet" href="~/css/Home/Login.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.LoginViewModel;
+
+<div id="main">
+    <div id="qr" class="container m-4 is-justify-content-center is-flex"></div>
+</div>

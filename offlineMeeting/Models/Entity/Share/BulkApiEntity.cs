@@ -1,15 +1,14 @@
 ﻿using offlineMeeting.Models.JsonDataProperty;
-using RazorEngine.Text;
 
-namespace offlineMeeting.Models.Entity.Pos
+namespace offlineMeeting.Models.Entity.Share
 {
-    public class SendPlesanterApiEntity: ApiKeyProperty
+    public class BulkApiEntity : ApiKeyProperty
     {
         public string ApiVersion { get; set; } = "1.1";
         public new string ApiKey { get; set; }
-        public List<SendOrderEntity> Data { get; set; }
+        public List<object> Data { get; set; }
 
-        public SendPlesanterApiEntity(List<SendOrderEntity> data)
+        public BulkApiEntity(List<object> data)
         {
             ApiKey = base.ApiKey!;
             Data = data;
