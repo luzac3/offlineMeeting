@@ -30,10 +30,10 @@ namespace offlineMeeting.Models.Process.DBProcess
                 .ToList();
         }
 
-        protected ResultsEntity GetSingleRecord(int resultId)
+        protected ResultsEntity GetSingleRecord(string resultId)
         {
             return Results
-                .Where(x => Convert.ToInt32(x.ResultId) == resultId)
+                .Where(x => Convert.ToInt32(x.ResultId) == Convert.ToInt32(resultId))
                 .FirstOrDefault() ?? throw new Exception("invalid userCd");
         }
     }

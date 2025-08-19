@@ -6,15 +6,15 @@ namespace offlineMeeting.Models.Process.Home
 {
     public class CheckUserJoin: ResultsProcess
     {
-        private strinig UserCd;
-        public CheckUserJoin(int userCd) {
+        private string UserCd;
+        public CheckUserJoin(string userCd) {
             UserCd = userCd;
         }
 
         public bool Check()
         {
             ResultsEntity resultsEntity = GetSingleRecord(UserCd);
-            return resultsEntity != null;
+            return resultsEntity != null && resultsEntity.CheckA == true;
         }
     }
 }

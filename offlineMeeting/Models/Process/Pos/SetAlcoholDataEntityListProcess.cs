@@ -1,8 +1,8 @@
-﻿using offlineMeeting.Models.DBProperty;
+﻿using Microsoft.IdentityModel.Tokens;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
-using offlineMeeting.Models.Share;
 
 namespace offlineMeeting.Models.Process.Pos
 {
@@ -75,10 +75,10 @@ namespace offlineMeeting.Models.Process.Pos
         {
             foreach (ResultsEntity result in results)
             {
-                ResultsEntity? brewery = int.TryParse(result.ClassC, out int breweryId) ? base.GetSingleRecord(breweryId) : null;
-                string? breweryName = brewery?.Title;
-                string? prefectures = int.TryParse(brewery?.ClassB, out int prefectureId) ? base.GetSingleRecord(prefectureId).ClassA : null;
-                string[]? imageSplit = result.DescriptionG?.Split("/");
+                ResultsEntity? brewery = String.IsNullOrEmpty(result.ClassC) ? null : base.GetSingleRecord(result.ClassC);
+                string? breweryName = brewery?.Title ?? null;
+                string? prefectures = String.IsNullOrEmpty(brewery?.ClassB) ? null : base.GetSingleRecord(brewery.ClassB).ClassA;
+                string[]? imageSplit = result!.DescriptionG?.Split("/");
                 string guid = "";
                 if (imageSplit != null && imageSplit?.Length > 2)
                 {

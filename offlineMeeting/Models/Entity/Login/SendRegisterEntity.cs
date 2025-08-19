@@ -1,6 +1,8 @@
-﻿namespace offlineMeeting.Models.Entity.Login
+﻿using offlineMeeting.Models.Entity.Share;
+
+namespace offlineMeeting.Models.Entity.Login
 {
-    public class SendRegisterEntity
+    public class SendRegisterEntity: ApiEntity
     {
         public CheckHashEntity CheckHash { get; set; }
 
