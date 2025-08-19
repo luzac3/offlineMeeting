@@ -61,11 +61,10 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList) // SendOrderPostEntityに修正予定
+        public async Task<bool> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList) // SendOrderPostEntityに修正予定
         {
             SendOrderProcess sendOrderProcess = new (orderPostEntityList, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            bool result = await sendOrderProcess.Send(HttpContext);
-            return result.ToString();
+            return await sendOrderProcess.Send(HttpContext);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

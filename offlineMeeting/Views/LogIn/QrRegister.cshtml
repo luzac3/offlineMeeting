@@ -1,0 +1,22 @@
+﻿@using offlineMeeting.Models.Entity.Login;
+
+@{
+    ViewData["Title"] = "Login";
+}
+@section Scripts {
+    <script src="~/js/dist/Login.js" defer></script>
+    <link rel="stylesheet" href="~/css/Home/Login.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.RegisterViewModel;
+
+<div id="main">
+    <div id="qr" class="container m-4 is-justify-content-center is-flex"></div>
+    @if(Model.RequestResult)
+    {
+        <div>登録完了</div>
+    }
+    else
+    {
+        <div>登録失敗</div>
+    }
+</div>

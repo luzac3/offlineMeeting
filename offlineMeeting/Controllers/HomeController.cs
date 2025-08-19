@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using offlineMeeting.Models;
+using offlineMeeting.Models.Process.Home;
 using offlineMeeting.Models.Share;
 using System.Diagnostics;
 
@@ -14,16 +15,24 @@ namespace offlineMeeting.Controllers
             _logger = logger;
         }
 
-
         [HttpGet]
         public IActionResult Index([FromQuery] string uid, string eid)
         {
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             ManageEventId manageEventId = new ManageEventId(HttpContext);
+            CheckUserJoin checkUserJoin = new CheckUserJoin(uid);
             manageUserCd.SetUserCd(uid);
             manageEventId.SetEventId(eid);
 
-            return View();
+            // ユーザが登録状態であるかどうか
+            if (checkUserJoin.Check())
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect($"~/Login/Qr?eid={eid}&uid={uid}");
+            }
         }
 
         public IActionResult Privacy()

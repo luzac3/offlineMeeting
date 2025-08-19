@@ -1,0 +1,27 @@
+﻿using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Entity.Share;
+using System.Net;
+using System.Text.Json;
+
+namespace offlineMeeting.Models.Process.Login
+{
+    public class SendRegisterProcess
+    {
+        public string UserCd;
+        public SendRegisterProcess(string userCd) { 
+            UserCd = userCd;
+        }
+
+        public async Task<bool> Send()
+        {
+            SendRegisterEntity sendRegisterEntity = new();
+            string json = JsonSerializer.Serialize(sendRegisterEntity);
+
+            HttpClient httpClient = new HttpClient();
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:59802/api/items/{UserCd}/update", content);
+
+            return response.StatusCode.Equals(HttpStatusCode.OK);
+        }
+    }
+}
