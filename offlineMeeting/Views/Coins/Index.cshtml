@@ -1,0 +1,76 @@
+﻿@model offlineMeeting.Models.ViewModel.GameDataViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts {
+    <script src="~/js/dist/Coins.js" defer></script>
+    <link rel="stylesheet" href="~/css/Coins/Index.css" asp-append-version="true" />
+
+<div id="coins">
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>1ポンコイン</p>
+        <p>120円</p>
+    </div>
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>5ポンコイン + オマケ1枚</p>
+        <p>600円</p>
+    </div>
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>10ポンコイン + オマケ3枚</p>
+        <p>1200円</p>
+    </div>
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>33ポンコイン + オマケ7枚</p>
+        <p>3600円</p>
+    </div>
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>50ポンコイン + オマケ18枚</p>
+        <p>6000円</p>
+    </div>
+    <div class="purcahse_coins">
+        <p>coinImage</p>
+        <p>100ポンコイン + オマケ40枚</p>
+        <p>120000円</p>
+    </div>
+</div>
+
+<!-- PayPal SDKの読み込み -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
+
+<div id="paypal-button-container"></div>
+
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            // 支払い金額などを指定
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '1000' // 例: 1000円
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            // 支払い承認後の処理
+            return actions.order.capture().then(function(details) {
+                // サーバーに支払い情報を送信（例: fetchでAPI呼び出し）
+                fetch('/Coins/PaymentComplete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(details)
+                }).then(() => {
+                    alert('支払いが完了しました: ' + details.payer.name.given_name);
+                });
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
