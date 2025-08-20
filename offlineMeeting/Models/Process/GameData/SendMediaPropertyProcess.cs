@@ -1,9 +1,9 @@
 ﻿using offlineMeeting.Models.DBEntity;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Hubs;
 using offlineMeeting.Models.Process.DBProcess;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Models.Process.GameData
 {
@@ -34,7 +34,7 @@ namespace offlineMeeting.Models.Process.GameData
         }
 
         public async Task SendIndexFile(
-            IHubContext<SignalRHub> hubcontext,
+            IHubContext<LoginHub> hubcontext,
             string m3u8FilePath,
             string targetClientName
         )

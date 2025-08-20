@@ -1,6 +1,5 @@
 ﻿using offlineMeeting.Models.DBEntity;
 using offlineMeeting.Models.Entity.GameData;
-using offlineMeeting.Models.Hubs;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Share;
 using offlineMeeting.Models.ViewModel;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Models.Process.GameData
 {
@@ -27,7 +27,7 @@ namespace offlineMeeting.Models.Process.GameData
             GameDataViewModel GameDataViewModel,
             PartialViewResult GameData,
             PartialViewResult Result,
-            IHubContext<SignalRHub> hubContext
+            IHubContext<LoginHub> hubContext
         )
         {
             ConvertPartialViewToJson convertPartialViewToJson = new ConvertPartialViewToJson();
@@ -63,13 +63,13 @@ namespace offlineMeeting.Models.Process.GameData
 
         }
 
-        private static async Task SendEndHandResultEntityList(List<EndHandResultEntity> endHandResultEntityList, IHubContext<SignalRHub> hubContext)
+        private static async Task SendEndHandResultEntityList(List<EndHandResultEntity> endHandResultEntityList, IHubContext<LoginHub> hubContext)
         {
             string endHandResultEntityListJson = JsonSerializer.Serialize(endHandResultEntityList);
             await hubContext.Clients.All.SendAsync("SendEndHandResultEntityList", endHandResultEntityList);
         }
 
-        private static async Task SendEndHandJson(Dictionary<string, string> endHandDic, IHubContext<SignalRHub> hubContext)
+        private static async Task SendEndHandJson(Dictionary<string, string> endHandDic, IHubContext<LoginHub> hubContext)
         {
             string endHandJson = JsonSerializer.Serialize(endHandDic);
             await hubContext.Clients.All.SendAsync("SendEndHandJson", endHandDic);
