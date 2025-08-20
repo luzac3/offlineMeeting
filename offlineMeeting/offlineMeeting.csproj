@@ -24,7 +24,6 @@
     <Folder Include="Templates\Home\" />
     <Folder Include="Templates\Share\" />
     <Folder Include="wwwroot\js\dist\" />
-    <Folder Include="wwwroot\ts\Login\" />
     <Folder Include="wwwroot\plugins\" />
   </ItemGroup>
 
