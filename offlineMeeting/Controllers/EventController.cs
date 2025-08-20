@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.Hubs;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Controllers
 {
     public class EventController : Controller
     {
-        private readonly IHubContext<SignalRHub> _hubContext;
+        private readonly IHubContext<LoginHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
         private ICompositeViewEngine ViewEngine;
         private GameDataViewModel GameDataViewModel;
@@ -23,7 +23,7 @@ namespace offlineMeeting.Controllers
         public EventController(
             ILogger<HomeController> logger,
             ICompositeViewEngine viewEngine,
-            IHubContext<SignalRHub> hubContext
+            IHubContext<LoginHub> hubContext
         )
         {
             _logger = logger;
