@@ -1,20 +1,25 @@
-﻿using offlineMeeting.Models;
-using offlineMeeting.Models.ViewModel;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Process.Login;
-using System.Threading.Tasks;
+using offlineMeeting.Models.ViewModel;
+using System.Diagnostics;
 
 namespace offlineMeeting.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly IHubContext<LoginHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
 
-        public LoginController(ILogger<HomeController> logger)
+        public LoginController(
+            ILogger<HomeController> logger,
+            IHubContext<LoginHub> hubContext
+        )
         {
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -38,7 +43,7 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public async Task<IActionResult> QrRegister([FromQuery] string uid)
         {
-            SendRegisterProcess sendRegisterProcess = new (userCd: uid);
+            SendRegisterProcess sendRegisterProcess = new (hubContext: _hubContext, userCd: uid);
             RegisterViewModel registerViewModel = new (await sendRegisterProcess.Send());
 
             return View(registerViewModel);

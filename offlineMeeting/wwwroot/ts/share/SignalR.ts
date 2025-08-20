@@ -35,7 +35,7 @@ export class SignalR {
             strJson: any
         ) => {
             let json = {};
-            if ((typeof json) == "string") {
+            if ((typeof strJson) == "string") {
                 json = JSON.parse(strJson) as { [key: string]: string | number | boolean } | { [key: string]: string | number }[];
             } else {
                 json = strJson as { [key: string]: string | number | boolean } | { [key: string]: string | number }[];
