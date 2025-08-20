@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using offlineMeeting.Models.DBProperty;
+﻿using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;

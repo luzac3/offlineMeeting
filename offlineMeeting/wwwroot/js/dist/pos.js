@@ -4117,7 +4117,7 @@ class SignalR {
         this.get = (getProcessName, callback) => {
             this.connection.on(getProcessName, (strJson) => {
                 let json = {};
-                if ((typeof json) == "string") {
+                if ((typeof strJson) == "string") {
                     json = JSON.parse(strJson);
                 }
                 else {

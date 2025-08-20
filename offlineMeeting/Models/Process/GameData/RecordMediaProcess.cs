@@ -1,5 +1,5 @@
-﻿using offlineMeeting.Models.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Models.Process.GameData
 {
@@ -18,7 +18,7 @@ namespace offlineMeeting.Models.Process.GameData
             int mediaMinutes,
             string base64,
             bool isVideo,
-            IHubContext<SignalRHub> hubcontext,
+            IHubContext<LoginHub> hubcontext,
             string numberPath,
             string tsFileDirectory,
             string tsNumberFileDirectory,
