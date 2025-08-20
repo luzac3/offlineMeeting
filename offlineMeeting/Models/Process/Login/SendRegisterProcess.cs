@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
-using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Share;
 using System.Net;
 using System.Text.Json;
 
