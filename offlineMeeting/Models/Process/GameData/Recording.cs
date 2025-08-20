@@ -1,8 +1,8 @@
 ﻿using offlineMeeting.Models.Entity.GameData;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Hubs;
 using offlineMeeting.Models.Process.Share;
 using Microsoft.AspNetCore.SignalR;
+using offlineMeeting.Models.Entity.Login;
 
 namespace offlineMeeting.Models.Process.GameData
 {
@@ -10,7 +10,7 @@ namespace offlineMeeting.Models.Process.GameData
     {
         public async void StartRecording(
             RecordedMediaPostEntity recordedMediaPostEntity,
-            IHubContext<SignalRHub> hubcontext,
+            IHubContext<LoginHub> hubcontext,
             string targetPath,
             string targetClientName
         )
@@ -112,7 +112,7 @@ namespace offlineMeeting.Models.Process.GameData
         }
 
         private async void ChangeRecording(
-            IHubContext<SignalRHub> hubcontext,
+            IHubContext<LoginHub> hubcontext,
             string finishedFileDirectory,
             string nowFileDirectory,
             string webmFileDirectory,
@@ -189,7 +189,7 @@ namespace offlineMeeting.Models.Process.GameData
             }
         }
 
-        public async Task SendMoveFileFinished(IHubContext<SignalRHub> hubcontext)
+        public async Task SendMoveFileFinished(IHubContext<LoginHub> hubcontext)
         {
             await hubcontext.Clients.All.SendAsync("SendMoveFileFinished");
         }
