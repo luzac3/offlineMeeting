@@ -45,3 +45,25 @@ body {
 .dot {
     font-family: "DotGothic16", sans-serif;
 }
+
+#name_wrapper {
+    width: 20%;
+}
+
+#level_wrapper {
+    width: 30%;
+}
+
+#coins_wrapper {
+    width: 25%;
+}
+
+#poncoin_img {
+    display: inline-block;
+    width: 25%;
+}
+
+#poncoins {
+    display: inline-block;
+    width: 30%;
+}
