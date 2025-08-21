@@ -22,10 +22,16 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
         {
-            SetAlcoholDataEntityListProcess setAlcoholDataEntityListProcess = new (SakeSiteId, EventId);
-            return setAlcoholDataEntityListProcess.Get(json);
+            ManageUserCd manageUserCd = new ManageUserCd(httpContext);
+            string userCd = manageUserCd.GetUserCd().ToString();
+
+            SetAlcoholDataEntityListProcess setAlcoholDataEntityListProcess = new (SakeSiteId, orderSiteId, EventId, userCd);
+            return setAlcoholDataEntityListProcess
+                .Get(json)
+                .OrderBy(x=>x.Rarity)
+                .ToList();
         }
     }
 }

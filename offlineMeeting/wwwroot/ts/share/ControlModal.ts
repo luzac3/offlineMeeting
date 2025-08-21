@@ -1,56 +1,31 @@
-﻿import { SetEventListner } from "./SetEventListner"
-
-export class ControlModal {
-    private modalKind: string;
-    private openModalElementSelector: string;
-
-    constructor(openModalElementSelector: string, modalKind: string = "") {
-        this.modalKind = modalKind;
-        this.openModalElementSelector = openModalElementSelector;
-    }
-
+﻿export class ControlModal {
     setControl = () => {
-        Array.from(document.getElementsByClassName("modalWindow")).forEach((element) => {
-            const parentElement = element as HTMLElement;
+        Array.from(document.getElementsByClassName("modal_parent")).forEach((element) => {
+            const modalParent = element as HTMLElement;
+            const modalElement = modalParent.querySelector(".modal_window") as HTMLElement;
+            const modalWrapper = modalParent.querySelector(".modal_wrapper") as HTMLElement;
 
-            SetEventListner.setEvent(
-                parentElement,
-                "click",
-                ".closeModal",
-                () => {
-                    this.hidden();
-                }
-            )
+            modalParent.querySelector(".close_modal")?.addEventListener("click", () => {
+                this.hidden(modalWrapper);
+            });
 
-            // 外をクリックしたときのクローズイベント
-            SetEventListner.setEvent(
-                parentElement,
-                "click",
-                "#" + this.modalKind + "ModalWrapper",
-                (event: Event) => {
-                    (<HTMLButtonElement>event.target)
-                        .closest("#" + this.modalKind + "ModalWindow") ?? this.hidden();
+            modalWrapper.addEventListener("click", (event: Event) => {
+                if (modalElement && !modalElement.contains(<HTMLElement>event.target)){
+                    this.hidden(modalWrapper);
                 }
-            );
+            });
 
-            SetEventListner.setEvent(
-                parentElement,
-                "click",
-                this.openModalElementSelector,
-                (event: Event) => {
-                    this.show();
-                }
-            );
+            modalParent.querySelector(".open_modal")?.addEventListener("click", () => {
+                this.show(modalWrapper);
+            });
         });
     }
 
-    private show = () => {
-        document.getElementById(this.modalKind + "ModalWrapper")!.classList.remove("hidden");
+    private show = (modalWrapper: HTMLElement) => {
+        modalWrapper?.classList.remove("nodisplay");
     }
 
-    private hidden = () => {
-        console.log(this.modalKind);
-        console.log(document.getElementById(this.modalKind + "ModalWrapper"));
-        document.getElementById(this.modalKind + "ModalWrapper")!.classList.add("hidden");
+    private hidden = (modalWrapper: HTMLElement) => {
+        modalWrapper?.classList.add("nodisplay");
     }
 }
