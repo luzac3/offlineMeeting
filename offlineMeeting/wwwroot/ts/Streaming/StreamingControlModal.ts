@@ -8,10 +8,7 @@ export class StreamingControlModal {
             document.getElementById("listModalWrapper")!.classList.remove("hidden");
         });
 
-       const listControlModal = new ControlModal(
-           "#painButton",
-            "list",
-        );
+       const listControlModal = new ControlModal();
 
         listControlModal.setControl();
     }
