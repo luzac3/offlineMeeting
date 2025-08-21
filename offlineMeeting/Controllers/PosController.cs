@@ -41,7 +41,7 @@ namespace offlineMeeting.Controllers
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get()));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
             return View(PosViewModel);
         }
 
@@ -56,12 +56,12 @@ namespace offlineMeeting.Controllers
             OrderListProcess orderListProcess = new (orderPostEntityList: orderPostEntityList, sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
 
-            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get()));
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
             return PartialView("_OrderListContents", PosViewModel);
         }
 
         [HttpPost]
-        public async Task<bool> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList) // SendOrderPostEntityに修正予定
+        public async Task<bool> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
             SendOrderProcess sendOrderProcess = new (orderPostEntityList, orderSiteId: OrderSiteId, httpContext: HttpContext);
             return await sendOrderProcess.Send(HttpContext);

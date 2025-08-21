@@ -29,6 +29,14 @@
     width: 100%;
 }
 
+.orderd {
+    position: absolute;
+    top: -5%;
+    left: 1%;
+    max-width: 93%;
+    height: 50%;
+}
+
 .star {
     position: absolute;
     right: 2%;
