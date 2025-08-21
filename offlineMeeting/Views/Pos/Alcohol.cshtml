@@ -22,45 +22,174 @@
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
-                <div id="alchol_@alcoholDataEntity.ResultId" class="alcohol_order" data-result_id="@alcoholDataEntity.ResultId">
-                    <p class="alcohol_detail">
-                        @if (@alcoholDataEntity.Image == "")
-                        {
-                            <img src="" alt="image" />
-                        }else{
-                            <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                <img src="@(alcoholDataEntity.Image)" class="food_image" />
-                            </a>
-                        }
-                        <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
-                        <span class="brewery">@alcoholDataEntity.Brewery</span>
-                        <span class="prefectures">@alcoholDataEntity.Prefectures</span>
-                        <span class="genryoMai">@alcoholDataEntity.GenryoMai</span>
-                        <span class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</span>
-                        <span class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</span>
-                        <span class="sakeMeterValue">@Convert.ToString(alcoholDataEntity.SakeMeterValue ?? 0).TrimEnd('0').TrimEnd('.')</span>
-                        <span class="acidRate">@Convert.ToString(alcoholDataEntity.AcidRate ?? 0).TrimEnd('0').TrimEnd('.')</span>
-                        <span class="abv">@(Convert.ToString(alcoholDataEntity.Abv ?? 0).TrimEnd('0').TrimEnd('.'))度</span>
-                        <span class="rarity">☆@(alcoholDataEntity.Rarity)</span>
-                        <input type="text" class="coin_per_2shaku nodisplay" value="@(alcoholDataEntity.CoinNumber)" />
-                        <input type="text" class="left_amount nodisplay" value="@(alcoholDataEntity.LeftAmount)" />
-                    </p>
-                    <p>
-                        <select class="alcohol_amount">
-                            <option value="36">2勺(36ml)</option>
-                            <option value="180" selected>1合(180ml)</option>
-                            <option value="0">全購入(残数購入)</option>
-                        </select>
-                        <span>注文数</span>
-                        <select class="order_number">
-                            @for(int i = 1; i <= 5; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <span>コイン:<input class="coin_number" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled/>枚</span>
-                    </p>
-                    <p><button class="order_button" type="button">注文に追加</button></p>
+                <div class="alcohol_order modal_parent">
+                    <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
+                        <div class="open_modal">
+                            <p class="food_image_container">
+                                @if (@alcoholDataEntity.Image == "")
+                                {
+                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                }
+                                else
+                                {
+                                    <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                }
+                                @switch (alcoholDataEntity.Rarity)
+                                {
+                                    case 0:
+                                        <img src="/image/zeroStars.png" class="star" />
+                                        break;
+                                    case 1:
+                                        <img src="/image/singleStars.png" class="star" />
+                                        break;
+                                    case 2:
+                                        <img src="/image/doubleStars.png" class="star" />
+                                        break;
+                                    case 3:
+                                        <img src="/image/tripleStars.png" class="star" />
+                                        break;
+                                    case 4:
+                                        <img src="/image/quadStars.png" class="star" />
+                                        break;
+                                    case 5:
+                                        <img src="/image/fiveStars.png" class="star" />
+                                        break;
+                                    case 6:
+                                        <img src="/image/sixStars.png" class="star" />
+                                        break;
+                                }
+                            </p>
+                            <p>
+                                <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
+                            </p>
+                            <p class="alcohol_poncoin">
+                                <img src="/image/poncoin.png" alt="image" />
+                                <span>　×　@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
+                                <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
+                            </p>
+                            <input type="text" class="coin_per_2shaku nodisplay" value="@(alcoholDataEntity.CoinNumber)" />
+                            <input type="text" class="left_amount nodisplay" value="@(alcoholDataEntity.LeftAmount)" />
+                        </div>
+                        <p>
+                            <select class="alcohol_amount">
+                                <option value="36">2勺</option>
+                                <option value="180" selected>1合</option>
+                                <option value="0">1瓶</option>
+                            </select>
+                            <span>×</span>
+                            <select class="order_number">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </p>
+                        <p><button class="order_button" type="button">注文に追加</button></p>
+                    </div>
+                    <div class="modal_wrapper nodisplay">
+                        <div id="alchol_@(alcoholDataEntity.ResultId)_modal" class="modal_window" data-result_id="@alcoholDataEntity.ResultId">
+                            <div class="alcohol_detail_modal">
+                                <p class="food_image_modal_container">
+                                    @if (@alcoholDataEntity.Image == "")
+                                    {
+                                        <img src="/image/noImage.jpg" alt="image" />
+                                    }
+                                    else
+                                    {
+                                        <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                                            <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                        </a>
+                                    }
+                                    @switch (alcoholDataEntity.Rarity)
+                                    {
+                                        case 0:
+                                            <img src="/image/zeroStars.png" class="star" />
+                                            break;
+                                        case 1:
+                                            <img src="/image/singleStars.png" class="star" />
+                                            break;
+                                        case 2:
+                                            <img src="/image/doubleStars.png" class="star" />
+                                            break;
+                                        case 3:
+                                            <img src="/image/tripleStars.png" class="star" />
+                                            break;
+                                        case 4:
+                                            <img src="/image/quadStars.png" class="star" />
+                                            break;
+                                        case 5:
+                                            <img src="/image/fiveStars.png" class="star" />
+                                            break;
+                                        case 6:
+                                            <img src="/image/sixStars.png" class="star" />
+                                            break;
+                                    }
+                                </p>
+                                <p class="alcoholName">
+                                    <span>@alcoholDataEntity.AlcoholName</span>
+                                </p>
+                                <p class="alcohol_modal_poncoin">
+                                    <img src="/image/poncoin.png" alt="image" />
+                                    <span> × @(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
+                                    <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
+                                </p>
+                                <table>
+                                    <tr>
+                                        <td>酒造</td>
+                                        <td class="brewery">@alcoholDataEntity.Brewery</td>
+                                    </tr>
+                                    <tr>
+                                        <td>都道府県</td>
+                                        <td class="prefectures">@alcoholDataEntity.Prefectures</td>
+                                    </tr>
+                                    <tr>
+                                        <td>原料米</td>
+                                        <td class="genryoMai">@alcoholDataEntity.GenryoMai</td>
+                                    </tr>
+                                    <tr>
+                                        <td>特定名称</td>
+                                        <td class="speciallyDesignated">@alcoholDataEntity.SpeciallyDesignated</td>
+                                    </tr>
+                                    <tr>
+                                        <td>精米歩合</td>
+                                        <td class="ricePolishingRatio">@(alcoholDataEntity.RicePolishingRatio)%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>日本酒度</td>
+                                        <td class="sakeMeterValue">@Convert.ToString(alcoholDataEntity.SakeMeterValue ?? 0).TrimEnd('0').TrimEnd('.')</td>
+                                    </tr>
+                                    <tr>
+                                        <td>酸度</td>
+                                        <td class="acidRate">@Convert.ToString(alcoholDataEntity.AcidRate ?? 0).TrimEnd('0').TrimEnd('.')</td>
+                                    </tr>
+                                    <tr>
+                                        <td>度数</td>
+                                        <td class="abv">@(alcoholDataEntity.RicePolishingRatio)度</td>
+                                    </tr>
+                                </table>
+                                <input type="text" class="coin_per_2shaku nodisplay" value="@(alcoholDataEntity.CoinNumber)" />
+                                <input type="text" class="left_amount nodisplay" value="@(alcoholDataEntity.LeftAmount)" />
+                                <p>
+                                    <select class="alcohol_amount">
+                                        <option value="36">2勺(36ml)</option>
+                                        <option value="180" selected>1合(180ml)</option>
+                                        <option value="0">1瓶(全量)</option>
+                                    </select>
+                                    <span>×</span>
+                                    <select class="order_number">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                </p>
+                                <p>
+                                    <button class="order_button" type="button">注文に追加</button>
+                                    <button class="close_modal" type="button">閉じる</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         }
