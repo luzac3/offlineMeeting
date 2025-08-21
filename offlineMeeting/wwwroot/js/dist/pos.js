@@ -4009,6 +4009,49 @@ class StockOrder {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/share/ControlModal.ts":
+/*!******************************************!*\
+  !*** ./wwwroot/ts/share/ControlModal.ts ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ControlModal: () => (/* binding */ ControlModal)
+/* harmony export */ });
+class ControlModal {
+    constructor() {
+        this.setControl = () => {
+            Array.from(document.getElementsByClassName("modal_parent")).forEach((element) => {
+                const modalParent = element;
+                const modalElement = modalParent.querySelector(".modal_window");
+                const modalWrapper = modalParent.querySelector(".modal_wrapper");
+                modalParent.querySelector(".close_modal")?.addEventListener("click", () => {
+                    this.hidden(modalWrapper);
+                });
+                modalWrapper.addEventListener("click", (event) => {
+                    if (modalElement && !modalElement.contains(event.target)) {
+                        this.hidden(modalWrapper);
+                    }
+                });
+                modalParent.querySelector(".open_modal")?.addEventListener("click", () => {
+                    this.show(modalWrapper);
+                });
+            });
+        };
+        this.show = (modalWrapper) => {
+            modalWrapper?.classList.remove("nodisplay");
+        };
+        this.hidden = (modalWrapper) => {
+            modalWrapper?.classList.add("nodisplay");
+        };
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/LocalStrage.ts":
 /*!*****************************************!*\
   !*** ./wwwroot/ts/share/LocalStrage.ts ***!
@@ -4275,15 +4318,19 @@ var __webpack_exports__ = {};
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
-/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+/* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
+/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+
 
 
 
 (async () => {
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
-    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_1__.CaliculateCoinNumber();
-    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_2__.StockOrder();
+    const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_1__.ControlModal();
+    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_2__.CaliculateCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_3__.StockOrder();
+    controlModal.setControl();
     caliculateCoinNumber.setCoin();
     stockOrder.addOrder();
 })();
