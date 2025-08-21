@@ -8,15 +8,9 @@ export class ManagementStreamingControlModal {
             document.getElementById("listModalWrapper")!.classList.remove("hidden");
         });
 
-       const listControlModal = new ControlModal(
-           "#painButton",
-            "list",
-        );
+       const listControlModal = new ControlModal();
 
-        const endHandControlModal = new ControlModal(
-            "#listEndHandButton",
-            "endHand",
-        );
+        const endHandControlModal = new ControlModal();
 
         listControlModal.setControl();
         endHandControlModal.setControl();
