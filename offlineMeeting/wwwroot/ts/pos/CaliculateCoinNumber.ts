@@ -6,6 +6,8 @@ export class CaliculateCoinNumber {
             const htmlElement = <HTMLElement>element;
 
             const coinNumberElement = <HTMLInputElement>htmlElement.querySelector(".coin_number");
+            const coinNumberShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_show");
+            const coinNumberModalShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_modal_show");
 
             let coinNumber = 0;
 
@@ -18,8 +20,24 @@ export class CaliculateCoinNumber {
                 "change",
                 ".alcohol_amount",
                 async (event: Event) => {
+                    (<HTMLInputElement>element.querySelector(".alcohol_amount_modal")).value = (<HTMLInputElement>event.target).value;
                     coinNumber = this.caliculateCoinNumber(htmlElement);
                     coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                }
+            );
+
+            SetEventListner.setEvent(
+                <HTMLElement>element,
+                "change",
+                ".alcohol_amount_modal",
+                async (event: Event) => {
+                    (<HTMLInputElement>element.querySelector(".alcohol_amount")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
                 }
             );
 
@@ -28,8 +46,24 @@ export class CaliculateCoinNumber {
                 "change",
                 ".order_number",
                 async (event: Event) => {
+                    (<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
                     coinNumber = this.caliculateCoinNumber(htmlElement);
                     coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                }
+            );
+
+            SetEventListner.setEvent(
+                <HTMLElement>element,
+                "change",
+                ".order_number_modal",
+                async (event: Event) => {
+                    (<HTMLInputElement>element.querySelector(".order_number")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
                 }
             );
         });

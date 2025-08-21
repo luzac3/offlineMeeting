@@ -3900,17 +3900,39 @@ class CaliculateCoinNumber {
             Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
                 const htmlElement = element;
                 const coinNumberElement = htmlElement.querySelector(".coin_number");
+                const coinNumberShowElement = htmlElement.querySelector(".coin_number_show");
+                const coinNumberModalShowElement = htmlElement.querySelector(".coin_number_modal_show");
                 let coinNumber = 0;
                 if (coinNumberElement == null) {
                     return;
                 }
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount", async (event) => {
+                    element.querySelector(".alcohol_amount_modal").value = event.target.value;
                     coinNumber = this.caliculateCoinNumber(htmlElement);
                     coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                });
+                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount_modal", async (event) => {
+                    element.querySelector(".alcohol_amount").value = event.target.value;
+                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number", async (event) => {
+                    element.querySelector(".order_number_modal").value = event.target.value;
                     coinNumber = this.caliculateCoinNumber(htmlElement);
                     coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                });
+                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number_modal", async (event) => {
+                    element.querySelector(".order_number").value = event.target.value;
+                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
             });
         };
