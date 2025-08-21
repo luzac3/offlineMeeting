@@ -34,6 +34,10 @@
                                 {
                                     <img src="@(alcoholDataEntity.Image)" class="food_image" />
                                 }
+                                @if (alcoholDataEntity.Ordered)
+                                {
+                                    <img src="/image/ordered.png" class="orderd" alt="image" />
+                                }
                                 @switch (alcoholDataEntity.Rarity)
                                 {
                                     case 0:
@@ -59,12 +63,13 @@
                                         break;
                                 }
                             </p>
-                            <p>
-                                <span class="alcoholName">@alcoholDataEntity.AlcoholName</span>
+                            <p class="alcoholName">
+                                <span>@alcoholDataEntity.AlcoholName</span>
                             </p>
                             <p class="alcohol_poncoin">
                                 <img src="/image/poncoin.png" alt="image" />
-                                <span>　×　@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
+                                <span> × </span>
+                                <span class="coin_number_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
                             </p>
                             <input type="text" class="coin_per_2shaku nodisplay" value="@(alcoholDataEntity.CoinNumber)" />
@@ -92,13 +97,17 @@
                                 <p class="food_image_modal_container">
                                     @if (@alcoholDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" alt="image" />
+                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
                                     }
                                     else
                                     {
                                         <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
                                             <img src="@(alcoholDataEntity.Image)" class="food_image" />
                                         </a>
+                                    }
+                                    @if (alcoholDataEntity.Ordered)
+                                    {
+                                        <img src="/image/ordered.png" class="orderd" alt="image" />
                                     }
                                     @switch (alcoholDataEntity.Rarity)
                                     {
@@ -130,8 +139,8 @@
                                 </p>
                                 <p class="alcohol_modal_poncoin">
                                     <img src="/image/poncoin.png" alt="image" />
-                                    <span> × @(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
-                                    <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
+                                    <span> × </span>
+                                    <span class="coin_number_modal_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 </p>
                                 <table>
                                     <tr>
@@ -167,16 +176,14 @@
                                         <td class="abv">@(alcoholDataEntity.RicePolishingRatio)度</td>
                                     </tr>
                                 </table>
-                                <input type="text" class="coin_per_2shaku nodisplay" value="@(alcoholDataEntity.CoinNumber)" />
-                                <input type="text" class="left_amount nodisplay" value="@(alcoholDataEntity.LeftAmount)" />
                                 <p>
-                                    <select class="alcohol_amount">
+                                    <select class="alcohol_amount_modal">
                                         <option value="36">2勺(36ml)</option>
                                         <option value="180" selected>1合(180ml)</option>
                                         <option value="0">1瓶(全量)</option>
                                     </select>
                                     <span>×</span>
-                                    <select class="order_number">
+                                    <select class="order_number_modal">
                                         @for (int i = 1; i <= 5; i++)
                                         {
                                             <option value="@i">@i</option>

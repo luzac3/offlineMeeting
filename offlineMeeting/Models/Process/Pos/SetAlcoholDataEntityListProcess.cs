@@ -8,12 +8,17 @@ namespace offlineMeeting.Models.Process.Pos
     public class SetAlcoholDataEntityListProcess : ResultsProcess
     {
         private int SakeSiteId;
+        private int OrderSiteId;
         private string EventId;
+        private string UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
 
-        public SetAlcoholDataEntityListProcess(int sakeSiteId, string eventId) {
-            EventId = eventId;
+        public SetAlcoholDataEntityListProcess(int sakeSiteId, int orderSiteId, string eventId, string userCd)
+        {
             SakeSiteId = sakeSiteId;
+            OrderSiteId = orderSiteId;
+            EventId = eventId;
+            UserCd = userCd;
             AlcoholDataEntityList = new List<AlcoholDataEntity> { };
         }
 
@@ -72,6 +77,13 @@ namespace offlineMeeting.Models.Process.Pos
 
         private void GetAlcoholDataEntityList(List<ResultsEntity> results, Dictionary<string, string> choicesTextDic)
         {
+            List<int> orderedResultsIdList = base
+                .GetFromSiteId(OrderSiteId)
+                .Where(x => x.ClassA == EventId)
+                .Where(x => x.ClassB == UserCd)
+                .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
+                .ToList();
+
             foreach (ResultsEntity result in results)
             {
                 ResultsEntity? brewery = String.IsNullOrEmpty(result.ClassC) ? null : base.GetSingleRecord(result.ClassC);
@@ -102,7 +114,8 @@ namespace offlineMeeting.Models.Process.Pos
                             abv: result.NumD,
                             rarity: Convert.ToInt32(result.NumF),
                             coinNumber: Convert.ToInt32(result.NumI),
-                            leftAmount: Convert.ToInt32(result.NumH)
+                            leftAmount: Convert.ToInt32(result.NumH),
+                            ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
                         )
                     );
             }
