@@ -51,6 +51,5 @@ namespace offlineMeeting.Models.Process.Coins
 
             return response.StatusCode.Equals(HttpStatusCode.OK);
         }
-        // コインの増減は全てPleasanter側で実施
     }
 }
