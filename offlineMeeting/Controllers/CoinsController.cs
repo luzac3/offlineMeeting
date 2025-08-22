@@ -3,6 +3,7 @@ using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Coins;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
 
@@ -12,12 +13,14 @@ namespace offlineMeeting.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private int CoinsSiteId;
+        private int JoinerSiteId;
 
         public CoinsController(ILogger<HomeController> logger)
         {
             _logger = logger;
             TableIdProperty tableIdProperty = new();
             CoinsSiteId = tableIdProperty.CoinsSiteId;
+            JoinerSiteId = tableIdProperty.JoinerSiteId;
         }
 
         public IActionResult Index()
@@ -34,8 +37,9 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Give()
         {
-            CoinsViewModel coinsViewModel = new();
-            return View(coinsViewModel);
+            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+            GiveCoinsViewModel giveCoinsViewModel = new(getUsersProcess.GetUsers());
+            return View(giveCoinsViewModel);
         }
         
         [HttpPost]

@@ -1,4 +1,4 @@
-﻿@model offlineMeeting.Models.ViewModel.CoinsViewModel;
+﻿@model offlineMeeting.Models.ViewModel.GiveCoinsViewModel;
 
 @{
     ViewData["Title"] = "GiveCoins";
@@ -16,7 +16,10 @@
     <tr>
         <td>
             <select>
-                <option value="value">text</option>
+                @foreach (KeyValuePair<int, string> user in Model.Users)
+                {
+                        <option value="@user.Key">@user.Value</option>
+                }
             </select>
         </td>
         <td>
