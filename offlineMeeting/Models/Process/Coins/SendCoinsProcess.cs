@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.Entity.Coins;
-using offlineMeeting.Models.Entity.Login;
+﻿using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.Share;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Coins
