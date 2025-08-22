@@ -1,4 +1,9 @@
-﻿#coins {
+﻿#coin_menu {
+    white-space: nowrap;
+    font-size: clamp(1em, 5vw, 2em);
+}
+
+#coins {
     display: flex;
     flex-flow: column;
     align-items: center;

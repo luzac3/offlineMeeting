@@ -8,54 +8,23 @@
     <script src="https://www.paypal.com/sdk/js?client-id=@(Model.ClientId)&currency=JPY"></script>
     <link rel="stylesheet" href="~/css/Coins/Index.css" asp-append-version="true" />
 }
-<div id="coins">
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×1</span>
-        </p>
-        <p>120円</p>
-        <p id="paypal_button_120" class="paypal_button"></p>
-    </div>
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×5(オマケ1枚)</span>
-        </p>
-        <p>600円</p>
-        <p id="paypal_button_600"></p>
-    </div>
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×10(オマケ3枚)</span>
-        </p>
-        <p>1200円</p>
-        <p id="paypal_button_1200"></p>
-    </div>
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×33(オマケ7枚)</span>
-        </p>
-        <p>3600円</p>
-        <p id="paypal_button_3600"></p>
-    </div>
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×50(オマケ18枚)</span>
-        </p>
-        <p>6000円</p>
-        <p id="paypal_button_6000"></p>
-    </div>
-    <div class="purcahse_coins">
-        <p>
-            <img class="poncoin_img" src="/image/poncoin.png" />
-            <span>×100(オマケ40枚)</span>
-        </p>
-        <p>12000円</p>
-        <p id="paypal_button_12000"></p>
-    </div>
-</div>
-    <!-- https://passmarket.yahoo.co.jp/event/show/detail/02qp9j9dhrm41.html -->
+<header>
+    <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div id="coin_menu" class="container-fluid">
+            <button b-c19eioo5et class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span b-c19eioo5et class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark dot" asp-area="" asp-controller="Coins" asp-action="Buy">コウニュウ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark dot" asp-area="" asp-controller="Coins" asp-action="Give">ジョウト</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

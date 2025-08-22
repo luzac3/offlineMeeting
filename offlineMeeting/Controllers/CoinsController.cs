@@ -26,6 +26,18 @@ namespace offlineMeeting.Controllers
             return View(coinsViewModel);
         }
 
+        public IActionResult Buy()
+        {
+            CoinsViewModel coinsViewModel = new();
+            return View(coinsViewModel);
+        }
+
+        public IActionResult Give()
+        {
+            CoinsViewModel coinsViewModel = new();
+            return View(coinsViewModel);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> PaymentComplete([FromBody] CoinsEntity coinsEntity)
         {
