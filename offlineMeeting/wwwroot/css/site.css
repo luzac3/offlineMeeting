@@ -36,8 +36,17 @@ body {
     display: none;
 }
 
-#painList{
-    margin-left:auto;
+#menu {
+    white-space: nowrap;
+    font-size: clamp(1em, 5vw, 2em);
+}
+
+#coins_wrapper a {
+    text-decoration: none;
+}
+
+#painList {
+    margin-left: auto;
 }
 
 .shortInput{
