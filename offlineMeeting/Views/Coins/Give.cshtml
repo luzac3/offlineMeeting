@@ -1,0 +1,30 @@
+﻿@model offlineMeeting.Models.ViewModel.CoinsViewModel;
+
+@{
+    ViewData["Title"] = "GiveCoins";
+}
+@section Scripts {
+    <script src="~/js/dist/Coins.js" defer></script>
+    <link rel="stylesheet" href="~/css/Coins/Index.css" asp-append-version="true" />
+}
+<div id="coins">
+    <table>
+    <tr>
+        <th>譲渡先</th>
+        <th>枚数</th>
+    </tr>
+    <tr>
+        <td>
+            <select>
+                <option value="value">text</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="counter_decrement">-</button>
+            <!--最小値は1で、コインを持っていない場合はグレーアウト-->
+            <input type="number" class="counter" value="0" min="1" max="100" />
+            <button type="button" class="counter_increment">+</button>
+        </td>
+    </tr>
+</table>
+</div>
