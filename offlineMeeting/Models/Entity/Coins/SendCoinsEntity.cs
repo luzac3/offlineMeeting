@@ -10,13 +10,15 @@ namespace offlineMeeting.Models.Entity.Coins
         public SendCoinsEntity(
             string eventNumber,
             string userCd,
+            string gar,
             int coins,
             int value
         )
         {
             ClassHash = new ClassHashEntity(
                 eventNumber: eventNumber,
-                userCd: userCd
+                userCd: userCd,
+                gar: gar
             );
             NumHash = new NumHashEntity(
                 coins: coins,
@@ -32,12 +34,13 @@ namespace offlineMeeting.Models.Entity.Coins
         public string ClassC { get; set; } // ここのResultIdは、商品のId
         public ClassHashEntity(
             string eventNumber,
-            string userCd
+            string userCd,
+            string gar
         )
         {
             ClassA = eventNumber;
             ClassB = userCd;
-            ClassC = "100"; // 購入
+            ClassC = gar;
         }
     }
 
