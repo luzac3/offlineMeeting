@@ -51,6 +51,23 @@ namespace offlineMeeting.Controllers
             return Json(result.ToString());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GiveCoins([FromBody] GiveCoinsEntity giveCoinsEntity)
+        {
+            GiveCoinsProcess giveCoinsProcess = new (giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
+
+            try
+            {
+                bool result = await giveCoinsProcess.Send();
+
+                return Json(result.ToString());
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.ToString());
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -33,6 +33,7 @@ namespace offlineMeeting.Models.Process.Coins
             (
                 eventNumber: EventId,
                 userCd: UserCd,
+                gar: "100",
                 coins: CoinsEntity.Coins,
                 value: CoinsEntity.Value
             );
