@@ -13,6 +13,7 @@ namespace offlineMeeting.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            ViewData["UserName"] = "るざ狼";
         }
 
         [HttpGet]
@@ -27,6 +28,11 @@ namespace offlineMeeting.Controllers
             // ユーザが登録状態であるかどうか
             if (checkUserJoin.Check())
             {
+                // userを取得しに行く
+                // なおuserCdはすべての場合に有効なのでHome以外ではコンストラクタで取得する。
+                // Homeはただのメニュー兼エラー受け画面なので要らない
+
+                ViewData["UserName"] = "るざ狼";
                 return View();
             }
             else
