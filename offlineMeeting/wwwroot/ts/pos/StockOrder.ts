@@ -32,11 +32,28 @@ export class StockOrder {
 
                     orderEntityList.push(orderEntity);
 
-                    LocalStrage.set("OrderEntityList", orderEntityList);
+                    // 二回以上注文されていた場合、数量を合計して一つにまとめる
+                    LocalStrage.set("OrderEntityList", this.Deduplication(orderEntityList));
 
                     window.alert("追加成功");
                 }
             );
         });
+    }
+
+    private Deduplication = (array: OrderEntity[]) => {
+        // IDごとに合計
+        const map = new Map<string, OrderEntity>();
+
+        array.forEach(item => {
+            const key = `${item.ResultId}_${item.AlcoholAmount}`;
+            if (map.has(key)) {
+                map.get(key)!.OrderNumber += item.OrderNumber;
+            } else {
+                map.set(key, { ...item });
+            }
+        });
+
+        return Array.from(map.values());
     }
 }

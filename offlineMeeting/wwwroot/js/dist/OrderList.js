@@ -12,29 +12,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   GetOrderList: () => (/* binding */ GetOrderList)
 /* harmony export */ });
-/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
+/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+
+
 
 
 class GetOrderList {
     constructor() {
         this.setOrderList = () => {
+            const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__.Counter();
             let orderEntityList = [];
-            if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.check("OrderEntityList")) {
-                orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.get("OrderEntityList");
+            if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.check("OrderEntityList")) {
+                orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.get("OrderEntityList");
             }
             let totalCoins = 0;
             this.send(orderEntityList).then((data) => {
                 document.getElementById("order_list").innerHTML = data;
                 document.getElementById("pon_coins").innerText = totalCoins.toString();
                 document.getElementById("pon_coins_input").value = totalCoins.toString();
+                // カウンターをアクティブ
+                counter.SetCounter();
+                // ナビバーの位置を調整
+                new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
             });
             orderEntityList.forEach(order => {
                 totalCoins += order.OrderCoins;
             });
         };
         this.send = async (orderEntityList) => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__.FetchApi();
             return await fetchApi.send(this.url, this.method, this.headers, orderEntityList, this.responseKind).then(async (data) => {
                 return data;
             }).catch(e => {
@@ -66,26 +75,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../pos/OrderEntity */ "./wwwroot/ts/pos/OrderEntity.ts");
+
 
 
 class SendOrder {
     constructor() {
         this.setOrderList = () => {
             document.getElementById("send_order")?.addEventListener("click", async () => {
+                const orderElements = Array.from(document.getElementsByClassName("order"));
                 let orderEntityList = [];
-                if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.check("OrderEntityList")) {
-                    orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.get("OrderEntityList");
+                if (orderElements.length > 0) {
+                    Array.from(document.getElementsByClassName("order")).forEach((orderElement) => {
+                        orderEntityList.push(new _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(parseInt(orderElement.dataset.result_id), parseInt(orderElement.querySelector(".order_number").value), parseInt(orderElement.querySelector(".order_coins").value), parseInt(orderElement.querySelector(".alcohol_amount").value)));
+                    });
+                    const orderObjectList = orderEntityList.map(order => ({
+                        ResultId: order.ResultId,
+                        OrderNumber: order.OrderNumber,
+                        OrderCoins: order.OrderCoins,
+                        AlcoholAmount: order.AlcoholAmount
+                    })).filter(x => x.OrderNumber != 0);
+                    this.send(orderObjectList).then((data) => {
+                        const result = JSON.parse(data);
+                        if (result.status == "200") {
+                            // オーダーのストックをクリア
+                            _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.delete();
+                            // 画面をクリア
+                            document.getElementById("order_list").innerHTML = "";
+                            document.getElementById("pon_coins").innerText = "0";
+                            document.getElementById("pon_coins_input").value = "0";
+                        }
+                        window.alert(result.message);
+                    });
                 }
-                this.send(orderEntityList).then((data) => {
-                    const result = JSON.parse(data);
-                    if (result.status == "200") {
-                        // オーダーのストックをクリア
-                        _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.delete();
-                        // 画面をクリア
-                        document.getElementById("order_list").innerHTML = "";
-                    }
-                    window.alert(result.message);
-                });
             });
         };
         this.send = async (orderEntityList) => {
@@ -103,6 +125,118 @@ class SendOrder {
             'X-Requested-With': 'XMLHttpRequest'
         };
         this.responseKind = "text";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
+/* harmony export */ });
+class OrderEntity {
+    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
+        this.ResultId = resultId;
+        this.OrderNumber = orderNumber;
+        this.OrderCoins = orderCoins;
+        this.AlcoholAmount = alcoholAmount;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/ControlNavbar.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
+/* harmony export */ });
+class ControlNavbar {
+    constructor() {
+        this.setBodyPadding = () => {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                document.body.style.paddingTop = navbar.offsetHeight + 'px';
+            }
+        };
+        this.setBodyPadding();
+        window.addEventListener('resize', this.setBodyPadding);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/Counter.ts":
+/*!*************************************!*\
+  !*** ./wwwroot/ts/share/Counter.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Counter: () => (/* binding */ Counter)
+/* harmony export */ });
+class Counter {
+    constructor() {
+        this.SetCounter = () => {
+            const counterElements = Array.from(document.getElementsByClassName('counter'));
+            counterElements.forEach((element) => {
+                const counterElement = element;
+                if (!counterElement) {
+                    return;
+                }
+                const incrementButtonElement = counterElement.querySelector('.counter_increment');
+                const decrementButtonElement = counterElement.querySelector('.counter_decrement');
+                const decrementNumberElement = counterElement.querySelector('.counter_number');
+                const max = parseInt(counterElement.max) || 100;
+                const min = parseInt(counterElement.min) || 0;
+                let timer;
+                let interval = 200; // 長押し時の間隔(ms)
+                let step = 1;
+                let longPressStep = 5;
+                function changeValue(delta) {
+                    let value = parseInt(decrementNumberElement.value) || 0;
+                    value += delta;
+                    value = Math.max(min, Math.min(max, value));
+                    decrementNumberElement.value = String(value);
+                }
+                function handlePress(buttonElement, delta) {
+                    buttonElement.addEventListener('mousedown', function () {
+                        step = 1;
+                        changeValue(delta);
+                        timer = setTimeout(function repeat() {
+                            step = longPressStep;
+                            changeValue(delta * step);
+                            timer = setTimeout(repeat, interval);
+                        }, 500); // 0.5秒後に長押し判定
+                    });
+                    buttonElement.addEventListener('mouseup', function () {
+                        clearTimeout(timer);
+                    });
+                    buttonElement.addEventListener('mouseleave', function () {
+                        clearTimeout(timer);
+                    });
+                    buttonElement.addEventListener('touchend', function () {
+                        clearTimeout(timer);
+                    });
+                }
+                handlePress(incrementButtonElement, 1);
+                handlePress(decrementButtonElement, -1);
+            });
+        };
     }
 }
 

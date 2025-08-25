@@ -1,5 +1,6 @@
 export class ControlNavbar {
     constructor() {
+        this.setBodyPadding();
         window.addEventListener('resize', this.setBodyPadding);
     }
 
