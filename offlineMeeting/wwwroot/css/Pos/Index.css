@@ -108,3 +108,20 @@
     .alcohol_modal_poncoin span {
         font-size: 2em;
     }
+
+.poncoin_img {
+    max-width: 50px;
+}
+
+.order {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%; /* 要素間の隙間を均等に */
+    justify-content: space-between; /* 横並びを均等に配置 */
+    border: 2px solid #000; /* 黒いふち */
+    border-radius: 16px; /* 角を丸く */
+    box-sizing: border-box;
+}
+    .order > div {
+        width: 48%;
+    }

@@ -4010,7 +4010,7 @@ class StockOrder {
             Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
                 const htmlElement = element;
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "click", ".order_button", async (event) => {
-                    const resultId = parseInt(htmlElement.dataset.result_id);
+                    const resultId = parseInt(htmlElement.querySelector('.alchol_info').dataset.result_id);
                     const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
                     const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
                     const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");
@@ -4020,10 +4020,25 @@ class StockOrder {
                         orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.get("OrderEntityList");
                     }
                     orderEntityList.push(orderEntity);
-                    _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.set("OrderEntityList", orderEntityList);
+                    // 二回以上注文されていた場合、数量を合計して一つにまとめる
+                    _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.set("OrderEntityList", this.Deduplication(orderEntityList));
                     window.alert("追加成功");
                 });
             });
+        };
+        this.Deduplication = (array) => {
+            // IDごとに合計
+            const map = new Map();
+            array.forEach(item => {
+                const key = `${item.ResultId}_${item.AlcoholAmount}`;
+                if (map.has(key)) {
+                    map.get(key).OrderNumber += item.OrderNumber;
+                }
+                else {
+                    map.set(key, { ...item });
+                }
+            });
+            return Array.from(map.values());
         };
     }
 }
@@ -4068,6 +4083,33 @@ class ControlModal {
         this.hidden = (modalWrapper) => {
             modalWrapper?.classList.add("nodisplay");
         };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/ControlNavbar.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
+/* harmony export */ });
+class ControlNavbar {
+    constructor() {
+        this.setBodyPadding = () => {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                document.body.style.paddingTop = navbar.offsetHeight + 'px';
+            }
+        };
+        this.setBodyPadding();
+        window.addEventListener('resize', this.setBodyPadding);
     }
 }
 
@@ -4341,17 +4383,20 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
-/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
+/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+
 
 
 
 
 (async () => {
+    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_2__.ControlNavbar();
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_1__.ControlModal();
-    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_2__.CaliculateCoinNumber();
-    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_3__.StockOrder();
+    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__.CaliculateCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_4__.StockOrder();
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
     stockOrder.addOrder();
