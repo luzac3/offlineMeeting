@@ -24,8 +24,16 @@ export class GetOrderList {
             orderEntityList = LocalStrage.get("OrderEntityList");
         }
 
+        let totalCoins = 0;
+
         this.send(orderEntityList).then((data: string) => {
             document.getElementById("order_list")!.innerHTML = data;
+            document.getElementById("pon_coins")!.innerText = totalCoins.toString();
+            (<HTMLInputElement>document.getElementById("pon_coins_input")!).value = totalCoins.toString();
+        });
+
+        orderEntityList.forEach(order => {
+            totalCoins += order.OrderCoins;
         });
     }
 
