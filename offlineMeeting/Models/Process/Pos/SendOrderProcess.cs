@@ -83,11 +83,11 @@ namespace offlineMeeting.Models.Process.Pos
 
             if(!response.StatusCode.Equals(HttpStatusCode.OK))
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" }, { "url", url }, { "userCd", userCd } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" }, { "url", url }, { "sendData", json } });
             }
             else
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url }, { "userCd", userCd } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url }, { "userCd", userCd }, { "sendData", json } });
             }
         }
     }
