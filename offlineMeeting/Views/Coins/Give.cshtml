@@ -10,28 +10,28 @@
 }
 <div id="coins">
     <table>
-    <tr>
-        <th>譲渡先</th>
-        <th>枚数</th>
-    </tr>
-    <tr>
-        <td>
-            <select>
-                @foreach (KeyValuePair<int, string> user in Model.Users)
-                {
-                    <option value="@user.Key">@user.Value</option>
+        <tr>
+            <th>譲渡先</th>
+            <th>枚数</th>
+        </tr>
+        <tr>
+            <td>
+                <select>
+                    @foreach (KeyValuePair<int, string> user in Model.Users)
+                    {
+                        <option value="@user.Key">@user.Value</option>
+                    }
+                </select>
+            </td>
+            <td class="counter">
+                <button type="button" class="counter_decrement">-</button>
+                <!--最小値は1で、コインを持っていない場合はグレーアウト-->
+                @{
+                    JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
+                    <input type="number" class="counter_number" value="0" min="0" max="@(userData?.Coins)" />
                 }
-            </select>
-        </td>
-        <td class="counter">
-            <button type="button" class="counter_decrement">-</button>
-            <!--最小値は1で、コインを持っていない場合はグレーアウト-->
-            @{
-                JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
-                <input type="number" class="counter_number" value="0" min="0" max="@(userData?.Coins)" />
-            }
-            <button type="button" class="counter_increment">+</button>
-        </td>
-    </tr>
-</table>
+                <button type="button" class="counter_increment">+</button>
+            </td>
+        </tr>
+    </table>
 </div>
