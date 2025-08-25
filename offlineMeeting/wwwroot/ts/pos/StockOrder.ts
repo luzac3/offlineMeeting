@@ -12,7 +12,7 @@ export class StockOrder {
                 "click",
                 ".order_button",
                 async (event: Event) => {
-                    const resultId = parseInt(htmlElement.dataset.result_id!);
+                    const resultId = parseInt((<HTMLElement>htmlElement.querySelector('.alchol_info')).dataset.result_id!);
                     const alcoholAmount = parseInt((<HTMLInputElement>htmlElement.querySelector(".alcohol_amount"))?.value ?? "0");
                     const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
                     const coinNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".coin_number"))?.value ?? "0");

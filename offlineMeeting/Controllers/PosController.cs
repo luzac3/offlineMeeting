@@ -16,6 +16,7 @@ namespace offlineMeeting.Controllers
         private PosViewModel PosViewModel;
         private int SakeSiteId;
         private int OrderSiteId;
+        private int JoinerSiteId;
 
         public PosController(ILogger<HomeController> logger)
         {
@@ -24,6 +25,7 @@ namespace offlineMeeting.Controllers
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
+            JoinerSiteId = tableIdProperty.JoinerSiteId;
 
         }
 
@@ -69,9 +71,9 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
+        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            SendOrderProcess sendOrderProcess = new (orderPostEntityList, orderSiteId: OrderSiteId, httpContext: HttpContext);
+            SendOrderProcess sendOrderProcess = new(orderPostEntityList, orderSiteId: OrderSiteId, joinerSiteId: JoinerSiteId, httpContext: HttpContext);
             return await sendOrderProcess.Send(HttpContext);
         }
 

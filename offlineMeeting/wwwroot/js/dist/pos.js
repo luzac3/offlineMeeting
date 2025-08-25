@@ -4010,7 +4010,7 @@ class StockOrder {
             Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
                 const htmlElement = element;
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "click", ".order_button", async (event) => {
-                    const resultId = parseInt(htmlElement.dataset.result_id);
+                    const resultId = parseInt(htmlElement.querySelector('.alchol_info').dataset.result_id);
                     const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
                     const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
                     const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");

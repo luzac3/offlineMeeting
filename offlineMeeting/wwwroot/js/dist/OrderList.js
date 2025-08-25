@@ -71,7 +71,14 @@ class SendOrder {
                     orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.get("OrderEntityList");
                 }
                 this.send(orderEntityList).then((data) => {
-                    window.alert("注文を送信しました");
+                    const result = JSON.parse(data);
+                    if (result.status == "200") {
+                        // オーダーのストックをクリア
+                        _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.delete();
+                        // 画面をクリア
+                        document.getElementById("order_list").innerHTML = "";
+                    }
+                    window.alert(result.message);
                 });
             });
         };
