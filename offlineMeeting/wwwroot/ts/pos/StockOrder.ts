@@ -12,7 +12,7 @@ export class StockOrder {
                 "click",
                 ".order_button",
                 async (event: Event) => {
-                    const resultId = parseInt(htmlElement.dataset.result_id!);
+                    const resultId = parseInt((<HTMLElement>htmlElement.querySelector('.alchol_info')).dataset.result_id!);
                     const alcoholAmount = parseInt((<HTMLInputElement>htmlElement.querySelector(".alcohol_amount"))?.value ?? "0");
                     const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
                     const coinNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".coin_number"))?.value ?? "0");
@@ -32,11 +32,28 @@ export class StockOrder {
 
                     orderEntityList.push(orderEntity);
 
-                    LocalStrage.set("OrderEntityList", orderEntityList);
+                    // 二回以上注文されていた場合、数量を合計して一つにまとめる
+                    LocalStrage.set("OrderEntityList", this.Deduplication(orderEntityList));
 
                     window.alert("追加成功");
                 }
             );
         });
+    }
+
+    private Deduplication = (array: OrderEntity[]) => {
+        // IDごとに合計
+        const map = new Map<string, OrderEntity>();
+
+        array.forEach(item => {
+            const key = `${item.ResultId}_${item.AlcoholAmount}`;
+            if (map.has(key)) {
+                map.get(key)!.OrderNumber += item.OrderNumber;
+            } else {
+                map.set(key, { ...item });
+            }
+        });
+
+        return Array.from(map.values());
     }
 }

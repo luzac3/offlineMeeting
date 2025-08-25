@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.JsonDataProperty;
@@ -15,6 +16,7 @@ namespace offlineMeeting.Controllers
         private PosViewModel PosViewModel;
         private int SakeSiteId;
         private int OrderSiteId;
+        private int JoinerSiteId;
 
         public PosController(ILogger<HomeController> logger)
         {
@@ -23,7 +25,15 @@ namespace offlineMeeting.Controllers
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
+            JoinerSiteId = tableIdProperty.JoinerSiteId;
 
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            SetViewDataProcess setViewDataProcess = new();
+            ViewData["UserData"] = setViewDataProcess.Set(HttpContext);
+            base.OnActionExecuting(context);
         }
 
         public IActionResult Index()
@@ -41,7 +51,7 @@ namespace offlineMeeting.Controllers
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get()));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
             return View(PosViewModel);
         }
 
@@ -56,16 +66,15 @@ namespace offlineMeeting.Controllers
             OrderListProcess orderListProcess = new (orderPostEntityList: orderPostEntityList, sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
 
-            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get()));
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
             return PartialView("_OrderListContents", PosViewModel);
         }
 
         [HttpPost]
-        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList) // SendOrderPostEntityに修正予定
+        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            SendOrderProcess sendOrderProcess = new (orderPostEntityList, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            bool result = await sendOrderProcess.Send(HttpContext);
-            return result.ToString();
+            SendOrderProcess sendOrderProcess = new(orderPostEntityList, orderSiteId: OrderSiteId, joinerSiteId: JoinerSiteId, httpContext: HttpContext);
+            return await sendOrderProcess.Send(HttpContext);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

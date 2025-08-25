@@ -4008,7 +4008,7 @@ StreamingControlModal.setModal = () => {
     document.getElementById("painButton")?.addEventListener("click", () => {
         document.getElementById("listModalWrapper").classList.remove("hidden");
     });
-    const listControlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#painButton", "list");
+    const listControlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
     listControlModal.setControl();
 };
 
@@ -4026,36 +4026,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ControlModal: () => (/* binding */ ControlModal)
 /* harmony export */ });
-/* harmony import */ var _SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
 class ControlModal {
-    constructor(openModalElementSelector, modalKind = "") {
+    constructor() {
         this.setControl = () => {
-            Array.from(document.getElementsByClassName("modalWindow")).forEach((element) => {
-                const parentElement = element;
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", ".closeModal", () => {
-                    this.hidden();
+            Array.from(document.getElementsByClassName("modal_parent")).forEach((element) => {
+                const modalParent = element;
+                const modalElement = modalParent.querySelector(".modal_window");
+                const modalWrapper = modalParent.querySelector(".modal_wrapper");
+                modalParent.querySelector(".close_modal")?.addEventListener("click", () => {
+                    this.hidden(modalWrapper);
                 });
-                // 外をクリックしたときのクローズイベント
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", "#" + this.modalKind + "ModalWrapper", (event) => {
-                    event.target
-                        .closest("#" + this.modalKind + "ModalWindow") ?? this.hidden();
+                modalWrapper.addEventListener("click", (event) => {
+                    if (modalElement && !modalElement.contains(event.target)) {
+                        this.hidden(modalWrapper);
+                    }
                 });
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", this.openModalElementSelector, (event) => {
-                    this.show();
+                modalParent.querySelector(".open_modal")?.addEventListener("click", () => {
+                    this.show(modalWrapper);
                 });
             });
         };
-        this.show = () => {
-            document.getElementById(this.modalKind + "ModalWrapper").classList.remove("hidden");
+        this.show = (modalWrapper) => {
+            modalWrapper?.classList.remove("nodisplay");
         };
-        this.hidden = () => {
-            console.log(this.modalKind);
-            console.log(document.getElementById(this.modalKind + "ModalWrapper"));
-            document.getElementById(this.modalKind + "ModalWrapper").classList.add("hidden");
+        this.hidden = (modalWrapper) => {
+            modalWrapper?.classList.add("nodisplay");
         };
-        this.modalKind = modalKind;
-        this.openModalElementSelector = openModalElementSelector;
     }
 }
 
@@ -4180,7 +4176,7 @@ class SignalR {
         this.get = (getProcessName, callback) => {
             this.connection.on(getProcessName, (strJson) => {
                 let json = {};
-                if ((typeof json) == "string") {
+                if ((typeof strJson) == "string") {
                     json = JSON.parse(strJson);
                 }
                 else {

@@ -16,6 +16,7 @@
         public int? Rarity { get; set; }
         public int? CoinNumber { get; set; }
         public int? LeftAmount { get; set; }
+        public bool Ordered { get; set; } = false;
         public AlcoholDataEntity(
             long? resultId,
             string? image,
@@ -30,7 +31,8 @@
             decimal? abv,
             int? rarity,
             int? coinNumber,
-            int? leftAmount
+            int? leftAmount,
+            bool ordered
         )
         {
             ResultId = resultId;
@@ -47,6 +49,7 @@
             Rarity = rarity;
             CoinNumber = coinNumber;
             LeftAmount = leftAmount;
+            Ordered = ordered;
         }
     }
 }
