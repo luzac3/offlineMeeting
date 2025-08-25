@@ -32,6 +32,11 @@ namespace offlineMeeting.Models.Process.Pos
 
         public async Task<string> Send(HttpContext httpContext)
         {
+            #if DEBUG
+                string pleasanterUrlBase = "http://localhost:59802";
+            #else
+                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
+            #endif
             List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
@@ -73,15 +78,16 @@ namespace offlineMeeting.Models.Process.Pos
 
             HttpClient httpClient = new HttpClient();
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:59802/api/items/{OrderSiteId}/bulkupsert", content);
+            string url = $"{pleasanterUrlBase}/api/items/{OrderSiteId}/bulkupsert";
+            HttpResponseMessage response = await httpClient.PostAsync(url, content);
 
             if(!response.StatusCode.Equals(HttpStatusCode.OK))
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" }, { "url", url} });
             }
             else
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url } });
             }
         }
     }
