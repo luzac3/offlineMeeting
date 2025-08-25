@@ -4,6 +4,7 @@ using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Coins;
+using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
