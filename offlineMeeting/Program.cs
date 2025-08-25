@@ -37,7 +37,7 @@ app.MapHub<LoginHub>("/hub");
 
 app.UseDefaultFiles();
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
 app.UseRouting();
 
