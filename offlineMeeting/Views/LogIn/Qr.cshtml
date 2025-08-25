@@ -1,6 +1,7 @@
 ﻿@using offlineMeeting.Models.Entity.Login;
 
 @{
+    Layout = null;
     ViewData["Title"] = "Login";
 }
 @section Scripts {
@@ -12,5 +13,5 @@
 
 <div id="main">
     <div id="qr" class="container m-4 is-justify-content-center is-flex"></div>
-    <input type="text" id="qr_input" class="nodisplay" value="@(Model?.url + (Model?.GenerateQr?.UserId ?? 0))" />
+    <input type="text" id="qr_input" class="nodisplay" value="@(Model?.url + "?eid=" + (Model?.GenerateQr?.EventId ?? 0) + "&uid=" + (Model?.GenerateQr?.UserId ?? 0))" />
 </div>

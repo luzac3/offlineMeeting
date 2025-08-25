@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Views\Event\_VideoController.txt" />
     <Content Include="Views\Streaming\_VideoController.txt" />
   </ItemGroup>
 

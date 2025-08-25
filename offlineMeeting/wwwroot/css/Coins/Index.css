@@ -1,0 +1,38 @@
+﻿#coin_menu {
+    white-space: nowrap;
+    font-size: clamp(1em, 5vw, 2em);
+}
+
+#coins {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    width: 90vw;
+    margin: auto;
+}
+
+.purcahse_coins {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    font-size: 2em;
+    border: 4px solid red; /* 赤い線 */
+    border-radius: 16px; /* 角を丸く */
+    padding: 16px;
+    width: 100%;
+}
+    .purcahse_coins p {
+        text-align: center;
+    }
+
+.poncoin_img{
+    max-width: 50px;
+}
+
+.paypal_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
