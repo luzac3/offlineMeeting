@@ -4,6 +4,9 @@ declare const paypal: any;
 
 export class CreatePaypalButton {
     SetPaypalButton = () => {
+        if (document.getElementsByClassName('purcahse_coins').length === 0) {
+            return;
+        }
         this.Create(120, 1, '#paypal_button_120');
         this.Create(600, 6, '#paypal_button_600');
         this.Create(1200, 13, '#paypal_button_1200');

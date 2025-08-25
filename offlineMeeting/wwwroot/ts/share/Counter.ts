@@ -7,8 +7,10 @@
             if (!counterElement) {
                 return;
             }
+            
             const incrementButtonElement = <HTMLButtonElement>counterElement.querySelector('.counter_increment');
             const decrementButtonElement = <HTMLButtonElement>counterElement.querySelector('.counter_decrement');
+            const decrementNumberElement = <HTMLInputElement>counterElement.querySelector('.counter_number');
             const max = parseInt(counterElement.max) || 100;
             const min = parseInt(counterElement.min) || 0;
 
@@ -18,10 +20,10 @@
             let longPressStep = 5;
 
             function changeValue(delta: number) {
-                let value = parseInt(counterElement.value) || 0;
+                let value = parseInt(decrementNumberElement.value) || 0;
                 value += delta;
                 value = Math.max(min, Math.min(max, value));
-                counterElement.value = String(value);
+                decrementNumberElement.value = String(value);
             }
 
             function handlePress(buttonElement: HTMLButtonElement, delta: number) {

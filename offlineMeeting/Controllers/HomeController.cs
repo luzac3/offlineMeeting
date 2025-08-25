@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using offlineMeeting.Models;
-using offlineMeeting.Models.Process.Home;
-using offlineMeeting.Models.Share;
+using offlineMeeting.Models.Process.Share;
 using System.Diagnostics;
 
 namespace offlineMeeting.Controllers
@@ -13,32 +13,18 @@ namespace offlineMeeting.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            ViewData["UserName"] = "るざ狼";
         }
 
-        [HttpGet]
-        public IActionResult Index([FromQuery] string uid, string eid)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            ManageEventId manageEventId = new ManageEventId(HttpContext);
-            CheckUserJoin checkUserJoin = new CheckUserJoin(uid);
-            manageUserCd.SetUserCd(uid);
-            manageEventId.SetEventId(eid);
+            SetViewDataProcess setViewDataProcess = new();
+            ViewData["UserData"] = setViewDataProcess.Set(HttpContext);
+            base.OnActionExecuting(context);
+        }
 
-            // ユーザが登録状態であるかどうか
-            if (checkUserJoin.Check())
-            {
-                // userを取得しに行く
-                // なおuserCdはすべての場合に有効なのでHome以外ではコンストラクタで取得する。
-                // Homeはただのメニュー兼エラー受け画面なので要らない
-
-                ViewData["UserName"] = "るざ狼";
-                return View();
-            }
-            else
-            {
-                return Redirect($"~/Login/Qr?eid={eid}&uid={uid}");
-            }
+        public IActionResult Index()
+        {
+            return View();
         }
 
         public IActionResult Privacy()

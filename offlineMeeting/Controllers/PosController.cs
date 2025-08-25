@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.JsonDataProperty;
@@ -24,6 +25,13 @@ namespace offlineMeeting.Controllers
             SakeSiteId = tableIdProperty.SakeSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
 
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            SetViewDataProcess setViewDataProcess = new();
+            ViewData["UserData"] = setViewDataProcess.Set(HttpContext);
+            base.OnActionExecuting(context);
         }
 
         public IActionResult Index()
