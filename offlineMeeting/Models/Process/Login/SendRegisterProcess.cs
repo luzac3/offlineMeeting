@@ -8,10 +8,12 @@ namespace offlineMeeting.Models.Process.Login
     public class SendRegisterProcess
     {
         private readonly IHubContext<LoginHub> _hubContext;
+        private string EventId;
         public string UserCd;
-        public SendRegisterProcess(IHubContext<LoginHub> hubContext, string userCd)
+        public SendRegisterProcess(IHubContext<LoginHub> hubContext, string eventId, string userCd)
         {
             _hubContext = hubContext;
+            EventId = eventId;
             UserCd = userCd;
         }
 
@@ -38,7 +40,7 @@ namespace offlineMeeting.Models.Process.Login
                 // SignalRを使ってクライアントに通知
                 await _hubContext.Clients.All.SendAsync("RegisterSuccess", new Dictionary<string, string>()
                 {
-                    {"url", $"{urlBase}/Login/Index"}
+                    {"url", $"{urlBase}/Login/Index?eid={EventId}&uid={UserCd}"}
                 });
             }
             return response.StatusCode.Equals(HttpStatusCode.OK);

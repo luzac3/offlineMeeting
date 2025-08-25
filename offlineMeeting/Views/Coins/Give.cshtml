@@ -1,4 +1,5 @@
-﻿@model offlineMeeting.Models.ViewModel.GiveCoinsViewModel;
+﻿@using offlineMeeting.Models.Entity.Share;
+@model offlineMeeting.Models.ViewModel.GiveCoinsViewModel;
 
 @{
     ViewData["Title"] = "GiveCoins";
@@ -22,10 +23,13 @@
                 }
             </select>
         </td>
-        <td>
+        <td class="counter">
             <button type="button" class="counter_decrement">-</button>
             <!--最小値は1で、コインを持っていない場合はグレーアウト-->
-            <input type="number" class="counter" value="0" min="1" max="100" />
+            @{
+                JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
+                <input type="number" class="counter_number" value="0" min="0" max="@(userData?.Coins)" />
+            }
             <button type="button" class="counter_increment">+</button>
         </td>
     </tr>
