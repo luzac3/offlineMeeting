@@ -10,9 +10,9 @@ namespace offlineMeeting.Models.ViewModel
 
         public LoginViewModel() {
             #if DEBUG
-                url = $"http://localhost:58874/Login/QrRegister?uid=";
+                url = $"http://localhost:58874/Login/QrRegister";
             #else
-                url = $"https://sake.wolfslab.jp/Login/QrRegister?uid=";
+                url = $"https://sake.wolfslab.jp/Login/QrRegister";
             #endif
         }
 

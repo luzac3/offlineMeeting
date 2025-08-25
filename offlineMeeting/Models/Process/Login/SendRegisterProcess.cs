@@ -8,10 +8,12 @@ namespace offlineMeeting.Models.Process.Login
     public class SendRegisterProcess
     {
         private readonly IHubContext<LoginHub> _hubContext;
+        private string EventId;
         public string UserCd;
-        public SendRegisterProcess(IHubContext<LoginHub> hubContext, string userCd)
+        public SendRegisterProcess(IHubContext<LoginHub> hubContext, string eventId, string userCd)
         {
             _hubContext = hubContext;
+            EventId = eventId;
             UserCd = userCd;
         }
 
@@ -19,8 +21,10 @@ namespace offlineMeeting.Models.Process.Login
         {
             #if DEBUG
                 string urlBase = "http://localhost:58874";
+                string pleasanterUrlBase = "http://localhost:59802";
             #else
                 string urlBase = "https://sake.wolfslab.jp";
+                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
             #endif
 
             SendRegisterEntity sendRegisterEntity = new();
@@ -28,7 +32,7 @@ namespace offlineMeeting.Models.Process.Login
 
             HttpClient httpClient = new HttpClient();
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await httpClient.PostAsync($"{urlBase}/api/items/{UserCd}/update", content);
+            HttpResponseMessage response = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{UserCd}/update", content);
 
             // 通信がうまくいったら
             if (response.StatusCode.Equals(HttpStatusCode.OK))
@@ -36,10 +40,9 @@ namespace offlineMeeting.Models.Process.Login
                 // SignalRを使ってクライアントに通知
                 await _hubContext.Clients.All.SendAsync("RegisterSuccess", new Dictionary<string, string>()
                 {
-                    {"url", $"{urlBase}/Login/Index"}
+                    {"url", $"{urlBase}/Login/Index?eid={EventId}&uid={UserCd}"}
                 });
-            }   
-
+            }
             return response.StatusCode.Equals(HttpStatusCode.OK);
         }
     }

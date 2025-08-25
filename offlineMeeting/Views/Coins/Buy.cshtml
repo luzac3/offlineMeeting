@@ -1,0 +1,61 @@
+﻿@model offlineMeeting.Models.ViewModel.CoinsViewModel;
+
+@{
+    ViewData["Title"] = "BuyCoins";
+}
+@section Scripts {
+    <script src="~/js/dist/Coins.js" defer></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=@(Model.ClientId)&currency=JPY"></script>
+    <link rel="stylesheet" href="~/css/Coins/Index.css" asp-append-version="true" />
+}
+<div id="coins">
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×1</span>
+        </p>
+        <p>120円</p>
+        <p id="paypal_button_120" class="paypal_button"></p>
+    </div>
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×5(オマケ1枚)</span>
+        </p>
+        <p>600円</p>
+        <p id="paypal_button_600"></p>
+    </div>
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×10(オマケ3枚)</span>
+        </p>
+        <p>1200円</p>
+        <p id="paypal_button_1200"></p>
+    </div>
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×33(オマケ7枚)</span>
+        </p>
+        <p>3600円</p>
+        <p id="paypal_button_3600"></p>
+    </div>
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×50(オマケ18枚)</span>
+        </p>
+        <p>6000円</p>
+        <p id="paypal_button_6000"></p>
+    </div>
+    <div class="purcahse_coins">
+        <p>
+            <img class="poncoin_img" src="/image/poncoin.png" />
+            <span>×100(オマケ40枚)</span>
+        </p>
+        <p>12000円</p>
+        <p id="paypal_button_12000"></p>
+    </div>
+</div>
+    <!-- https://passmarket.yahoo.co.jp/event/show/detail/02qp9j9dhrm41.html -->
