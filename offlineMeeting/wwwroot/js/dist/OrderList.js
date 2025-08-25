@@ -23,8 +23,14 @@ class GetOrderList {
             if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.check("OrderEntityList")) {
                 orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.get("OrderEntityList");
             }
+            let totalCoins = 0;
             this.send(orderEntityList).then((data) => {
                 document.getElementById("order_list").innerHTML = data;
+                document.getElementById("pon_coins").innerText = totalCoins.toString();
+                document.getElementById("pon_coins_input").value = totalCoins.toString();
+            });
+            orderEntityList.forEach(order => {
+                totalCoins += order.OrderCoins;
             });
         };
         this.send = async (orderEntityList) => {
