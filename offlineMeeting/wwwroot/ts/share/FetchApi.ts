@@ -13,6 +13,7 @@
             { [key: string]: string }[] |
             { [key: string]: boolean }[] |
             Uint8Array |
+            number |
             number[] |
             boolean |
             FormDataEntryValue |
