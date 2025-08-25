@@ -26,7 +26,14 @@ export class SendOrder {
             }
 
             this.send(orderEntityList).then((data: string) => {
-                window.alert("注文を送信しました");
+                const result = JSON.parse(data) as {[key: string]: string};
+                if (result.status == "200") {
+                    // オーダーのストックをクリア
+                    LocalStrage.delete();
+                    // 画面をクリア
+                    document.getElementById("order_list")!.innerHTML = "";
+                }
+                window.alert(result.message);
             });
         });
     }
