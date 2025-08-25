@@ -5,7 +5,7 @@
     foreach (OrderEntity orderEntity in Model.OrderEntityList ?? new List<OrderEntity> { })
     {
         <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
-            <p class="order_detail">
+            <div class="image_container">
                 @if (@orderEntity.AlcoholDataEntity?.Image != null)
                 {
                     @if ((@orderEntity.AlcoholDataEntity.Image) == "")
@@ -18,8 +18,12 @@
                             <img src="@(orderEntity.AlcoholDataEntity.Image)" class="food_image" />
                         </a>
                     }
-                    <span class="alcoholName">@orderEntity.AlcoholDataEntity.AlcoholName</span>
-                    <span class="rarity">☆@(orderEntity.AlcoholDataEntity.Rarity)</span>
+                }
+            </div>
+            <div class="caption">
+                <p>
+                    <span class="alcoholName">@orderEntity.AlcoholDataEntity?.AlcoholName</span>
+                    <span class="rarity">☆@(orderEntity.AlcoholDataEntity?.Rarity)</span>
                     @switch (orderEntity.OrderPostEntity.AlcoholAmount)
                     {
                         case 36:
@@ -35,10 +39,20 @@
                             ;
                             break;
                     }
-                }
-                <span>注文数:@(orderEntity.OrderPostEntity.OrderNumber)</span>
-                <span>ポンコイン:@(orderEntity.OrderPostEntity.OrderCoins)枚</span>
-            </p>
+                    <input type="text" class="alcohol_amount nodisplay" value="@(orderEntity.OrderPostEntity.AlcoholAmount)" />
+                </p>
+                <p class="counter">
+                    <span>注文数:</span>
+                    <button type="button" class="counter_decrement">-</button>
+                    <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
+                    <button type="button" class="counter_increment">+</button>
+                </p>
+                <p>
+                    <img class="poncoin_img" src="/image/poncoin.png" />
+                    <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
+                    <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
+                </p>
+            </div>
         </div>
     }
 }

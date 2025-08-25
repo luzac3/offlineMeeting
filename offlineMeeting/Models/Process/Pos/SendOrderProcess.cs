@@ -3,6 +3,7 @@ using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
+using System.Net;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -74,7 +75,7 @@ namespace offlineMeeting.Models.Process.Pos
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage response = await httpClient.PostAsync($"http://localhost:59802/api/items/{OrderSiteId}/bulkupsert", content);
 
-            if(!response.StatusCode.Equals(200))
+            if(!response.StatusCode.Equals(HttpStatusCode.OK))
             {
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" } });
             }
