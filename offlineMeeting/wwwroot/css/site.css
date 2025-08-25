@@ -41,6 +41,14 @@ body {
     font-size: clamp(1em, 5vw, 2em);
 }
 
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+}
+
 #coins_wrapper a {
     text-decoration: none;
 }

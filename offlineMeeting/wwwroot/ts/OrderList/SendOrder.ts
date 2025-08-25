@@ -32,6 +32,8 @@ export class SendOrder {
                     LocalStrage.delete();
                     // 画面をクリア
                     document.getElementById("order_list")!.innerHTML = "";
+                    document.getElementById("pon_coins")!.innerText = "0";
+                    (<HTMLInputElement>document.getElementById("pon_coins_input")!).value = "0";
                 }
                 window.alert(result.message);
             });
