@@ -1,0 +1,17 @@
+@using offlineMeeting.Models.Entity.Quiz
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+@{
+    <p>番号：@(Model.QuizEntity?.ResultId)</p>
+    <input id="quiz_id" type="text" class="nodisplay" value="@(Model.QuizEntity?.ResultId)" />
+    <p>@(Model.QuizEntity?.Quiz)</p>
+    @if (@Model.QuizEntity?.QuizImage != "")
+    {
+        <img src="@(Model.QuizEntity?.QuizImage)" class="food_image" />
+    }
+    <p>@(Model.QuizEntity?.Hint)</p>
+    <p>@(Model.QuizEntity?.MaxPoint)</p>
+    <p>@(Model.QuizEntity?.Answer)</p>
+    <p>@(Model.QuizEntity?.Explanation)</p>
+    <p><button id="send_quiz" type="button" value="send_quiz">問題送信</button></p>
+}

@@ -1,0 +1,20 @@
+@using offlineMeeting.Models.Entity.Quiz
+@{
+    ViewData["Title"] = "QuizList";
+}
+@section Scripts {
+    <script src="~/js/dist/Quiz.js" defer></script>
+    <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+<div id="quiz_list">
+    @{
+        @foreach (QuizEntity quizEntity in Model.QuizEntityList ?? new List<offlineMeeting.Models.Entity.Quiz.QuizEntity> { })
+        {
+            <p>
+                <a asp-area="" asp-controller="Quiz" asp-action="Orner/@(quizEntity.ResultId)">@quizEntity.Quiz</a>
+            </p>
+        }
+    }
+</div>

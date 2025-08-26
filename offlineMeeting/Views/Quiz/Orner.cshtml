@@ -1,3 +1,4 @@
+@using offlineMeeting.Models.Entity.Quiz
 @{
     ViewData["Title"] = "QuizOrner";
 }
@@ -5,17 +6,34 @@
     <script src="~/js/dist/Quiz.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
 }
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+<!--問題の表示-->
+<div id="quiz">
+    <p>番号：@(Model.QuizEntity?.ResultId)</p>
+    <input id="quiz_id" type="text" class="nodisplay" value="@(Model.QuizEntity?.ResultId)" />
+    <p>@(Model.QuizEntity?.Quiz)</p>
+    @if (@Model.QuizEntity?.QuizImage != "")
+    {
+        <img src="@(Model.QuizEntity?.QuizImage)" class="food_image" />
+    }
+    <p>@(Model.QuizEntity?.Hint)</p>
+    <p>@(Model.QuizEntity?.MaxPoint)</p>
+    <p>@(Model.QuizEntity?.Answer)</p>
+    <p>@(Model.QuizEntity?.Explanation)</p>
+    <p><button id="send_quiz" type="button" value="send_quiz">問題送信</button></p>
+</div>
 
+<!--userの答えはここに列挙される-->
 <div id="answer_list">
     <div class="answer">
         <div>
-            <p><img class="receivedImage" style="max-width:400px;max-height:200px;" /></p>
+            <p><img class="receivedImage" /></p>
         </div>
         <div>
             <p>ユーザ名</p>
             <input type="text" id="userCd" class="nodisplay" />
             <p>正否</p>
-            <input type="number" id="userCode" min="0" max="10" />
+            <input type="number" id="userCode" min="0" max="@(Model.QuizEntity?.MaxPoint)" />
         </div>
     </div>
 </div>

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using offlineMeeting.Models;
-using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.JsonDataProperty;
-using offlineMeeting.Models.Process.Coins;
+using offlineMeeting.Models.Process.Quiz;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
@@ -13,15 +12,13 @@ namespace offlineMeeting.Controllers
     public class QuizController : Controller
     {
         private readonly ILogger<QuizController> _logger;
-        private int CoinsSiteId;
-        private int JoinerSiteId;
+        private int QuizSiteId;
 
         public QuizController(ILogger<QuizController> logger)
         {
             _logger = logger;
             TableIdProperty tableIdProperty = new();
-            CoinsSiteId = tableIdProperty.CoinsSiteId;
-            JoinerSiteId = tableIdProperty.JoinerSiteId;
+            QuizSiteId = tableIdProperty.QuizSiteId;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -36,9 +33,33 @@ namespace offlineMeeting.Controllers
             return View();
         }
 
-        public IActionResult Orner()
+        public IActionResult QuizList()
         {
-            return View();
+            GetQuizProcess getQuizProcess = new(HttpContext);
+            QuizViewModel quizViewModel = new QuizViewModel();
+            quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
+
+            return View(quizViewModel);
+        }
+
+        [HttpPost("Quiz/GetQuiz/{quizId}")]
+        public IActionResult GetQuiz(int quizId)
+        {
+            GetQuizProcess getQuizProcess = new(HttpContext);
+            QuizViewModel quizViewModel = new QuizViewModel();
+            quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
+
+            return PartialView("_Quiz", quizViewModel);
+        }
+
+        [HttpGet("Quiz/Orner/{resultId}")]
+        public IActionResult Orner(int resultId)
+        {
+            GetQuizProcess getQuizProcess = new(HttpContext);
+            QuizViewModel quizViewModel = new QuizViewModel();
+            quizViewModel.setQuizEntity(getQuizProcess.Get(resultId));
+
+            return View(quizViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

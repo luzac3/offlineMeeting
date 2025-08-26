@@ -5,11 +5,12 @@
     <script src="~/js/dist/Quiz.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
 }
-
-<div id ="quiz-container">
-    <canvas id="textCanvas" width="400" height="200" style="border:1px solid #ccc;"></canvas>
+<div id="quiz"></div>
+<div id ="answer_container">
+    <canvas id="textCanvas"></canvas>
     <div class="quiz-buttons">
         <button id="clear">クリア</button>
         <button id="send">確定</button>
     </div>
+    <input id="quiz_id" type="text" class="nodisplay" value="" />
 </div>
