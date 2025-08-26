@@ -10,6 +10,8 @@ namespace offlineMeeting.Models.JsonDataProperty
         public int OrderSiteId { get; set; }
         public int JoinerSiteId { get; set; }
         public int CoinsSiteId { get; set; }
+        public int QuizSiteId { get; set; }
+        public int AnswerSiteId { get; set; }
     }
 
     public class TableIdProperty : TableIdEntity
@@ -27,6 +29,8 @@ namespace offlineMeeting.Models.JsonDataProperty
             OrderSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.OrderSiteId ?? throw new NullReferenceException("json read error");
             JoinerSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.JoinerSiteId ?? throw new NullReferenceException("json read error");
             CoinsSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.CoinsSiteId ?? throw new NullReferenceException("json read error");
+            QuizSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.QuizSiteId ?? throw new NullReferenceException("json read error");
+            AnswerSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.AnswerSiteId ?? throw new NullReferenceException("json read error");
         }
     }
 }

@@ -4105,7 +4105,7 @@ class ControlNavbar {
         this.setBodyPadding = () => {
             const navbar = document.querySelector('.navbar');
             if (navbar) {
-                document.body.style.paddingTop = navbar.offsetHeight + 'px';
+                document.body.style.paddingTop = (navbar.offsetHeight + 5) + 'px';
             }
         };
         this.setBodyPadding();

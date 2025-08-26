@@ -19,23 +19,27 @@ export class SendCanvasImage {
     SendCanvas = () => {
         const sendElement = document.getElementById('send') as HTMLButtonElement;
         const canvasElement = document.getElementById('textCanvas') as HTMLCanvasElement;
+        const quizId = (document.getElementById('quizId') as HTMLInputElement).value;
         sendElement.onclick = () => {
             const dataUrl = canvasElement.toDataURL("image/png");
-            this.send({ image: dataUrl }).then((data: string) => {
+            const answerEntity: { [key: string]: string } = {
+                quizId: quizId,
+                image: dataUrl
+            };
+            this.send(answerEntity).then((data: string) => {
                 console.log(data);
                 alert('送信完了');
             });
         };
     }
 
-    private send = async (coinsEntity: { [key: string]: string }) => {
+    private send = async (answerEntity: { [key: string]: string }) => {
         const fetchApi = new FetchApi();
-
         return await fetchApi.send(
             this.url,
             this.method,
             this.headers,
-            coinsEntity,
+            answerEntity,
             this.responseKind
         ).then(async (data: string) => {
             return data;
