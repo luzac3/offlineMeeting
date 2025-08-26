@@ -22,7 +22,7 @@ namespace offlineMeeting.Models.Process.Quiz
             SetQuizEntityProcess = new(EventId);
         }
 
-        public QuizEntity Get(int resultId)
+        public QuizEntity Get(string resultId)
         {
             return SetQuizEntityProcess.Get(resultId);
         }

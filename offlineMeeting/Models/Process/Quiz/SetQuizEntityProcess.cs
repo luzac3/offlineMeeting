@@ -14,11 +14,12 @@ namespace offlineMeeting.Models.Process.Quiz
             EventId = eventId;
         }
 
-        public QuizEntity Get(int resultId) {
+        public QuizEntity Get(string resultId)
+        {
             ResultsEntity result = base
-                .GetSingleRecord(resultId.ToString());
+                .GetSingleRecord(resultId);
 
-            string[]? imageSplit = result!.DescriptionG?.Split("/");
+            string[]? imageSplit = result!.DescriptionB?.Split("/");
             string guid = "";
             if (imageSplit != null && imageSplit?.Length > 2)
             {

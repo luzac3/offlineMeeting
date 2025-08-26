@@ -4069,39 +4069,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class QuizHub {
     constructor(signalR) {
+        this.sendQuizId = () => {
+            const sendQuizElement = document.getElementById("send_quiz");
+            if (sendQuizElement != null) {
+                sendQuizElement.onclick = () => {
+                    const quizId = document.getElementById("quiz_id").value;
+                    this.SignalR.send("SendQuizId", quizId);
+                };
+            }
+        };
         this.SignalR = signalR;
-        const sendQuizElement = document.getElementById("send_quiz");
-        if (sendQuizElement != null) {
-            sendQuizElement.onclick = () => {
-                const quizId = document.getElementById("quiz_id").value;
-                signalR.send("SendQuizId", quizId);
-            };
-        }
+        this.sendQuizId();
     }
 }
 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/Quiz/SendCanvasImage.ts":
-/*!********************************************!*\
-  !*** ./wwwroot/ts/Quiz/SendCanvasImage.ts ***!
-  \********************************************/
+/***/ "./wwwroot/ts/Quiz/SendAnswer.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/Quiz/SendAnswer.ts ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SendCanvasImage: () => (/* binding */ SendCanvasImage)
+/* harmony export */   SendAnswer: () => (/* binding */ SendAnswer)
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
 
-class SendCanvasImage {
+class SendAnswer {
     constructor() {
         this.SendCanvas = () => {
             const sendElement = document.getElementById('send');
             const canvasElement = document.getElementById('textCanvas');
-            const quizId = document.getElementById('quizId').value;
+            const quizId = document.getElementById('quiz_id').value;
             sendElement.onclick = () => {
                 const dataUrl = canvasElement.toDataURL("image/png");
                 const answerEntity = {
@@ -4109,8 +4112,9 @@ class SendCanvasImage {
                     image: dataUrl
                 };
                 this.send(answerEntity).then((data) => {
+                    const result = JSON.parse(data);
                     console.log(data);
-                    alert('送信完了');
+                    window.alert(result.message);
                 });
             };
         };
@@ -4122,7 +4126,7 @@ class SendCanvasImage {
                 throw e;
             });
         };
-        this.url = '/Quiz/SendCanvasImage';
+        this.url = '/Quiz/SendAnswer';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
@@ -4414,7 +4418,7 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _SendCanvasImage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendCanvasImage */ "./wwwroot/ts/Quiz/SendCanvasImage.ts");
+/* harmony import */ var _SendAnswer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendAnswer */ "./wwwroot/ts/Quiz/SendAnswer.ts");
 /* harmony import */ var _Canvas__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Canvas */ "./wwwroot/ts/Quiz/Canvas.ts");
 /* harmony import */ var _QuizHub__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./QuizHub */ "./wwwroot/ts/Quiz/QuizHub.ts");
 /* harmony import */ var _GetQuiz__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GetQuiz */ "./wwwroot/ts/Quiz/GetQuiz.ts");
@@ -4430,9 +4434,9 @@ __webpack_require__.r(__webpack_exports__);
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     new _Canvas__WEBPACK_IMPORTED_MODULE_3__.Canvas();
     new _QuizHub__WEBPACK_IMPORTED_MODULE_4__.QuizHub(signalR);
-    const sendCanvasImage = new _SendCanvasImage__WEBPACK_IMPORTED_MODULE_2__.SendCanvasImage();
+    const sendAnswer = new _SendAnswer__WEBPACK_IMPORTED_MODULE_2__.SendAnswer();
     const getQuiz = new _GetQuiz__WEBPACK_IMPORTED_MODULE_5__.GetQuiz();
-    sendCanvasImage.SendCanvas();
+    sendAnswer.SendCanvas();
     getQuiz.GetQuiz(signalR);
 })();
 
