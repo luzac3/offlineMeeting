@@ -7,7 +7,7 @@ export class ControlNavbar {
     setBodyPadding = () => {
         const navbar = document.querySelector('.navbar') as HTMLElement;
         if (navbar) {
-            document.body.style.paddingTop = navbar.offsetHeight + 'px';
+            document.body.style.paddingTop = (navbar.offsetHeight + 5) + 'px';
         }
     }
 }
