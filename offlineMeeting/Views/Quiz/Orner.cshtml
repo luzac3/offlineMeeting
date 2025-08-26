@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "QuizOrner";
+}
+@section Scripts {
+    <script src="~/js/dist/Quiz.js" defer></script>
+    <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
+}
+
+<div id="answer_list">
+    <div class="answer">
+        <div>
+            <p><img class="receivedImage" style="max-width:400px;max-height:200px;" /></p>
+        </div>
+        <div>
+            <p>ユーザ名</p>
+            <input type="text" id="userCd" class="nodisplay" />
+            <p>正否</p>
+            <input type="number" id="userCode" min="0" max="10" />
+        </div>
+    </div>
+</div>
+<div>
+    <button type="button" value="sendPoints">ポイント確定</button>
+</div>

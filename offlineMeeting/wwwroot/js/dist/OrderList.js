@@ -1,1 +1,424 @@
-(()=>{"use strict";var __webpack_modules__={222:(__unused_webpack_module,__webpack_exports__,__webpack_require__)=>{__webpack_require__.d(__webpack_exports__,{c:()=>LocalStrage});class LocalStrage{static set(e,t){window.sessionStorage.setItem(e,JSON.stringify(t))}static get(objName){const obj=window.sessionStorage.getItem(objName);if(!this.check(objName))return!1;if(null===obj)throw new Error("���m�̃G���[");const parser=function(_k,v){return 0===v.toString().indexOf("function")?eval("("+v+")"):v};return JSON.parse(obj,parser)}static check(e){return!!window.sessionStorage.getItem(e)}static delete(){window.sessionStorage.clear()}}}},__webpack_module_cache__={};function __webpack_require__(e){var t=__webpack_module_cache__[e];if(void 0!==t)return t.exports;var r=__webpack_module_cache__[e]={exports:{}};return __webpack_modules__[e](r,r.exports,__webpack_require__),r.exports}__webpack_require__.d=(e,t)=>{for(var r in t)__webpack_require__.o(t,r)&&!__webpack_require__.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},__webpack_require__.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t);var __webpack_exports__={};(()=>{class e{constructor(){this.setBodyPadding=()=>{const e=document.querySelector(".navbar");e&&(document.body.style.paddingTop=e.offsetHeight+"px")},this.setBodyPadding(),window.addEventListener("resize",this.setBodyPadding)}}class t{constructor(){this.SetCounter=()=>{Array.from(document.getElementsByClassName("counter")).forEach((e=>{const t=e;if(!t)return;const r=t.querySelector(".counter_increment"),s=t.querySelector(".counter_decrement"),n=t.querySelector(".counter_number"),o=parseInt(t.max)||100,c=parseInt(t.min)||0;let i,a=1;function d(e){let t=parseInt(n.value)||0;t+=e,t=Math.max(c,Math.min(o,t)),n.value=String(t)}function u(e,t){e.addEventListener("mousedown",(function(){a=1,d(t),i=setTimeout((function e(){a=5,d(t*a),i=setTimeout(e,200)}),500)})),e.addEventListener("mouseup",(function(){clearTimeout(i)})),e.addEventListener("mouseleave",(function(){clearTimeout(i)})),e.addEventListener("touchend",(function(){clearTimeout(i)}))}u(r,1),u(s,-1)}))}}}var r=__webpack_require__(222);class s{constructor(){this.send=async(e,t,r,s,n="json",o=!0)=>{let c;c="GET"==t?new Request(e,{method:t,headers:r}):new Request(e,{method:t,headers:r,body:JSON.stringify(s)});const i=await fetch(c).catch((e=>{throw e}));if(!i.ok)throw new Error(i.statusText);if(o)switch(n){case"json":return await this.fetchResonse(i.json()).catch((e=>{throw e}));case"text":return await this.fetchResonse(i.text()).catch((e=>{throw e}))}}}async fetchResonse(e){return await e.then((e=>e)).catch((e=>{throw console.log(e),e}))}}class n{constructor(){this.setOrderList=()=>{const s=new t;let n=[];r.c.check("OrderEntityList")&&(n=r.c.get("OrderEntityList"));let o=0;this.send(n).then((t=>{document.getElementById("order_list").innerHTML=t,document.getElementById("pon_coins").innerText=o.toString(),document.getElementById("pon_coins_input").value=o.toString(),s.SetCounter(),new e})),n.forEach((e=>{o+=e.OrderCoins}))},this.send=async e=>{const t=new s;return await t.send(this.url,this.method,this.headers,e,this.responseKind).then((async e=>e)).catch((e=>{throw e}))},this.url="/Pos/OrderListContents",this.method="POST",this.headers={"Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"},this.responseKind="text"}}class o{constructor(e,t,r,s=0){this.ResultId=e,this.OrderNumber=t,this.OrderCoins=r,this.AlcoholAmount=s}}class c{constructor(){this.setOrderList=()=>{document.getElementById("send_order")?.addEventListener("click",(async()=>{const e=Array.from(document.getElementsByClassName("order"));let t=[];if(e.length>0){Array.from(document.getElementsByClassName("order")).forEach((e=>{t.push(new o(parseInt(e.dataset.result_id),parseInt(e.querySelector(".order_number").value),parseInt(e.querySelector(".order_coins").value),parseInt(e.querySelector(".alcohol_amount").value)))}));const e=t.map((e=>({ResultId:e.ResultId,OrderNumber:e.OrderNumber,OrderCoins:e.OrderCoins,AlcoholAmount:e.AlcoholAmount}))).filter((e=>0!=e.OrderNumber));this.send(e).then((e=>{const t=JSON.parse(e);"200"==t.status&&(r.c.delete(),document.getElementById("order_list").innerHTML="",document.getElementById("pon_coins").innerText="0",document.getElementById("pon_coins_input").value="0"),window.alert(t.message)}))}}))},this.send=async e=>{const t=new s;return await t.send(this.url,this.method,this.headers,e,this.responseKind).then((async e=>e)).catch((e=>{throw e}))},this.url="/Pos/SendOrder",this.method="POST",this.headers={"Content-Type":"application/json","X-Requested-With":"XMLHttpRequest"},this.responseKind="text"}}(async()=>{const e=new n,t=new c;e.setOrderList(),t.setOrderList()})()})()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./wwwroot/ts/OrderList/GetOrderList.ts":
+/*!**********************************************!*\
+  !*** ./wwwroot/ts/OrderList/GetOrderList.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GetOrderList: () => (/* binding */ GetOrderList)
+/* harmony export */ });
+/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
+/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+
+
+
+
+class GetOrderList {
+    constructor() {
+        this.setOrderList = () => {
+            const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__.Counter();
+            let orderEntityList = [];
+            if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.check("OrderEntityList")) {
+                orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.get("OrderEntityList");
+            }
+            let totalCoins = 0;
+            this.send(orderEntityList).then((data) => {
+                document.getElementById("order_list").innerHTML = data;
+                document.getElementById("pon_coins").innerText = totalCoins.toString();
+                document.getElementById("pon_coins_input").value = totalCoins.toString();
+                // カウンターをアクティブ
+                counter.SetCounter();
+                // ナビバーの位置を調整
+                new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
+            });
+            orderEntityList.forEach(order => {
+                totalCoins += order.OrderCoins;
+            });
+        };
+        this.send = async (orderEntityList) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__.FetchApi();
+            return await fetchApi.send(this.url, this.method, this.headers, orderEntityList, this.responseKind).then(async (data) => {
+                return data;
+            }).catch(e => {
+                throw e;
+            });
+        };
+        this.url = '/Pos/OrderListContents';
+        this.method = 'POST';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        this.responseKind = "text";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/OrderList/SendOrder.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/OrderList/SendOrder.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SendOrder: () => (/* binding */ SendOrder)
+/* harmony export */ });
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../pos/OrderEntity */ "./wwwroot/ts/pos/OrderEntity.ts");
+
+
+
+class SendOrder {
+    constructor() {
+        this.setOrderList = () => {
+            document.getElementById("send_order")?.addEventListener("click", async () => {
+                const orderElements = Array.from(document.getElementsByClassName("order"));
+                let orderEntityList = [];
+                if (orderElements.length > 0) {
+                    Array.from(document.getElementsByClassName("order")).forEach((orderElement) => {
+                        orderEntityList.push(new _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(parseInt(orderElement.dataset.result_id), parseInt(orderElement.querySelector(".order_number").value), parseInt(orderElement.querySelector(".order_coins").value), parseInt(orderElement.querySelector(".alcohol_amount").value)));
+                    });
+                    const orderObjectList = orderEntityList.map(order => ({
+                        ResultId: order.ResultId,
+                        OrderNumber: order.OrderNumber,
+                        OrderCoins: order.OrderCoins,
+                        AlcoholAmount: order.AlcoholAmount
+                    })).filter(x => x.OrderNumber != 0);
+                    this.send(orderObjectList).then((data) => {
+                        const result = JSON.parse(data);
+                        if (result.status == "200") {
+                            // オーダーのストックをクリア
+                            _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_0__.LocalStrage.delete();
+                            // 画面をクリア
+                            document.getElementById("order_list").innerHTML = "";
+                            document.getElementById("pon_coins").innerText = "0";
+                            document.getElementById("pon_coins_input").value = "0";
+                        }
+                        window.alert(result.message);
+                    });
+                }
+            });
+        };
+        this.send = async (orderEntityList) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
+            return await fetchApi.send(this.url, this.method, this.headers, orderEntityList, this.responseKind).then(async (data) => {
+                return data;
+            }).catch(e => {
+                throw e;
+            });
+        };
+        this.url = '/Pos/SendOrder';
+        this.method = 'POST';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        this.responseKind = "text";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
+/* harmony export */ });
+class OrderEntity {
+    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
+        this.ResultId = resultId;
+        this.OrderNumber = orderNumber;
+        this.OrderCoins = orderCoins;
+        this.AlcoholAmount = alcoholAmount;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/ControlNavbar.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
+/* harmony export */ });
+class ControlNavbar {
+    constructor() {
+        this.setBodyPadding = () => {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                document.body.style.paddingTop = navbar.offsetHeight + 'px';
+            }
+        };
+        this.setBodyPadding();
+        window.addEventListener('resize', this.setBodyPadding);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/Counter.ts":
+/*!*************************************!*\
+  !*** ./wwwroot/ts/share/Counter.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Counter: () => (/* binding */ Counter)
+/* harmony export */ });
+class Counter {
+    constructor() {
+        this.SetCounter = () => {
+            const counterElements = Array.from(document.getElementsByClassName('counter'));
+            counterElements.forEach((element) => {
+                const counterElement = element;
+                if (!counterElement) {
+                    return;
+                }
+                const incrementButtonElement = counterElement.querySelector('.counter_increment');
+                const decrementButtonElement = counterElement.querySelector('.counter_decrement');
+                const decrementNumberElement = counterElement.querySelector('.counter_number');
+                const max = parseInt(counterElement.max) || 100;
+                const min = parseInt(counterElement.min) || 0;
+                let timer;
+                let interval = 200; // 長押し時の間隔(ms)
+                let step = 1;
+                let longPressStep = 5;
+                function changeValue(delta) {
+                    let value = parseInt(decrementNumberElement.value) || 0;
+                    value += delta;
+                    value = Math.max(min, Math.min(max, value));
+                    decrementNumberElement.value = String(value);
+                }
+                function handlePress(buttonElement, delta) {
+                    buttonElement.addEventListener('mousedown', function () {
+                        step = 1;
+                        changeValue(delta);
+                        timer = setTimeout(function repeat() {
+                            step = longPressStep;
+                            changeValue(delta * step);
+                            timer = setTimeout(repeat, interval);
+                        }, 500); // 0.5秒後に長押し判定
+                    });
+                    buttonElement.addEventListener('mouseup', function () {
+                        clearTimeout(timer);
+                    });
+                    buttonElement.addEventListener('mouseleave', function () {
+                        clearTimeout(timer);
+                    });
+                    buttonElement.addEventListener('touchend', function () {
+                        clearTimeout(timer);
+                    });
+                }
+                handlePress(incrementButtonElement, 1);
+                handlePress(decrementButtonElement, -1);
+            });
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/FetchApi.ts":
+/*!**************************************!*\
+  !*** ./wwwroot/ts/share/FetchApi.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FetchApi: () => (/* binding */ FetchApi)
+/* harmony export */ });
+class FetchApi {
+    constructor() {
+        this.send = async (url, method, headers, body, 
+        //body: any,
+        responseKind = "json", needResponseData = true) => {
+            let request;
+            if (method == "GET") {
+                request = new Request(url, {
+                    method: method,
+                    headers: headers
+                });
+            }
+            else {
+                request = new Request(url, {
+                    method: method,
+                    headers: headers,
+                    body: JSON.stringify(body)
+                });
+            }
+            const response = await fetch(request).catch(e => { throw e; });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            if (!needResponseData) {
+                return;
+            }
+            switch (responseKind) {
+                case "json":
+                    return await this.fetchResonse(response.json()).catch(e => { throw e; });
+                case "text":
+                    return await this.fetchResonse(response.text()).catch(e => { throw e; });
+            }
+        };
+    }
+    async fetchResonse(response) {
+        return await response.then(data => {
+            return data;
+        })
+            .catch(error => {
+            // エラー処理
+            console.log(error);
+            throw error;
+        });
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/LocalStrage.ts":
+/*!*****************************************!*\
+  !*** ./wwwroot/ts/share/LocalStrage.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LocalStrage: () => (/* binding */ LocalStrage)
+/* harmony export */ });
+class LocalStrage {
+    static set(Obj_name, Obj) {
+        window.sessionStorage.setItem(Obj_name, JSON.stringify(Obj));
+    }
+    static get(objName) {
+        const obj = window.sessionStorage.getItem(objName);
+        if (!this.check(objName)) {
+            return false;
+        }
+        if (obj === null) {
+            throw new Error("���m�̃G���[");
+        }
+        const parser = function (_k, v) { return v.toString().indexOf('function') === 0 ? eval('(' + v + ')') : v; };
+        return JSON.parse(obj, parser);
+    }
+    static check(Obj_name) {
+        if (window.sessionStorage.getItem(Obj_name)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    static delete() {
+        window.sessionStorage.clear();
+    }
+}
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!***************************************!*\
+  !*** ./wwwroot/ts/OrderList/Index.ts ***!
+  \***************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
+/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+
+
+(async () => {
+    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_0__.GetOrderList();
+    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_1__.SendOrder();
+    getOrderList.setOrderList();
+    sendOrder.setOrderList();
+})();
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=OrderList.js.map
