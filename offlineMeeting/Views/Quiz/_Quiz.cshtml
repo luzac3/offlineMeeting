@@ -7,11 +7,6 @@
     <p>@(Model.QuizEntity?.Quiz)</p>
     @if (@Model.QuizEntity?.QuizImage != "")
     {
-        <img src="@(Model.QuizEntity?.QuizImage)" class="food_image" />
+        <img src="@(Model.QuizEntity?.QuizImage)" class="quiz_image" />
     }
-    <p>@(Model.QuizEntity?.Hint)</p>
-    <p>@(Model.QuizEntity?.MaxPoint)</p>
-    <p>@(Model.QuizEntity?.Answer)</p>
-    <p>@(Model.QuizEntity?.Explanation)</p>
-    <p><button id="send_quiz" type="button" value="send_quiz">問題送信</button></p>
 }

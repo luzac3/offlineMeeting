@@ -1,0 +1,18 @@
+@using offlineMeeting.Models.Entity.Quiz
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+@{
+    <div class="answer">
+        <div>
+            <p><img class="receivedImage" /></p>
+        </div>
+        <div>
+            <p>ユーザ名</p>
+            <input type="text" id="userCd" class="nodisplay" />
+            <p>正否</p>
+            <input type="number" id="userCode" min="0" max="@(Model.QuizEntity?.MaxPoint)" />
+            <img src="@(Model.AnswerEntity?.Image)" class="quiz_image" />
+            <p>@(Model.AnswerEntity?.AnswerTime)</p>
+        </div>
+    </div>
+}
