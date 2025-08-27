@@ -1,4 +1,6 @@
-﻿using offlineMeeting.Models.Entity.Pos;
+﻿using Microsoft.AspNetCore.SignalR;
+using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
@@ -13,9 +15,11 @@ namespace offlineMeeting.Models.Process.Pos
         private int OrderSiteId;
         private int JoinerSiteId;
         private string EventId;
+        private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
+        private readonly IHubContext<PosHub> _hubContext;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext)
+        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<PosHub> hubContext)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
@@ -26,11 +30,13 @@ namespace offlineMeeting.Models.Process.Pos
             }
             OrderSiteId = orderSiteId;
             JoinerSiteId = joinerSiteId;
+            HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
+            _hubContext = hubContext;
         }
 
 
-        public async Task<string> Send(HttpContext httpContext)
+        public async Task<string> Send()
         {
             #if DEBUG
                 string pleasanterUrlBase = "http://localhost:59802";
@@ -38,7 +44,7 @@ namespace offlineMeeting.Models.Process.Pos
                 string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
             #endif
             List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
-            ManageUserCd manageUserCd = new ManageUserCd(httpContext);
+            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
             if (userCd == "0")
             {
@@ -64,7 +70,7 @@ namespace offlineMeeting.Models.Process.Pos
                 totalCoins += orderPostEntity.OrderCoins;
             }
 
-            GetUsersProcess getUsersProcess = new (JoinerSiteId, httpContext);
+            GetUsersProcess getUsersProcess = new (JoinerSiteId, HttpContext);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             if(userData.Coins < totalCoins)
@@ -87,6 +93,8 @@ namespace offlineMeeting.Models.Process.Pos
             }
             else
             {
+                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() { {"userName", userData.UserName ?? ""} });
+
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url }, { "userCd", userCd }, { "sendData", json } });
             }
         }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
+using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
@@ -12,21 +14,25 @@ namespace offlineMeeting.Controllers
 {
     public class PosController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHubContext<PosHub> _hubContext;
+        private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
         private int OrderSiteId;
         private int JoinerSiteId;
 
-        public PosController(ILogger<HomeController> logger)
+        public PosController(
+            ILogger<PosController> logger,
+            IHubContext<PosHub> hubContext
+        )
         {
             _logger = logger;
+            _hubContext = hubContext;
             PosViewModel = new ();
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
-
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -73,8 +79,21 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            SendOrderProcess sendOrderProcess = new(orderPostEntityList, orderSiteId: OrderSiteId, joinerSiteId: JoinerSiteId, httpContext: HttpContext);
-            return await sendOrderProcess.Send(HttpContext);
+            SendOrderProcess sendOrderProcess = new(
+                orderPostEntityList,
+                orderSiteId: OrderSiteId,
+                joinerSiteId: JoinerSiteId,
+                httpContext: HttpContext,
+                hubContext: _hubContext
+            );
+            return await sendOrderProcess.Send();
+        }
+        public IActionResult UserOrders()
+        {
+            GetUsersOrderProcess getUsersOrderProcess = new (OrderSiteId, JoinerSiteId, HttpContext);
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
+
+            return View(PosViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
