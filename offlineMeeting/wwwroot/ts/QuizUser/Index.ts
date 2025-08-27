@@ -1,8 +1,7 @@
-﻿import { SignalR } from "@root/share/SignalR";
+import { SignalR } from "@root/share/SignalR";
 import { ControlNavbar } from "@root/share/ControlNavbar";
 import { SendAnswer } from "./SendAnswer";
 import { Canvas } from "./Canvas";
-import { QuizHub } from "./QuizHub";
 import { GetQuiz } from "./GetQuiz";
 
 (() => {
@@ -10,9 +9,8 @@ import { GetQuiz } from "./GetQuiz";
     signalR.activate();
     new ControlNavbar();
     new Canvas();
-    new QuizHub(signalR);
-    const sendAnswer = new SendAnswer();
     const getQuiz = new GetQuiz();
+    const sendAnswer = new SendAnswer();
     sendAnswer.SendCanvas();
     getQuiz.GetQuiz(signalR);
 })();

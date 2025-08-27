@@ -1,24 +1,23 @@
-﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Share;
 using System.Data;
 using System.Net;
-using System.Runtime.Intrinsics.Arm;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Quiz
 {
     public class SendAnswerProcess : ResultsProcess
     {
-        private readonly IHubContext<QuizHub> _hubContext;
-        private string QuizSiteId;
+        private readonly IHubContext<MyHub> _hubContext;
+        private string AnswerSiteId;
         private string EventId;
         private AnswerPostEntity AnswerPostEntity;
         private HttpContext HttpContext;
 
-        public SendAnswerProcess(IHubContext<QuizHub> hubContext, AnswerPostEntity answerPostEntity, int quizSiteId, HttpContext httpContext)
+        public SendAnswerProcess(IHubContext<MyHub> hubContext, AnswerPostEntity answerPostEntity, int answerSiteId, HttpContext httpContext)
         {
             _hubContext = hubContext;
             ManageEventId manageEventId = new (httpContext);
@@ -29,7 +28,7 @@ namespace offlineMeeting.Models.Process.Quiz
             {
                 throw new DataException("イベントIDが不正です");
             }
-            QuizSiteId = quizSiteId.ToString();
+            AnswerSiteId = answerSiteId.ToString();
             AnswerPostEntity = answerPostEntity;
             HttpContext = httpContext;
         }
@@ -42,7 +41,7 @@ namespace offlineMeeting.Models.Process.Quiz
                 string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
             #endif
 
-            string url = $"{pleasanterUrlBase}/api/items/{QuizSiteId}/create";
+            string url = $"{pleasanterUrlBase}/api/items/{AnswerSiteId}/create";
 
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
@@ -69,12 +68,12 @@ namespace offlineMeeting.Models.Process.Quiz
                 base64Image: base64Image
             );
 
-
             string json = JsonSerializer.Serialize(sendAnswerEntity);
 
             HttpClient httpClient = new HttpClient();
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(url, content);
+            var message = await response.Content.ReadAsStringAsync();
 
             if (!response.StatusCode.Equals(HttpStatusCode.OK))
             {
@@ -103,8 +102,7 @@ namespace offlineMeeting.Models.Process.Quiz
                     resultId = "";
                 }
 
-
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url }, { "userCd", userCd }, { "sendData", json }, { "resultId", resultId } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "回答を送信しました" },  { "resultId", resultId } });
             }
         }
     }

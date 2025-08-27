@@ -2,7 +2,7 @@
     ViewData["Title"] = "Quiz";
 }
 @section Scripts {
-    <script src="~/js/dist/Quiz.js" defer></script>
+    <script src="~/js/dist/QuizUser.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
 }
 <div id="quiz"></div>
@@ -10,6 +10,6 @@
     <canvas id="textCanvas"></canvas>
     <div class="quiz-buttons">
         <button id="clear">クリア</button>
-        <button id="send">確定</button>
+        <button id="send" disabled>確定</button>
     </div>
 </div>

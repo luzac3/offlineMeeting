@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.IdentityModel.Tokens;
 using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;

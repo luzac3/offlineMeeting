@@ -1,4 +1,4 @@
-﻿import { FetchApi } from "@root/share/FetchApi"
+import { FetchApi } from "@root/share/FetchApi"
 
 export class SendAnswer {
     private url: string;
@@ -19,22 +19,24 @@ export class SendAnswer {
     SendCanvas = () => {
         const sendElement = document.getElementById('send') as HTMLButtonElement;
         const canvasElement = document.getElementById('textCanvas') as HTMLCanvasElement;
-        const quizId = (document.getElementById('quiz_id') as HTMLInputElement).value;
         sendElement.onclick = () => {
+            const quizId = (document.getElementById('quiz_id') as HTMLInputElement).value;
             const dataUrl = canvasElement.toDataURL("image/png");
             const answerEntity: { [key: string]: string } = {
                 quizId: quizId,
                 image: dataUrl
             };
-            this.send(answerEntity).then((data: string) => {
-                const result = JSON.parse(data) as { [key: string]: string };
-                console.log(data);
+            this.Send(answerEntity).then((data: string) => {
+                const result = JSON.parse(data);
+                console.log(typeof data, data);
+                console.log(result);
+                sendElement.disabled = true;
                 window.alert(result.message);
             });
         };
     }
 
-    private send = async (answerEntity: { [key: string]: string }) => {
+    private Send = async (answerEntity: { [key: string]: string }) => {
         const fetchApi = new FetchApi();
         return await fetchApi.send(
             this.url,
