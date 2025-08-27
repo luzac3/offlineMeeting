@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Views\Streaming\_VideoController.txt" />
+    <Compile Remove="Views\Streaming\**" />
+    <Content Remove="Views\Streaming\**" />
+    <EmbeddedResource Remove="Views\Streaming\**" />
+    <None Remove="Views\Streaming\**" />
   </ItemGroup>
 
   <ItemGroup>
