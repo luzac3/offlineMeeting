@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using offlineMeeting.Models.Entity.Pos;
+﻿using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Share;
 using System.Data;
 
