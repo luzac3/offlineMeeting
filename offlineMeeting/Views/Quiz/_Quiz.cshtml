@@ -1,0 +1,12 @@
+@using offlineMeeting.Models.Entity.Quiz
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+@{
+    <p>番号：@(Model.QuizEntity?.ResultId)</p>
+    <input id="quiz_id" type="text" class="nodisplay" value="@(Model.QuizEntity?.ResultId)" />
+    <p>@(Model.QuizEntity?.Quiz)</p>
+    @if (@Model.QuizEntity?.QuizImage != "")
+    {
+        <img src="@(Model.QuizEntity?.QuizImage)" class="quiz_image" />
+    }
+}

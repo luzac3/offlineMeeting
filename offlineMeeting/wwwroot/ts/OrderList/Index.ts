@@ -7,7 +7,6 @@ import { SendOrder } from "./SendOrder";
     new ControlNavbar();
     const getOrderList = new GetOrderList();
     const sendOrder = new SendOrder();
-
     getOrderList.setOrderList();
     sendOrder.setOrderList();
 })();

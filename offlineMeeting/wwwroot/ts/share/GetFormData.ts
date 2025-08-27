@@ -1,4 +1,4 @@
-﻿import { ValidateForm } from "./ValidateForm"
+import { ValidateForm } from "./ValidateForm"
 export class GetFormData {
     static get = (element: HTMLElement | HTMLFormElement | null, isValidate: boolean = false) => {
         if (!element) {

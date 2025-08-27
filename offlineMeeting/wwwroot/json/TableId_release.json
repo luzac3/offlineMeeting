@@ -2,5 +2,7 @@
   "SakeSiteId": 55939,
   "OrderSiteId": 56292,
   "JoinerSiteId": 51841,
-  "CoinsSiteId": 56336
+  "CoinsSiteId": 56336,
+  "QuizSiteId": 56372,
+  "AnswerSiteId": 56373
 }
