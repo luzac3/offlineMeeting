@@ -18,7 +18,7 @@ export class FetchApi {
             boolean |
             FormDataEntryValue |
             null
-        } | { [key: string]: number }[] | string | null,
+        } | { [key: string]: number }[] | { [key: string]: string }[] | string | null,
         //body: any,
         responseKind: string = "json",
         needResponseData: boolean = true
