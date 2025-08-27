@@ -1,4 +1,4 @@
-﻿export class SetOutSameClassSelect {
+export class SetOutSameClassSelect {
 	setSelectorEvent = (targets: HTMLCollectionOf<HTMLSelectElement>) => {
 		this.setSelectorEventOnce(targets);
 		Array.from(targets).forEach((element: HTMLSelectElement) => {

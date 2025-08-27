@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
@@ -10,16 +13,16 @@ using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SendOrderProcess
+    public class SendOrderProcess : ResultsProcess
     {
         private int OrderSiteId;
         private int JoinerSiteId;
         private string EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
-        private readonly IHubContext<PosHub> _hubContext;
+        private readonly IHubContext<MyHub> _hubContext;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<PosHub> hubContext)
+        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
@@ -44,6 +47,7 @@ namespace offlineMeeting.Models.Process.Pos
                 string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
             #endif
             List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
+            List<OrderTableEntity> orderTableEntity = new List<OrderTableEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
             if (userCd == "0")
@@ -53,7 +57,15 @@ namespace offlineMeeting.Models.Process.Pos
 
             // コインが足りることを確認する
             int totalCoins = 0;
-                
+
+            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+            JoinerEntity userData = getUsersProcess.GetUserData(userCd);
+
+            if (userData.Coins < totalCoins)
+            {
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "コインが不足しています" } });
+            }
+
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {
                 sendOrderEntityList.Add(
@@ -68,14 +80,25 @@ namespace offlineMeeting.Models.Process.Pos
                     )
                 );
                 totalCoins += orderPostEntity.OrderCoins;
-            }
 
-            GetUsersProcess getUsersProcess = new (JoinerSiteId, HttpContext);
-            JoinerEntity userData = getUsersProcess.GetUserData(userCd);
+                // 送信用
+                ResultsEntity? purchaseName = String.IsNullOrEmpty(orderPostEntity.ResultId.ToString()) ? null : base.GetSingleRecord(orderPostEntity.ResultId.ToString());
 
-            if(userData.Coins < totalCoins)
-            {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "コインが不足しています" } });
+                orderTableEntity
+                    .Add(
+                        new OrderTableEntity(
+                            resultId: "",
+                            userCd: userCd,
+                            userName: userData.UserName,
+                            purchaseCd: orderPostEntity.ResultId.ToString(),
+                            purchaseName: purchaseName?.ClassA,
+                            number: orderPostEntity.OrderNumber,
+                            unit: "",
+                            coins: orderPostEntity.OrderCoins,
+                            alcoholQuantity: orderPostEntity.AlcoholAmount,
+                            unProvided: true
+                        )
+                    );
             }
 
             BulkApiEntity sendPlesanterApiEntity = new(data: sendOrderEntityList.Cast<object>().ToList());
@@ -93,7 +116,7 @@ namespace offlineMeeting.Models.Process.Pos
             }
             else
             {
-                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() { {"userName", userData.UserName ?? ""} });
+                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() { {"userName", userData.UserName ?? ""}, { "orderTableEntity", JsonSerializer.Serialize(orderTableEntity) } });
 
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "注文を送信しました" }, { "url", url }, { "userCd", userCd }, { "sendData", json } });
             }

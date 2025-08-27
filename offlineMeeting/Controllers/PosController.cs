@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
@@ -14,7 +14,7 @@ namespace offlineMeeting.Controllers
 {
     public class PosController : Controller
     {
-        private readonly IHubContext<PosHub> _hubContext;
+        private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
@@ -23,7 +23,7 @@ namespace offlineMeeting.Controllers
 
         public PosController(
             ILogger<PosController> logger,
-            IHubContext<PosHub> hubContext
+            IHubContext<MyHub> hubContext
         )
         {
             _logger = logger;

@@ -9,7 +9,7 @@ export class LocalStrage {
             return false;
         }
         if (obj === null) {
-            throw new Error("–¢’m‚ÌƒGƒ‰[")
+            throw new Error("æœªçŸ¥ã®ã‚¨ãƒ©ãƒ¼")
         }
         const parser = function (_k: string, v: Object) { return v.toString().indexOf('function') === 0 ? eval('(' + v + ')') : v };
 
