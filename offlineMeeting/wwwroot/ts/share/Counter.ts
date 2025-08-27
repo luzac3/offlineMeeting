@@ -1,4 +1,4 @@
-﻿export class Counter {
+export class Counter {
     SetCounter = () => {
         const counterElements = Array.from(document.getElementsByClassName('counter'));
         counterElements.forEach((element) => {
@@ -51,4 +51,4 @@
             handlePress(decrementButtonElement, -1);
         });
     }
-} 
+}

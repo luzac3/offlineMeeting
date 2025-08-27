@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using System.Net;
 using System.Text.Json;
@@ -7,10 +7,10 @@ namespace offlineMeeting.Models.Process.Login
 {
     public class SendRegisterProcess
     {
-        private readonly IHubContext<LoginHub> _hubContext;
+        private readonly IHubContext<MyHub> _hubContext;
         private string EventId;
         public string UserCd;
-        public SendRegisterProcess(IHubContext<LoginHub> hubContext, string eventId, string userCd)
+        public SendRegisterProcess(IHubContext<MyHub> hubContext, string eventId, string userCd)
         {
             _hubContext = hubContext;
             EventId = eventId;

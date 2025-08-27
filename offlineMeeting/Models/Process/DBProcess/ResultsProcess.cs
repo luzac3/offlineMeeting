@@ -33,7 +33,7 @@ namespace offlineMeeting.Models.Process.DBProcess
         {
             return Results
                 .Where(x => Convert.ToInt32(x.ResultId) == Convert.ToInt32(resultId))
-                .FirstOrDefault() ?? throw new Exception("invalid userCd");
+                .FirstOrDefault() ?? throw new Exception("invalid resultId");
         }
     }
 }
