@@ -4137,7 +4137,7 @@ class LocalStrage {
             return false;
         }
         if (obj === null) {
-            throw new Error("���m�̃G���[");
+            throw new Error("未知のエラー");
         }
         const parser = function (_k, v) { return v.toString().indexOf('function') === 0 ? eval('(' + v + ')') : v; };
         return JSON.parse(obj, parser);

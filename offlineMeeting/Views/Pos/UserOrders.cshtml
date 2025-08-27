@@ -1,4 +1,4 @@
-﻿@using offlineMeeting.Models.Entity.Pos;
+@using offlineMeeting.Models.Entity.Pos;
 
 @{
     ViewData["Title"] = "ユーザーオーダー";
@@ -17,13 +17,15 @@
 }
 
 @model offlineMeeting.Models.ViewModel.PosViewModel;
+<button id="play-audio" type="button">オーダー受信起動</button>
 <table>
     <thead>
         <tr>
             <th>オーダーID</th>
             <th>ユーザー名</th>
+            <th>商品番号</th>
             <th>商品名</th>
-            <th>数量</th>
+            <th>数量(分量)</th>
         </tr>
     </thead>
     <tbody>
@@ -32,8 +34,22 @@
             <tr>
                 <td>@orderTableEntity?.ResultId</td>
                 <td>@orderTableEntity?.UserName</td>
+                <td>@orderTableEntity?.PurchaseCd</td>
                 <td>@orderTableEntity?.PurchaseName</td>
-                <td>@orderTableEntity?.Number</td>
+                <td>
+                    @if (orderTableEntity?.AlcoholQuantity == 36)
+                    {
+                        @($"{orderTableEntity?.Number * 2}勺")
+                    }
+                    else if (orderTableEntity?.AlcoholQuantity == 180)
+                    {
+                        @($"{orderTableEntity?.Number}合")
+                    }
+                    else
+                    {
+                        @($"{orderTableEntity?.Number}")
+                    }
+                </td>
             </tr>
         }
     </tbody>

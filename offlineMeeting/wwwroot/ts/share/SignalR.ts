@@ -1,4 +1,4 @@
-﻿import * as signalR from "@microsoft/signalr";
+import * as signalR from "@microsoft/signalr";
 
 export class SignalR {
     private connection: signalR.HubConnection;

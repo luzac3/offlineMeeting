@@ -1,4 +1,4 @@
-﻿export class ValidateForm
+export class ValidateForm
 {
     static validate = (
         formElement: HTMLFormElement
