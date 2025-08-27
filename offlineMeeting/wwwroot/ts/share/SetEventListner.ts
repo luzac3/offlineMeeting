@@ -1,4 +1,4 @@
-﻿export class SetEventListner {
+export class SetEventListner {
     static setEvent = (
         parentElement: HTMLElement | undefined | null,
         type: keyof HTMLElementEventMap,

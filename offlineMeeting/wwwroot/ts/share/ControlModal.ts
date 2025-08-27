@@ -1,4 +1,4 @@
-﻿export class ControlModal {
+export class ControlModal {
     setControl = () => {
         Array.from(document.getElementsByClassName("modal_parent")).forEach((element) => {
             const modalParent = element as HTMLElement;
