@@ -1,4 +1,4 @@
-﻿export class FetchApi {
+export class FetchApi {
     send = async (
         url: string,
         method: string,

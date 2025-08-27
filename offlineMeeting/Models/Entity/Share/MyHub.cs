@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.SignalR;
+
+using Microsoft.AspNetCore.SignalR;
 
 namespace offlineMeeting.Models.Entity.Login
 {
-    public class PosHub : Hub
+    public class MyHub : Hub
     {
         // クライアントからサーバへの送信がないので、空のままにしておく
     }
