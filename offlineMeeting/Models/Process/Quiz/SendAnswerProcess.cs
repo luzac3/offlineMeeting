@@ -102,7 +102,7 @@ namespace offlineMeeting.Models.Process.Quiz
                     resultId = "";
                 }
 
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "回答を送信しました" },  { "resultId", resultId } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "回答を送信しました" },  { "ResultId", resultId } });
             }
         }
     }

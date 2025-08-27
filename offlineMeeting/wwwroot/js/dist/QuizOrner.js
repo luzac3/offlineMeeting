@@ -3999,7 +3999,7 @@ class SendUserPoints {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
         };
-        this.responseKind = "text";
+        this.responseKind = "json";
     }
 }
 

@@ -13,7 +13,7 @@ export class SendAnswer {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
         };
-        this.responseKind = "text";
+        this.responseKind = "json";
     }
 
     SendCanvas = () => {
@@ -30,6 +30,7 @@ export class SendAnswer {
                 const result = JSON.parse(data);
                 console.log(typeof data, data);
                 console.log(result);
+                console.log(Object.keys(result)); // 追加: プロパティ一覧
                 sendElement.disabled = true;
                 window.alert(result.message);
             });
