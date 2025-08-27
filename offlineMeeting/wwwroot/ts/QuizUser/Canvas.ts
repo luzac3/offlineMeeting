@@ -1,4 +1,4 @@
-﻿export class Canvas {
+export class Canvas {
     CanvasElement: HTMLCanvasElement;
     Ctx: CanvasRenderingContext2D;
     ClearButtonElement: HTMLButtonElement;
@@ -85,7 +85,6 @@
     }
 
     private SetDrawingPhone = () => {
-        // --- タッチイベント ---
         this.CanvasElement.addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.isDrawing = true;

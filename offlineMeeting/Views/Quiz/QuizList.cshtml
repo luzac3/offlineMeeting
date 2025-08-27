@@ -3,7 +3,7 @@
     ViewData["Title"] = "QuizList";
 }
 @section Scripts {
-    <script src="~/js/dist/Quiz.js" defer></script>
+    <script src="~/js/dist/QuizOrner.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
 }
 @model offlineMeeting.Models.ViewModel.QuizViewModel
@@ -13,7 +13,7 @@
         @foreach (QuizEntity quizEntity in Model.QuizEntityList ?? new List<offlineMeeting.Models.Entity.Quiz.QuizEntity> { })
         {
             <p>
-                <a asp-area="" asp-controller="Quiz" asp-action="Orner/@(quizEntity.ResultId)">@quizEntity.Quiz</a>
+                <a asp-area="" asp-controller="Quiz" asp-action="Orner" asp-route-id="@(Convert.ToInt32(quizEntity.ResultId))">@quizEntity.Quiz</a>
             </p>
         }
     }

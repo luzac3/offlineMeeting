@@ -1,5 +1,5 @@
-﻿import { SignalR } from "@root/share/SignalR";
-export class QuizHub {
+import { SignalR } from "@root/share/SignalR";
+export class SendQuiz {
     SignalR: SignalR;
     constructor(signalR: SignalR) {
         this.SignalR = signalR;

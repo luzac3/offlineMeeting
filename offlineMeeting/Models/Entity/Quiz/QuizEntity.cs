@@ -1,4 +1,4 @@
-﻿namespace offlineMeeting.Models.Entity.Quiz
+namespace offlineMeeting.Models.Entity.Quiz
 {
     public class QuizEntity
     {

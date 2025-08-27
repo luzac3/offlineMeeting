@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;

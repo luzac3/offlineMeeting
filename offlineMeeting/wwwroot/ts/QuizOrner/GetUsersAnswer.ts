@@ -1,10 +1,9 @@
-﻿import { SignalR } from "@root/share/SignalR";
+import { SignalR } from "@root/share/SignalR";
 
 export class GetUsersAnswer {
     private url: string;
     private method: string;
     private headers: { [key: string]: string };
-    private responseKind: string;
 
     constructor() {
         this.url = '/Quiz/GetAnswer';
@@ -13,7 +12,6 @@ export class GetUsersAnswer {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
         };
-        this.responseKind = "text";
     }
 
     GetAnswer = async (signalR: SignalR) => {
@@ -26,10 +24,9 @@ export class GetUsersAnswer {
                 headers: this.headers
             });
 
-
             if (answerListElement != null) {
-                await response.json().then(data => {
-                    answerListElement.after(data);
+                await response.text().then(data => {
+                    answerListElement.insertAdjacentHTML('beforeend', data);
                 });
             }
         });

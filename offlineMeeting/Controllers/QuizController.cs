@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
+using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Quiz;
@@ -13,7 +16,8 @@ namespace offlineMeeting.Controllers
 {
     public class QuizController : Controller
     {
-        private readonly IHubContext<QuizHub> _hubContext;
+        private readonly ViewRenderHelperProcess _viewRenderHelperProcess;
+        private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<QuizController> _logger;
         private int QuizSiteId;
         private int AnswerSiteId;
@@ -21,7 +25,10 @@ namespace offlineMeeting.Controllers
 
         public QuizController(
             ILogger<QuizController> logger,
-            IHubContext<QuizHub> hubContext
+            IHubContext<MyHub> hubContext,
+            ICompositeViewEngine viewEngine,
+            ITempDataProvider tempDataProvider,
+            IServiceProvider serviceProvider
         )
         {
             _logger = logger;
@@ -30,6 +37,7 @@ namespace offlineMeeting.Controllers
             QuizSiteId = tableIdProperty.QuizSiteId;
             AnswerSiteId = tableIdProperty.AnswerSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
+            _viewRenderHelperProcess = new ViewRenderHelperProcess(viewEngine, tempDataProvider, serviceProvider);
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -54,13 +62,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/GetQuiz/{quizId}")]
-        public IActionResult GetQuiz(int quizId)
+        public async Task<IActionResult> GetQuiz(int quizId)
         {
             GetQuizProcess getQuizProcess = new(HttpContext);
             QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
+            quizViewModel.setQuizEntity(getQuizProcess.Get(quizId.ToString()));
 
-            return PartialView("_Quiz", quizViewModel);
+            var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_Quiz", quizViewModel);
+            return Content(html, "text/html");
         }
 
         [HttpGet("Quiz/Orner/{resultId}")]
@@ -71,25 +80,34 @@ namespace offlineMeeting.Controllers
             QuizViewModel quizViewModel = new QuizViewModel();
             quizViewModel.setQuizEntity(getQuizProcess.Get(resultId));
             quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
-            // AnswerListも取得に行く
 
             return View(quizViewModel);
         }
 
         [HttpGet("Quiz/GetAnswer/{resultId}")]
-        public IActionResult GetAnswer(string resultId)
+        public async Task<IActionResult> GetAnswer(string resultId)
         {
             GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
             QuizViewModel quizViewModel = new QuizViewModel();
             quizViewModel.setAnswerEntity(getAnswerProcess.Get(resultId));
 
-            return PartialView(quizViewModel);
+            var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_UserAnswer", quizViewModel);
+            return Content(html, "text/html");
         }
 
         [HttpPost]
         public async Task<IActionResult> SendAnswer([FromBody] AnswerPostEntity answerPostEntity)
         {
-            SendAnswerProcess sendAnswerProcess = new(hubContext: _hubContext, answerPostEntity: answerPostEntity, quizSiteId: QuizSiteId, httpContext: HttpContext);
+            SendAnswerProcess sendAnswerProcess = new(hubContext: _hubContext, answerPostEntity: answerPostEntity, answerSiteId: AnswerSiteId, httpContext: HttpContext);
+            string result = await sendAnswerProcess.Send();
+
+            return Json(result.ToString());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendPoints([FromBody] List<PointPostEntity> pointPostEntityList)
+        {
+            SendPointProcess sendAnswerProcess = new(hubContext: _hubContext, pointPostEntityList: pointPostEntityList, answerSiteId: AnswerSiteId, httpContext: HttpContext);
             string result = await sendAnswerProcess.Send();
 
             return Json(result.ToString());

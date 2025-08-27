@@ -1,11 +1,13 @@
-﻿using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Entity.Share;
 
 namespace offlineMeeting.Models.Entity.Quiz
 {
     public class SendAnswerEntity : ApiEntity
     {
         public ClassHashEntity ClassHash { get; set; }
-        public ImageHashEntity DiscriptionHash { get; set; }
+        public DateHashEntity DateHash { get; set; }
+        public DescriptionHashEntity DescriptionHash { get; set; }
+        public ImageHashEntity ImageHash { get; set; }
         public SendAnswerEntity(
             string eventNumber,
             string userCd,
@@ -18,8 +20,9 @@ namespace offlineMeeting.Models.Entity.Quiz
                 userCd: userCd,
                 quizId: quizId
             );
-
-            DiscriptionHash = new ImageHashEntity(base64Image: base64Image);
+            DateHash = new DateHashEntity();
+            DescriptionHash = new DescriptionHashEntity();
+            ImageHash = new ImageHashEntity(base64Image: base64Image);
         }
 
         public class ClassHashEntity
@@ -48,14 +51,23 @@ namespace offlineMeeting.Models.Entity.Quiz
             }
         }
 
+        public class DescriptionHashEntity
+        {
+            public string DescriptionA { get; set; }
+            public DescriptionHashEntity()
+            {
+                DescriptionA = "";
+            }
+        }
+
         public class ImageHashEntity
         {
-            public Dictionary<string, object> DiscriptionA { get; set; }
+            public Dictionary<string, object> DescriptionA { get; set; }
             public ImageHashEntity(
                 string base64Image
             )
             {
-                DiscriptionA = new Dictionary<string, object>
+                DescriptionA = new Dictionary<string, object>
                 {
                     {"HeadNewLine", false },
                     {"EndNewLine", false },
