@@ -1,4 +1,4 @@
-﻿export class ControlObject {
+export class ControlObject {
     static copyObject = (object: HTMLElement) => {
         const cloneObject = object.cloneNode(true);
         object.after(cloneObject);

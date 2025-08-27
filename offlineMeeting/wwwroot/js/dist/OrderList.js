@@ -322,7 +322,7 @@ class LocalStrage {
             return false;
         }
         if (obj === null) {
-            throw new Error("���m�̃G���[");
+            throw new Error("未知のエラー");
         }
         const parser = function (_k, v) { return v.toString().indexOf('function') === 0 ? eval('(' + v + ')') : v; };
         return JSON.parse(obj, parser);
@@ -406,13 +406,16 @@ var __webpack_exports__ = {};
   !*** ./wwwroot/ts/OrderList/Index.ts ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
-/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
+/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
+/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+
 
 
 (async () => {
-    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_0__.GetOrderList();
-    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_1__.SendOrder();
+    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
+    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_1__.GetOrderList();
+    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_2__.SendOrder();
     getOrderList.setOrderList();
     sendOrder.setOrderList();
 })();
