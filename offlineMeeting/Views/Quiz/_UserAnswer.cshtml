@@ -1,0 +1,20 @@
+@using offlineMeeting.Models.Entity.Quiz
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+@{
+    <div class="answer">
+        <div>
+            <img src="@(Model.AnswerEntity?.Image)" class="quiz_image" />
+        </div>
+        <div>
+            <p>@(Model.AnswerEntity?.UserName)</p>
+            <input type="text" class="user_cd nodisplay" />
+            <p>
+                <input type="number" class="point" min="0" max="@(Model.AnswerEntity?.MaxPoint)" value="@(Model.AnswerEntity?.Point)" />
+                <span>点</span>
+            </p>
+            <p>@(Model.AnswerEntity?.AnswerTime)</p>
+        </div>
+        <input type="text" class="answer_id nodisplay" value="@(Model.AnswerEntity?.ResultId)" />
+    </div>
+}

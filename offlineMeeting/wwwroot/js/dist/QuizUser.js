@@ -3881,880 +3881,175 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/Event/CanvasVideo.ts":
-/*!*****************************************!*\
-  !*** ./wwwroot/ts/Event/CanvasVideo.ts ***!
-  \*****************************************/
+/***/ "./wwwroot/ts/QuizUser/Canvas.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/QuizUser/Canvas.ts ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   CanvasVideo: () => (/* binding */ CanvasVideo)
+/* harmony export */   Canvas: () => (/* binding */ Canvas)
 /* harmony export */ });
-/* harmony import */ var _root_share_GetNewResolutions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/GetNewResolutions */ "./wwwroot/ts/share/GetNewResolutions.ts");
-/* harmony import */ var _StartVideoMedia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StartVideoMedia */ "./wwwroot/ts/Event/StartVideoMedia.ts");
-
-
-class CanvasVideo {
-    constructor(title, name, videoNumber, point = 25000) {
-        this.point = 25000;
-        this.myMovingPoint = 0;
-        this.targetPoint = 0;
-        this.calcPoint = 0;
-        this.leftCalcPoint = 0;
-        this.isCaliculate = false;
-        this.resultCd = "0";
-        this.canvasResolutions = {};
-        this.canvas = null;
-        this.ctx = null;
-        this.videoElement = null;
-        this.isPointView = false;
-        this.resultDic = {
-            "0": "　",
-            "1": "ツモ",
-            "2": "ロン",
-            "3": "放銃",
-            "30": "流局",
-            "31": "聴牌",
-            "32": "ノーテン",
-            "33": "四風連打",
-            "34": "九種九牌",
-            "35": "四家立直",
-            "36": "四開槓",
-            "21": "ダブロン",
-            "22": "トリロン",
+class Canvas {
+    constructor() {
+        this.isDrawing = false;
+        this.lastX = 0;
+        this.lastY = 0;
+        this.SetCanvas = () => {
+            this.ClearButtonElement.addEventListener("click", () => {
+                this.ActivateCanvas();
+            });
         };
-        this.activateCanvas = async () => {
-            // 選択されているカメラの取得
-            const myCameraSelectorElement = document.getElementById("cameraSelector" + this.videoNumber);
-            const startVideoMedia = new _StartVideoMedia__WEBPACK_IMPORTED_MODULE_1__.StartVideoMedia();
-            this.videoElement = await startVideoMedia.setVideo(myCameraSelectorElement.value, "video_" + this.videoNumber, this.resolution.w, this.resolution.h);
-            return await this.makeCanvasVideo();
+        this.ActivateCanvas = () => {
+            this.Ctx.clearRect(0, 0, this.CanvasElement.width, this.CanvasElement.height);
         };
-        this.makeCanvasVideo = async () => {
-            // canvas要素を取得
-            this.canvas = document.getElementById("canvasVideo_" + this.videoNumber);
-            this.canvas.width = this.canvasResolutions["canvas"].w;
-            this.canvas.height = this.canvasResolutions["canvas"].h;
-            // コンテキストを取得する
-            this.ctx = this.canvas.getContext('2d');
-            // imageを読み込む
-            await this.loadImage();
-            // fixme 画像はそれごとに変えます コレの変更機能は後で
-            this.image.src = "/image/pict1.png";
-            this.isPointView = false;
-            return this.drawCanvas();
+        this.SetCanvasSizeForDpi = () => {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = this.CanvasElement.getBoundingClientRect();
+            this.CanvasElement.width = rect.width * dpr;
+            this.CanvasElement.height = rect.height * dpr;
+            this.CanvasElement.style.width = rect.width + "px";
+            this.CanvasElement.style.height = rect.height + "px";
         };
-        // 一度ActivateしたあとはCanvasの描画だけ行うのでこのメソッドはPublic
-        this.drawCanvas = () => {
-            if (this.canvas && this.ctx) {
-                if (this.videoElement === null) {
-                    throw new Error("video_" + this.videoNumber + "is not exist");
-                }
-                this.ctx.globalAlpha = 1;
-                // バックグラウンド表示
-                this.ctx.fillStyle = "black";
-                this.ctx.fillRect(0, 0, this.canvasResolutions["canvas"].w, this.canvasResolutions["canvas"].h);
-                // video表示
-                this.ctx.drawImage(this.videoElement, this.canvasResolutions["video"].x, this.canvasResolutions["video"].y, this.canvasResolutions["video"].w, this.canvasResolutions["video"].h);
-                // isCaliculateがONになったら点数移動の計算を行う
-                if (this.isCaliculate) {
-                    this.pointMovingProcess();
-                }
-                // 文字枠表示
-                this.ctx.globalAlpha = 0.5;
-                this.ctx.fillRect(this.canvasResolutions["characterFrame"].x, this.canvasResolutions["characterFrame"].y, this.canvasResolutions["characterFrame"].w, this.canvasResolutions["characterFrame"].h);
-                // 画像表示
-                this.ctx.globalAlpha = 1;
-                this.ctx.drawImage(this.image, this.canvasResolutions["face"].x, this.canvasResolutions["face"].y, this.canvasResolutions["face"].w, this.canvasResolutions["face"].h);
-                this.ctx.textAlign = "end";
-                this.ctx.fillStyle = "white";
-                if (this.isPointView) {
-                    this.ctx.font = this.canvasResolutions["kind"].font.toString(), +'px monospace';
-                    this.ctx.fillText(this.resultDic[this.resultCd], this.canvasResolutions["kind"].x, this.canvasResolutions["kind"].y);
-                    this.ctx.fillText(this.myMovingPoint.toString(), this.canvasResolutions["movingPoint"].x, this.canvasResolutions["movingPoint"].y);
-                    this.ctx.font = this.canvasResolutions["allow"].font.toString() + 'px monospace';
-                    this.ctx.fillText("↓", this.canvasResolutions["allow"].x, this.canvasResolutions["allow"].y);
-                    this.ctx.textAlign = "end";
+        this.SetDrawingPc = () => {
+            this.CanvasElement.addEventListener('mousedown', (e) => {
+                this.isDrawing = true;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                this.lastX = (e.clientX - rect.left) * dpr;
+                this.lastY = (e.clientY - rect.top) * dpr;
+            });
+            this.CanvasElement.addEventListener('mousemove', (e) => {
+                if (!this.isDrawing)
+                    return;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const x = (e.clientX - rect.left) * dpr;
+                const y = (e.clientY - rect.top) * dpr;
+                if (this.lastX === x && this.lastY === y) {
+                    this.Ctx.beginPath();
+                    this.Ctx.arc(x, y, 1 * dpr, 0, Math.PI * 2);
+                    this.Ctx.fillStyle = "#333";
+                    this.Ctx.fill();
                 }
                 else {
-                    this.ctx.font = this.canvasResolutions["title"].font.toString() + 'px monospace';
-                    this.ctx.fillText(this.title, this.canvasResolutions["title"].x, this.canvasResolutions["title"].y);
-                    this.ctx.font = this.canvasResolutions["name"].font.toString() + 'px monospace';
-                    this.ctx.fillText(this.name, this.canvasResolutions["name"].x, this.canvasResolutions["name"].y);
+                    this.Ctx.beginPath();
+                    this.Ctx.moveTo(this.lastX, this.lastY);
+                    this.Ctx.lineTo(x, y);
+                    this.Ctx.strokeStyle = "#333";
+                    this.Ctx.lineWidth = 2 * dpr;
+                    this.Ctx.lineCap = "round";
+                    this.Ctx.stroke();
                 }
-                this.ctx.font = this.canvasResolutions["point"].font.toString() + 'px monospace';
-                this.ctx.fillText(this.point.toLocaleString(), this.canvasResolutions["point"].x, this.canvasResolutions["point"].y);
-            }
-        };
-        this.loadImage = async () => {
-            return this.image.addEventListener("load", () => { });
-        };
-        this.pointMovingProcess = () => {
-            this.isPointView = true;
-            if (this.calcPoint !== 0) {
-                this.leftCalcPoint -= this.calcPoint;
-                this.point += this.calcPoint;
-            }
-            if (this.myMovingPoint < 0) {
-                // 現ポイントがtargetPointより小さくなるまでfalse
-                this.isCaliculate = this.point > this.targetPoint;
-            }
-            else {
-                // 現ポイントがtargetPointより大きくなるまでfalse
-                this.isCaliculate = this.point < this.targetPoint;
-            }
-            if (!this.isCaliculate) {
-                this.leftCalcPoint = 0;
-                this.calcPoint = 0;
-                this.point = this.targetPoint;
-                this.targetPoint = 0;
-                window.setTimeout(() => {
-                    this.myMovingPoint = 0;
-                    this.isPointView = false;
-                }, 1000 * 2);
-            }
-        };
-        // 解像度を設定
-        //this.resolution = { w: 1280, h: 960 };
-        this.resolution = { w: 800, h: 600 };
-        // canvasのwrapperサイズを取得
-        const canvasWrapperElement = document.getElementById("canvas" + videoNumber + "Wrapper");
-        this.canvasResolutions = _root_share_GetNewResolutions__WEBPACK_IMPORTED_MODULE_0__.GetNewResolutions.Get(canvasWrapperElement, this.resolution, "VGA");
-        this.image = new Image();
-        this.title = title;
-        this.name = name;
-        this.videoNumber = videoNumber;
-        this.point = point;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/EventControlModal.ts":
-/*!***********************************************!*\
-  !*** ./wwwroot/ts/Event/EventControlModal.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   EventControlModal: () => (/* binding */ EventControlModal)
-/* harmony export */ });
-/* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
-
-class EventControlModal {
-}
-EventControlModal.setModal = () => {
-    document.getElementById("painList")?.classList.remove("nodisplay");
-    document.getElementById("painButton")?.addEventListener("click", () => {
-        document.getElementById("listModalWrapper").classList.remove("hidden");
-    });
-    const listControlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#painButton", "list");
-    const endHandControlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#listEndHandButton", "endHand");
-    const videoTestModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#showVideoTestButton", "videoTest");
-    const showPointModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#showPointButton", "showPoint");
-    const videoRegisterModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal("#videoRegisterButton", "videoRegister");
-    listControlModal.setControl();
-    endHandControlModal.setControl();
-    videoTestModal.setControl();
-    showPointModal.setControl();
-    videoRegisterModal.setControl();
-};
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/GetCamera.ts":
-/*!***************************************!*\
-  !*** ./wwwroot/ts/Event/GetCamera.ts ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GetCamera: () => (/* binding */ GetCamera)
-/* harmony export */ });
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _GetCameraInformation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetCameraInformation */ "./wwwroot/ts/Event/GetCameraInformation.ts");
-
-
-
-class GetCamera {
-    constructor() {
-        this.getCameraProperty = {
-            EventNumber: null,
-            GameNumber: null,
-            CameraContainer: null
-        };
-        this.cameraContainer = [];
-        this.setGetCamerEvent = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#getCameraButton", async () => {
-                this.getCameraProperty.CameraContainer = await _GetCameraInformation__WEBPACK_IMPORTED_MODULE_2__.GetCameraInformation.setDevices();
-                const videoHtml = await this.get();
-                document.getElementById("listModalWindow").innerHTML = videoHtml;
+                this.lastX = x;
+                this.lastY = y;
+            });
+            this.CanvasElement.addEventListener('mouseup', () => {
+                this.isDrawing = false;
+            });
+            this.CanvasElement.addEventListener('mouseleave', () => {
+                this.isDrawing = false;
             });
         };
-        this.get = async () => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.getCameraProperty, this.responseKind).then(async (data) => {
-                return data;
-            }).catch(e => {
-                throw e;
+        this.SetDrawingPhone = () => {
+            this.CanvasElement.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.isDrawing = true;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const touch = e.touches[0];
+                this.lastX = (touch.clientX - rect.left) * dpr;
+                this.lastY = (touch.clientY - rect.top) * dpr;
+            }, { passive: false });
+            this.CanvasElement.addEventListener('touchmove', (e) => {
+                if (!this.isDrawing)
+                    return;
+                e.preventDefault();
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const touch = e.touches[0];
+                const x = (touch.clientX - rect.left) * dpr;
+                const y = (touch.clientY - rect.top) * dpr;
+                if (this.lastX === x && this.lastY === y) {
+                    this.Ctx.beginPath();
+                    this.Ctx.arc(x, y, 1 * dpr, 0, Math.PI * 2);
+                    this.Ctx.fillStyle = "#333";
+                    this.Ctx.fill();
+                }
+                else {
+                    this.Ctx.beginPath();
+                    this.Ctx.moveTo(this.lastX, this.lastY);
+                    this.Ctx.lineTo(x, y);
+                    this.Ctx.strokeStyle = "#333";
+                    this.Ctx.lineWidth = 2 * dpr;
+                    this.Ctx.lineCap = "round";
+                    this.Ctx.stroke();
+                }
+                this.lastX = x;
+                this.lastY = y;
+            }, { passive: false });
+            this.CanvasElement.addEventListener('touchend', () => {
+                this.isDrawing = false;
+            });
+            this.CanvasElement.addEventListener('touchcancel', () => {
+                this.isDrawing = false;
             });
         };
-        this.url = '/Event/GetCamera';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "text";
-        this.getCameraProperty.EventNumber
-            = document.getElementById("eventNumber").value;
-        this.getCameraProperty.GameNumber
-            = document.getElementById("gameNumber").value;
-    }
-}
-GetCamera.cameraContainer = [];
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/GetCameraInformation.ts":
-/*!**************************************************!*\
-  !*** ./wwwroot/ts/Event/GetCameraInformation.ts ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GetCameraInformation: () => (/* binding */ GetCameraInformation)
-/* harmony export */ });
-var _a;
-class GetCameraInformation {
-}
-_a = GetCameraInformation;
-GetCameraInformation.cameraContainer = [];
-GetCameraInformation.setDevices = async () => {
-    const devices = (await navigator.mediaDevices.enumerateDevices());
-    _a.cameraContainer = [];
-    devices.forEach(device => {
-        if (device.kind !== "videoinput") {
-            return;
-        }
-        _a.cameraContainer.push({
-            deviceId: device.deviceId,
-            label: device.label
-        });
-    });
-    return _a.cameraContainer;
-};
-GetCameraInformation.createCameraSelectorObject = (selectObject) => {
-    if (selectObject.childElementCount > 0) {
-        Array.from(selectObject.children).forEach((element) => {
-            element.remove();
+        this.CanvasElement = document.getElementById('textCanvas');
+        this.ClearButtonElement = document.getElementById('clear');
+        this.SetCanvasSizeForDpi();
+        this.Ctx = this.CanvasElement.getContext('2d');
+        this.SetCanvas();
+        this.ActivateCanvas();
+        this.SetDrawingPc();
+        this.SetDrawingPhone();
+        // ウィンドウリサイズ時にCanvasサイズを再設定
+        window.addEventListener('resize', () => {
+            this.SetCanvasSizeForDpi();
+            this.ActivateCanvas();
         });
     }
-    _a.cameraContainer.forEach((camera) => {
-        const cameraOptionElement = document.createElement("option");
-        cameraOptionElement.value = camera.deviceId;
-        cameraOptionElement.text = camera.label;
-        selectObject.appendChild(cameraOptionElement);
-    });
-};
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/RegisterVideo.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/Event/RegisterVideo.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RegisterVideo: () => (/* binding */ RegisterVideo)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _StartVideoMedia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StartVideoMedia */ "./wwwroot/ts/Event/StartVideoMedia.ts");
-/* harmony import */ var _GetCameraInformation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetCameraInformation */ "./wwwroot/ts/Event/GetCameraInformation.ts");
-
-
-
-class RegisterVideo {
-    constructor() {
-        this.cameraContainer = [];
-        this.registerVideoProperty = {
-            DeviceId: null,
-            Label: null,
-            CameraName: null
-        };
-        this.setRegisterVideoEvent = async () => {
-            let videoElement;
-            document.getElementById("getRegisterVideoSelectorButton")?.addEventListener("click", async () => {
-                // 接続済カメラデバイスを取得、クラスPropertyにIDをセット
-                this.cameraContainer = await _GetCameraInformation__WEBPACK_IMPORTED_MODULE_2__.GetCameraInformation.setDevices();
-                // カメラ選択optionElementをセット
-                let cameraSelector = document.getElementById("registerVideoList");
-                _GetCameraInformation__WEBPACK_IMPORTED_MODULE_2__.GetCameraInformation.createCameraSelectorObject(cameraSelector);
-                // カメラを取得、Optionにセットしたら画面を表示
-                document.getElementById("startRegisterVideoButton").classList.remove("hidden");
-            });
-            document.getElementById("startRegisterVideoButton")?.addEventListener("click", async () => {
-                const nowCamera = document.getElementById("registerVideoList");
-                const startVideoMedia = new _StartVideoMedia__WEBPACK_IMPORTED_MODULE_1__.StartVideoMedia();
-                videoElement = await startVideoMedia.setVideo(nowCamera.value, "registerVideo", 320, 240);
-            });
-            // ビデオ停止
-            document.getElementById("stopRegiterVideoButton")?.addEventListener("click", async () => {
-                videoElement.pause();
-                videoElement.load();
-                const source = videoElement.querySelector("source");
-                if (source != null) {
-                    source.src = "";
-                    videoElement.load();
-                }
-            });
-            // ビデオ登録
-            document.getElementById("registerVideoInformationButton")?.addEventListener("click", async () => {
-                const cameraElement = document.getElementById("registerVideoList");
-                const selectedIndex = cameraElement.selectedIndex;
-                const cameraNameElement = document.getElementById("registerCameraName");
-                this.registerVideoProperty.CameraName = cameraNameElement.value;
-                this.registerVideoProperty.DeviceId = cameraElement.value;
-                this.registerVideoProperty.Label = cameraElement.options[selectedIndex].text;
-                this.setRegisterVideo();
-            });
-        };
-        this.setRegisterVideo = async () => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.registerVideoProperty, this.responseKind).then(async (data) => {
-                if (data) {
-                    alert("register complete");
-                }
-            }).catch(e => {
-                throw e;
-            });
-        };
-        this.url = '/Event/RegisterVideo';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-    }
 }
 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/Event/StartGame.ts":
-/*!***************************************!*\
-  !*** ./wwwroot/ts/Event/StartGame.ts ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   StartGame: () => (/* binding */ StartGame)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-
-class StartGame {
-    constructor() {
-        this.startGameProperty = {
-            EventNumber: null,
-            HandNumber: null,
-            HandSubNumber: null,
-            UsersList: null,
-            DirectionDictionary: null,
-            VideoDictionary: null,
-            VideoNumberDictionary: null
-        };
-        this.setStartEvent = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#listStartGameButton", () => {
-                this.start().then((data) => {
-                    this.setGameData(data);
-                });
-            });
-        };
-        this.setGameData = (data) => {
-            console.log(data);
-            const gameData = data["gameData"];
-            const videoController = data["videoController"];
-            const gameDataElement = document.getElementById("mainContents");
-            const videoControllElement = document.getElementById("listModalWindow");
-            gameDataElement.innerHTML = gameData;
-            videoControllElement.innerHTML = videoController;
-        };
-        this.start = async () => {
-            let userList = [];
-            let directionDic = {};
-            let videoDic = {};
-            let videoNumberDic = {};
-            const userListElement = document.getElementsByClassName("userList");
-            if (userListElement.length) {
-                Array.from(userListElement).forEach((userElement, index) => {
-                    const userCd = userElement.value;
-                    const directionElement = userElement
-                        .closest(".videoController")
-                        .querySelector(".directionList");
-                    const VideoElement = userElement
-                        .closest(".videoController")
-                        .querySelector(".cameraSelector");
-                    if (userCd == "99") {
-                        // 天吊のコードを除外
-                        return;
-                    }
-                    if (userList.length >= 4) {
-                        return;
-                    }
-                    userList.push(userCd);
-                    directionDic[userCd] = directionElement.value;
-                    videoDic[userCd] = VideoElement.value;
-                    videoNumberDic[userCd] = index.toString();
-                });
-                const checkUserCount = Array.from(new Set(userList));
-                if (checkUserCount.length < 4) {
-                    alert("ユーザーが重複しています");
-                    throw new Error("user Duplicated");
-                }
-            }
-            this.startGameProperty.UsersList = userList;
-            this.startGameProperty.DirectionDictionary = directionDic;
-            this.startGameProperty.VideoDictionary = videoDic;
-            this.startGameProperty.VideoNumberDictionary = videoNumberDic;
-            this.startGameProperty.HandNumber
-                = document.getElementById("handNumber").value;
-            this.startGameProperty.HandSubNumber
-                = document.getElementById("handSubNumber").value;
-            const startGameProperty = new StartGameProperty(parseInt(document.getElementById("eventNumber").value), userList, directionDic);
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.startGameProperty, this.responseKind).then(async (data) => {
-                return data;
-            }).catch(e => {
-                throw e;
-            });
-        };
-        this.url = '/Event/StartGame';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-        this.startGameProperty.EventNumber
-            = document.getElementById("eventNumber").value;
-    }
-}
-class StartGameProperty {
-    constructor(EventNumber, UsersList, DirectionDictionary) {
-        this.EventNumber = EventNumber;
-        this.UsersList = UsersList;
-        this.DirectionDictionary = DirectionDictionary;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/StartVideoMedia.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/Event/StartVideoMedia.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   StartVideoMedia: () => (/* binding */ StartVideoMedia)
-/* harmony export */ });
-class StartVideoMedia {
-    constructor() {
-        this.setVideo = async (deviceId, videoElementId, resolutionWidth, resolutionHeight) => {
-            // video要素を取得
-            const videoElement = document.getElementById(videoElementId);
-            // video要素にWebカメラの映像を表示させる
-            return await navigator.mediaDevices.getUserMedia({
-                audio: false,
-                video: {
-                    width: { ideal: resolutionWidth },
-                    height: { ideal: resolutionHeight },
-                    deviceId: deviceId
-                }
-            }).then(async (stream) => {
-                if (videoElement === null) {
-                    throw new Error("video_" + videoElement + "is not exist");
-                }
-                videoElement.srcObject = stream;
-                videoElement.play();
-                return videoElement;
-            });
-        };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/VideoControll.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/Event/VideoControll.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   VideoControll: () => (/* binding */ VideoControll)
-/* harmony export */ });
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _CanvasVideo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CanvasVideo */ "./wwwroot/ts/Event/CanvasVideo.ts");
-
-
-
-class VideoControll {
-    constructor() {
-        this.cameraContainer = [];
-        this.fps = 60;
-        this.intervalId = 0;
-        this.controlVideoEvent = async (signalR) => {
-            // 接続済カメラデバイスを取得、クラスPropertyにIDをセット
-            await this.setDevices();
-            // カメラ選択optionElementをセット
-            const cameraSelectors = document.getElementsByClassName("cameraSelector");
-            Array.from(cameraSelectors).forEach(cameraSelector => {
-                this.createCameraSelectorObject(cameraSelector);
-            });
-            // カメラを取得、Optionにセットしたら画面を表示
-            document.getElementById("mainContents").classList.remove("hidden");
-            if (document.getElementById("gameNumber") === null || document.getElementById("gameNumber").value === "") {
-                return;
-            }
-            const eventNumber = document.getElementById("eventNumber").value;
-            const gameNumber = document.getElementById("gameNumber").value;
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
-            const setting = await fetchApi.send(this.url, this.method, this.headers, {
-                EventNumber: eventNumber,
-                GameNumber: gameNumber
-            }, this.responseKind).then(async (data) => {
-                return data;
-            }).catch(e => {
-                throw e;
-            });
-            /*
-            const setting = [
-                {
-                    title: "またしても何も知らない",
-                    name: "大泉洋"
-                },
-                {
-                    title: "投げる同人作家",
-                    name: "佐々木貴賀"
-                },
-                {
-                    title: "それでも何もしてくれない",
-                    name: "荒巻スカルチノフ"
-                },
-                {
-                    title: "世界でしか通用しない男",
-                    name: "小林誠司"
-                },
-                {
-                    title: "",
-                    name: ""
-                },
-            ];
-            */
-            let canvasVideoArray = [];
-            for (let i = 0; i < 5; i++) {
-                canvasVideoArray.push(null);
-                // video有効・無効イベントのセット
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "change", "#video" + i + "Checker", async (event) => {
-                    this.setVideoInstance(event.target, canvasVideoArray, setting[i].userTitle, setting[i].userName, i, setting[i].point);
-                });
-            }
-            // canvasVideoArray
-            signalR.get("SendEndHandResultEntityList", endHandResultEntityListJson => {
-                console.log(endHandResultEntityListJson);
-                endHandResultEntityListJson = endHandResultEntityListJson;
-                endHandResultEntityListJson
-                    .filter(x => x["videoNumber"] != null && canvasVideoArray[x["videoNumber"]] != null)
-                    .forEach((endHandResultEntity, index) => {
-                    this.setUserData(canvasVideoArray[endHandResultEntity["videoNumber"]], endHandResultEntity);
-                });
-            });
-            document.getElementById("video0Button").addEventListener("click", () => {
-                if (canvasVideoArray[0] == null) {
-                    return;
-                }
-                canvasVideoArray[0].myMovingPoint = -48000;
-                canvasVideoArray[0].isCaliculate = true;
-                canvasVideoArray[0].targetPoint = canvasVideoArray[0].point + canvasVideoArray[0].myMovingPoint;
-                canvasVideoArray[0].calcPoint =
-                    Math.floor(canvasVideoArray[0].myMovingPoint / (this.fps * 3));
-                canvasVideoArray[0].leftCalcPoint = canvasVideoArray[0].myMovingPoint;
-            });
-            // videoの表示サイズ変更　厳密にはここじゃない気もする
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "change", "#videoSize", async (event) => {
-                this.changeVideoSize();
-                // 再生領域全体を確認して、チェックが付いていたら再生し直す
-                for (let i = 0; i < 5; i++) {
-                    canvasVideoArray.push(null);
-                    this.setVideoInstance(document.getElementById("video" + i + "Checker"), canvasVideoArray, setting[i].title, setting[i].name, i, setting[i].point);
-                }
-            });
-        };
-        this.setVideoInstance = async (elemnt, canvasVideoArray, title, name, videoNumber, point) => {
-            if (elemnt.checked) {
-                // 有効になったCanvasのインスタンス生成
-                const canvasVideo = new _CanvasVideo__WEBPACK_IMPORTED_MODULE_2__.CanvasVideo(title, name, videoNumber, point);
-                canvasVideoArray[videoNumber] = canvasVideo;
-                if (this.intervalId) {
-                    // 一瞬SetIntervalを止めてリフレッシュ
-                    clearInterval(this.intervalId);
-                }
-                canvasVideo.activateCanvas();
-                await this.setDrawCanvas(canvasVideoArray).then((setInterValId) => {
-                    this.intervalId = setInterValId;
-                });
-                // 有効になったVideoのcvenableをTrueに
-                document.getElementById("canvasVideo_" + videoNumber).dataset.cvenable = "1";
-            }
-            else {
-                canvasVideoArray[videoNumber] = null;
-                document.getElementById("canvasVideo_" + videoNumber).dataset.cvenable = "0";
-            }
-        };
-        this.setDevices = async () => {
-            const devices = (await navigator.mediaDevices.enumerateDevices());
-            devices.forEach(device => {
-                if (device.kind !== "videoinput") {
-                    return;
-                }
-                this.cameraContainer.push({
-                    deviceId: device.deviceId,
-                    label: device.label
-                });
-            });
-        };
-        this.createCameraSelectorObject = (selectObject) => {
-            this.cameraContainer.forEach((camera) => {
-                const cameraOptionElement = document.createElement("option");
-                cameraOptionElement.value = camera.deviceId;
-                cameraOptionElement.text = camera.label;
-                selectObject.appendChild(cameraOptionElement);
-            });
-        };
-        this.changeVideoSize = () => {
-            const videoSize = document.getElementById("videoSize").value;
-            const videoWrapperElements = document.getElementsByClassName("videoWrapper");
-            // 画面をすべて表示 クラスを一度すべて削除してつけなおし
-            Array.from(videoWrapperElements).forEach((element, index) => {
-                element.classList.remove(...element.classList);
-                element.classList.add("videoWrapper");
-                switch (videoSize) {
-                    case "small":
-                        element.classList.add("small");
-                        break;
-                    case "filmtsrip":
-                        // 一画面を大きく表示して外を並べる
-                        element.classList.add("filmtsrip");
-                        break;
-                    case "middle":
-                        element.classList.add("middle");
-                        // 4画面目までは削除しない
-                        if (index < 4) {
-                            return;
-                        }
-                        // videoを停止して非表示
-                        document.getElementById("video" + index + "Checker").checked = false;
-                        element.classList.add("nodisplay");
-                        break;
-                    case "large":
-                        element.classList.add("large");
-                        // 1画面目は残す
-                        if (index < 1) {
-                            return;
-                        }
-                        // videoを停止して非表示
-                        document.getElementById("video" + index + "Checker").checked = false;
-                        element.classList.add("nodisplay");
-                        break;
-                }
-            });
-        };
-        this.setDrawCanvas = async (canvasVideoArray) => {
-            return await window.setInterval(() => {
-                canvasVideoArray.forEach(canvasVideo => {
-                    if (canvasVideo !== null) {
-                        canvasVideo.drawCanvas();
-                    }
-                });
-            }, 1000 / this.fps);
-        };
-        this.setUserData = (canvasVideo, endHandResultEntity) => {
-            setTimeout(() => {
-                canvasVideo.myMovingPoint = endHandResultEntity["movingPoint"];
-                canvasVideo.targetPoint = endHandResultEntity["point"];
-                canvasVideo.isCaliculate = true;
-                canvasVideo.calcPoint = Math.floor(canvasVideo.myMovingPoint / 60 * 5);
-                canvasVideo.leftCalcPoint = canvasVideo.myMovingPoint;
-                canvasVideo.resultCd = endHandResultEntity["resultCd"];
-            }, 3000);
-        };
-        this.url = '/Event/GetVideoUsers';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/Event/VideoTestControll.ts":
-/*!***********************************************!*\
-  !*** ./wwwroot/ts/Event/VideoTestControll.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   VideoTestControll: () => (/* binding */ VideoTestControll)
-/* harmony export */ });
-/* harmony import */ var _StartVideoMedia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./StartVideoMedia */ "./wwwroot/ts/Event/StartVideoMedia.ts");
-
-class VideoTestControll {
-    constructor() {
-        this.cameraContainer = [];
-        this.fps = 60;
-        this.intervalId = 0;
-        this.setTestVideoEvent = async () => {
-            let videoElement;
-            document.getElementById("getTestVideoSelector")?.addEventListener("click", async () => {
-                // 接続済カメラデバイスを取得、クラスPropertyにIDをセット
-                await this.setDevices();
-                // カメラ選択optionElementをセット
-                let cameraSelector = document.getElementById("testVideoList");
-                this.createCameraSelectorObject(cameraSelector);
-                // カメラを取得、Optionにセットしたら画面を表示
-                document.getElementById("startTestVideo").classList.remove("hidden");
-            });
-            document.getElementById("startTestVideo")?.addEventListener("click", async () => {
-                const nowCamera = document.getElementById("testVideoList");
-                const startVideoMedia = new _StartVideoMedia__WEBPACK_IMPORTED_MODULE_0__.StartVideoMedia();
-                videoElement = await startVideoMedia.setVideo(nowCamera.value, "testVideo", 200, 150);
-            });
-            document.getElementById("endVideoTest")?.addEventListener("click", async () => {
-                videoElement.pause();
-                videoElement.load();
-                const source = videoElement.querySelector("source");
-                if (source != null) {
-                    source.src = "";
-                    videoElement.load();
-                }
-            });
-        };
-        this.setDevices = async () => {
-            const devices = (await navigator.mediaDevices.enumerateDevices());
-            this.cameraContainer = [];
-            devices.forEach(device => {
-                if (device.kind !== "videoinput") {
-                    return;
-                }
-                this.cameraContainer.push({
-                    deviceId: device.deviceId,
-                    label: device.label
-                });
-            });
-        };
-        this.createCameraSelectorObject = (selectObject) => {
-            if (selectObject.childElementCount > 0) {
-                Array.from(selectObject.children).forEach((element) => {
-                    element.remove();
-                });
-            }
-            this.cameraContainer.forEach((camera) => {
-                const cameraOptionElement = document.createElement("option");
-                cameraOptionElement.value = camera.deviceId;
-                cameraOptionElement.text = camera.label;
-                selectObject.appendChild(cameraOptionElement);
-            });
-        };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/EndHand.ts":
+/***/ "./wwwroot/ts/QuizUser/GetQuiz.ts":
 /*!****************************************!*\
-  !*** ./wwwroot/ts/GameData/EndHand.ts ***!
+  !*** ./wwwroot/ts/QuizUser/GetQuiz.ts ***!
   \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   EndHand: () => (/* binding */ EndHand)
+/* harmony export */   GetQuiz: () => (/* binding */ GetQuiz)
 /* harmony export */ });
-/* harmony import */ var _RegisterEndHand__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RegisterEndHand */ "./wwwroot/ts/GameData/RegisterEndHand.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-
-class EndHand {
+class GetQuiz {
     constructor() {
-        this.setEndHandRegisterEvent = (signalR) => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(document.getElementById("endHandModalWindow"), "click", "#correctModal", () => {
-                const registerEndHand = new _RegisterEndHand__WEBPACK_IMPORTED_MODULE_0__.RegisterEndHand();
-                registerEndHand.register();
+        this.GetQuiz = async (signalR) => {
+            signalR.get("ReceiveQuizId", async (quizId) => {
+                const parsedQuizId = quizId;
+                const response = await fetch(this.url + `/${parsedQuizId.QuizId}`, {
+                    method: this.method,
+                    headers: this.headers
+                });
+                await response.text().then(data => {
+                    console.log(data);
+                    document.getElementById("quiz").innerHTML = data;
+                });
+                // 問題を受信したらボタンをアクティブに
+                const sendElement = document.getElementById('send');
+                sendElement.disabled = false;
             });
-            signalR.get("SendEndHandJson", (endHandJson) => {
-                endHandJson = endHandJson;
-                const resultModal = document.getElementById("resultModalWindow");
-                resultModal.innerHTML = endHandJson["result"];
-                document.getElementById("resultModalWrapper")?.classList.remove("hidden");
-                document.getElementById("nextHand")?.addEventListener("click", () => {
-                    document.getElementById("nowHand")?.classList.remove("hidden");
-                    document.getElementById("nextResult")?.classList.remove("hidden");
-                    document.getElementById("nowResult")?.classList.add("hidden");
-                });
-                document.getElementById("nowHand")?.addEventListener("click", () => {
-                    document.getElementById("nowHand")?.classList.add("hidden");
-                    document.getElementById("nextResult")?.classList.add("hidden");
-                    document.getElementById("nowResult")?.classList.remove("hidden");
-                });
-                document.getElementById("resultConfirm")?.addEventListener("click", () => {
-                    if (document.getElementById("mainContents") != null) {
-                        document.getElementById("mainContents").innerHTML = endHandJson["gameData"];
-                    }
-                    document.getElementById("resultModalWrapper")?.classList.add("hidden");
-                    document.getElementById("endHandModalWrapper")?.classList.add("hidden");
-                    if (document.getElementById("listStartGameButton") != null) {
-                        // ボタンイベントをキック
-                        document.getElementById("listStartGameButton").click();
-                    }
-                });
-            });
+        };
+        this.url = '/Quiz/GetQuiz';
+        this.method = 'Get';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
         };
     }
 }
@@ -4762,689 +4057,83 @@ class EndHand {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/GameData/RecordMedia.ts":
-/*!********************************************!*\
-  !*** ./wwwroot/ts/GameData/RecordMedia.ts ***!
-  \********************************************/
+/***/ "./wwwroot/ts/QuizUser/SendAnswer.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/QuizUser/SendAnswer.ts ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RecordMedia: () => (/* binding */ RecordMedia)
+/* harmony export */   SendAnswer: () => (/* binding */ SendAnswer)
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
 
-class RecordMedia {
-    constructor(url) {
-        this.isStopRecording = false;
-        this.recordingInterval = 0;
-        this.recordBlobs = [];
-        this.startRecording = (eventNumber, gameNumber, handNumber, handSubNumber, mediaMinutes, ...mediaAssociates) => {
-            this.recordBlobs = mediaAssociates
-                .map(mediaAssociate => new RecordBlob(eventNumber, gameNumber, handNumber, handSubNumber, mediaMinutes, mediaAssociate.MediaNumber, mediaAssociate.MediaStream, mediaAssociate.IsVideo));
-            this.recordBlobs.forEach(recordBlob => {
-                recordBlob.recorder(this.encodeBlob);
-            });
-            this.recordingInterval = window.setInterval(() => {
-                this.recordBlobs.forEach(recordBlob => {
-                    recordBlob.mediaRecorder?.stop();
-                    recordBlob.mediaRecorder?.start();
-                    this.encodeBlob(recordBlob);
-                });
-            }, 1000 * Number(mediaMinutes));
-        };
-        this.stopRecording = () => {
-            clearInterval(this.recordingInterval);
-            this.recordBlobs.forEach(recordBlob => {
-                recordBlob.isStopRecording = true;
-                recordBlob.mediaRecorder?.stop();
-            });
-            return this.recordBlobs.length;
-        };
-        this.encodeBlob = (recordBlob) => {
-            let recordedMediaProperty = recordBlob.recordedMediaProperty;
-            // fixme メソッド呼び出しにして直接書き換えないようにする
-            if (recordBlob.blob?.length ?? 0 > 0) {
-                const inBlob = new Blob(recordBlob.blob, { type: recordBlob.blob[0].type });
-                // 保存した時点で、Blobの中身を消去
-                recordBlob.blob = [];
-                const fr = new FileReader();
-                fr.readAsDataURL(inBlob);
-                fr.onload = () => {
-                    const result = fr.result;
-                    if (!result) {
-                        throw new Error();
-                    }
-                    const base64 = result.slice(result.indexOf(',') + 1);
-                    recordedMediaProperty.MediaCount = recordBlob.mediaCount.toString();
-                    recordedMediaProperty.Base64 = base64;
-                    recordBlob.mediaCount++;
-                    this.sendBlob(recordedMediaProperty).then(() => {
-                        console.log("arrival");
-                    }).catch(e => {
-                        // fixme 最終的にはエラーログを吐く
-                        console.log(e);
-                        throw e;
-                    });
+class SendAnswer {
+    constructor() {
+        this.SendCanvas = () => {
+            const sendElement = document.getElementById('send');
+            const canvasElement = document.getElementById('textCanvas');
+            sendElement.onclick = () => {
+                const quizId = document.getElementById('quiz_id').value;
+                const dataUrl = canvasElement.toDataURL("image/png");
+                const answerEntity = {
+                    quizId: quizId,
+                    image: dataUrl
                 };
-            }
-        };
-        this.sendBlob = async (recordedVideoProperty) => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, recordedVideoProperty, this.responseKind).then(async (data) => {
-                if (data) {
-                }
-            }).catch(e => {
-                throw e;
-            });
-        };
-        this.url = url;
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-    }
-}
-class RecordBlob {
-    constructor(eventNumber, gameNumber, handNumber, handSubNumber, mediaMinutes, mediaNumber, mediaStream, isVideo) {
-        this.isStopRecording = false;
-        this.mediaCount = 0;
-        this.isVideo = false;
-        this.blob = [];
-        this.recorder = (encodeBlob) => {
-            const mediaType = this.isVideo ? "video" : "audio";
-            const mime = MediaRecorder.isTypeSupported(`${mediaType}/webm; codecs=vp9`) ?
-                `${mediaType}/webm; codecs=vp9` :
-                `${mediaType}/webm`;
-            this.mediaRecorder = new MediaRecorder(this.mediaStream, { mimeType: mime });
-            this.blob = [];
-            // 記録開始
-            this.mediaRecorder.ondataavailable = (e) => {
-                (this.blob).push(e.data);
-                if (this.isStopRecording) {
-                    this.recordedMediaProperty.IsChangeFile = true;
-                    encodeBlob(this);
-                }
+                this.Send(answerEntity).then((data) => {
+                    const result = JSON.parse(data);
+                    console.log(typeof data, data);
+                    console.log(result);
+                    console.log(Object.keys(result)); // 追加: プロパティ一覧
+                    sendElement.disabled = true;
+                    window.alert(result.message);
+                });
             };
-            this.mediaRecorder.start();
         };
-        this.recordedMediaProperty = {
-            EventNumber: eventNumber,
-            GameNumber: gameNumber,
-            HandNumber: handNumber,
-            HandSubNumber: handSubNumber,
-            MediaNumber: mediaNumber,
-            MediaCount: "",
-            MediaMinutes: mediaMinutes.toString(),
-            Base64: "",
-            IsVideo: isVideo,
-            IsEndFile: false
-        };
-        this.isVideo = isVideo;
-        this.mediaStream = mediaStream;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/RecordVideo.ts":
-/*!********************************************!*\
-  !*** ./wwwroot/ts/GameData/RecordVideo.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RecordVideo: () => (/* binding */ RecordVideo)
-/* harmony export */ });
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-/* harmony import */ var _root_GameData_RecordMedia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/GameData/RecordMedia */ "./wwwroot/ts/GameData/RecordMedia.ts");
-
-
-class RecordVideo {
-    constructor() {
-        this.setRecordEvent = (signalR) => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#startRecordingButton", async (event) => {
-                this.activateVideo(signalR, event);
-            }, true);
-        };
-        this.activateVideo = async (signalR, event) => {
-            const medias = document.getElementsByClassName("canvasVideo");
-            const videoMinutes = 10;
-            const recordMedia = new _root_GameData_RecordMedia__WEBPACK_IMPORTED_MODULE_1__.RecordMedia('/GameData/RecordedVideo');
-            const mediaAssociates = Array.from(medias)
-                .map((media) => {
-                if (media.dataset.cvenable != "0") {
-                    return {
-                        MediaStream: media.captureStream(),
-                        MediaNumber: media.closest(".videoWrapper").dataset.videonumber,
-                        IsVideo: true
-                    };
-                }
-            }).filter(Boolean);
-            recordMedia.startRecording(document.getElementById("eventNumber").value, document.getElementById("gameNumber").value, document.getElementById("handNumber").value, document.getElementById("handSubNumber").value, videoMinutes.toString(), ...mediaAssociates);
-            // 録画停止用イベント生成
-            event.target.textContent = "録画停止";
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#startRecordingButton", async () => {
-                event.target.disabled = true;
-                const mediaCount = recordMedia.stopRecording();
-                let returnedCount = 0;
-                signalR.get("SendMoveFileFinished", () => {
-                    // 通知が来たら完了カウントを進める
-                    returnedCount++;
-                    // 全コピーが終わったら終了処理を走らせる
-                    if (mediaCount === returnedCount) {
-                        this.getRecordingFinished(signalR);
-                    }
-                });
-            }, true);
-        };
-        this.getRecordingFinished = (signalR) => {
-            const recordingCommentaryElement = document.getElementById("startRecordingButton");
-            signalR.get("SendRecordingFinished", () => {
-                recordingCommentaryElement.textContent = "記録開始";
-                recordingCommentaryElement.disabled = false;
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#startRecordingButton", async (event) => {
-                    return this.activateVideo(signalR, event);
-                }, true);
-            });
-            // 終了処理送信
-            signalR.send("FinishRecording", document.getElementById("eventNumber").value, document.getElementById("gameNumber").value, "management/");
-        };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/RegisterEndGame.ts":
-/*!************************************************!*\
-  !*** ./wwwroot/ts/GameData/RegisterEndGame.ts ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RegisterEndGame: () => (/* binding */ RegisterEndGame)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-
-class RegisterEndGame {
-    constructor() {
-        this.endGameProperty = {
-            EventNumber: null,
-            GameNumber: null
-        };
-        this.setGameEndEvent = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#endGamebutton", () => {
-                this.setGameEnd().then(() => {
-                    // 実際はリザルトの表示を入れたほうが良さそう
-                    window.location.reload();
-                });
-            });
-        };
-        this.setGameEnd = async () => {
+        this.Send = async (answerEntity) => {
             const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.endGameProperty, this.responseKind).then(async (data) => {
-                if (data) {
-                    window.location.reload();
-                }
-            }).catch(e => {
-                throw e;
-            });
-        };
-        this.url = '/Event/EndGame';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-        this.endGameProperty.EventNumber
-            = document.getElementById("eventNumber").value;
-        this.endGameProperty.GameNumber
-            = document.getElementById("gameNumber").value;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/RegisterEndHand.ts":
-/*!************************************************!*\
-  !*** ./wwwroot/ts/GameData/RegisterEndHand.ts ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RegisterEndHand: () => (/* binding */ RegisterEndHand)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-
-class RegisterEndHand {
-    constructor() {
-        this.endHandProperty = {
-            EventNumber: null,
-            HoraKind: null,
-            Parent: null,
-            RonPointDicList: null,
-            PickPointDic: null,
-            PaoPointDicList: null,
-            TenpaiUsersList: null,
-            LeachUsersList: null,
-            MyaoUsersList: null,
-            VideoIdDic: null,
-            VideoNameDic: null,
-            ValidVideoDic: null
-        };
-        this.register = async () => {
-            const horaKind = document.getElementById("horaKind").value;
-            this.endHandProperty.HoraKind = horaKind;
-            this.endHandProperty.Parent = document.getElementById("parent").value;
-            const toUserElementList = document.getElementsByClassName("toUser");
-            if (horaKind == "1") {
-                // ツモ点数
-                const pickPointElementList = document.getElementsByClassName("pickPoint");
-                if (pickPointElementList.length) {
-                    let pickPoinDic = { UserCd: toUserElementList[0].value };
-                    let pointList = [];
-                    Array.from(pickPointElementList).forEach((pickPointElement, index) => {
-                        pointList.push(pickPointElement.value);
-                    });
-                    if (pointList.length > 1) {
-                        if (parseInt(pointList[0]) > parseInt(pointList[1])) {
-                            pickPoinDic["TumoPoint"] = pointList[1];
-                            pickPoinDic["ParentTumoPoint"] = pointList[0];
-                        }
-                        else {
-                            pickPoinDic["TumoPoint"] = pointList[0];
-                            pickPoinDic["ParentTumoPoint"] = pointList[1];
-                        }
-                    }
-                    else {
-                        pickPoinDic["TumoPoint"] = pointList[0];
-                    }
-                    this.endHandProperty.PickPointDic = pickPoinDic;
-                }
-            }
-            if (horaKind == "2") {
-                // ロン点数
-                const fromUser = document.getElementById("fromUser")?.value ?? null;
-                if (toUserElementList.length) {
-                    let ronDicList = [];
-                    Array.from(toUserElementList).forEach(toUserElement => {
-                        const pointElement = toUserElement.nextElementSibling;
-                        ronDicList.push({
-                            UserCd: toUserElement.value,
-                            Point: pointElement.value,
-                            DealInUserCd: fromUser
-                        });
-                    });
-                    this.endHandProperty.RonPointDicList = ronDicList;
-                }
-            }
-            // paoのチェック確認
-            const paoElement = document.getElementById("pao");
-            if (paoElement.checked) {
-                // 包点数　包だけは基本支払い者基準になってる　二重Listを作る
-                // Listは[もらった人、あげた人、点数]
-                const paoUserElementList = document.getElementsByClassName("paoUser");
-                if (paoUserElementList.length) {
-                    let paoPointDicList = [];
-                    if (parseInt(horaKind) < 20) {
-                        // ダブロン、トリロンでなければToUserもpaoUserも一人　ロンとツモの区別は不要
-                        const toUser = document.getElementsByClassName("toUser")[0].value;
-                        const paoUser = paoUserElementList[0].value;
-                        const paoPoint = document.getElementsByClassName("paoPoint")[0].value;
-                        paoPointDicList = [
-                            {
-                                UserCd: toUser,
-                                PaoUserCd: paoUser,
-                                PaoPoint: paoPoint
-                            }
-                        ];
-                    }
-                    else {
-                        Array.from(paoUserElementList).forEach((paoUserElement, index) => {
-                            if (index > 0 &&
-                                paoUserElement.previousElementSibling.checked) {
-                                return;
-                            }
-                            const paoUserToElement = paoUserElement
-                                .nextElementSibling
-                                .nextElementSibling;
-                            const paoPointElement = paoUserToElement.nextElementSibling;
-                            paoPointDicList[index] = {
-                                UserCd: paoUserToElement.value,
-                                PaoUserCd: paoUserElement.value,
-                                PaoPoint: paoPointElement.value
-                            };
-                        });
-                    }
-                    this.endHandProperty.PaoPointDicList = paoPointDicList;
-                }
-            }
-            // 立直
-            const leachUsersElement = document.getElementsByClassName("leach");
-            if (leachUsersElement.length) {
-                let leachUsersArray = [];
-                Array.from(leachUsersElement).forEach(element => {
-                    if (element.checked) {
-                        const leachCameraNumber = element.value;
-                        const userCdElement = document.getElementById("userCd" + leachCameraNumber);
-                        leachUsersArray.push(userCdElement.value);
-                    }
-                });
-                if (leachUsersArray.length > 0) {
-                    this.endHandProperty.LeachUsersList = leachUsersArray;
-                }
-            }
-            // 副露
-            const myaoUsersElement = document.getElementsByClassName("myao");
-            if (myaoUsersElement.length) {
-                let myaoUsersArray = [];
-                Array.from(myaoUsersElement).forEach(element => {
-                    if (element.checked) {
-                        const myaoCameraNumber = element.value;
-                        const userCdElement = document.getElementById("userCd" + myaoCameraNumber);
-                        myaoUsersArray.push(userCdElement.value);
-                    }
-                });
-                if (myaoUsersArray.length > 0) {
-                    this.endHandProperty.MyaoUsersList = myaoUsersArray;
-                }
-            }
-            // ビデオID
-            const videoSelectElement = document.getElementsByClassName("cameraSelector");
-            if (videoSelectElement.length) {
-                let videoIdDic = {};
-                let videoNameDic = {};
-                let validVideoDic = {};
-                Array.from(videoSelectElement).forEach((element, index) => {
-                    if (index >= 4) {
-                        return;
-                    }
-                    const userCdElement = element
-                        .closest(".videoController")
-                        .querySelector(".userList");
-                    const selectedIndex = element.selectedIndex;
-                    const videoCheckerElement = element
-                        .closest(".videoController")
-                        .querySelector(".videoChecker");
-                    videoIdDic[userCdElement.value] = element.value;
-                    videoNameDic[userCdElement.value] = element.options[selectedIndex].text;
-                    validVideoDic[userCdElement.value] = videoCheckerElement.checked;
-                });
-                this.endHandProperty.VideoIdDic = videoIdDic;
-                this.endHandProperty.VideoNameDic = videoNameDic;
-                this.endHandProperty.ValidVideoDic = validVideoDic;
-            }
-            // 通常流局
-            if (horaKind == "30") {
-                const tenpaiElement = document.getElementsByClassName("tenpai");
-                let tenpaiUsersArray = [];
-                Array.from(tenpaiElement).forEach(element => {
-                    if (element.checked) {
-                        tenpaiUsersArray.push(element.value);
-                    }
-                });
-                this.endHandProperty.TenpaiUsersList = tenpaiUsersArray;
-            }
-            console.log(this.endHandProperty);
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.endHandProperty, this.responseKind, false).catch(e => {
-                throw e;
-            });
-        };
-        this.url = '/GameData/EndHandRegister';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "json";
-        this.endHandProperty.EventNumber
-            = document.getElementById("eventNumber").value;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/SelectEndHand.ts":
-/*!**********************************************!*\
-  !*** ./wwwroot/ts/GameData/SelectEndHand.ts ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SelectEndHand: () => (/* binding */ SelectEndHand)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-
-class SelectEndHand {
-    constructor() {
-        this.setHoraKindEvent = () => {
-            document.getElementById("horaKind")?.addEventListener("change", () => {
-                this.sendEndHand();
-            });
-        };
-        this.sendEndHand = async () => {
-            const horaKind = $("#horaKind").val()?.toString() ?? "";
-            this.rewritePartial({
-                EventNumber: this.eventNumber,
-                HoraKind: horaKind
-            });
-        };
-        this.changeToUserEventListner = (horaKind) => {
-            const toUserElementList = document.getElementsByClassName("toUser");
-            toUserElementList[0].addEventListener("change", () => {
-                this.changeToUserEvent(horaKind, toUserElementList[0]);
-            });
-        };
-        this.changeToUserEvent = (horaKind, toUserElement) => {
-            const toUser = toUserElement.value.toString() ?? "";
-            const index = toUserElement.selectedIndex;
-            const parent = $("#parent").val()?.toString() ?? "";
-            const isPao = document.getElementById("pao").checked;
-            return this.rewritePartial({
-                EventNumber: this.eventNumber,
-                HoraKind: horaKind,
-                Parent: parent,
-                ToUser: toUser,
-                IsPao: isPao
-            }).then(() => {
-                console.log("leach");
-                const newToUserElement = document.getElementsByClassName("toUser")[0];
-                newToUserElement.options[index].selected = true;
-                if (parent == toUser) {
-                }
-            });
-        };
-        this.rewritePartial = async (body) => {
-            let fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, body, this.responseKind).then((data) => {
-                $("#endGame").empty();
-                $("#endGame").append(data);
-                const horaKind = $("#horaKind").val()?.toString() ?? "";
-                if (horaKind == "1") {
-                    this.changeToUserEventListner(horaKind);
-                }
-                return "";
-            }).catch(e => {
-                console.log(e);
-                //fixme エラー処理
-            });
-        };
-        this.url = '/GameData/EndHandChangeDisplay';
-        this.method = 'POST';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        this.responseKind = "text";
-        this.eventNumber = document.getElementById("eventNumber").value;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/SetAvoidSelectDuplication.ts":
-/*!**********************************************************!*\
-  !*** ./wwwroot/ts/GameData/SetAvoidSelectDuplication.ts ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ModifiedUserSelect: () => (/* binding */ ModifiedUserSelect)
-/* harmony export */ });
-/* harmony import */ var _root_share_SetOutSameClassSelect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetOutSameClassSelect */ "./wwwroot/ts/share/SetOutSameClassSelect.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-
-class ModifiedUserSelect {
-}
-ModifiedUserSelect.setAvoidDuplication = () => {
-    const setOutSameClassSelect = new _root_share_SetOutSameClassSelect__WEBPACK_IMPORTED_MODULE_0__.SetOutSameClassSelect();
-    const userClass = document.getElementsByClassName("userList");
-    const directionClass = document.getElementsByClassName("directionList");
-    setOutSameClassSelect.setSelectorEvent(userClass);
-    setOutSameClassSelect.setSelectorEvent(directionClass);
-};
-ModifiedUserSelect.hangingVideoSetter = (parentElementName) => {
-    const userClass = document.getElementsByClassName("userList");
-    Array.from(userClass).forEach((userElement, index) => {
-        const parentElement = userElement.closest(parentElementName);
-        _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(parentElement, "change", "#userCd" + index, (event) => {
-            const targetDirection = event.target
-                .closest(".videoController")
-                .querySelector(".directionList");
-            if (event.target.value == "99") {
-                targetDirection.value = "99";
-                targetDirection.disabled = true;
-                // changeイベントを発火させる
-                targetDirection.dispatchEvent(new Event("change"));
-            }
-            else {
-                targetDirection.disabled = false;
-            }
-        });
-    });
-};
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/GameData/ShowPoint.ts":
-/*!******************************************!*\
-  !*** ./wwwroot/ts/GameData/ShowPoint.ts ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ShowPoint: () => (/* binding */ ShowPoint)
-/* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-
-class ShowPoint {
-    constructor() {
-        this.showPointProperty = {
-            EventNumber: null,
-            GameNumber: null
-        };
-        this.setStartEvent = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(document.getElementById("listModalWindow"), "click", "#showPointButton", () => {
-                this.show().then((data) => {
-                    document.getElementById("showPointModalWindow").innerHTML = data;
-                    document.getElementById("showPointModalWrapper").classList.remove("hidden");
-                });
-            });
-        };
-        this.show = async () => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, this.showPointProperty, this.responseKind).then(async (data) => {
+            return await fetchApi.send(this.url, this.method, this.headers, answerEntity, this.responseKind).then(async (data) => {
                 return data;
             }).catch(e => {
                 throw e;
             });
         };
-        this.url = '/GameData/ShowPoint';
+        this.url = '/Quiz/SendAnswer';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
         };
-        this.responseKind = "text";
-        this.showPointProperty.EventNumber
-            = document.getElementById("eventNumber").value;
-        this.showPointProperty.GameNumber
-            = document.getElementById("gameNumber").value;
+        this.responseKind = "json";
     }
 }
 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/ControlModal.ts":
-/*!******************************************!*\
-  !*** ./wwwroot/ts/share/ControlModal.ts ***!
-  \******************************************/
+/***/ "./wwwroot/ts/share/ControlNavbar.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlModal: () => (/* binding */ ControlModal)
+/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
 /* harmony export */ });
-/* harmony import */ var _SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
-
-class ControlModal {
-    constructor(openModalElementSelector, modalKind = "") {
-        this.setControl = () => {
-            Array.from(document.getElementsByClassName("modalWindow")).forEach((element) => {
-                const parentElement = element;
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", ".closeModal", () => {
-                    this.hidden();
-                });
-                // 外をクリックしたときのクローズイベント
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", "#" + this.modalKind + "ModalWrapper", (event) => {
-                    event.target
-                        .closest("#" + this.modalKind + "ModalWindow") ?? this.hidden();
-                });
-                _SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(parentElement, "click", this.openModalElementSelector, (event) => {
-                    this.show();
-                });
-            });
+class ControlNavbar {
+    constructor() {
+        this.setBodyPadding = () => {
+            const navbar = document.querySelector('.navbar');
+            if (navbar) {
+                document.body.style.paddingTop = (navbar.offsetHeight + 5) + 'px';
+            }
         };
-        this.show = () => {
-            document.getElementById(this.modalKind + "ModalWrapper").classList.remove("hidden");
-        };
-        this.hidden = () => {
-            console.log(this.modalKind);
-            console.log(document.getElementById(this.modalKind + "ModalWrapper"));
-            document.getElementById(this.modalKind + "ModalWrapper").classList.add("hidden");
-        };
-        this.modalKind = modalKind;
-        this.openModalElementSelector = openModalElementSelector;
+        this.setBodyPadding();
+        window.addEventListener('resize', this.setBodyPadding);
     }
 }
 
@@ -5511,181 +4200,6 @@ class FetchApi {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/GetNewResolutions.ts":
-/*!***********************************************!*\
-  !*** ./wwwroot/ts/share/GetNewResolutions.ts ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GetNewResolutions: () => (/* binding */ GetNewResolutions)
-/* harmony export */ });
-class GetNewResolutions {
-}
-GetNewResolutions.Get = (canvasWrapperElement, resolution, aspectRatioKind) => {
-    let dataSet = {};
-    switch (aspectRatioKind) {
-        case "VGA":
-            dataSet = {
-                characterFrame: { x: 0, y: 400, w: 800, h: 210 },
-                leftUp: { x: 0, y: 0, w: 0, h: 0 },
-                field: { x: 0, y: 0, font: 0 },
-                leachImage: { x: 0, y: 0, w: 0, h: 0 },
-                leach: { x: 0, y: 0, font: 0 },
-                honbaImage: { x: 0, y: 0, w: 0, h: 0 },
-                honba: { x: 0, y: 0, font: 0 },
-                face: { x: 80, y: 420, w: 150, h: 170 },
-                point: { x: 780, y: 575, font: 75 },
-                title: { x: 780, y: 445, font: 30 },
-                name: { x: 780, y: 505, font: 60 },
-                yaku: { x: 0, y: 0, font: 0 },
-                kind: { x: 750, y: 385, font: 60 },
-                movingPoint: { x: 780, y: 465, font: 30 },
-                allow: { x: 700, y: 505, font: 45 },
-            };
-            break;
-        case "HDTV":
-            dataSet = {
-                characterFrame: { x: 0, y: 620, w: 1280, h: 300 },
-                leftUp: { x: 0, y: 0, w: 0, h: 0 },
-                field: { x: 0, y: 0, font: 0 },
-                leachImage: { x: 0, y: 0, w: 0, h: 0 },
-                leach: { x: 0, y: 0, font: 0 },
-                honbaImage: { x: 0, y: 0, w: 0, h: 0 },
-                honba: { x: 0, y: 0, font: 0 },
-                face: { x: 660, y: 650, w: 160, h: 180 },
-                point: { x: 1245, y: 825, font: 75 },
-                name: { x: 1245, y: 755, font: 60 },
-                title: { x: 1245, y: 695, font: 30 },
-                allow: { x: 1255, y: 755, font: 45 },
-                movingPoint: { x: 1245, y: 520, font: 30 },
-                yaku: { x: 0, y: 0, font: 0 },
-                kind: { x: 1230, y: 755, font: 60 },
-            };
-    }
-    let widthRate = canvasWrapperElement.clientWidth / resolution.w;
-    let heightRate = canvasWrapperElement.clientHeight / resolution.h;
-    const canvasWidth = widthRate < heightRate ?
-        canvasWrapperElement.clientWidth :
-        canvasWrapperElement.clientHeight / resolution.h * resolution.w;
-    const canvasHeight = heightRate < widthRate ?
-        canvasWrapperElement.clientHeight :
-        canvasWrapperElement.clientWidth / resolution.w * resolution.h;
-    let fontRate = widthRate < heightRate ? widthRate : heightRate;
-    const canvasXFrame = Math.floor((canvasWidth - (resolution.w * widthRate)) / 2);
-    const canvasYFrame = Math.floor((canvasHeight - (resolution.h * heightRate)) / 2);
-    // widthチェック
-    Object.keys(dataSet).forEach((key) => {
-        dataSet[key].x = Math.floor(dataSet[key].x * widthRate) + canvasXFrame;
-        dataSet[key].y = Math.floor(dataSet[key].y * heightRate) + canvasYFrame;
-        if ("w" in dataSet[key]) {
-            dataSet[key].w = Math.floor(dataSet[key].w * widthRate);
-            dataSet[key].h = Math.floor(dataSet[key].h * heightRate);
-        }
-        else {
-            dataSet[key].font = Math.floor(dataSet[key].font * fontRate);
-        }
-    });
-    dataSet.canvas = { w: canvasWidth, h: canvasHeight };
-    dataSet.video = {
-        x: canvasXFrame,
-        y: canvasYFrame,
-        w: Math.floor(resolution.w * widthRate),
-        h: Math.floor(resolution.h * heightRate)
-    };
-    return dataSet;
-};
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/share/SetEventListner.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/share/SetEventListner.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SetEventListner: () => (/* binding */ SetEventListner)
-/* harmony export */ });
-class SetEventListner {
-}
-SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = false) => {
-    const returnHandler = (event) => {
-        const targetElement = parentElement?.querySelector(targetName);
-        if (event.target == targetElement) {
-            callback(event);
-            if (atOnce) {
-                parentElement?.removeEventListener(type, returnHandler);
-            }
-        }
-    };
-    parentElement?.addEventListener(type, returnHandler);
-    return returnHandler;
-};
-SetEventListner.removeEvent = (parentElement, type, handler) => {
-    parentElement?.removeEventListener(type, handler);
-};
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/share/SetOutSameClassSelect.ts":
-/*!***************************************************!*\
-  !*** ./wwwroot/ts/share/SetOutSameClassSelect.ts ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SetOutSameClassSelect: () => (/* binding */ SetOutSameClassSelect)
-/* harmony export */ });
-class SetOutSameClassSelect {
-    constructor() {
-        this.setSelectorEvent = (targets) => {
-            this.setSelectorEventOnce(targets);
-            Array.from(targets).forEach((element) => {
-                // fixme
-                element.addEventListener("change", (event) => {
-                    const changedTarget = event.target;
-                    this.setSelectorEventOnce(targets, changedTarget);
-                });
-            });
-        };
-        this.setSelectorEventOnce = (targets, changedTarget = null) => {
-            const alreadySelectedValueArray = Array.from(targets).map(target => target.value);
-            changedTarget = changedTarget ?? targets.item(0);
-            Array.from(targets).forEach((element) => {
-                alreadySelectedValueArray.shift();
-                let thisValue = element.value;
-                if (element !== changedTarget &&
-                    alreadySelectedValueArray.includes(element.value)) {
-                    thisValue = this.deduplicationOption(alreadySelectedValueArray, element);
-                }
-                alreadySelectedValueArray.push(thisValue);
-            });
-        };
-        this.deduplicationOption = (alreadySelectedValueArray, element) => {
-            const optionElements = element.children;
-            for (let optionElement of Array.from(optionElements)) {
-                if (!alreadySelectedValueArray.includes(optionElement.value)) {
-                    optionElement.selected = true;
-                    return optionElement.value;
-                }
-            }
-            throw new Error("element anomaly");
-        };
-    }
-}
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/share/SignalR.ts":
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/SignalR.ts ***!
@@ -5719,7 +4233,7 @@ class SignalR {
         this.get = (getProcessName, callback) => {
             this.connection.on(getProcessName, (strJson) => {
                 let json = {};
-                if ((typeof json) == "string") {
+                if ((typeof strJson) == "string") {
                     json = JSON.parse(strJson);
                 }
                 else {
@@ -5872,67 +4386,33 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!***********************************!*\
-  !*** ./wwwroot/ts/Event/Index.ts ***!
-  \***********************************/
+/*!**************************************!*\
+  !*** ./wwwroot/ts/QuizUser/Index.ts ***!
+  \**************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
-/* harmony import */ var _root_GameData_SelectEndHand__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/GameData/SelectEndHand */ "./wwwroot/ts/GameData/SelectEndHand.ts");
-/* harmony import */ var _root_GameData_SetAvoidSelectDuplication__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/GameData/SetAvoidSelectDuplication */ "./wwwroot/ts/GameData/SetAvoidSelectDuplication.ts");
-/* harmony import */ var _root_GameData_RegisterEndGame__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root/GameData/RegisterEndGame */ "./wwwroot/ts/GameData/RegisterEndGame.ts");
-/* harmony import */ var _root_GameData_ShowPoint__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @root/GameData/ShowPoint */ "./wwwroot/ts/GameData/ShowPoint.ts");
-/* harmony import */ var _root_GameData_RecordVideo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @root/GameData/RecordVideo */ "./wwwroot/ts/GameData/RecordVideo.ts");
-/* harmony import */ var _root_GameData_EndHand__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @root/GameData/EndHand */ "./wwwroot/ts/GameData/EndHand.ts");
-/* harmony import */ var _VideoControll__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./VideoControll */ "./wwwroot/ts/Event/VideoControll.ts");
-/* harmony import */ var _StartGame__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StartGame */ "./wwwroot/ts/Event/StartGame.ts");
-/* harmony import */ var _EventControlModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./EventControlModal */ "./wwwroot/ts/Event/EventControlModal.ts");
-/* harmony import */ var _RegisterVideo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RegisterVideo */ "./wwwroot/ts/Event/RegisterVideo.ts");
-/* harmony import */ var _VideoTestControll__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./VideoTestControll */ "./wwwroot/ts/Event/VideoTestControll.ts");
-/* harmony import */ var _GetCamera__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./GetCamera */ "./wwwroot/ts/Event/GetCamera.ts");
+/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
+/* harmony import */ var _SendAnswer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendAnswer */ "./wwwroot/ts/QuizUser/SendAnswer.ts");
+/* harmony import */ var _Canvas__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Canvas */ "./wwwroot/ts/QuizUser/Canvas.ts");
+/* harmony import */ var _GetQuiz__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GetQuiz */ "./wwwroot/ts/QuizUser/GetQuiz.ts");
 
 
 
 
 
-
-
-
-
-
-
-
-
-(async () => {
+(() => {
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
-    const selectEndHand = new _root_GameData_SelectEndHand__WEBPACK_IMPORTED_MODULE_1__.SelectEndHand();
-    const videoControll = new _VideoControll__WEBPACK_IMPORTED_MODULE_7__.VideoControll();
-    const videoTestControll = new _VideoTestControll__WEBPACK_IMPORTED_MODULE_11__.VideoTestControll();
-    const registerVideo = new _RegisterVideo__WEBPACK_IMPORTED_MODULE_10__.RegisterVideo();
-    const startGame = new _StartGame__WEBPACK_IMPORTED_MODULE_8__.StartGame();
-    const endHand = new _root_GameData_EndHand__WEBPACK_IMPORTED_MODULE_6__.EndHand();
-    const registerEndGame = new _root_GameData_RegisterEndGame__WEBPACK_IMPORTED_MODULE_3__.RegisterEndGame();
-    const showPoint = new _root_GameData_ShowPoint__WEBPACK_IMPORTED_MODULE_4__.ShowPoint();
-    const getCamera = new _GetCamera__WEBPACK_IMPORTED_MODULE_12__.GetCamera();
-    const recordVideo = new _root_GameData_RecordVideo__WEBPACK_IMPORTED_MODULE_5__.RecordVideo();
-    // 終了処理を挟み、コンストラクタプロパティを終了処理から変更できるようにする
-    await signalR.activate();
-    videoControll.controlVideoEvent(signalR);
-    selectEndHand.setHoraKindEvent();
-    startGame.setStartEvent();
-    endHand.setEndHandRegisterEvent(signalR);
-    videoTestControll.setTestVideoEvent();
-    registerVideo.setRegisterVideoEvent();
-    registerEndGame.setGameEndEvent();
-    showPoint.setStartEvent();
-    getCamera.setGetCamerEvent();
-    recordVideo.setRecordEvent(signalR);
-    _EventControlModal__WEBPACK_IMPORTED_MODULE_9__.EventControlModal.setModal();
-    _root_GameData_SetAvoidSelectDuplication__WEBPACK_IMPORTED_MODULE_2__.ModifiedUserSelect.setAvoidDuplication();
-    _root_GameData_SetAvoidSelectDuplication__WEBPACK_IMPORTED_MODULE_2__.ModifiedUserSelect.hangingVideoSetter("#listModalWindow");
+    signalR.activate();
+    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
+    new _Canvas__WEBPACK_IMPORTED_MODULE_3__.Canvas();
+    const getQuiz = new _GetQuiz__WEBPACK_IMPORTED_MODULE_4__.GetQuiz();
+    const sendAnswer = new _SendAnswer__WEBPACK_IMPORTED_MODULE_2__.SendAnswer();
+    sendAnswer.SendCanvas();
+    getQuiz.GetQuiz(signalR);
 })();
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=Event.js.map
+//# sourceMappingURL=QuizUser.js.map
