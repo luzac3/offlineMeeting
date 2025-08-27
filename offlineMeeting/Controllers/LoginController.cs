@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Login;
@@ -12,12 +12,12 @@ namespace offlineMeeting.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly IHubContext<LoginHub> _hubContext;
+        private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
 
         public LoginController(
             ILogger<HomeController> logger,
-            IHubContext<LoginHub> hubContext
+            IHubContext<MyHub> hubContext
         )
         {
             _logger = logger;

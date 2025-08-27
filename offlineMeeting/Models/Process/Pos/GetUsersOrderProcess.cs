@@ -1,12 +1,10 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
-using System.Net;
-using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {

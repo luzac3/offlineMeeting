@@ -1,7 +1,7 @@
-using offlineMeeting.Models.Entity.Share;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Entity.Share;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,7 @@ if (!app.Environment.IsDevelopment())
 EnvironmentEntity.ContentRootPath = Environment.CurrentDirectory;
 
 // Hub  routing  ݒ 
-app.MapHub<LoginHub>("/hub");
+app.MapHub<MyHub>("/hub");
 
 app.UseDefaultFiles();
 app.UseHttpsRedirection();
