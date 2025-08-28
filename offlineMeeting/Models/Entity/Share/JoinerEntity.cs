@@ -1,4 +1,4 @@
-﻿namespace offlineMeeting.Models.Entity.Share
+namespace offlineMeeting.Models.Entity.Share
 {
     public class JoinerEntity
     {
@@ -11,6 +11,7 @@
         public int Coins { get; set; }
         public int Exp { get; set; }
         public int Level { get; set; }
+        public bool IsAdmin { get; set; }
 
         public JoinerEntity(
             string? eventId,
@@ -21,7 +22,8 @@
             string handoverNotes,
             int coins,
             int exp,
-            int level
+            int level,
+            bool isAdmin = false
         )
         {
             EventId = eventId;
@@ -33,6 +35,7 @@
             Coins = coins;
             Exp = exp;
             Level = level;
+            IsAdmin = isAdmin;
         }
     }
 }
