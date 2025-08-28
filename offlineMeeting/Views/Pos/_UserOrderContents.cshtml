@@ -1,0 +1,25 @@
+@using offlineMeeting.Models.Entity.Pos;
+
+@foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
+{
+    <tr>
+        <td>@orderTableEntity?.ResultId</td>
+        <td>@orderTableEntity?.UserName</td>
+        <td>@orderTableEntity?.PurchaseCd</td>
+        <td>@orderTableEntity?.PurchaseName</td>
+        <td>
+            @if (orderTableEntity?.AlcoholQuantity == 36)
+            {
+                @($"{orderTableEntity?.Number * 2}勺")
+            }
+            else if (orderTableEntity?.AlcoholQuantity == 180)
+            {
+                @($"{orderTableEntity?.Number}合")
+            }
+            else
+            {
+                @($"{orderTableEntity?.Number}")
+            }
+        </td>
+    </tr>
+}
