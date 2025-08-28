@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Share;
@@ -31,7 +31,8 @@ namespace offlineMeeting.Models.Process.Share
                 handoverNotes : resultsEntity.DescriptionA ?? "",
                 coins: Convert.ToInt32(resultsEntity.NumA ?? 0),
                 exp: Convert.ToInt32(resultsEntity.NumB ?? 0),
-                level: Convert.ToInt32(resultsEntity.NumC ?? 1)
+                level: Convert.ToInt32(resultsEntity.NumC ?? 1),
+                isAdmin: resultsEntity.CheckB ?? false
             );
         }
         public Dictionary<int, string> GetUsers()
