@@ -54,6 +54,7 @@ namespace offlineMeeting.Models.Process.Pos
                             userName: userData.UserName,
                             purchaseCd: resultsEntity.ClassC,
                             purchaseName: purchaseName?.ClassA,
+                            purchaseRead: purchaseName?.ClassJ,
                             number: Convert.ToInt32(resultsEntity.NumA),
                             unit: resultsEntity.ClassD,
                             coins: Convert.ToInt32(resultsEntity.NumB),
