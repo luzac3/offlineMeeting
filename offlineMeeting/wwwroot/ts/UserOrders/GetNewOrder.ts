@@ -9,7 +9,7 @@ export class GetNewOrder {
     private responseKind: string;
 
     constructor() {
-        this.url = '/Pos/UserOrders';
+        this.url = '/Pos/UserOrdersPartial';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export class GetNewOrder {
 
             const managedVoiceVox = new ManagedVoiceVox();
             this.send().then((data) => {
-                document.getElementById("main")!.innerHTML = data;
+                document.getElementById("contents")!.innerHTML = data;
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
 
