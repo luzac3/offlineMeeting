@@ -3938,7 +3938,7 @@ class GetNewOrder {
                 console.log(parsedData.userName);
                 const managedVoiceVox = new _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__.ManagedVoiceVox();
                 this.send().then((data) => {
-                    document.getElementById("main").innerHTML = data;
+                    document.getElementById("contents").innerHTML = data;
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
                 JSON.parse(parsedData.orderTableEntity).forEach(async (order) => {
@@ -3967,7 +3967,7 @@ class GetNewOrder {
                 throw e;
             });
         };
-        this.url = '/Pos/UserOrders';
+        this.url = '/Pos/UserOrdersPartial';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",

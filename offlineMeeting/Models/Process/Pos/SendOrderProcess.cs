@@ -81,7 +81,7 @@ namespace offlineMeeting.Models.Process.Pos
                 totalCoins += orderPostEntity.OrderCoins;
 
                 // 送信用
-                ResultsEntity? purchaseName = String.IsNullOrEmpty(orderPostEntity.ResultId.ToString()) ? null : base.GetSingleRecord(orderPostEntity.ResultId.ToString());
+                ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderPostEntity.ResultId.ToString()) ? null : base.GetSingleRecord(orderPostEntity.ResultId.ToString());
 
                 orderTableEntity
                     .Add(
@@ -90,7 +90,8 @@ namespace offlineMeeting.Models.Process.Pos
                             userCd: userCd,
                             userName: userData.UserName,
                             purchaseCd: orderPostEntity.ResultId.ToString(),
-                            purchaseName: purchaseName?.ClassA,
+                            purchaseName: resultsEntity?.ClassA,
+                            purchaseRead: resultsEntity?.ClassJ,
                             number: orderPostEntity.OrderNumber,
                             unit: "",
                             coins: orderPostEntity.OrderCoins,
