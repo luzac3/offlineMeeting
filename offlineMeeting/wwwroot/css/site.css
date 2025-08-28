@@ -46,7 +46,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 20;
+    z-index: 30;
 }
 
 .navbar-sub {
@@ -60,6 +60,7 @@ body {
 #sub_menu {
     white-space: nowrap;
     font-size: clamp(1em, 5vw, 2em);
+    z-index: 29;
 }
 
 #coins_wrapper a {
@@ -115,7 +116,7 @@ body {
     overflow: auto;
     transition: .3s;
     box-sizing: border-box;
-    z-index: 11;
+    z-index: 51;
 }
 
 .modal_window {
@@ -128,7 +129,7 @@ body {
     margin: auto;
     border: 1px solid #000;
     background-color: white;
-    z-index: 10;
+    z-index: 40;
     text-align: center;
 }
     .modal_window > * {
