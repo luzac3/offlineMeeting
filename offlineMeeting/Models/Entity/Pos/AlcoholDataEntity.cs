@@ -1,10 +1,11 @@
-﻿namespace offlineMeeting.Models.Entity.Pos
+namespace offlineMeeting.Models.Entity.Pos
 {
     public class AlcoholDataEntity
     {
         public long? ResultId {  get; set; }
         public string? Image {  get; set; }
-        public string? AlcoholName { get; set;}
+        public string? AlcoholName { get; set; }
+        public string? Abbreviation { get; set; }
         public string? Brewery { get; set; }
         public string? Prefectures { get; set; }
         public string? GenryoMai { get; set; }
@@ -21,6 +22,7 @@
             long? resultId,
             string? image,
             string? alcoholName,
+            string? abreviation,
             string? brewery,
             string? prefectures,
             string? genryoMai,
@@ -38,6 +40,7 @@
             ResultId = resultId;
             Image = image;
             AlcoholName = alcoholName;
+            Abbreviation = abreviation;
             Brewery = brewery;
             Prefectures = prefectures;
             GenryoMai = genryoMai;

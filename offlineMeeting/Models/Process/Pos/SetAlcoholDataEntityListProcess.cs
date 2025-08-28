@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
@@ -104,6 +104,7 @@ namespace offlineMeeting.Models.Process.Pos
                             resultId: result.ResultId,
                             image: image == null ? "" : $"data:image/jpeg;base64,{image}",
                             alcoholName: result.ClassA,
+                            abreviation: result.ClassI,
                             brewery: breweryName,
                             prefectures: prefectures,
                             genryoMai: result.ClassD,
