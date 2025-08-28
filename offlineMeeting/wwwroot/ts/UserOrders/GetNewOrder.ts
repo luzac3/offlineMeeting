@@ -9,7 +9,7 @@ export class GetNewOrder {
     private responseKind: string;
 
     constructor() {
-        this.url = '/Pos/UserOrders';
+        this.url = '/Pos/UserOrdersPartial';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
@@ -26,13 +26,13 @@ export class GetNewOrder {
 
             const managedVoiceVox = new ManagedVoiceVox();
             this.send().then((data) => {
-                document.getElementById("main")!.innerHTML = data;
+                document.getElementById("contents")!.innerHTML = data;
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
 
             JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
                 readText += `注文番号、${order.PurchaseCd}。`;
-                readText += `商品名、${order.PurchaseName}。`;
+                readText += `商品名、${order.PurchaseRead}。`;
                 if (Number(order.AlcoholQuantity) > 0) {
                     if (order.AlcoholQuantity == 36) {
                         readText += `分量、${Number(order.Number) * 2}勺。`;

@@ -28,29 +28,7 @@
             <th>数量(分量)</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
-        {
-            <tr>
-                <td>@orderTableEntity?.ResultId</td>
-                <td>@orderTableEntity?.UserName</td>
-                <td>@orderTableEntity?.PurchaseCd</td>
-                <td>@orderTableEntity?.PurchaseName</td>
-                <td>
-                    @if (orderTableEntity?.AlcoholQuantity == 36)
-                    {
-                        @($"{orderTableEntity?.Number * 2}勺")
-                    }
-                    else if (orderTableEntity?.AlcoholQuantity == 180)
-                    {
-                        @($"{orderTableEntity?.Number}合")
-                    }
-                    else
-                    {
-                        @($"{orderTableEntity?.Number}")
-                    }
-                </td>
-            </tr>
-        }
+    <tbody id="contents">
+        <partial name="/Views/Pos/_UserOrderContents.cshtml" />
     </tbody>
 </table>
