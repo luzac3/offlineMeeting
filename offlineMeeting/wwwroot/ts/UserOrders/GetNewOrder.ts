@@ -32,7 +32,7 @@ export class GetNewOrder {
 
             JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
                 readText += `注文番号、${order.PurchaseCd}。`;
-                readText += `商品名、${order.PurchaseName}。`;
+                readText += `商品名、${order.PurchaseRead}。`;
                 if (Number(order.AlcoholQuantity) > 0) {
                     if (order.AlcoholQuantity == 36) {
                         readText += `分量、${Number(order.Number) * 2}勺。`;

@@ -1,4 +1,4 @@
-﻿namespace offlineMeeting.Models.Entity.Pos
+namespace offlineMeeting.Models.Entity.Pos
 {
     public class OrderTableEntity
     {
@@ -7,6 +7,7 @@
         public string? UserName { get; set; }
         public string? PurchaseCd { get; set; }
         public string? PurchaseName { get; set; }
+        public string? PurchaseRead { get; set; }
         public int Number { get; set; }
         public string? Unit { get; set; }
         public int Coins { get; set; }
@@ -18,6 +19,7 @@
             string? userName = null,
             string? purchaseCd = null,
             string? purchaseName = null,
+            string? purchaseRead = null,
             int number = 0,
             string? unit = null,
             int coins = 0,
@@ -30,6 +32,7 @@
             UserName = userName;
             PurchaseCd = purchaseCd;
             PurchaseName = purchaseName;
+            PurchaseRead = purchaseRead;
             Number = number;
             Unit = unit;
             Coins = coins;
