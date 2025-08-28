@@ -1,3 +1,4 @@
+@using offlineMeeting.Models.Entity.Share;
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
@@ -22,6 +23,10 @@
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
+                JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
+                if (userData?.Level + 3 < alcoholDataEntity.Rarity){
+                    continue;
+                }
                 <div class="alcohol_order modal_parent">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
                         <div class="open_modal">
