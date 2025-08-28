@@ -88,12 +88,21 @@ namespace offlineMeeting.Controllers
             );
             return await sendOrderProcess.Send();
         }
+
         public IActionResult UserOrders()
         {
             GetUsersOrderProcess getUsersOrderProcess = new (OrderSiteId, JoinerSiteId, HttpContext);
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return View(PosViewModel);
+        }
+
+        public IActionResult UserOrdersPartial()
+        {
+            GetUsersOrderProcess getUsersOrderProcess = new(OrderSiteId, JoinerSiteId, HttpContext);
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
+
+            return PartialView("_UserOrderContents", PosViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
