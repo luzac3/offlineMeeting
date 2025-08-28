@@ -24,7 +24,10 @@
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
-                if (userData?.Level + 3 < alcoholDataEntity.Rarity){
+                if (userData?.Level + 2 < alcoholDataEntity.Rarity){
+                    continue;
+                }
+                if (alcoholDataEntity.Rarity == 0){
                     continue;
                 }
                 <div class="alcohol_order modal_parent">
@@ -69,7 +72,7 @@
                                 }
                             </p>
                             <p class="alcoholName">
-                                <span>@alcoholDataEntity.Abbreviation</span>
+                                <span>@(alcoholDataEntity.Abbreviation == "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
                             </p>
                             <p class="alcohol_poncoin">
                                 <img src="/image/poncoin.png" alt="image" />

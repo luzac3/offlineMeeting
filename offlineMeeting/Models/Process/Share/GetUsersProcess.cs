@@ -31,7 +31,7 @@ namespace offlineMeeting.Models.Process.Share
                 handoverNotes : resultsEntity.DescriptionA ?? "",
                 coins: Convert.ToInt32(resultsEntity.NumA ?? 0),
                 exp: Convert.ToInt32(resultsEntity.NumB ?? 0),
-                expNext: Convert.ToInt32(resultsEntity.NumC ?? 0),
+                expNext: Convert.ToInt32(resultsEntity.NumD ?? 0),
                 level: Convert.ToInt32(resultsEntity.NumC ?? 1),
                 isAdmin: resultsEntity.CheckB ?? false
             );
