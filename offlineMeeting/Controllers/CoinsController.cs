@@ -13,12 +13,14 @@ namespace offlineMeeting.Controllers
     public class CoinsController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        CoinsViewModel CoinsViewModel;
         private int CoinsSiteId;
         private int JoinerSiteId;
 
         public CoinsController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            CoinsViewModel = new();
             TableIdProperty tableIdProperty = new();
             CoinsSiteId = tableIdProperty.CoinsSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
@@ -33,14 +35,12 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Index()
         {
-            CoinsViewModel coinsViewModel = new();
-            return View(coinsViewModel);
+            return View(CoinsViewModel);
         }
 
         public IActionResult Buy()
         {
-            CoinsViewModel coinsViewModel = new();
-            return View(coinsViewModel);
+            return View(CoinsViewModel);
         }
 
         public IActionResult Give()

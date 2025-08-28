@@ -3938,12 +3938,12 @@ class GetNewOrder {
                 console.log(parsedData.userName);
                 const managedVoiceVox = new _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__.ManagedVoiceVox();
                 this.send().then((data) => {
-                    document.getElementById("main").innerHTML = data;
+                    document.getElementById("contents").innerHTML = data;
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
                 JSON.parse(parsedData.orderTableEntity).forEach(async (order) => {
                     readText += `注文番号、${order.PurchaseCd}。`;
-                    readText += `商品名、${order.PurchaseName}。`;
+                    readText += `商品名、${order.PurchaseRead}。`;
                     if (Number(order.AlcoholQuantity) > 0) {
                         if (order.AlcoholQuantity == 36) {
                             readText += `分量、${Number(order.Number) * 2}勺。`;
@@ -3967,7 +3967,7 @@ class GetNewOrder {
                 throw e;
             });
         };
-        this.url = '/Pos/UserOrders';
+        this.url = '/Pos/UserOrdersPartial';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
@@ -3993,14 +3993,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class ControlNavbar {
     constructor() {
-        this.setBodyPadding = () => {
+        this.setPadding = () => {
             const navbar = document.querySelector('.navbar');
+            let subbarHeight = 0;
             if (navbar) {
-                document.body.style.paddingTop = (navbar.offsetHeight + 5) + 'px';
+                const subbar = document.querySelector('.navbar-sub');
+                if (subbar) {
+                    subbarHeight = navbar.offsetHeight;
+                    subbar.style.top = subbarHeight + 'px';
+                }
+                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
             }
         };
-        this.setBodyPadding();
-        window.addEventListener('resize', this.setBodyPadding);
+        this.setPadding();
+        window.addEventListener('resize', this.setPadding);
     }
 }
 
