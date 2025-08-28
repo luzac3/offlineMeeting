@@ -1,4 +1,4 @@
-﻿@model offlineMeeting.Models.ViewModel.CoinsViewModel;
+@model offlineMeeting.Models.ViewModel.CoinsViewModel;
 
 @{
     ViewData["Title"] = "Coins";
@@ -8,23 +8,4 @@
     <script src="https://www.paypal.com/sdk/js?client-id=@(Model.ClientId)&currency=JPY"></script>
     <link rel="stylesheet" href="~/css/Coins/Index.css" asp-append-version="true" />
 }
-<header>
-    <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div id="coin_menu" class="container-fluid">
-            <div class="navbar-collapse-coins collapse justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark dot" asp-area="" asp-controller="Coins" asp-action="Buy">コウニュウ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark dot" asp-area="" asp-controller="Coins" asp-action="Give">ジョウト</a>
-                    </li>
-                </ul>
-            </div>
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse-coins" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
-</header>
+<div></div>
