@@ -4019,14 +4019,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class ControlNavbar {
     constructor() {
-        this.setBodyPadding = () => {
+        this.setPadding = () => {
             const navbar = document.querySelector('.navbar');
+            let subbarHeight = 0;
             if (navbar) {
-                document.body.style.paddingTop = (navbar.offsetHeight + 5) + 'px';
+                const subbar = document.querySelector('.navbar-sub');
+                if (subbar) {
+                    subbarHeight = navbar.offsetHeight;
+                    subbar.style.top = subbarHeight + 'px';
+                }
+                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
             }
         };
-        this.setBodyPadding();
-        window.addEventListener('resize', this.setBodyPadding);
+        this.setPadding();
+        window.addEventListener('resize', this.setPadding);
     }
 }
 
