@@ -4,5 +4,7 @@
   "JoinerSiteId": 354,
   "CoinsSiteId": 835,
   "QuizSiteId": 867,
-  "AnswerSiteId": 868
+  "AnswerSiteId": 868,
+  "RawFoodSiteId": 961,
+  "EventFoodSiteId": 335
 }
