@@ -1,4 +1,6 @@
-﻿using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -34,8 +36,8 @@ namespace offlineMeeting.Models.Process.Pos
             ManageUserCd manageUserCd = new (httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
 
-            SetAlcoholDataEntityListProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
-            List<AlcoholDataEntity> alCoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, resultIdList);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
+            List<AlcoholDataEntity> alCoholDataEntityList = setAlcoholDataEntityProcess.Get(json, resultIdList);
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {
