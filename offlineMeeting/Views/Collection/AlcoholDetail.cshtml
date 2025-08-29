@@ -1,0 +1,149 @@
+@using offlineMeeting.Models.Entity.Share;
+
+@{
+    ViewData["Title"] = "Alcohol";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
+    <script src="~/js/dist/pos.js" defer></script>
+    <link rel="stylesheet" href="~/css/Collection/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
+}
+@model offlineMeeting.Models.ViewModel.CollectionViewModel;
+
+<div class="text-center">
+    <div id="alcohol_order">
+        @{
+            <div id="alchol_@(Model.AlcoholDataEntity?.ResultId)_modal" data-result_id="@Model.AlcoholDataEntity?.ResultId">
+                <div class="alcohol_detail">
+                    <p class="food_image_container">
+                        @if (@Model.AlcoholDataEntity?.Image == "")
+                        {
+                            <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                        }
+                        else
+                        {
+                            <a href="@(Model.AlcoholDataEntity?.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                                <img src="@(Model.AlcoholDataEntity?.Image)" class="food_image" />
+                            </a>
+                        }
+                        @switch (Model.AlcoholDataEntity?.Rarity)
+                        {
+                            case 0:
+                                <img src="/image/zeroStars.png" class="star" />
+                                break;
+                            case 1:
+                                <img src="/image/singleStars.png" class="star" />
+                                break;
+                            case 2:
+                                <img src="/image/doubleStars.png" class="star" />
+                                break;
+                            case 3:
+                                <img src="/image/tripleStars.png" class="star" />
+                                break;
+                            case 4:
+                                <img src="/image/quadStars.png" class="star" />
+                                break;
+                            case 5:
+                                <img src="/image/fiveStars.png" class="star" />
+                                break;
+                            case 6:
+                                <img src="/image/sixStars.png" class="star" />
+                                break;
+                        }
+                    </p>
+                    <h2 class="alcoholName">
+                        <span>@Model.AlcoholDataEntity?.AlcoholName</span>
+                    </h2>
+                    <p class="alcohol_poncoin">
+                        <span>1合</span>
+                        <img src="/image/poncoin.png" alt="image" />
+                        <span> × </span>
+                        <span class="coin_number_modal_show">@(Model.AlcoholDataEntity?.CoinNumber * 5 - Model.AlcoholDataEntity?.CoinNumber)</span>
+                    </p>
+                    <table class="alcohol_detail_table">
+                        <tr>
+                            <td>原料米</td>
+                            <td class="genryoMai">@Model.AlcoholDataEntity?.GenryoMai</td>
+                        </tr>
+                        <tr>
+                            <td>特定名称</td>
+                            <td class="speciallyDesignated">@Model.AlcoholDataEntity?.SpeciallyDesignated</td>
+                        </tr>
+                        <tr>
+                            <td>精米歩合</td>
+                            <td class="ricePolishingRatio">@(Model.AlcoholDataEntity?.RicePolishingRatio)%</td>
+                        </tr>
+                        <tr>
+                            <td>日本酒度</td>
+                            <td class="sakeMeterValue">@Convert.ToString(Model.AlcoholDataEntity?.SakeMeterValue ?? 0).TrimEnd('0').TrimEnd('.')</td>
+                        </tr>
+                        <tr>
+                            <td>酸度</td>
+                            <td class="acidRate">@Convert.ToString(Model.AlcoholDataEntity?.AcidRate ?? 0).TrimEnd('0').TrimEnd('.')</td>
+                        </tr>
+                        <tr>
+                            <td>度数</td>
+                            <td class="abv">@(Model.AlcoholDataEntity?.RicePolishingRatio)度</td>
+                        </tr>
+                        <tr>
+                            <td>レア度の理由</td>
+                            <td class="reality_reason">@(Model.AlcoholDataEntity?.RarityReason)</td>
+                        </tr>
+                        <tr>
+                            <td>解説</td>
+                            <td class="explanation">@(Model.AlcoholDataEntity?.Explanation)</td>
+                        </tr>
+                        <tr>
+                            <td>酒造</td>
+                            <td class="brewery">@Model.AlcoholDataEntity?.Brewery</td>
+                        </tr>
+                        <tr>
+                            <td>酒造情報</td>
+                            <td class="explanation">@(Model.AlcoholDataEntity?.BreweryFeatures)</td>
+                        </tr>
+                        <tr>
+                            <td>メインラベル</td>
+                            <td class="explanation">@(Model.AlcoholDataEntity?.MainLabel)</td>
+                        </tr>
+                        <tr>
+                            <td>住所</td>
+                            <td class="prefectures">
+                                <p>
+                                    @{
+                                        string postCodeStr = Model.AlcoholDataEntity?.PostCode.ToString() ?? "";
+                                        string postCodeDisplay = postCodeStr.Length >= 7
+                                            ? $"{postCodeStr.Substring(0, 3)}-{postCodeStr.Substring(3)}"
+                                            : postCodeStr;
+                                    }
+                                    〒@postCodeDisplay
+                                </p>
+                                <p>
+                                    @(Model.AlcoholDataEntity?.Prefectures) @(Model.AlcoholDataEntity?.Municipality) @(Model.AlcoholDataEntity?.Address)
+                                </p>
+                                <p>
+                                    @{
+                                        string telStr = Model.AlcoholDataEntity?.Tel.ToString() ?? "";
+                                        string telDisplay = telStr.Length >= 7
+                                            ? $"Tel {(telStr.Substring(0, 3))}-{(telStr.Substring(2, 6))}-{(telStr.Substring(6))}"
+                                            : $"Tel {telStr}";
+                                    }
+                                </p>
+                                <p>
+                                    URL @(Model.AlcoholDataEntity?.Url)
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p><button class="back" type="button">戻る</button></p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

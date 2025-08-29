@@ -70,7 +70,7 @@
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="Collection" asp-action="Index">ズカン</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark dot" asp-area="" asp-controller="Collection" asp-action="Achievements">ジッセキ</a>
+                                <a class="nav-link text-dark dot" asp-area="" asp-controller="Achievement" asp-action="Index">ジッセキ</a>
                             </li>
                         </ul>
                     </div>
@@ -85,6 +85,9 @@
                         break;
                     case "Coins":
                         <partial name="/Views/Coins/_CoinsNavbar.cshtml" />
+                        break;
+                    case "Collection":
+                        <partial name="/Views/Collection/_CollectionNavbar.cshtml" />
                         break;
                 }
             }

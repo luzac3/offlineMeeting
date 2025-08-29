@@ -1,4 +1,5 @@
-﻿namespace offlineMeeting.Models.Entity.Pos
+using offlineMeeting.Models.Entity.Share;
+namespace offlineMeeting.Models.Entity.Pos
 {
     public class OrderEntity
     {
