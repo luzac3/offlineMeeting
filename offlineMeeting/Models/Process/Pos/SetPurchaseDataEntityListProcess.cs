@@ -5,61 +5,62 @@ using offlineMeeting.Models.Process.Share;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SetFoodDataEntityListProcess : ResultsProcess
+    public class SetPurchaseDataEntityListProcess : ResultsProcess
     {
+        private int ExtraFoodSiteId;
         private int EventFoodSiteId;
+        private int RawFoodSiteId;
         private int OrderSiteId;
         private string EventId;
         private string UserCd;
-        List<FoodDataEntity> FoodDataEntityList;
+        List<PurchaseDataEntity> PurchaseDataEntityList;
 
-        public SetFoodDataEntityListProcess(int eventFoodSiteId, int orderSiteId, string eventId, string userCd)
+        public SetPurchaseDataEntityListProcess(
+            int extraFoodSiteId,
+            int eventFoodSiteId,
+            int rawFoodSiteId,
+            int orderSiteId,
+            string eventId,
+            string userCd
+        )
         {
+            ExtraFoodSiteId = extraFoodSiteId;
             EventFoodSiteId = eventFoodSiteId;
+            RawFoodSiteId = rawFoodSiteId;
             OrderSiteId = orderSiteId;
             EventId = eventId;
             UserCd = userCd;
-            FoodDataEntityList = new List<FoodDataEntity> { };
+            PurchaseDataEntityList = new List<PurchaseDataEntity> { };
         }
 
-        public List<FoodDataEntity> Get()
+        public List<PurchaseDataEntity> Get(int category)
         {
             List<ResultsEntity> results = base
-                .GetFromSiteId(EventFoodSiteId)
+                .GetFromSiteIdList(
+                    new List<int> { ExtraFoodSiteId, EventFoodSiteId, RawFoodSiteId }
+                )
                 .Where(x=>x.ClassD == EventId)
                 .ToList();
 
-            GetFoodDataEntityList(results);
+            GetPurchaseDataEntityList(results, category);
 
-            return FoodDataEntityList;
+            return PurchaseDataEntityList;
         }
 
-        public List<FoodDataEntity> Get(List<int> resultId)
+        public List<PurchaseDataEntity> Get(List<int> resultId)
         {
             List<ResultsEntity> results = base
                 .GetFromSiteId(EventFoodSiteId, resultId)
                 .Where(x => x.ClassD == EventId)
                 .ToList();
 
-            GetFoodDataEntityList(results);
+            GetPurchaseDataEntityList(results);
 
-            return FoodDataEntityList;
+            return PurchaseDataEntityList;
         }
 
-        private void GetFoodDataEntityList(List<ResultsEntity> results)
+        private void GetPurchaseDataEntityList(List<ResultsEntity> results, int category = 0)
         {
-            /*
-            List<ResultsEntity> categories = new List<ResultsEntity>();
-            if (results.Count > 0)
-            {
-                if (int.TryParse(results[0].ClassB, out int classBInt))
-                {
-                    // wikiからの取得になってないので今回はオミット
-                    categories = base.GetFromSiteId(classBInt);
-                }
-            }
-            */
-
             List<int> orderedResultsIdList = base
                 .GetFromSiteId(OrderSiteId)
                 .Where(x => x.ClassA == EventId)
@@ -69,11 +70,11 @@ namespace offlineMeeting.Models.Process.Pos
 
             foreach (ResultsEntity result in results)
             {
-                string foodName = "";
-                if (!string.IsNullOrEmpty(result.ClassA))
+                string purchaseName = "";
+                if (!string.IsNullOrEmpty(result.ClassA) && category == 1)
                 {
-                    ResultsEntity? foodEntity = base.GetSingleRecord(result.ClassA);
-                    foodName = foodEntity?.Title ?? "";
+                    ResultsEntity? purchaseEntity = base.GetSingleRecord(result.ClassA);
+                    purchaseName = purchaseEntity?.Title ?? "";
                 }
 
                 string[]? imageSplit = result!.Body?.Split("/");
@@ -85,13 +86,13 @@ namespace offlineMeeting.Models.Process.Pos
 
                 GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
                 string? image = getBinariesProcess.GetImage(guid);
-                FoodDataEntityList
+                PurchaseDataEntityList
                     .Add(
-                        new FoodDataEntity(
+                        new PurchaseDataEntity(
                             resultId: result.ResultId,
                             image: image == null ? "" : $"data:image/jpeg;base64,{image}",
-                            foodName: foodName,
-                            cookingCategory: "",
+                            purchaseName: purchaseName,
+                            category: category,
                             coinNumber: Convert.ToInt32(result.NumG),
                             leftAmount: Convert.ToInt32(result.NumE),
                             ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
