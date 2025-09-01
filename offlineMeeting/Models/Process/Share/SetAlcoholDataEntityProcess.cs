@@ -1,11 +1,10 @@
 using offlineMeeting.Models.DBProperty;
-using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
-using offlineMeeting.Models.Process.Share;
 
-namespace offlineMeeting.Models.Process.Pos
+namespace offlineMeeting.Models.Process.Share
 {
-    public class SetAlcoholDataEntityListProcess : ResultsProcess
+    public class SetAlcoholDataEntityProcess : ResultsProcess
     {
         private int SakeSiteId;
         private int OrderSiteId;
@@ -13,7 +12,7 @@ namespace offlineMeeting.Models.Process.Pos
         private string UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
 
-        public SetAlcoholDataEntityListProcess(int sakeSiteId, int orderSiteId, string eventId, string userCd)
+        public SetAlcoholDataEntityProcess(int sakeSiteId, int orderSiteId, string eventId, string userCd)
         {
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;
@@ -26,8 +25,8 @@ namespace offlineMeeting.Models.Process.Pos
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
-            List<ResultsEntity> results = base
-                .GetFromSiteId(SakeSiteId)
+            List<ResultsEntity> results = 
+                GetFromSiteId(SakeSiteId)
                 .Where(x=>x.ClassH == EventId)
                 .ToList();
 
@@ -40,14 +39,26 @@ namespace offlineMeeting.Models.Process.Pos
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
-            List<ResultsEntity> results = base
-                .GetFromSiteId(SakeSiteId, resultId)
+            List<ResultsEntity> results = 
+                GetFromSiteId(SakeSiteId, resultId)
                 .Where(x => x.ClassH == EventId)
                 .ToList();
 
             GetAlcoholDataEntityList(results, choicesTextDic);
 
             return AlcoholDataEntityList;
+        }
+
+        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, int resultId)
+        {
+            Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
+
+            ResultsEntity result = 
+                GetSingleRecord(resultId.ToString());
+
+            GetAlcoholDataEntity(result, choicesTextDic);
+
+            return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
         private Dictionary<string, string> GetChoicesTextDic(System.Text.Json.Nodes.JsonNode? json)
@@ -77,8 +88,8 @@ namespace offlineMeeting.Models.Process.Pos
 
         private void GetAlcoholDataEntityList(List<ResultsEntity> results, Dictionary<string, string> choicesTextDic)
         {
-            List<int> orderedResultsIdList = base
-                .GetFromSiteId(OrderSiteId)
+            List<int> orderedResultsIdList = 
+                GetFromSiteId(OrderSiteId)
                 .Where(x => x.ClassA == EventId)
                 .Where(x => x.ClassB == UserCd)
                 .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
@@ -86,9 +97,9 @@ namespace offlineMeeting.Models.Process.Pos
 
             foreach (ResultsEntity result in results)
             {
-                ResultsEntity? brewery = String.IsNullOrEmpty(result.ClassC) ? null : base.GetSingleRecord(result.ClassC);
+                ResultsEntity? brewery = string.IsNullOrEmpty(result.ClassC) ? null : GetSingleRecord(result.ClassC);
                 string? breweryName = brewery?.Title ?? null;
-                string? prefectures = String.IsNullOrEmpty(brewery?.ClassB) ? null : base.GetSingleRecord(brewery.ClassB).ClassA;
+                string? prefectures = string.IsNullOrEmpty(brewery?.ClassB) ? null : GetSingleRecord(brewery.ClassB).ClassA;
                 string[]? imageSplit = result!.DescriptionG?.Split("/");
                 string guid = "";
                 if (imageSplit != null && imageSplit?.Length > 2)
@@ -120,6 +131,56 @@ namespace offlineMeeting.Models.Process.Pos
                         )
                     );
             }
+        }
+
+        private AlcoholDataEntity GetAlcoholDataEntity(ResultsEntity result, Dictionary<string, string> choicesTextDic)
+        {
+            List<int> orderedResultsIdList = 
+                GetFromSiteId(OrderSiteId)
+                .Where(x => x.ClassA == EventId)
+                .Where(x => x.ClassB == UserCd)
+                .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
+                .ToList();
+
+            ResultsEntity? brewery = string.IsNullOrEmpty(result.ClassC) ? null : GetSingleRecord(result.ClassC);
+            string? prefectures = string.IsNullOrEmpty(brewery?.ClassB) ? null : GetSingleRecord(brewery.ClassB).ClassA;
+            string[]? imageSplit = result!.DescriptionG?.Split("/");
+            string guid = "";
+            if (imageSplit != null && imageSplit?.Length > 2)
+            {
+                guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
+            }
+
+            GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
+            string? image = getBinariesProcess.GetImage(guid);
+
+            return new AlcoholDataEntity(
+                resultId: result.ResultId,
+                image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                alcoholName: result.ClassA,
+                abreviation: result.ClassI,
+                brewery: brewery?.Title,
+                prefectures: prefectures,
+                genryoMai: result.ClassD,
+                speciallyDesignated: string.IsNullOrEmpty(result.ClassE) ? "" : choicesTextDic[result.ClassE], // 特定名称
+                ricePolishingRatio: Convert.ToInt32(result.NumB),
+                sakeMeterValue: result.NumC,
+                acidRate: result.NumG,
+                abv: result.NumD,
+                rarity: Convert.ToInt32(result.NumF),
+                coinNumber: Convert.ToInt32(result.NumI),
+                leftAmount: Convert.ToInt32(result.NumH),
+                ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
+                rarityReason: result.DescriptionF?.Replace("\n", "<br>"),
+                explanation: result.DescriptionC?.Replace("\n", "<br>"),
+                mainLabel: brewery?.DescriptionA?.Replace("\n", "<br>"),
+                breweryFeatures: brewery?.DescriptionB?.Replace("\n", "<br>"),
+                postCode: Convert.ToInt32(brewery?.NumA),
+                municipality: brewery?.ClassC,
+                address: brewery?.ClassD,
+                tel: Convert.ToInt32(brewery?.NumB),
+                url: brewery?.ClassE
+            );
         }
     }
 }

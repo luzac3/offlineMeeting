@@ -1,3 +1,4 @@
+using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Entity.Pos;
 
 namespace offlineMeeting.Models.ViewModel
