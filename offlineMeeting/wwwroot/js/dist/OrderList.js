@@ -157,6 +157,30 @@ class OrderEntity {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/share/BackButton.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/share/BackButton.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BackButton: () => (/* binding */ BackButton)
+/* harmony export */ });
+class BackButton {
+    constructor() {
+        this.Buck = () => {
+            const element = document.getElementById('back');
+            element.addEventListener("click", () => {
+                history.back();
+            });
+        };
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/ControlNavbar.ts":
 /*!*******************************************!*\
   !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
@@ -417,17 +441,21 @@ var __webpack_exports__ = {};
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
-/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
+/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
+
 
 
 
 (async () => {
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
-    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_1__.GetOrderList();
-    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_2__.SendOrder();
+    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_2__.GetOrderList();
+    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_3__.SendOrder();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
     getOrderList.setOrderList();
     sendOrder.setOrderList();
+    backButton.Buck();
 })();
 
 })();

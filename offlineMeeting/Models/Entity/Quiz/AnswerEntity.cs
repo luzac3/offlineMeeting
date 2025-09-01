@@ -12,6 +12,7 @@ namespace offlineMeeting.Models.Entity.Quiz
         public int MaxPoint { get; set; }
         public int Point { get; set; }
         public DateTime? AnswerTime { get; set; }
+        public bool Show { get; set; }
 
         public AnswerEntity(
             string? resultId,
@@ -21,7 +22,8 @@ namespace offlineMeeting.Models.Entity.Quiz
             string? image,
             int maxPoint,
             int point,
-            DateTime answerTime
+            DateTime answerTime,
+            bool show = false
         )
         {
             ResultId = resultId;
@@ -32,6 +34,7 @@ namespace offlineMeeting.Models.Entity.Quiz
             MaxPoint = maxPoint;
             Point = point;
             AnswerTime = answerTime;
+            Show = show;
         }
     }
 }

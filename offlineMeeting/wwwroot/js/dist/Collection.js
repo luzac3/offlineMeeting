@@ -2,30 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/Collection/BackButton.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/Collection/BackButton.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BackButton: () => (/* binding */ BackButton)
-/* harmony export */ });
-class BackButton {
-    constructor() {
-        this.Buck = () => {
-            const element = document.getElementById('back');
-            element.addEventListener("click", () => {
-                history.back();
-            });
-        };
-    }
-}
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/Collection/JumpDetail.ts":
 /*!*********************************************!*\
   !*** ./wwwroot/ts/Collection/JumpDetail.ts ***!
@@ -48,6 +24,30 @@ class JumpDetail {
                         location.href = `/Collection/AlcoholDetail/${alcoholId}`;
                     });
                 }
+            });
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/BackButton.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/share/BackButton.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BackButton: () => (/* binding */ BackButton)
+/* harmony export */ });
+class BackButton {
+    constructor() {
+        this.Buck = () => {
+            const element = document.getElementById('back');
+            element.addEventListener("click", () => {
+                history.back();
             });
         };
     }
@@ -203,8 +203,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _JumpDetail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JumpDetail */ "./wwwroot/ts/Collection/JumpDetail.ts");
-/* harmony import */ var _BackButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BackButton */ "./wwwroot/ts/Collection/BackButton.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _JumpDetail__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./JumpDetail */ "./wwwroot/ts/Collection/JumpDetail.ts");
 
 
 
@@ -212,8 +212,8 @@ __webpack_require__.r(__webpack_exports__);
 (async () => {
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
-    const jumpDetail = new _JumpDetail__WEBPACK_IMPORTED_MODULE_2__.JumpDetail();
-    const backButton = new _BackButton__WEBPACK_IMPORTED_MODULE_3__.BackButton();
+    const jumpDetail = new _JumpDetail__WEBPACK_IMPORTED_MODULE_3__.JumpDetail();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
     controlModal.setControl();
     jumpDetail.Jump();
     backButton.Buck();

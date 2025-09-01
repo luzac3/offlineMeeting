@@ -1,7 +1,7 @@
 import { ControlModal } from "@root/share/ControlModal";
 import { ControlNavbar } from "@root/share/ControlNavbar";
+import { BackButton } from "@root//share/BackButton";
 import { JumpDetail } from "./JumpDetail";
-import { BackButton } from "./BackButton";
 
 
 (async () => {
