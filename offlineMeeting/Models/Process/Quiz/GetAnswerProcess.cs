@@ -25,9 +25,9 @@ namespace offlineMeeting.Models.Process.Quiz
             return SetAnswerEntityProcess.Get(resultId);
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, string quizId, bool show = false)
+        public List<AnswerEntity> GetList(int answerSiteId, string quizId)
         {
-            return SetAnswerEntityProcess.GetList(answerSiteId, quizId, show);
+            return SetAnswerEntityProcess.GetList(answerSiteId, quizId);
         }
     }
 }
