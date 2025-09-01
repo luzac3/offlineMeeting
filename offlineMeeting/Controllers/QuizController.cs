@@ -89,7 +89,7 @@ namespace offlineMeeting.Controllers
         {
             GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
             QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId, true));
+            quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
 
             return View(quizViewModel);
         }
