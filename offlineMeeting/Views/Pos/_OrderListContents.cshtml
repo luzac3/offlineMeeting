@@ -4,55 +4,97 @@
 @{
     foreach (OrderEntity orderEntity in Model.OrderEntityList ?? new List<OrderEntity> { })
     {
-        <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
-            <div class="image_container">
-                @if (@orderEntity.AlcoholDataEntity?.Image != null)
-                {
-                    @if ((@orderEntity.AlcoholDataEntity.Image) == "")
+        @if (orderEntity.AlcoholDataEntity != null)
+        {
+            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
+                <input class="category nodisplay" value="2" />
+                <div class="image_container">
+                    @if (@orderEntity.AlcoholDataEntity?.Image != null)
                     {
-                        <img src="" alt="image" />
+                        @if ((@orderEntity.AlcoholDataEntity.Image) == "")
+                        {
+                            <img src="" alt="image" />
+                        }
+                        else
+                        {
+                            <a href="@(orderEntity.AlcoholDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                                <img src="@(orderEntity.AlcoholDataEntity.Image)" class="food_image" />
+                            </a>
+                        }
                     }
-                    else
-                    {
-                        <a href="@(orderEntity.AlcoholDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                            <img src="@(orderEntity.AlcoholDataEntity.Image)" class="food_image" />
-                        </a>
-                    }
-                }
+                </div>
+                <div class="caption">
+                    <p>
+                        <span class="alcohol_name">@orderEntity.AlcoholDataEntity?.AlcoholName</span>
+                        <span class="rarity">☆@(orderEntity.AlcoholDataEntity?.Rarity)</span>
+                        @switch (orderEntity.OrderPostEntity.AlcoholAmount)
+                        {
+                            case 36:
+                                <span>2勺(36ml)</span>
+                                ;
+                                break;
+                            case 180:
+                                <span>1合(180ml)</span>
+                                ;
+                                break;
+                            default:
+                                <span>全購入(残数購入)</span>
+                                ;
+                                break;
+                        }
+                        <input type="text" class="alcohol_amount nodisplay" value="@(orderEntity.OrderPostEntity.AlcoholAmount)" />
+                    </p>
+                    <p class="counter">
+                        <span>注文数:</span>
+                        <button type="button" class="counter_decrement">-</button>
+                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
+                        <button type="button" class="counter_increment">+</button>
+                    </p>
+                    <p>
+                        <img class="poncoin_img" src="/image/poncoin.png" />
+                        <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
+                        <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
+                    </p>
+                </div>
             </div>
-            <div class="caption">
-                <p>
-                    <span class="alcoholName">@orderEntity.AlcoholDataEntity?.AlcoholName</span>
-                    <span class="rarity">☆@(orderEntity.AlcoholDataEntity?.Rarity)</span>
-                    @switch (orderEntity.OrderPostEntity.AlcoholAmount)
+        }
+        else if (orderEntity.FoodDataEntity != null)
+        {
+            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
+                <input class="category nodisplay" value="1" />
+                <div class="image_container">
+                    @if (@orderEntity.FoodDataEntity?.Image != null)
                     {
-                        case 36:
-                            <span>2勺(36ml)</span>
-                            ;
-                            break;
-                        case 180:
-                            <span>1合(180ml)</span>
-                            ;
-                            break;
-                        default:
-                            <span>全購入(残数購入)</span>
-                            ;
-                            break;
+                        @if ((@orderEntity.FoodDataEntity.Image) == "")
+                        {
+                            <img src="" alt="image" />
+                        }
+                        else
+                        {
+                            <a href="@(orderEntity.FoodDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                                <img src="@(orderEntity.FoodDataEntity.Image)" class="food_image" />
+                            </a>
+                        }
                     }
-                    <input type="text" class="alcohol_amount nodisplay" value="@(orderEntity.OrderPostEntity.AlcoholAmount)" />
-                </p>
-                <p class="counter">
-                    <span>注文数:</span>
-                    <button type="button" class="counter_decrement">-</button>
-                    <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
-                    <button type="button" class="counter_increment">+</button>
-                </p>
-                <p>
-                    <img class="poncoin_img" src="/image/poncoin.png" />
-                    <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
-                    <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
-                </p>
+                </div>
+                <div class="caption">
+                    <p>
+                        <span class="food_name">@orderEntity.FoodDataEntity?.FoodName</span>
+                    </p>
+                    <p class="counter">
+                        <span>注文数:</span>
+                        <button type="button" class="counter_decrement">-</button>
+                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
+                        <button type="button" class="counter_increment">+</button>
+                    </p>
+                    <p>
+                        <img class="poncoin_img" src="/image/poncoin.png" />
+                        <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
+                        <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
+                    </p>
+                </div>
             </div>
-        </div>
+        }
+
     }
 }

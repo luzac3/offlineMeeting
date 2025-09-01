@@ -87,10 +87,13 @@ class SendOrder {
                 let orderEntityList = [];
                 if (orderElements.length > 0) {
                     Array.from(document.getElementsByClassName("order")).forEach((orderElement) => {
-                        orderEntityList.push(new _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(parseInt(orderElement.dataset.result_id), parseInt(orderElement.querySelector(".order_number").value), parseInt(orderElement.querySelector(".order_coins").value), parseInt(orderElement.querySelector(".alcohol_amount").value)));
+                        const alcoholAmountElement = orderElement.querySelector(".alcohol_amount");
+                        const alcoholAmount = alcoholAmountElement ? parseInt(alcoholAmountElement.value) : 0;
+                        orderEntityList.push(new _pos_OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(parseInt(orderElement.dataset.result_id), parseInt(orderElement.querySelector('.category')?.value ?? "0"), parseInt(orderElement.querySelector(".order_number").value), parseInt(orderElement.querySelector(".order_coins").value), alcoholAmount));
                     });
                     const orderObjectList = orderEntityList.map(order => ({
                         ResultId: order.ResultId,
+                        Category: order.Category,
                         OrderNumber: order.OrderNumber,
                         OrderCoins: order.OrderCoins,
                         AlcoholAmount: order.AlcoholAmount
@@ -142,8 +145,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
 /* harmony export */ });
 class OrderEntity {
-    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
+    constructor(resultId, category, orderNumber, orderCoins, alcoholAmount = 0) {
         this.ResultId = resultId;
+        this.Category = category;
         this.OrderNumber = orderNumber;
         this.OrderCoins = orderCoins;
         this.AlcoholAmount = alcoholAmount;

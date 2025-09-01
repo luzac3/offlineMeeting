@@ -33,14 +33,12 @@ export class GetNewOrder {
             JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
                 readText += `注文番号、${order.PurchaseCd}。`;
                 readText += `商品名、${order.PurchaseRead}。`;
-                if (Number(order.AlcoholQuantity) > 0) {
-                    if (order.AlcoholQuantity == 36) {
-                        readText += `分量、${Number(order.Number) * 2}勺。`;
-                    } else if (order.AlcoholQuantity == 180) {
-                        readText += `分量、${order.Number}合。`;
-                    } else {
-                        readText += `オーダー数、${order.Number}。`;
-                    }
+                if (order.AlcoholQuantity == 36) {
+                    readText += `分量、${Number(order.Number) * 2}勺。`;
+                } else if (order.AlcoholQuantity == 180) {
+                    readText += `分量、${order.Number}合。`;
+                } else {
+                    readText += `オーダー数、${order.Number}。`;
                 }
             });
             await managedVoiceVox.playVoiceVox(readText, 3, ctx);
