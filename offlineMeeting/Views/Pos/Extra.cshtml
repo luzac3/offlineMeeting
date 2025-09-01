@@ -1,0 +1,74 @@
+@using offlineMeeting.Models.Entity.Share;
+@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    ViewData["Title"] = "Extra";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
+    <script src="~/js/dist/Pos.js" defer></script>
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
+}
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+<div class="text-center">
+    <div id="purchase_order">
+        @{
+            foreach (ExtraDataEntity foodDataEntity in Model.ExtraDataEntityList ?? new List<ExtraDataEntity> { })
+            {
+                JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
+                <div class="purchase_order food_order modal_parent">
+                    <div id="alchol_@extraDataEntity.ResultId" class="alchol_info" data-result_id="@extraDataEntity.ResultId">
+                        <input class="category nodisplay" value="1" />
+                        <div class="open_modal">
+                            <p class="food_image_container">
+                                @if (@extraDataEntity.Image == "")
+                                {
+                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                }
+                                else
+                                {
+                                    <img src="@(extraDataEntity.Image)" class="food_image" />
+                                }
+                                @if (extraDataEntity.Ordered)
+                                {
+                                    <img src="/image/ordered.png" class="orderd" alt="image" />
+                                }
+                            </p>
+                            <p class="alcoholName">
+                                <span>@(extraDataEntity.FoodName)</span>
+                            </p>
+                            <p class="extra_poncoin">
+                                <img src="/image/poncoin.png" alt="image" />
+                                <span> × </span>
+                                <span class="coin_number_show">@(extraDataEntity.CoinNumber * 5 - extraDataEntity.CoinNumber)</span>
+                                <input class="coin_number nodisplay" value="@(extraDataEntity.CoinNumber * 5 - extraDataEntity.CoinNumber)" disabled />
+                            </p>
+                            <input type="text" class="left_amount nodisplay" value="@(foodDataEntity.LeftAmount)" />
+                        </div>
+                        <p>
+                            <span>×</span>
+                            <select class="order_number">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </p>
+                        <p><button class="order_button" type="button">注文に追加</button></p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div>
+        <br /><button id="back" type="button">戻る</button>
+    </div>
+</div>
