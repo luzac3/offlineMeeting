@@ -28,9 +28,6 @@ export class SendAnswer {
             };
             this.Send(answerEntity).then((data: string) => {
                 const result = JSON.parse(data);
-                console.log(typeof data, data);
-                console.log(result);
-                console.log(Object.keys(result)); // 追加: プロパティ一覧
                 sendElement.disabled = true;
                 window.alert(result.message);
             });
