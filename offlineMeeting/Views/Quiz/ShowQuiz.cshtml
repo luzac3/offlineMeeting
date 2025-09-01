@@ -1,0 +1,30 @@
+@using offlineMeeting.Models.Entity.Quiz
+@{
+    ViewData["Title"] = "ShowQuiz";
+}
+@section Scripts {
+    <script src="~/js/dist/QuizOrner.js" defer></script>
+    <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.QuizViewModel
+
+<div id="answer_list">
+    @if (Model.AnswerEntityList != null)
+    {
+        foreach (AnswerEntity answerEntity in Model.AnswerEntityList)
+        {
+            <div class="answer">
+                <div>
+                    <img src="@(answerEntity.Image)" class="quiz_image" />
+                </div>
+                <div>
+                    <p>@(answerEntity.UserName)</p>
+                    <p>@(answerEntity.AnswerTime)</p>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div>
+    <br /><button id="back" type="button">戻る</button>
+</div>

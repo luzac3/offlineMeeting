@@ -53,7 +53,7 @@ namespace offlineMeeting.Models.Process.Quiz
             );
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, string quizId)
+        public List<AnswerEntity> GetList(int answerSiteId, string quizId, bool show = false)
         {
             GetUsersProcess getUsersProcess = new(JoinerSiteId, httpContext);
             List<ResultsEntity> results = GetFromSiteId(answerSiteId)
@@ -85,7 +85,8 @@ namespace offlineMeeting.Models.Process.Quiz
                     image: $"data:image/jpeg;base64,{image}",
                     maxPoint: Convert.ToInt32(resultsEntity?.NumA ?? 0),
                     point: Convert.ToInt32(result.NumA),
-                    answerTime: result.DateA ?? DateTime.MinValue
+                    answerTime: result.DateA ?? DateTime.MinValue,
+                    show: show
                 ));
             }
             return answerEntityList;

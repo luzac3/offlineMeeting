@@ -2,6 +2,7 @@
 @model offlineMeeting.Models.ViewModel.QuizViewModel
 
 @{
+    var path = Context.Request.Path.ToString();
     <div class="answer">
         <div>
             <img src="@(Model.AnswerEntity?.Image)" class="quiz_image" />
@@ -9,7 +10,7 @@
         <div>
             <p>@(Model.AnswerEntity?.UserName)</p>
             <input type="text" class="user_cd nodisplay" />
-            <p>
+            <p class="show">
                 <input type="number" class="point" min="0" max="@(Model.AnswerEntity?.MaxPoint)" value="@(Model.AnswerEntity?.Point)" />
                 <span>点</span>
             </p>

@@ -3904,7 +3904,17 @@ class GetUsersAnswer {
                 });
                 if (answerListElement != null) {
                     await response.text().then(data => {
+                        const path = window.location.pathname;
                         answerListElement.insertAdjacentHTML('beforeend', data);
+                        if (path.startsWith("/Quiz/ShowQuiz")) {
+                            Array.from(document.getElementsByClassName("show")).forEach(element => {
+                                element.classList.add("nodisplay");
+                            });
+                            const answers = document.querySelectorAll(".answer");
+                            if (answers.length > 0) {
+                                answers[answers.length - 1].scrollIntoView({ behavior: "smooth" });
+                            }
+                        }
                     });
                 }
             });
@@ -3969,21 +3979,23 @@ class SendUserPoints {
         this.SendPoints = () => {
             const sendPointsElement = document.getElementById("send_points");
             const answerElements = document.getElementsByClassName("answer");
-            sendPointsElement.onclick = () => {
-                let pointEntityList = [];
-                Array.from(answerElements).forEach(answerElement => {
-                    const answerId = answerElement.querySelector('.answer_id').value;
-                    const point = answerElement.querySelector('.point').value;
-                    pointEntityList.push({
-                        AnswerId: answerId,
-                        Point: point
+            if (sendPointsElement != null) {
+                sendPointsElement.onclick = () => {
+                    let pointEntityList = [];
+                    Array.from(answerElements).forEach(answerElement => {
+                        const answerId = answerElement.querySelector('.answer_id').value;
+                        const point = answerElement.querySelector('.point').value;
+                        pointEntityList.push({
+                            AnswerId: answerId,
+                            Point: point
+                        });
                     });
-                });
-                this.Send(pointEntityList).then((data) => {
-                    const result = JSON.parse(data);
-                    window.alert(result.message);
-                });
-            };
+                    this.Send(pointEntityList).then((data) => {
+                        const result = JSON.parse(data);
+                        window.alert(result.message);
+                    });
+                };
+            }
         };
         this.Send = async (pointEntityList) => {
             const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
@@ -4000,6 +4012,31 @@ class SendUserPoints {
             'X-Requested-With': 'XMLHttpRequest'
         };
         this.responseKind = "json";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/BackButton.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/share/BackButton.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BackButton: () => (/* binding */ BackButton)
+/* harmony export */ });
+class BackButton {
+    constructor() {
+        this.Buck = () => {
+            const element = document.getElementById('back');
+            element.addEventListener("click", () => {
+                history.back();
+            });
+        };
     }
 }
 
@@ -4291,9 +4328,11 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _SendQuiz__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendQuiz */ "./wwwroot/ts/QuizOrner/SendQuiz.ts");
-/* harmony import */ var _SendUserPoints__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendUserPoints */ "./wwwroot/ts/QuizOrner/SendUserPoints.ts");
-/* harmony import */ var _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GetUsersAnswer */ "./wwwroot/ts/QuizOrner/GetUsersAnswer.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _SendQuiz__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendQuiz */ "./wwwroot/ts/QuizOrner/SendQuiz.ts");
+/* harmony import */ var _SendUserPoints__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SendUserPoints */ "./wwwroot/ts/QuizOrner/SendUserPoints.ts");
+/* harmony import */ var _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GetUsersAnswer */ "./wwwroot/ts/QuizOrner/GetUsersAnswer.ts");
+
 
 
 
@@ -4303,11 +4342,13 @@ __webpack_require__.r(__webpack_exports__);
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     signalR.activate();
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
-    new _SendQuiz__WEBPACK_IMPORTED_MODULE_2__.SendQuiz(signalR);
-    const getUsersAnswer = new _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_4__.GetUsersAnswer();
-    const sendUserPoints = new _SendUserPoints__WEBPACK_IMPORTED_MODULE_3__.SendUserPoints();
+    new _SendQuiz__WEBPACK_IMPORTED_MODULE_3__.SendQuiz(signalR);
+    const getUsersAnswer = new _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_5__.GetUsersAnswer();
+    const sendUserPoints = new _SendUserPoints__WEBPACK_IMPORTED_MODULE_4__.SendUserPoints();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
     getUsersAnswer.GetAnswer(signalR);
     sendUserPoints.SendPoints();
+    backButton.Buck();
 })();
 
 })();
