@@ -18,7 +18,6 @@ namespace offlineMeeting.Controllers
         private CollectionViewModel CollectionViewModel;
         private int SakeSiteId;
         private int OrderSiteId;
-        private int JoinerSiteId;
 
         public CollectionController(
             ILogger<CollectionController> logger,
@@ -31,7 +30,6 @@ namespace offlineMeeting.Controllers
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
-            JoinerSiteId = tableIdProperty.JoinerSiteId;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -43,18 +41,8 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Appetizers()
-        {
-            return View();
-        }
-
-        public IActionResult Alcohol()
-        {
-            AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new ();
+            AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
+            SiteSettingsProcess siteSettingsProcess = new();
 
             CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId)));
             return View(CollectionViewModel);

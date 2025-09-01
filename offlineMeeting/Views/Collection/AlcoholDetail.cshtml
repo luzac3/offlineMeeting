@@ -7,7 +7,7 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/pos.js" defer></script>
+    <script src="~/js/dist/Collection.js" defer></script>
     <link rel="stylesheet" href="~/css/Collection/Index.css" asp-append-version="true" />
     <script>
          document.addEventListener('DOMContentLoaded', function () {
@@ -94,11 +94,11 @@
                         </tr>
                         <tr>
                             <td>レア度の理由</td>
-                            <td class="reality_reason">@(Model.AlcoholDataEntity?.RarityReason)</td>
+                            <td class="reality_reason">@Html.Raw(Model.AlcoholDataEntity?.RarityReason)</td>
                         </tr>
                         <tr>
                             <td>解説</td>
-                            <td class="explanation">@(Model.AlcoholDataEntity?.Explanation)</td>
+                            <td class="explanation">@Html.Raw(Model.AlcoholDataEntity?.Explanation)</td>
                         </tr>
                         <tr>
                             <td>酒造</td>
@@ -106,11 +106,11 @@
                         </tr>
                         <tr>
                             <td>酒造情報</td>
-                            <td class="explanation">@(Model.AlcoholDataEntity?.BreweryFeatures)</td>
+                            <td class="brewery_data">@Html.Raw(Model.AlcoholDataEntity?.BreweryFeatures)</td>
                         </tr>
                         <tr>
                             <td>メインラベル</td>
-                            <td class="explanation">@(Model.AlcoholDataEntity?.MainLabel)</td>
+                            <td class="main_label">@(Model.AlcoholDataEntity?.MainLabel)</td>
                         </tr>
                         <tr>
                             <td>住所</td>
@@ -141,7 +141,7 @@
                             </td>
                         </tr>
                     </table>
-                    <p><button class="back" type="button">戻る</button></p>
+                    <p><br /><button id="back" type="button">戻る</button></p>
                 </div>
             </div>
         }
