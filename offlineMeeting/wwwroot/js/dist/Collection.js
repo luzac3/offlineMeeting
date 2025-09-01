@@ -47,24 +47,32 @@ class ControlModal {
                 const modalParent = element;
                 const modalElement = modalParent.querySelector(".modal_window");
                 const modalWrapper = modalParent.querySelector(".modal_wrapper");
-                modalParent.querySelector(".close_modal")?.addEventListener("click", () => {
-                    this.hidden(modalWrapper);
-                });
-                modalWrapper.addEventListener("click", (event) => {
-                    if (modalElement && !modalElement.contains(event.target)) {
+                const closeBtn = modalParent.querySelector(".close_modal");
+                const openBtn = modalParent.querySelector(".open_modal");
+                if (closeBtn && modalWrapper) {
+                    closeBtn.addEventListener("click", () => {
                         this.hidden(modalWrapper);
-                    }
-                });
-                modalParent.querySelector(".open_modal")?.addEventListener("click", () => {
-                    this.show(modalWrapper);
-                });
+                    });
+                }
+                if (modalWrapper && modalElement) {
+                    modalWrapper.addEventListener("click", (event) => {
+                        if (!modalElement.contains(event.target)) {
+                            this.hidden(modalWrapper);
+                        }
+                    });
+                }
+                if (openBtn && modalWrapper) {
+                    openBtn.addEventListener("click", () => {
+                        this.show(modalWrapper);
+                    });
+                }
             });
         };
         this.show = (modalWrapper) => {
-            modalWrapper?.classList.remove("nodisplay");
+            modalWrapper.classList.remove("nodisplay");
         };
         this.hidden = (modalWrapper) => {
-            modalWrapper?.classList.add("nodisplay");
+            modalWrapper.classList.add("nodisplay");
         };
     }
 }
