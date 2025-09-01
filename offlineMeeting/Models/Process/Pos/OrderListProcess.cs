@@ -9,10 +9,11 @@ namespace offlineMeeting.Models.Process.Pos
     public class OrderListProcess
     {
         private int SakeSiteId;
+        private int EventFoodSiteId;
         private string EventId;
         private List<OrderPostEntity> OrderPostEntityList;
 
-        public OrderListProcess(List<OrderPostEntity> orderPostEntityList, int sakeSiteId, HttpContext httpContext)
+        public OrderListProcess(List<OrderPostEntity> orderPostEntityList, int sakeSiteId, int eventFoodSiteId, HttpContext httpContext)
         {
             ManageEventId manageEventId = new (httpContext);
 
@@ -22,22 +23,37 @@ namespace offlineMeeting.Models.Process.Pos
                 throw new DataException("イベントIDが不正です");
             }
             SakeSiteId = sakeSiteId;
+            EventFoodSiteId = eventFoodSiteId;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
         }
 
         public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
         {
-            List<OrderEntity> orderEntityList = new List<OrderEntity>();  
+            List<OrderEntity> orderEntityList = new List<OrderEntity>();
 
-            List<int> resultIdList = OrderPostEntityList
+            List<int> spResultIdList = OrderPostEntityList
+                .Where(x => x.Category == 0)
+                .Select(x => x.ResultId)
+                .ToList();
+
+            List<int> foodResultIdList = OrderPostEntityList
+                .Where(x => x.Category == 1)
+                .Select(x => x.ResultId)
+                .ToList();
+
+            List<int> alcoholResultIdList = OrderPostEntityList
+                .Where(x => x.Category == 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
             ManageUserCd manageUserCd = new (httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
-            List<AlcoholDataEntity> alCoholDataEntityList = setAlcoholDataEntityProcess.Get(json, resultIdList);
+            SetFoodDataEntityListProcess setFoodDataEntityListProcess = new(EventFoodSiteId, orderSiteId, EventId, userCd);
+            List<FoodDataEntity> foodDataEntityList = setFoodDataEntityListProcess.Get(foodResultIdList);
+
+            SetAlcoholDataEntityListProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
+            List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {
@@ -45,7 +61,8 @@ namespace offlineMeeting.Models.Process.Pos
                     new OrderEntity
                     (
                         orderPostEntity: orderPostEntity,
-                        alcoholDataEntity: alCoholDataEntityList.Where(x => x.ResultId == orderPostEntity.ResultId).FirstOrDefault()
+                        foodDataEntity: foodDataEntityList.Where(x => x.ResultId == orderPostEntity.ResultId).FirstOrDefault(),
+                        alcoholDataEntity: alcoholDataEntityList.Where(x => x.ResultId == orderPostEntity.ResultId).FirstOrDefault()
                     )
                 );
             }
