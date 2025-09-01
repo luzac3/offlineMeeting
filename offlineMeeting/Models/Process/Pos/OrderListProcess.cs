@@ -52,6 +52,9 @@ namespace offlineMeeting.Models.Process.Pos
                 .Select(x => x.ResultId)
                 .ToList();
 
+            Dictionary<int, int> categoryDic = OrderPostEntityList
+                .ToDictionary(x => x.ResultId, x => x.Category);
+
             ManageUserCd manageUserCd = new (httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();
 
@@ -63,7 +66,7 @@ namespace offlineMeeting.Models.Process.Pos
                 EventId,
                 userCd
             );
-            List<PurchaseDataEntity> purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList);
+            List<PurchaseDataEntity> purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
 
             SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
             List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
