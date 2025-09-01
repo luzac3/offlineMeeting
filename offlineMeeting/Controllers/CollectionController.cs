@@ -54,9 +54,9 @@ namespace offlineMeeting.Controllers
         public IActionResult Alcohol()
         {
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
+            SiteSettingsProcess siteSettingsProcess = new ();
 
-            CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get()));
+            CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId)));
             return View(CollectionViewModel);
         }
 
@@ -64,9 +64,9 @@ namespace offlineMeeting.Controllers
         public IActionResult AlcoholDetail(int alcoholId)
         {
             AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new(sakeSiteId: SakeSiteId);
+            SiteSettingsProcess siteSettingsProcess = new();
 
-            CollectionViewModel.setAlcoholDataEntity(alcoholDataProcess.Get(siteSettingsProcess.Get(), alcoholId));
+            CollectionViewModel.setAlcoholDataEntity(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), alcoholId));
             return View(CollectionViewModel);
         }
 
