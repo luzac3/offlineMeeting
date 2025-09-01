@@ -55,6 +55,11 @@ body {
     border-top: none;
     border-bottom: 1px solid #e5e5e5;
     box-shadow: none;
+    z-index: 29;
+}
+
+#main_menu {
+    z-index: 30;
 }
 
 #sub_menu {
