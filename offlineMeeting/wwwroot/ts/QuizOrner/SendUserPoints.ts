@@ -20,22 +20,24 @@ export class SendUserPoints {
         const sendPointsElement = document.getElementById("send_points") as HTMLButtonElement;
         const answerElements = document.getElementsByClassName("answer");
 
-        sendPointsElement.onclick = () => {
-            let pointEntityList: { [key: string]: string }[] = [];
+        if (sendPointsElement != null) {
+            sendPointsElement.onclick = () => {
+                let pointEntityList: { [key: string]: string }[] = [];
 
-            Array.from(answerElements).forEach(answerElement => {
-                const answerId = (answerElement.querySelector('.answer_id') as HTMLInputElement).value;
-                const point = (answerElement.querySelector('.point') as HTMLInputElement).value;
-                pointEntityList.push({
-                    AnswerId: answerId,
-                    Point: point
+                Array.from(answerElements).forEach(answerElement => {
+                    const answerId = (answerElement.querySelector('.answer_id') as HTMLInputElement).value;
+                    const point = (answerElement.querySelector('.point') as HTMLInputElement).value;
+                    pointEntityList.push({
+                        AnswerId: answerId,
+                        Point: point
+                    });
                 });
-            });
 
-            this.Send(pointEntityList).then((data: string) => {
-                const result = JSON.parse(data);
-                window.alert(result.message);
-            });
+                this.Send(pointEntityList).then((data: string) => {
+                    const result = JSON.parse(data);
+                    window.alert(result.message);
+                });
+            }
         }
     }
 

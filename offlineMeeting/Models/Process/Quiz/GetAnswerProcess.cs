@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.Entity.Quiz;
+using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -25,9 +25,9 @@ namespace offlineMeeting.Models.Process.Quiz
             return SetAnswerEntityProcess.Get(resultId);
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, string quizId)
+        public List<AnswerEntity> GetList(int answerSiteId, string quizId, bool show = false)
         {
-            return SetAnswerEntityProcess.GetList(answerSiteId, quizId);
+            return SetAnswerEntityProcess.GetList(answerSiteId, quizId, show);
         }
     }
 }
