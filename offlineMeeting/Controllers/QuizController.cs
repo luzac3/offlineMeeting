@@ -84,6 +84,16 @@ namespace offlineMeeting.Controllers
             return View(quizViewModel);
         }
 
+        [HttpGet("Quiz/ShowQuiz/{resultId}")]
+        public IActionResult ShowQuiz(string resultId)
+        {
+            GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
+            QuizViewModel quizViewModel = new QuizViewModel();
+            quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
+
+            return View(quizViewModel);
+        }
+
         [HttpGet("Quiz/GetAnswer/{resultId}")]
         public async Task<IActionResult> GetAnswer(string resultId)
         {

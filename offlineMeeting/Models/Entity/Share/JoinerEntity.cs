@@ -10,6 +10,7 @@ namespace offlineMeeting.Models.Entity.Share
         public string? HandoverNotes { get; set; }
         public int Coins { get; set; }
         public int Exp { get; set; }
+        public int ExpNext { get; set; }
         public int Level { get; set; }
         public bool IsAdmin { get; set; }
 
@@ -22,6 +23,7 @@ namespace offlineMeeting.Models.Entity.Share
             string handoverNotes,
             int coins,
             int exp,
+            int expNext,
             int level,
             bool isAdmin = false
         )
@@ -34,6 +36,7 @@ namespace offlineMeeting.Models.Entity.Share
             HandoverNotes = handoverNotes;
             Coins = coins;
             Exp = exp;
+            ExpNext = expNext;
             Level = level;
             IsAdmin = isAdmin;
         }

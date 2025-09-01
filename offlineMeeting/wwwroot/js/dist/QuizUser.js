@@ -4084,9 +4084,6 @@ class SendAnswer {
                 };
                 this.Send(answerEntity).then((data) => {
                     const result = JSON.parse(data);
-                    console.log(typeof data, data);
-                    console.log(result);
-                    console.log(Object.keys(result)); // 追加: プロパティ一覧
                     sendElement.disabled = true;
                     window.alert(result.message);
                 });
@@ -4107,6 +4104,31 @@ class SendAnswer {
             'X-Requested-With': 'XMLHttpRequest'
         };
         this.responseKind = "json";
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/BackButton.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/share/BackButton.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BackButton: () => (/* binding */ BackButton)
+/* harmony export */ });
+class BackButton {
+    constructor() {
+        this.Buck = () => {
+            const element = document.getElementById('back');
+            element.addEventListener("click", () => {
+                history.back();
+            });
+        };
     }
 }
 
@@ -4398,9 +4420,11 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _SendAnswer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendAnswer */ "./wwwroot/ts/QuizUser/SendAnswer.ts");
-/* harmony import */ var _Canvas__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Canvas */ "./wwwroot/ts/QuizUser/Canvas.ts");
-/* harmony import */ var _GetQuiz__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GetQuiz */ "./wwwroot/ts/QuizUser/GetQuiz.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _SendAnswer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendAnswer */ "./wwwroot/ts/QuizUser/SendAnswer.ts");
+/* harmony import */ var _Canvas__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Canvas */ "./wwwroot/ts/QuizUser/Canvas.ts");
+/* harmony import */ var _GetQuiz__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GetQuiz */ "./wwwroot/ts/QuizUser/GetQuiz.ts");
+
 
 
 
@@ -4410,11 +4434,13 @@ __webpack_require__.r(__webpack_exports__);
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     signalR.activate();
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
-    new _Canvas__WEBPACK_IMPORTED_MODULE_3__.Canvas();
-    const getQuiz = new _GetQuiz__WEBPACK_IMPORTED_MODULE_4__.GetQuiz();
-    const sendAnswer = new _SendAnswer__WEBPACK_IMPORTED_MODULE_2__.SendAnswer();
+    new _Canvas__WEBPACK_IMPORTED_MODULE_4__.Canvas();
+    const getQuiz = new _GetQuiz__WEBPACK_IMPORTED_MODULE_5__.GetQuiz();
+    const sendAnswer = new _SendAnswer__WEBPACK_IMPORTED_MODULE_3__.SendAnswer();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
     sendAnswer.SendCanvas();
     getQuiz.GetQuiz(signalR);
+    backButton.Buck();
 })();
 
 })();

@@ -1,18 +1,14 @@
-﻿using offlineMeeting.Models.Process.DBProcess;
+using offlineMeeting.Models.Process.DBProcess;
 
 namespace offlineMeeting.Models.Process.Share
 {
     public class SiteSettingsProcess : SitesProcess
     {
-        private int SakeSiteId;
+        public SiteSettingsProcess() {}
 
-        public SiteSettingsProcess(int sakeSiteId) {
-            SakeSiteId = sakeSiteId;
-        }
-
-        public new System.Text.Json.Nodes.JsonNode? Get()
+        public new System.Text.Json.Nodes.JsonNode? Get(int siteId)
         {
-            string? siteSettings = base.Get(SakeSiteId).SiteSettings;
+            string? siteSettings = base.Get(siteId).SiteSettings;
             var json = System.Text.Json.Nodes.JsonNode.Parse(siteSettings ?? "");
 
             return json;
