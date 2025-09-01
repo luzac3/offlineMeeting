@@ -3976,8 +3976,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   OrderEntity: () => (/* binding */ OrderEntity)
 /* harmony export */ });
 class OrderEntity {
-    constructor(resultId, orderNumber, orderCoins, alcoholAmount = 0) {
+    constructor(resultId, category, orderNumber, orderCoins, alcoholAmount = 0) {
         this.ResultId = resultId;
+        this.Category = category;
         this.OrderNumber = orderNumber;
         this.OrderCoins = orderCoins;
         this.AlcoholAmount = alcoholAmount;
@@ -4007,15 +4008,16 @@ __webpack_require__.r(__webpack_exports__);
 class StockOrder {
     constructor() {
         this.addOrder = () => {
-            Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
+            Array.from(document.getElementsByClassName("purchase_order")).forEach((element) => {
                 const htmlElement = element;
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "click", ".order_button", async (event) => {
                     const resultId = parseInt(htmlElement.querySelector('.alchol_info').dataset.result_id);
+                    const category = parseInt(htmlElement.querySelector('.category')?.value ?? "0");
                     const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
                     const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
                     const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");
                     let orderEntityList = [];
-                    const orderEntity = new _OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(resultId, orderNumber, coinNumber, alcoholAmount);
+                    const orderEntity = new _OrderEntity__WEBPACK_IMPORTED_MODULE_2__.OrderEntity(resultId, category, orderNumber, coinNumber, alcoholAmount);
                     if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.check("OrderEntityList")) {
                         orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.get("OrderEntityList");
                     }
@@ -4064,24 +4066,32 @@ class ControlModal {
                 const modalParent = element;
                 const modalElement = modalParent.querySelector(".modal_window");
                 const modalWrapper = modalParent.querySelector(".modal_wrapper");
-                modalParent.querySelector(".close_modal")?.addEventListener("click", () => {
-                    this.hidden(modalWrapper);
-                });
-                modalWrapper.addEventListener("click", (event) => {
-                    if (modalElement && !modalElement.contains(event.target)) {
+                const closeBtn = modalParent.querySelector(".close_modal");
+                const openBtn = modalParent.querySelector(".open_modal");
+                if (closeBtn && modalWrapper) {
+                    closeBtn.addEventListener("click", () => {
                         this.hidden(modalWrapper);
-                    }
-                });
-                modalParent.querySelector(".open_modal")?.addEventListener("click", () => {
-                    this.show(modalWrapper);
-                });
+                    });
+                }
+                if (modalWrapper && modalElement) {
+                    modalWrapper.addEventListener("click", (event) => {
+                        if (!modalElement.contains(event.target)) {
+                            this.hidden(modalWrapper);
+                        }
+                    });
+                }
+                if (openBtn && modalWrapper) {
+                    openBtn.addEventListener("click", () => {
+                        this.show(modalWrapper);
+                    });
+                }
             });
         };
         this.show = (modalWrapper) => {
-            modalWrapper?.classList.remove("nodisplay");
+            modalWrapper.classList.remove("nodisplay");
         };
         this.hidden = (modalWrapper) => {
-            modalWrapper?.classList.add("nodisplay");
+            modalWrapper.classList.add("nodisplay");
         };
     }
 }
