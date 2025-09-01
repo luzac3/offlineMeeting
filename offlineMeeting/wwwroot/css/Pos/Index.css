@@ -125,3 +125,12 @@
     .order > div {
         width: 48%;
     }
+
+table {
+    border-collapse: collapse; /* 枠線が重ならないように */
+    width: 100%; /* 必要に応じて */
+}
+    table, th, td {
+        border: 1px solid #888; /* 枠線の色や太さはお好みで調整可能 */
+        padding: 6px; /* 余白（任意） */
+    }
