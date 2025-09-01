@@ -45,13 +45,12 @@
                             <p class="alcoholName">
                                 <span>@(foodDataEntity.FoodName)</span>
                             </p>
-                            <p class="alcohol_poncoin">
+                            <p class="food_poncoin">
                                 <img src="/image/poncoin.png" alt="image" />
                                 <span> × </span>
                                 <span class="coin_number_show">@(foodDataEntity.CoinNumber * 5 - foodDataEntity.CoinNumber)</span>
                                 <input class="coin_number nodisplay" value="@(foodDataEntity.CoinNumber * 5 - foodDataEntity.CoinNumber)" disabled />
                             </p>
-                            <input type="text" class="coin_per_2shaku nodisplay" value="@(foodDataEntity.CoinNumber)" />
                             <input type="text" class="left_amount nodisplay" value="@(foodDataEntity.LeftAmount)" />
                         </div>
                         <p>
