@@ -3,12 +3,14 @@ export class JumpDetail {
         const elements = Array.from(document.getElementsByClassName('alcohol_order'));
 
         elements.forEach((element) => {
-            const alcoholInfo = element.querySelector('.alchol_info') as HTMLElement;
-            alcoholInfo.addEventListener("click", () => {
-                const alcoholId = alcoholInfo.dataset.result_id;
+            if (element.classList.contains("detail_link")) {
+                const alcoholInfo = element.querySelector('.alchol_info') as HTMLElement;
+                alcoholInfo.addEventListener("click", () => {
+                    const alcoholId = alcoholInfo.dataset.result_id;
 
-                location.href = `/Collection/AlcoholDetail/${alcoholId}`;
-            });
+                    location.href = `/Collection/AlcoholDetail/${alcoholId}`;
+                });
+            }
         });
     }
 }

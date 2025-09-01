@@ -13,8 +13,8 @@
     text-align: center;
 }
 
-.ordered{
-    filter: brightness(0.7);
+.no_ordered{
+    filter: brightness(0.4);
 }
 
 .alcohol_detail {
