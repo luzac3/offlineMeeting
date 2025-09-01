@@ -44,7 +44,12 @@ namespace offlineMeeting.Models.Process.Pos
             {
                 GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
                 JoinerEntity userData = getUsersProcess.GetUserData(resultsEntity.ClassB ?? string.Empty);
-                ResultsEntity? purchaseName = String.IsNullOrEmpty(resultsEntity.ClassC) ? null : base.GetSingleRecord(resultsEntity.ClassC);
+                ResultsEntity? purchaseData = String.IsNullOrEmpty(resultsEntity.ClassC) ? null : base.GetSingleRecord(resultsEntity.ClassC);
+
+
+                string? purchaseName = Int32.TryParse(purchaseData?.ClassA, out int pursedPurchaseData) ?
+                    base.GetSingleRecord(pursedPurchaseData.ToString()).Title :
+                    purchaseData?.ClassA;
 
                 orderTableEntity
                     .Add(
@@ -53,8 +58,8 @@ namespace offlineMeeting.Models.Process.Pos
                             userCd: resultsEntity.ClassB,
                             userName: userData.UserName,
                             purchaseCd: resultsEntity.ClassC,
-                            purchaseName: purchaseName?.ClassA,
-                            purchaseRead: purchaseName?.ClassJ,
+                            purchaseName: purchaseName,
+                            purchaseRead: purchaseData?.ClassJ,
                             number: Convert.ToInt32(resultsEntity.NumA),
                             unit: resultsEntity.ClassD,
                             coins: Convert.ToInt32(resultsEntity.NumB),

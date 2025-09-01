@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.Entity.Quiz;
+using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Share;
 using System.Data;
 

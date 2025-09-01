@@ -1,3 +1,4 @@
+@using offlineMeeting.Models.Entity.Share;
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
@@ -7,7 +8,7 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/pos.js" defer></script>
+    <script src="~/js/dist/Pos.js" defer></script>
     <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
     <script>
          document.addEventListener('DOMContentLoaded', function () {
@@ -18,12 +19,20 @@
 @model offlineMeeting.Models.ViewModel.PosViewModel;
 
 <div class="text-center">
-    <div id="alcohol_order">
+    <div id="purchase_order">
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
-                <div class="alcohol_order modal_parent">
+                JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
+                if (userData?.Level + 2 < alcoholDataEntity.Rarity){
+                    continue;
+                }
+                if (alcoholDataEntity.Rarity == 0){
+                    continue;
+                }
+                <div class="purchase_order alcohol_order modal_parent">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
+                        <input class="category nodisplay" value="2" />
                         <div class="open_modal">
                             <p class="food_image_container">
                                 @if (@alcoholDataEntity.Image == "")
@@ -64,7 +73,7 @@
                                 }
                             </p>
                             <p class="alcoholName">
-                                <span>@alcoholDataEntity.Abbreviation</span>
+                                <span>@(alcoholDataEntity.Abbreviation == "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
                             </p>
                             <p class="alcohol_poncoin">
                                 <img src="/image/poncoin.png" alt="image" />
@@ -200,5 +209,8 @@
                 </div>
             }
         }
+    </div>
+    <div>
+        <br /><button id="back" type="button">戻る</button>
     </div>
 </div>

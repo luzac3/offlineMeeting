@@ -26,7 +26,18 @@ export class GetUsersAnswer {
 
             if (answerListElement != null) {
                 await response.text().then(data => {
+                    const path = window.location.pathname;
                     answerListElement.insertAdjacentHTML('beforeend', data);
+
+                    if (path.startsWith("/Quiz/ShowQuiz")) {
+                        Array.from(document.getElementsByClassName("show")).forEach(element => {
+                            element.classList.add("nodisplay");
+                        });
+                        const answers = document.querySelectorAll(".answer");
+                        if (answers.length > 0) {
+                            answers[answers.length - 1].scrollIntoView({ behavior: "smooth" });
+                        }
+                    }
                 });
             }
         });
