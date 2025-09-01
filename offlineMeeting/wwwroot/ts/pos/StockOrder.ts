@@ -4,7 +4,7 @@ import { OrderEntity } from "./OrderEntity"
 
 export class StockOrder {
     addOrder = () => {
-        Array.from(document.getElementsByClassName("alcohol_order")).forEach((element: Element) => {
+        Array.from(document.getElementsByClassName("purchase_order")).forEach((element: Element) => {
             const htmlElement = <HTMLElement>element;
 
             SetEventListner.setEvent(
@@ -13,6 +13,7 @@ export class StockOrder {
                 ".order_button",
                 async (event: Event) => {
                     const resultId = parseInt((<HTMLElement>htmlElement.querySelector('.alchol_info')).dataset.result_id!);
+                    const category = parseInt((<HTMLInputElement>htmlElement.querySelector('.category'))?.value ?? "0");
                     const alcoholAmount = parseInt((<HTMLInputElement>htmlElement.querySelector(".alcohol_amount"))?.value ?? "0");
                     const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
                     const coinNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".coin_number"))?.value ?? "0");
@@ -21,6 +22,7 @@ export class StockOrder {
 
                     const orderEntity = new OrderEntity(
                         resultId,
+                        category,
                         orderNumber,
                         coinNumber,
                         alcoholAmount
