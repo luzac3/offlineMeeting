@@ -1,4 +1,4 @@
-﻿#alcohol_order {
+#purchase_order {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
@@ -7,7 +7,7 @@
     width: 98%;
 }
 
-.alcohol_order {
+.purchase_order {
     width: 26%;
     margin: 3%;
     text-align: center;
