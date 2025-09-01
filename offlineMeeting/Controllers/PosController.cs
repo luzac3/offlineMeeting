@@ -18,7 +18,9 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
+        private int ExtraSiteId;
         private int EventFoodSiteId;
+        private int RawFoodSiteId;
         private int OrderSiteId;
         private int JoinerSiteId;
 
@@ -32,7 +34,9 @@ namespace offlineMeeting.Controllers
             PosViewModel = new ();
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
+            ExtraSiteId = tableIdProperty.ExtraSiteId;
             EventFoodSiteId = tableIdProperty.EventFoodSiteId;
+            RawFoodSiteId = tableIdProperty.RawFoodSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
         }
@@ -65,10 +69,15 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Food()
         {
-            FoodDataProcess foodDataProcess = new(eventFoodSiteId: EventFoodSiteId, httpContext: HttpContext);
+            PurchaseDataProcess purchaseDataProcess = new(
+                extraSiteId: ExtraSiteId,
+                eventFoodSiteId: EventFoodSiteId,
+                rawFoorSiteId: RawFoodSiteId,
+                httpContext: HttpContext
+            );
             SiteSettingsProcess siteSettingsProcess = new();
 
-            PosViewModel.setFoodDataList(foodDataProcess.Get(HttpContext, OrderSiteId));
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 2));
             return View(PosViewModel);
         }
 
@@ -83,7 +92,9 @@ namespace offlineMeeting.Controllers
             OrderListProcess orderListProcess = new (
                 orderPostEntityList: orderPostEntityList,
                 sakeSiteId: SakeSiteId,
+                extraFoodSiteId: ExtraSiteId,
                 eventFoodSiteId: EventFoodSiteId,
+                rawFoodSiteId: RawFoodSiteId,
                 httpContext: HttpContext
             );
             SiteSettingsProcess siteSettingsProcess = new ();

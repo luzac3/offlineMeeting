@@ -21,7 +21,7 @@
 <div class="text-center">
     <div id="purchase_order">
         @{
-            foreach (FoodDataEntity foodDataEntity in Model.FoodDataEntityList ?? new List<FoodDataEntity> { })
+            foreach (PurchaseDataEntity foodDataEntity in Model.FoodDataEntityList ?? new List<PurchaseDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
                 <div class="purchase_order food_order modal_parent">
