@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Share;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +19,6 @@ namespace offlineMeeting.Models.Process.DBProcess
         {
             return Results
                 .Where(x => Convert.ToInt32(x.SiteId) == siteId).ToList();
-        }
-
-        protected List<ResultsEntity> GetFromSiteIdList(List<int> siteIdList)
-        {
-            return Results
-                .Where(x => siteIdList.Contains(Convert.ToInt32(x.SiteId))).ToList();
         }
 
         protected List<ResultsEntity> GetFromSiteId(int siteId, List<int> resultIdList)

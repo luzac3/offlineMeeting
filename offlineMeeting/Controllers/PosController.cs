@@ -77,8 +77,8 @@ namespace offlineMeeting.Controllers
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
-            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 1));
-            return View(PosViewModel);
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 0));
+            return View("Purchase", PosViewModel);
         }
 
         public IActionResult Food()
@@ -91,8 +91,8 @@ namespace offlineMeeting.Controllers
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
-            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 2));
-            return View(PosViewModel);
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 1));
+            return View("Purchase", PosViewModel);
         }
 
         public IActionResult RawFood()
@@ -105,8 +105,8 @@ namespace offlineMeeting.Controllers
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
-            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 3));
-            return View(PosViewModel);
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 2));
+            return View("Purchase", PosViewModel);
         }
 
         public IActionResult OrderList()

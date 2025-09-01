@@ -58,28 +58,28 @@
                 </div>
             </div>
         }
-        else if (orderEntity.FoodDataEntity != null)
+        else if (orderEntity.PurchaseDataEntity != null)
         {
             <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
                 <input class="category nodisplay" value="1" />
                 <div class="image_container">
-                    @if (@orderEntity.FoodDataEntity?.Image != null)
+                    @if (@orderEntity.PurchaseDataEntity?.Image != null)
                     {
-                        @if ((@orderEntity.FoodDataEntity.Image) == "")
+                        @if ((@orderEntity.PurchaseDataEntity.Image) == "")
                         {
                             <img src="" alt="image" />
                         }
                         else
                         {
-                            <a href="@(orderEntity.FoodDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                <img src="@(orderEntity.FoodDataEntity.Image)" class="food_image" />
+                            <a href="@(orderEntity.PurchaseDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
+                                <img src="@(orderEntity.PurchaseDataEntity.Image)" class="food_image" />
                             </a>
                         }
                     }
                 </div>
                 <div class="caption">
                     <p>
-                        <span class="food_name">@orderEntity.FoodDataEntity?.FoodName</span>
+                        <span class="food_name">@orderEntity.PurchaseDataEntity?.PurchaseName</span>
                     </p>
                     <p class="counter">
                         <span>注文数:</span>

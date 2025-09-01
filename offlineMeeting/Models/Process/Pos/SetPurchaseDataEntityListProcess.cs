@@ -35,31 +35,43 @@ namespace offlineMeeting.Models.Process.Pos
 
         public List<PurchaseDataEntity> Get(int category)
         {
+            int siteId = 0;
+            switch (category)
+            {
+                case 0:
+                    siteId = ExtraFoodSiteId;
+                    break;
+                case 1:
+                    siteId = EventFoodSiteId;
+                    break;
+                case 2:
+                    siteId = RawFoodSiteId;
+                    break;
+            }
+
             List<ResultsEntity> results = base
-                .GetFromSiteIdList(
-                    new List<int> { ExtraFoodSiteId, EventFoodSiteId, RawFoodSiteId }
-                )
+                .GetFromSiteId(siteId)
                 .Where(x=>x.ClassD == EventId)
                 .ToList();
 
-            GetPurchaseDataEntityList(results, category);
+            GetPurchaseDataEntityList(results, _ => category);
 
             return PurchaseDataEntityList;
         }
 
-        public List<PurchaseDataEntity> Get(List<int> resultId)
+        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<int, int> categoryDic)
         {
             List<ResultsEntity> results = base
                 .GetFromSiteId(EventFoodSiteId, resultId)
                 .Where(x => x.ClassD == EventId)
                 .ToList();
 
-            GetPurchaseDataEntityList(results);
+            GetPurchaseDataEntityList(results, result => categoryDic[Convert.ToInt32(result.ResultId)]);
 
             return PurchaseDataEntityList;
         }
 
-        private void GetPurchaseDataEntityList(List<ResultsEntity> results, int category = 0)
+        private void GetPurchaseDataEntityList(List<ResultsEntity> results, Func<ResultsEntity, int> getCategory)
         {
             List<int> orderedResultsIdList = base
                 .GetFromSiteId(OrderSiteId)
@@ -70,12 +82,9 @@ namespace offlineMeeting.Models.Process.Pos
 
             foreach (ResultsEntity result in results)
             {
-                string purchaseName = "";
-                if (!string.IsNullOrEmpty(result.ClassA) && category == 1)
-                {
-                    ResultsEntity? purchaseEntity = base.GetSingleRecord(result.ClassA);
-                    purchaseName = purchaseEntity?.Title ?? "";
-                }
+                string? purchaseName = Int32.TryParse(result?.ClassA, out int pursedPurchaseData) ?
+                    base.GetSingleRecord(pursedPurchaseData.ToString()).Title :
+                    result?.ClassA;
 
                 string[]? imageSplit = result!.Body?.Split("/");
                 string guid = "";
@@ -86,18 +95,17 @@ namespace offlineMeeting.Models.Process.Pos
 
                 GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
                 string? image = getBinariesProcess.GetImage(guid);
-                PurchaseDataEntityList
-                    .Add(
-                        new PurchaseDataEntity(
-                            resultId: result.ResultId,
-                            image: image == null ? "" : $"data:image/jpeg;base64,{image}",
-                            purchaseName: purchaseName,
-                            category: category,
-                            coinNumber: Convert.ToInt32(result.NumG),
-                            leftAmount: Convert.ToInt32(result.NumE),
-                            ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
-                        )
-                    );
+                PurchaseDataEntityList.Add(
+                    new PurchaseDataEntity(
+                        resultId: result.ResultId,
+                        image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                        purchaseName: purchaseName,
+                        category: getCategory(result),
+                        coinNumber: Convert.ToInt32(result.NumG),
+                        leftAmount: Convert.ToInt32(result.NumE),
+                        ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
+                    )
+                );
             }
         }
     }

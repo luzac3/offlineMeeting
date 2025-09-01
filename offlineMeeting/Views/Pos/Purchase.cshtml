@@ -2,7 +2,7 @@
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
-    ViewData["Title"] = "Extra";
+    ViewData["Title"] = "Purchase";
 }
 
 @section Scripts {
@@ -21,37 +21,37 @@
 <div class="text-center">
     <div id="purchase_order">
         @{
-            foreach (ExtraDataEntity foodDataEntity in Model.ExtraDataEntityList ?? new List<ExtraDataEntity> { })
+            foreach (PurchaseDataEntity purchaseDataEntity in Model.PurchaseDataEntityList ?? new List<PurchaseDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
                 <div class="purchase_order food_order modal_parent">
-                    <div id="alchol_@extraDataEntity.ResultId" class="alchol_info" data-result_id="@extraDataEntity.ResultId">
+                    <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
                         <input class="category nodisplay" value="1" />
                         <div class="open_modal">
                             <p class="food_image_container">
-                                @if (@extraDataEntity.Image == "")
+                                @if (@purchaseDataEntity.Image == "")
                                 {
                                     <img src="/image/noImage.jpg" class="food_image" alt="image" />
                                 }
                                 else
                                 {
-                                    <img src="@(extraDataEntity.Image)" class="food_image" />
+                                    <img src="@(purchaseDataEntity.Image)" class="food_image" />
                                 }
-                                @if (extraDataEntity.Ordered)
+                                @if (purchaseDataEntity.Ordered)
                                 {
                                     <img src="/image/ordered.png" class="orderd" alt="image" />
                                 }
                             </p>
                             <p class="alcoholName">
-                                <span>@(extraDataEntity.FoodName)</span>
+                                <span>@(purchaseDataEntity.PurchaseName)</span>
                             </p>
-                            <p class="extra_poncoin">
-                                <img src="/image/poncoin.png" alt="image" />
+                            <p>
+                                <img class="poncoin_img" src="/image/poncoin.png" />
                                 <span> × </span>
-                                <span class="coin_number_show">@(extraDataEntity.CoinNumber * 5 - extraDataEntity.CoinNumber)</span>
-                                <input class="coin_number nodisplay" value="@(extraDataEntity.CoinNumber * 5 - extraDataEntity.CoinNumber)" disabled />
+                                <span class="coin_number_show">@(purchaseDataEntity.CoinNumber * 5 - purchaseDataEntity.CoinNumber)</span>
+                                <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber * 5 - purchaseDataEntity.CoinNumber)" disabled />
                             </p>
-                            <input type="text" class="left_amount nodisplay" value="@(foodDataEntity.LeftAmount)" />
+                            <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
                         </div>
                         <p>
                             <span>×</span>
