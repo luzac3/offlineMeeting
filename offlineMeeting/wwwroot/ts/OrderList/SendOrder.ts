@@ -1,4 +1,4 @@
-﻿import { LocalStrage } from "@root/share/LocalStrage"
+import { LocalStrage } from "@root/share/LocalStrage"
 import { FetchApi } from "@root/share/FetchApi"
 import { OrderEntity } from "../pos/OrderEntity"
 
@@ -25,16 +25,21 @@ export class SendOrder {
 
             if (orderElements.length > 0) {
                 Array.from(document.getElementsByClassName("order")).forEach((orderElement) => {
+                    const alcoholAmountElement = orderElement.querySelector(".alcohol_amount") as HTMLInputElement | null;
+                    const alcoholAmount = alcoholAmountElement ? parseInt(alcoholAmountElement.value) : 0;
+
                     orderEntityList.push(new OrderEntity(
                         parseInt((<HTMLElement>orderElement).dataset.result_id!),
+                        parseInt((<HTMLInputElement>orderElement.querySelector('.category'))?.value ?? "0"),
                         parseInt((<HTMLInputElement>orderElement.querySelector(".order_number")).value),
                         parseInt((<HTMLInputElement>orderElement.querySelector(".order_coins")).value),
-                        parseInt((<HTMLInputElement>orderElement.querySelector(".alcohol_amount")).value)
+                        alcoholAmount
                     ));
                 });
 
                 const orderObjectList = orderEntityList.map(order => ({
                     ResultId: order.ResultId,
+                    Category: order.Category,
                     OrderNumber: order.OrderNumber,
                     OrderCoins: order.OrderCoins,
                     AlcoholAmount: order.AlcoholAmount

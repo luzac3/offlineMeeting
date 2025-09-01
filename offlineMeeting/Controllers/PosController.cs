@@ -18,6 +18,7 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
         private int SakeSiteId;
+        private int EventFoodSiteId;
         private int OrderSiteId;
         private int JoinerSiteId;
 
@@ -31,6 +32,7 @@ namespace offlineMeeting.Controllers
             PosViewModel = new ();
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
+            EventFoodSiteId = tableIdProperty.EventFoodSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
         }
@@ -55,9 +57,18 @@ namespace offlineMeeting.Controllers
         public IActionResult Alcohol()
         {
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
+            SiteSettingsProcess siteSettingsProcess = new ();
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
+            return View(PosViewModel);
+        }
+
+        public IActionResult Food()
+        {
+            FoodDataProcess foodDataProcess = new(eventFoodSiteId: EventFoodSiteId, httpContext: HttpContext);
+            SiteSettingsProcess siteSettingsProcess = new();
+
+            PosViewModel.setFoodDataList(foodDataProcess.Get(HttpContext, OrderSiteId));
             return View(PosViewModel);
         }
 
@@ -69,10 +80,15 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public IActionResult OrderListContents([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            OrderListProcess orderListProcess = new (orderPostEntityList: orderPostEntityList, sakeSiteId: SakeSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new (sakeSiteId: SakeSiteId);
+            OrderListProcess orderListProcess = new (
+                orderPostEntityList: orderPostEntityList,
+                sakeSiteId: SakeSiteId,
+                eventFoodSiteId: EventFoodSiteId,
+                httpContext: HttpContext
+            );
+            SiteSettingsProcess siteSettingsProcess = new ();
 
-            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(), HttpContext, OrderSiteId));
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
             return PartialView("_OrderListContents", PosViewModel);
         }
 

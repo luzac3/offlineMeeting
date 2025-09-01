@@ -19,7 +19,7 @@
 @model offlineMeeting.Models.ViewModel.PosViewModel;
 
 <div class="text-center">
-    <div id="alcohol_order">
+    <div id="purchase_order">
         @{
             foreach (AlcoholDataEntity alcoholDataEntity in Model.AlcoholDataEntityList ?? new List<AlcoholDataEntity> { })
             {
@@ -30,8 +30,9 @@
                 if (alcoholDataEntity.Rarity == 0){
                     continue;
                 }
-                <div class="alcohol_order modal_parent">
+                <div class="purchase_order alcohol_order modal_parent">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
+                        <input class="category nodisplay" value="2" />
                         <div class="open_modal">
                             <p class="food_image_container">
                                 @if (@alcoholDataEntity.Image == "")
