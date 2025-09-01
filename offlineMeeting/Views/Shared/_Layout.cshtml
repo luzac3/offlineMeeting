@@ -43,7 +43,7 @@
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span b-c19eioo5et class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse collapse justify-content-between">
+                <div id="main_menu"  class="navbar-collapse collapse justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="Home" asp-action="Index">ホーム</a>
@@ -103,6 +103,6 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/signalR/hubs"></script>
-        @await RenderSectionAsync("Scripts", required: false);
+        @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>
