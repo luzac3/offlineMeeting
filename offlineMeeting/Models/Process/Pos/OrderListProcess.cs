@@ -1,4 +1,6 @@
 using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -50,7 +52,7 @@ namespace offlineMeeting.Models.Process.Pos
             SetFoodDataEntityListProcess setFoodDataEntityListProcess = new(EventFoodSiteId, orderSiteId, EventId, userCd);
             List<FoodDataEntity> foodDataEntityList = setFoodDataEntityListProcess.Get(foodResultIdList);
 
-            SetAlcoholDataEntityListProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
             List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
@@ -64,7 +66,6 @@ namespace offlineMeeting.Models.Process.Pos
                     )
                 );
             }
-
             return orderEntityList;
         }
     }

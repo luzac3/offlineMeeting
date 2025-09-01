@@ -3881,9 +3881,9 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
+/***/ "./wwwroot/ts/Pos/CaliculateCoinNumber.ts":
 /*!************************************************!*\
-  !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
+  !*** ./wwwroot/ts/Pos/CaliculateCoinNumber.ts ***!
   \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3964,9 +3964,9 @@ class CaliculateCoinNumber {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/***/ "./wwwroot/ts/Pos/OrderEntity.ts":
 /*!***************************************!*\
-  !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
+  !*** ./wwwroot/ts/Pos/OrderEntity.ts ***!
   \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3988,9 +3988,9 @@ class OrderEntity {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/pos/StockOrder.ts":
+/***/ "./wwwroot/ts/Pos/StockOrder.ts":
 /*!**************************************!*\
-  !*** ./wwwroot/ts/pos/StockOrder.ts ***!
+  !*** ./wwwroot/ts/Pos/StockOrder.ts ***!
   \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -4001,7 +4001,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
 /* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
-/* harmony import */ var _OrderEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OrderEntity */ "./wwwroot/ts/pos/OrderEntity.ts");
+/* harmony import */ var _OrderEntity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./OrderEntity */ "./wwwroot/ts/Pos/OrderEntity.ts");
 
 
 
@@ -4394,14 +4394,14 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 /*!*********************************!*\
-  !*** ./wwwroot/ts/pos/Index.ts ***!
+  !*** ./wwwroot/ts/Pos/Index.ts ***!
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/Pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/Pos/StockOrder.ts");
 
 
 
@@ -4422,4 +4422,4 @@ __webpack_require__.r(__webpack_exports__);
 
 /******/ })()
 ;
-//# sourceMappingURL=pos.js.map
+//# sourceMappingURL=Pos.js.map

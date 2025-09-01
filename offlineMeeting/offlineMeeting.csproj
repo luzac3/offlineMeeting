@@ -8,16 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Templates\**" />
     <Compile Remove="Views\Streaming\**" />
+    <Content Remove="Templates\**" />
     <Content Remove="Views\Streaming\**" />
+    <EmbeddedResource Remove="Templates\**" />
     <EmbeddedResource Remove="Views\Streaming\**" />
+    <None Remove="Templates\**" />
     <None Remove="Views\Streaming\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Entity\Collection\" />
     <Folder Include="Properties\bk\" />
-    <Folder Include="Templates\Home\" />
-    <Folder Include="Templates\Share\" />
     <Folder Include="wwwroot\js\dist\" />
     <Folder Include="wwwroot\plugins\" />
   </ItemGroup>
