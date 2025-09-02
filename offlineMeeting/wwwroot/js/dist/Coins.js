@@ -53,6 +53,66 @@ class CreatePaypalButton {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/Coins/GiveCoins.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/Coins/GiveCoins.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GiveCoins: () => (/* binding */ GiveCoins)
+/* harmony export */ });
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+
+class GiveCoins {
+    constructor() {
+        this.setCoinsData = () => {
+            const forUserCdElement = document.getElementById("for_user_cd");
+            const counterNumberElement = document.getElementsByClassName("counter")[0].querySelector(".counter_number");
+            const giveElement = document.getElementById("give");
+            giveElement.onclick = () => {
+                const giveCoinsEntity = {
+                    ForUserCd: Number(forUserCdElement.value),
+                    Coins: Number(counterNumberElement.value),
+                    Value: 0
+                };
+                if (giveElement != null) {
+                    const coinsRate = Math.round(Number(counterNumberElement.value) * 0.2) == 0 ? 1 : Math.round(Number(counterNumberElement.value) * 0.2);
+                    if (window.confirm("コイン" + coinsRate + "枚が手数料として引かれます。よろしいですか？")) {
+                        this.send(giveCoinsEntity).then((data) => {
+                            const response = JSON.parse(data);
+                            console.log(response.StatusCode);
+                            if (response.StatusCode == "200" || "OK") {
+                                window.alert('譲渡が完了しました');
+                            }
+                            else {}
+                        });
+                    }
+                }
+            };
+        };
+        this.send = async (giveCoinsEntity) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
+            return await fetchApi.send(this.url, this.method, this.headers, giveCoinsEntity, this.responseKind).then(async (data) => {
+                return data;
+            }).catch(e => {
+                throw e;
+            });
+        };
+        this.url = '/Coins/GiveCoins';
+        this.method = 'POST';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        this.responseKind = "text";
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/Coins/SendCoins.ts":
 /*!***************************************!*\
   !*** ./wwwroot/ts/Coins/SendCoins.ts ***!
@@ -346,6 +406,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
 /* harmony import */ var _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreatePaypalButton */ "./wwwroot/ts/Coins/CreatePaypalButton.ts");
 /* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _GiveCoins__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GiveCoins */ "./wwwroot/ts/Coins/GiveCoins.ts");
+
 
 
 
@@ -355,9 +417,11 @@ __webpack_require__.r(__webpack_exports__);
     const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__.Counter();
     const createPaypalButton = new _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_2__.CreatePaypalButton();
     const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_3__.BackButton();
+    const giveCoins = new _GiveCoins__WEBPACK_IMPORTED_MODULE_4__.GiveCoins();
     createPaypalButton.SetPaypalButton();
     counter.SetCounter();
     backButton.Buck();
+    giveCoins.setCoinsData();
 })();
 
 })();
