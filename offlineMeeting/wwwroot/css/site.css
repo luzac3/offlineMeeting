@@ -148,3 +148,12 @@ body {
         width: 80%;
     }
 }
+
+.stop_order {
+    pointer-events: none;
+    filter: brightness(0.4);
+}
+
+.index_menu{
+    font-size: 2em;
+}

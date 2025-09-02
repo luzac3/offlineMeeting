@@ -24,7 +24,7 @@
             foreach (PurchaseDataEntity purchaseDataEntity in Model.PurchaseDataEntityList ?? new List<PurchaseDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
-                <div class="purchase_order food_order modal_parent">
+                <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                     <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
                         <input class="category nodisplay" value="1" />
                         <div class="open_modal">
@@ -48,8 +48,8 @@
                             <p>
                                 <img class="poncoin_img" src="/image/poncoin.png" />
                                 <span> × </span>
-                                <span class="coin_number_show">@(purchaseDataEntity.CoinNumber * 5 - purchaseDataEntity.CoinNumber)</span>
-                                <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber * 5 - purchaseDataEntity.CoinNumber)" disabled />
+                                <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                             </p>
                             <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
                         </div>
@@ -62,7 +62,16 @@
                                 }
                             </select>
                         </p>
-                        <p><button class="order_button" type="button">注文に追加</button></p>
+                        <p>
+                            @if (purchaseDataEntity.LeftAmount <= 0)
+                            {
+                                <span>品切れ</span>
+                            }
+                            else
+                            {
+                                <button class="order_button" type="button">注文に追加</button>
+                            }
+                        </p>
                     </div>
                 </div>
             }

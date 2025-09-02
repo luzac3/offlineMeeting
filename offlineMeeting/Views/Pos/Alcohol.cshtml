@@ -30,7 +30,7 @@
                 if (alcoholDataEntity.Rarity == 0){
                     continue;
                 }
-                <div class="purchase_order alcohol_order modal_parent">
+                <div class="purchase_order alcohol_order modal_parent @(alcoholDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
                         <input class="category nodisplay" value="2" />
                         <div class="open_modal">
@@ -98,7 +98,16 @@
                                 }
                             </select>
                         </p>
-                        <p><button class="order_button" type="button">注文に追加</button></p>
+                        <p>
+                            @if (alcoholDataEntity.LeftAmount <= 0)
+                            {
+                                <span>品切れ</span>
+                            }
+                            else
+                            {
+                                <button class="order_button" type="button">注文に追加</button>
+                            }
+                        </p>
                     </div>
                     <div class="modal_wrapper nodisplay">
                         <div id="alchol_@(alcoholDataEntity.ResultId)_modal" class="modal_window" data-result_id="@alcoholDataEntity.ResultId">
@@ -200,7 +209,6 @@
                                     </select>
                                 </p>
                                 <p>
-                                    <button class="order_button" type="button">注文に追加</button>
                                     <button class="close_modal" type="button">閉じる</button>
                                 </p>
                             </div>
