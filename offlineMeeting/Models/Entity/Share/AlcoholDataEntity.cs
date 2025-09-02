@@ -17,6 +17,8 @@ namespace offlineMeeting.Models.Entity.Share
         public int? Rarity { get; set; } // レアリティ
         public int? CoinNumber { get; set; } // コイン必要数
         public int? LeftAmount { get; set; } // 残り数量
+        public bool Priority { get; set; } // 優先
+        public bool Hide { get; set; } // 隠す
         public bool Ordered { get; set; } = false; // 注文済み
         public string? RarityReason { get; set; } // レアリティの理由
         public string? Explanation { get; set; } // 説明
@@ -43,6 +45,8 @@ namespace offlineMeeting.Models.Entity.Share
             int? rarity,
             int? coinNumber,
             int? leftAmount,
+            bool priority,
+            bool hide,
             bool ordered,
             string? rarityReason = null,
             string? explanation = null,
@@ -70,6 +74,8 @@ namespace offlineMeeting.Models.Entity.Share
             Rarity = rarity;
             CoinNumber = coinNumber;
             LeftAmount = leftAmount;
+            Priority = priority;
+            Hide = hide;
             Ordered = ordered;
             RarityReason = rarityReason;
             Explanation = explanation;

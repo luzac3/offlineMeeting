@@ -5,17 +5,17 @@ namespace offlineMeeting.Models.Entity.Pos
     {
         public OrderPostEntity OrderPostEntity { get; set; }
         public AlcoholDataEntity? AlcoholDataEntity { get; set; }
-        public FoodDataEntity? FoodDataEntity { get; set; }
+        public PurchaseDataEntity? PurchaseDataEntity { get; set; }
 
         public OrderEntity(
             OrderPostEntity orderPostEntity,
             AlcoholDataEntity? alcoholDataEntity = null,
-            FoodDataEntity? foodDataEntity = null
+            PurchaseDataEntity? purchaseDataEntity = null
         )
         {
             OrderPostEntity = orderPostEntity;
             AlcoholDataEntity = alcoholDataEntity;
-            FoodDataEntity = foodDataEntity;
+            PurchaseDataEntity = purchaseDataEntity;
         }
     }
 }

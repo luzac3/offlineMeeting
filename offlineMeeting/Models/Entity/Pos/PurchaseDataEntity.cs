@@ -1,19 +1,19 @@
 namespace offlineMeeting.Models.Entity.Pos
 {
-    public class FoodDataEntity
+    public class PurchaseDataEntity
     {
         public long? ResultId {  get; set; }
         public string? Image {  get; set; }
-        public string? FoodName { get; set; }
-        public string? CookingCategory { get; set; }
+        public string? PurchaseName { get; set; }
+        public int Category { get; set; }
         public int? CoinNumber { get; set; }
         public int? LeftAmount { get; set; }
         public bool Ordered { get; set; } = false;
-        public FoodDataEntity(
+        public PurchaseDataEntity(
             long? resultId,
             string? image,
-            string? foodName,
-            string? cookingCategory,
+            string? purchaseName,
+            int category,
             int? coinNumber,
             int? leftAmount,
             bool ordered
@@ -21,8 +21,8 @@ namespace offlineMeeting.Models.Entity.Pos
         {
             ResultId = resultId;
             Image = image;
-            FoodName = foodName;
-            CookingCategory = cookingCategory;
+            PurchaseName = purchaseName;
+            Category = category;
             CoinNumber = coinNumber;
             LeftAmount = leftAmount;
             Ordered = ordered;
