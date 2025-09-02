@@ -35,24 +35,28 @@ namespace offlineMeeting.Models.Process.Pos
 
         public List<PurchaseDataEntity> Get(int category)
         {
-            int siteId = 0;
+            List<ResultsEntity> results = new List<ResultsEntity> { };
             switch (category)
             {
                 case 0:
-                    siteId = ExtraFoodSiteId;
+                    results = base
+                        .GetFromSiteId(ExtraFoodSiteId)
+                        .Where(x => x.ClassD == EventId)
+                        .ToList();
                     break;
                 case 1:
-                    siteId = EventFoodSiteId;
-                    break;
-                case 2:
-                    siteId = RawFoodSiteId;
+                    results = base
+                        .GetFromSiteId(EventFoodSiteId)
+                        .Where(x => x.ClassD == EventId)
+                        .ToList();
+                    results.AddRange(
+                        base
+                            .GetFromSiteId(RawFoodSiteId)
+                            .Where(x => x.ClassD == EventId)
+                            .ToList()
+                    );
                     break;
             }
-
-            List<ResultsEntity> results = base
-                .GetFromSiteId(siteId)
-                .Where(x=>x.ClassD == EventId)
-                .ToList();
 
             GetPurchaseDataEntityList(results, _ => category);
 
