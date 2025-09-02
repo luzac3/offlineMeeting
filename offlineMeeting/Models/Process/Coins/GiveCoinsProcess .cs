@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.Entity.Coins;
+using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.Share;
 using System.Net;
 using System.Text.Json;
@@ -22,7 +22,7 @@ namespace offlineMeeting.Models.Process.Coins
             UserCd = manageUserCd.GetUserCd().ToString();
         }
 
-        public async Task<bool> Send()
+        public async Task<Dictionary<string, string>> Send()
         {
             HttpClient httpClient = new();
 
@@ -36,7 +36,7 @@ namespace offlineMeeting.Models.Process.Coins
             (
                 eventNumber: EventId,
                 userCd: UserCd,
-                gar: "150",
+                gar: "250",
                 coins: GiveCoinsEntity.Coins,
                 value: GiveCoinsEntity.Value
             );
@@ -46,17 +46,23 @@ namespace offlineMeeting.Models.Process.Coins
 
             var responseGive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
 
-            if (responseGive.StatusCode.Equals(HttpStatusCode.OK))
+            if (!responseGive.StatusCode.Equals(HttpStatusCode.OK))
             {
+                return new Dictionary<string, string> {
+                    {"StatusCode", responseGive.StatusCode.ToString() },
+                    {"Message", "receive coins failue"}
+                };
                 throw new Exception("give coins failue");
             }
+
+            int coinsRate = (int)Math.Round(GiveCoinsEntity.Coins * 0.2) == 0 ? 1 : (int)Math.Round(GiveCoinsEntity.Coins * 0.2);
 
             sendCoinsEntity = new
             (
                 eventNumber: EventId,
-                userCd: GiveCoinsEntity.forUserCd,
-                gar: "250",
-                coins: GiveCoinsEntity.Coins,
+                userCd: GiveCoinsEntity.ForUserCd.ToString(),
+                gar: "150",
+                coins: (int)GiveCoinsEntity.Coins - coinsRate,
                 value: GiveCoinsEntity.Value
             );
 
@@ -65,14 +71,19 @@ namespace offlineMeeting.Models.Process.Coins
 
             var responseReceive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
 
-            if (responseReceive.StatusCode.Equals(HttpStatusCode.OK))
+            if (!responseReceive.StatusCode.Equals(HttpStatusCode.OK))
             {
+                return new Dictionary<string, string> {
+                    {"StatusCode", responseReceive.StatusCode.ToString() },
+                    {"Message", "receive coins failue"}
+                };
                 throw new Exception("receive coins failue");
             }
 
-            // あるいはQRで譲渡にすべきだったかもしれねえ
-
-            return responseReceive.StatusCode.Equals(HttpStatusCode.OK);
+            return new Dictionary<string, string> {
+                    {"StatusCode", responseReceive.StatusCode.ToString() },
+                    {"Message", "receive coins success"}
+                };
         }
     }
 }
