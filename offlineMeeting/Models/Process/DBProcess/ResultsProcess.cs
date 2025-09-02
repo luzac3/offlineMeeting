@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.DBProperty;
+using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Share;
 using Microsoft.EntityFrameworkCore;
 

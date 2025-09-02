@@ -2,7 +2,7 @@
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
-    ViewData["Title"] = "Food";
+    ViewData["Title"] = "Purchase";
 }
 
 @section Scripts {
@@ -21,38 +21,37 @@
 <div class="text-center">
     <div id="purchase_order">
         @{
-            foreach (FoodDataEntity foodDataEntity in Model.FoodDataEntityList ?? new List<FoodDataEntity> { })
+            foreach (PurchaseDataEntity purchaseDataEntity in Model.PurchaseDataEntityList ?? new List<PurchaseDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
-                <div class="purchase_order food_order modal_parent">
-                    <div id="alchol_@foodDataEntity.ResultId" class="alchol_info" data-result_id="@foodDataEntity.ResultId">
+                <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                    <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
                         <input class="category nodisplay" value="1" />
                         <div class="open_modal">
                             <p class="food_image_container">
-                                @if (@foodDataEntity.Image == "")
+                                @if (@purchaseDataEntity.Image == "")
                                 {
                                     <img src="/image/noImage.jpg" class="food_image" alt="image" />
                                 }
                                 else
                                 {
-                                    <img src="@(foodDataEntity.Image)" class="food_image" />
+                                    <img src="@(purchaseDataEntity.Image)" class="food_image" />
                                 }
-                                @if (foodDataEntity.Ordered)
+                                @if (purchaseDataEntity.Ordered)
                                 {
                                     <img src="/image/ordered.png" class="orderd" alt="image" />
                                 }
                             </p>
                             <p class="alcoholName">
-                                <span>@(foodDataEntity.FoodName)</span>
+                                <span>@(purchaseDataEntity.PurchaseName)</span>
                             </p>
-                            <p class="alcohol_poncoin">
-                                <img src="/image/poncoin.png" alt="image" />
+                            <p>
+                                <img class="poncoin_img" src="/image/poncoin.png" />
                                 <span> × </span>
-                                <span class="coin_number_show">@(foodDataEntity.CoinNumber * 5 - foodDataEntity.CoinNumber)</span>
-                                <input class="coin_number nodisplay" value="@(foodDataEntity.CoinNumber * 5 - foodDataEntity.CoinNumber)" disabled />
+                                <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                             </p>
-                            <input type="text" class="coin_per_2shaku nodisplay" value="@(foodDataEntity.CoinNumber)" />
-                            <input type="text" class="left_amount nodisplay" value="@(foodDataEntity.LeftAmount)" />
+                            <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
                         </div>
                         <p>
                             <span>×</span>
@@ -63,7 +62,16 @@
                                 }
                             </select>
                         </p>
-                        <p><button class="order_button" type="button">注文に追加</button></p>
+                        <p>
+                            @if (purchaseDataEntity.LeftAmount <= 0)
+                            {
+                                <span>品切れ</span>
+                            }
+                            else
+                            {
+                                <button class="order_button" type="button">注文に追加</button>
+                            }
+                        </p>
                     </div>
                 </div>
             }

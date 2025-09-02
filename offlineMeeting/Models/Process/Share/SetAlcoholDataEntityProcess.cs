@@ -127,6 +127,8 @@ namespace offlineMeeting.Models.Process.Share
                             rarity: Convert.ToInt32(result.NumF),
                             coinNumber: Convert.ToInt32(result.NumI),
                             leftAmount: Convert.ToInt32(result.NumH),
+                            priority: result.CheckA ?? false,
+                            hide: result.CheckB ?? false,
                             ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
                         )
                     );
@@ -170,6 +172,8 @@ namespace offlineMeeting.Models.Process.Share
                 rarity: Convert.ToInt32(result.NumF),
                 coinNumber: Convert.ToInt32(result.NumI),
                 leftAmount: Convert.ToInt32(result.NumH),
+                priority: result.CheckA ?? false,
+                hide: result.CheckB ?? false,
                 ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
                 rarityReason: result.DescriptionF?.Replace("\n", "<br>"),
                 explanation: result.DescriptionC?.Replace("\n", "<br>"),

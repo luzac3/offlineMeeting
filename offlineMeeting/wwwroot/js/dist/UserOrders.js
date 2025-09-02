@@ -3942,6 +3942,9 @@ class GetNewOrder {
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
                 JSON.parse(parsedData.orderTableEntity).forEach(async (order) => {
+                    if (order.Hide) {
+                        return;
+                    }
                     readText += `注文番号、${order.PurchaseCd}。`;
                     readText += `商品名、${order.PurchaseRead}。`;
                     if (order.AlcoholQuantity == 36) {
