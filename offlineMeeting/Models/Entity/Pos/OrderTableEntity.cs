@@ -13,6 +13,7 @@ namespace offlineMeeting.Models.Entity.Pos
         public int Coins { get; set; }
         public int AlcoholQuantity { get; set; }
         public bool UnProvided { get; set; }
+        public bool Hide { get; set; }
         public OrderTableEntity(
             string? resultId = null,
             string? userCd = null,
@@ -24,7 +25,8 @@ namespace offlineMeeting.Models.Entity.Pos
             string? unit = null,
             int coins = 0,
             int alcoholQuantity = 0,
-            bool unProvided = false
+            bool unProvided = false,
+            bool hide = false
         )
         {
             ResultId = resultId;
@@ -38,6 +40,7 @@ namespace offlineMeeting.Models.Entity.Pos
             Coins = coins;
             AlcoholQuantity = alcoholQuantity;
             UnProvided = unProvided;
+            Hide = hide;
         }
     }
 }

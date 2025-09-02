@@ -30,7 +30,9 @@ namespace offlineMeeting.Models.Process.Pos
             SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (SakeSiteId, orderSiteId, EventId, userCd);
             return setAlcoholDataEntityProcess
                 .Get(json)
-                .OrderBy(x=>x.Rarity)
+                .Where(x => !x.Hide)
+                .OrderByDescending(x => x.Priority)
+                .ThenBy(x=>x.Rarity)
                 .ToList();
         }
     }

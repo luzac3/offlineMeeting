@@ -95,20 +95,6 @@ namespace offlineMeeting.Controllers
             return View("Purchase", PosViewModel);
         }
 
-        public IActionResult RawFood()
-        {
-            PurchaseDataProcess purchaseDataProcess = new(
-                extraSiteId: ExtraSiteId,
-                eventFoodSiteId: EventFoodSiteId,
-                rawFoorSiteId: RawFoodSiteId,
-                httpContext: HttpContext
-            );
-            SiteSettingsProcess siteSettingsProcess = new();
-
-            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 2));
-            return View("Purchase", PosViewModel);
-        }
-
         public IActionResult OrderList()
         {
             return View();

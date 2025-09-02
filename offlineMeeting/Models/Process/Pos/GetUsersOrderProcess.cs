@@ -64,7 +64,8 @@ namespace offlineMeeting.Models.Process.Pos
                             unit: resultsEntity.ClassD,
                             coins: Convert.ToInt32(resultsEntity.NumB),
                             alcoholQuantity: Convert.ToInt32(resultsEntity.NumC),
-                            unProvided: resultsEntity.CheckA ?? false
+                            unProvided: resultsEntity.CheckA ?? false,
+                            hide: resultsEntity.CheckZ ?? false
                         )
                     );
             }
