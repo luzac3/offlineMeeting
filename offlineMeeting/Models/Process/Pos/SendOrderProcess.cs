@@ -96,7 +96,8 @@ namespace offlineMeeting.Models.Process.Pos
                             unit: "",
                             coins: orderPostEntity.OrderCoins,
                             alcoholQuantity: orderPostEntity.AlcoholAmount,
-                            unProvided: true
+                            unProvided: true,
+                            hide: resultsEntity?.CheckZ ?? false
                         )
                     );
             }

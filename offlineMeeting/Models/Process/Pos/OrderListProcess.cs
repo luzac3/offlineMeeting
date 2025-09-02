@@ -43,12 +43,12 @@ namespace offlineMeeting.Models.Process.Pos
             List<OrderEntity> orderEntityList = new List<OrderEntity>();
 
             List<int> purchaseResultIdList = OrderPostEntityList
-                .Where(x => x.Category != 3)
+                .Where(x => x.Category != 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
             List<int> alcoholResultIdList = OrderPostEntityList
-                .Where(x => x.Category == 3)
+                .Where(x => x.Category == 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
