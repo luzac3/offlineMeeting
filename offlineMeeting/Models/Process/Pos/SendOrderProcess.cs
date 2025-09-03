@@ -38,7 +38,7 @@ namespace offlineMeeting.Models.Process.Pos
         }
 
 
-        public async Task<string> Send()
+        public async Task<string> Send(int sakeSiteId)
         {
             #if DEBUG
                 string pleasanterUrlBase = "http://localhost:59802";
@@ -57,6 +57,7 @@ namespace offlineMeeting.Models.Process.Pos
             // コインが足りることを確認する
             int totalCoins = 0;
 
+
             GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
@@ -67,7 +68,35 @@ namespace offlineMeeting.Models.Process.Pos
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {
-                sendOrderEntityList.Add(
+                // extraオーダーのチェック
+                // 今回はオーダーNOで管理するより仕方ない
+
+                #if DEBUG
+                    int extraId = 1014;
+                #else
+                    int extraId = 56483;
+                #endif
+                if (orderPostEntity.ResultId == extraId)
+                {
+                    SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(sakeSiteId, OrderSiteId, EventId, userCd);
+                    List<int> extraAlcoholIdList = setAlcoholDataEntityProcess.GetHidedIdList();
+                    foreach (int extraAlcoholId in extraAlcoholIdList)
+                    {
+                        sendOrderEntityList.Add(
+                                new SendOrderEntity
+                                (
+                                    eventNumber: EventId,
+                                    userCd: userCd,
+                                    resultId: extraAlcoholId.ToString(),
+                                    orderNumber: 1,
+                                    orderCoins: 0,
+                                    alcoholAmount: 36
+                                )
+                            );
+                    }
+
+                }
+                    sendOrderEntityList.Add(
                     new SendOrderEntity
                     (
                         eventNumber: EventId,
