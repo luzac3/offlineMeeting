@@ -18,14 +18,17 @@
 
 @model offlineMeeting.Models.ViewModel.PosViewModel;
 <button id="play-audio" type="button">オーダー受信起動</button>
-<table>
+<button id="batch_processing" type="button">まとめて提供済</button>
+<table id="user_order_list">
     <thead>
         <tr>
+            <th></th>
             <th>オーダーID</th>
             <th>ユーザー名</th>
             <th>商品番号</th>
             <th>商品名</th>
             <th>数量(分量)</th>
+            <th>提供済</th>
         </tr>
     </thead>
     <tbody id="contents">

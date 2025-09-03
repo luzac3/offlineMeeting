@@ -127,7 +127,7 @@ namespace offlineMeeting.Controllers
                 httpContext: HttpContext,
                 hubContext: _hubContext
             );
-            return await sendOrderProcess.Send();
+            return await sendOrderProcess.Send(SakeSiteId);
         }
 
         public IActionResult UserOrders()
@@ -144,6 +144,14 @@ namespace offlineMeeting.Controllers
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return PartialView("_UserOrderContents", PosViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
+        {
+            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
+
+            return Json(await orderCompleteProcess.Send());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

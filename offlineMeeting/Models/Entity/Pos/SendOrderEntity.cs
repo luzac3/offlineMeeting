@@ -1,4 +1,4 @@
-﻿namespace offlineMeeting.Models.Entity.Pos
+namespace offlineMeeting.Models.Entity.Pos.SendOrderEntity
 {
     public class SendOrderEntity
     {
