@@ -3,23 +3,7 @@ export class FetchApi {
         url: string,
         method: string,
         headers: { [key: string]: string },
-        body: {
-            [key: string]:
-            string |
-            string[] |
-            string[][] |
-            { [key: string]: string } |
-            { [ket: string]: boolean } |
-            { [key: string]: string }[] |
-            { [key: string]: boolean }[] |
-            Uint8Array |
-            number |
-            number[] |
-            boolean |
-            FormDataEntryValue |
-            null
-        } | { [key: string]: number }[] | { [key: string]: string }[] | string | null,
-        //body: any,
+        body: any,
         responseKind: string = "json",
         needResponseData: boolean = true
     ) => {
