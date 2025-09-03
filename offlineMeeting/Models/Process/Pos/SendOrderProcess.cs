@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
