@@ -5,12 +5,14 @@
     <script src="~/js/dist/QuizUser.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
 }
-<div id="quiz"></div>
+<div id="quiz">
+    <partial name="/Views/Quiz/_Quiz.cshtml" />
+</div>
 <div id ="answer_container">
     <canvas id="textCanvas"></canvas>
     <div class="quiz-buttons">
         <button id="clear">クリア</button>
-        <button id="send" disabled>確定</button>
+        <button id="send" @(Model.QuizEntity != null ? "" : "disabled")>確定</button>
     </div>
 </div>
 <div>
