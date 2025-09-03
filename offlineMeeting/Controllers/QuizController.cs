@@ -49,12 +49,16 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
+            QuizViewModel quizViewModel = new QuizViewModel();
+            quizViewModel.setQuizEntity(getQuizProcess.Get());
+
+            return View(quizViewModel);
         }
 
         public IActionResult QuizList()
         {
-            GetQuizProcess getQuizProcess = new(HttpContext);
+            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
             QuizViewModel quizViewModel = new QuizViewModel();
             quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
 
@@ -64,7 +68,7 @@ namespace offlineMeeting.Controllers
         [HttpGet("Quiz/GetQuiz/{quizId}")]
         public async Task<IActionResult> GetQuiz(int quizId)
         {
-            GetQuizProcess getQuizProcess = new(HttpContext);
+            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
             QuizViewModel quizViewModel = new QuizViewModel();
             quizViewModel.setQuizEntity(getQuizProcess.Get(quizId.ToString()));
 
@@ -75,13 +79,21 @@ namespace offlineMeeting.Controllers
         [HttpGet("Quiz/Orner/{resultId}")]
         public IActionResult Orner(string resultId)
         {
-            GetQuizProcess getQuizProcess = new(HttpContext);
+            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
             GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
             QuizViewModel quizViewModel = new QuizViewModel();
             quizViewModel.setQuizEntity(getQuizProcess.Get(resultId));
             quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
 
             return View(quizViewModel);
+        }
+
+        [HttpGet("Quiz/SendQuiz/{resultId}")]
+        public IActionResult SendQuiz(string resultId)
+        {
+            SendQuizProcess sendQuizProcess = new(_hubContext, QuizSiteId, HttpContext);
+
+            return Json(sendQuizProcess.Send(Convert.ToInt32(resultId)));
         }
 
         [HttpGet("Quiz/ShowQuiz/{resultId}")]
