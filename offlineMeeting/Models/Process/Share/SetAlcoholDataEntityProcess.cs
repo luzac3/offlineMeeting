@@ -61,6 +61,14 @@ namespace offlineMeeting.Models.Process.Share
             return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
+        public List<int> GetHidedIdList()
+        {
+            return GetFromSiteId(SakeSiteId)
+                .Where(x => x.CheckZ ?? false)
+                .Select(x => Convert.ToInt32(x.ResultId))
+                .ToList();
+        }
+
         private Dictionary<string, string> GetChoicesTextDic(System.Text.Json.Nodes.JsonNode? json)
         {
             var columns = json?["Columns"];

@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.Entity.Quiz;
+using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -9,7 +9,7 @@ namespace offlineMeeting.Models.Process.Quiz
         private string EventId;
         private SetQuizEntityProcess SetQuizEntityProcess;
 
-        public GetQuizProcess(HttpContext httpContext) {
+        public GetQuizProcess(HttpContext httpContext, int quizSiteId) {
 
             ManageEventId manageEventId = new(httpContext);
 
@@ -19,7 +19,12 @@ namespace offlineMeeting.Models.Process.Quiz
                 throw new DataException("イベントIDが不正です");
             }
 
-            SetQuizEntityProcess = new(EventId);
+            SetQuizEntityProcess = new(quizSiteId, EventId);
+        }
+
+        public QuizEntity? Get()
+        {
+            return SetQuizEntityProcess.Get();
         }
 
         public QuizEntity Get(string resultId)
