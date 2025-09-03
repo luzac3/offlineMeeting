@@ -4105,9 +4105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class FetchApi {
     constructor() {
-        this.send = async (url, method, headers, body, 
-        //body: any,
-        responseKind = "json", needResponseData = true) => {
+        this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
             let request;
             if (method == "GET") {
                 request = new Request(url, {

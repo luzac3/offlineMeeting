@@ -3,6 +3,10 @@
 @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
 {
     <tr>
+        <td>
+            <input type="checkbox" class="completed_check" name="completed_check" />
+            <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
+        </td>
         <td>@orderTableEntity?.ResultId</td>
         <td>@orderTableEntity?.UserName</td>
         <td>@orderTableEntity?.PurchaseCd</td>
@@ -20,6 +24,10 @@
             {
                 @($"{orderTableEntity?.Number}")
             }
+        </td>
+        <td>
+            <button type="button" class="completed">提供済</button>
+            <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
         </td>
     </tr>
 }

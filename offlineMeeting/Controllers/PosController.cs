@@ -146,6 +146,14 @@ namespace offlineMeeting.Controllers
             return PartialView("_UserOrderContents", PosViewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
+        {
+            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
+
+            return Json(await orderCompleteProcess.Send());
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

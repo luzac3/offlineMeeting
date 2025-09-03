@@ -3981,6 +3981,78 @@ class GetNewOrder {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/UserOrders/OrderComplete.ts":
+/*!************************************************!*\
+  !*** ./wwwroot/ts/UserOrders/OrderComplete.ts ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OrderComplete: () => (/* binding */ OrderComplete)
+/* harmony export */ });
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
+
+
+class OrderComplete {
+    constructor() {
+        this.parentElement = document.getElementById("user_order_list");
+        this.Batch = () => {
+            const batchButtonElement = document.getElementById("batch_processing");
+            batchButtonElement.addEventListener("click", () => {
+                const checkedResultElements = Array.from(this.parentElement?.querySelectorAll('.completed_check[type="checkbox"]:checked + input') ?? []);
+                const checkedResultIdArray = checkedResultElements.map(el => el.value);
+                this.send({ "ResultIdList": checkedResultIdArray }).then((data) => {
+                    this.OrderCompleted(data, checkedResultElements);
+                });
+            });
+        };
+        this.Complete = () => {
+            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(this.parentElement, 'click', '.completed', (e) => {
+                const target = e.target;
+                const resultId = target.nextElementSibling.value;
+                this.send({ "ResultIdList": [resultId] }).then((data) => {
+                    this.OrderCompleted(data, [target.parentElement]);
+                });
+            });
+        };
+        this.send = async (resultIds) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
+            return await fetchApi.send(this.url, this.method, this.headers, resultIds, this.responseKind).then(async (data) => {
+                return data;
+            }).catch(e => {
+                throw e;
+            });
+        };
+        this.OrderCompleted = (data, elements) => {
+            const result = JSON.parse(data);
+            if (result.status == "200") {
+                elements.forEach(element => {
+                    const tr = element.closest("tr");
+                    if (tr) {
+                        tr.remove();
+                    }
+                });
+            }
+            window.alert(result.message);
+        };
+        this.url = '/Pos/OrderComplete';
+        this.method = 'POST';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        this.responseKind = "text";
+        this.Batch();
+        this.Complete();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/ControlNavbar.ts":
 /*!*******************************************!*\
   !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
@@ -4027,9 +4099,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class FetchApi {
     constructor() {
-        this.send = async (url, method, headers, body, 
-        //body: any,
-        responseKind = "json", needResponseData = true) => {
+        this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
             let request;
             if (method == "GET") {
                 request = new Request(url, {
@@ -4116,6 +4186,39 @@ class ManagedVoiceVox {
         };
     }
 }
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/SetEventListner.ts":
+/*!*********************************************!*\
+  !*** ./wwwroot/ts/share/SetEventListner.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SetEventListner: () => (/* binding */ SetEventListner)
+/* harmony export */ });
+class SetEventListner {
+}
+SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = false) => {
+    const returnHandler = (event) => {
+        const targetElement = parentElement?.querySelector(targetName);
+        if (event.target == targetElement) {
+            callback(event);
+            if (atOnce) {
+                parentElement?.removeEventListener(type, returnHandler);
+            }
+        }
+    };
+    parentElement?.addEventListener(type, returnHandler);
+    return returnHandler;
+};
+SetEventListner.removeEvent = (parentElement, type, handler) => {
+    parentElement?.removeEventListener(type, handler);
+};
 
 
 /***/ }),
@@ -4314,6 +4417,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
 /* harmony import */ var _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetNewOrder */ "./wwwroot/ts/UserOrders/GetNewOrder.ts");
 /* harmony import */ var _AudioStart__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AudioStart */ "./wwwroot/ts/UserOrders/AudioStart.ts");
+/* harmony import */ var _OrderComplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OrderComplete */ "./wwwroot/ts/UserOrders/OrderComplete.ts");
+
 
 
 
@@ -4321,6 +4426,7 @@ __webpack_require__.r(__webpack_exports__);
 (async () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
+    new _OrderComplete__WEBPACK_IMPORTED_MODULE_4__.OrderComplete();
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     const getNewOrder = new _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__.GetNewOrder();
     const audioStart = new _AudioStart__WEBPACK_IMPORTED_MODULE_3__.AudioStart();
