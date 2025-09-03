@@ -3947,11 +3947,27 @@ class SendQuiz {
         this.sendQuizId = () => {
             const sendQuizElement = document.getElementById("send_quiz");
             if (sendQuizElement != null) {
-                sendQuizElement.onclick = () => {
+                sendQuizElement.onclick = async () => {
                     const quizId = document.getElementById("quiz_id").value;
-                    this.SignalR.send("SendQuizId", quizId);
+                    const response = await fetch(this.url + `/${quizId}`, {
+                        method: this.method,
+                        headers: this.headers
+                    });
+                    await response.text().then(data => {
+                        const result = JSON.parse(data);
+                        if (result.status == 200 || "OK") {
+                            window.alert(result.message);
+                        }
+                        else {}
+                    });
                 };
             }
+        };
+        this.url = '/Quiz/SendQuiz';
+        this.method = 'Get';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
         };
         this.SignalR = signalR;
         this.sendQuizId();

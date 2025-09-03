@@ -7,11 +7,51 @@ namespace offlineMeeting.Models.Process.Quiz
 {
     public class SetQuizEntityProcess : ResultsProcess
     {
+        private int QuizSiteId;
         private string EventId;
 
-        public SetQuizEntityProcess(string eventId)
+        public SetQuizEntityProcess(int quizSiteId, string eventId)
         {
+            QuizSiteId = quizSiteId;
             EventId = eventId;
+        }
+
+
+        public QuizEntity? Get()
+        {
+            ResultsEntity? result = base
+                .GetFromSiteId(QuizSiteId)
+                .Where(x=>x.CheckA ?? false)
+                .FirstOrDefault();
+
+
+            if (result == null)
+            {
+                return null;
+            } else { 
+                string[]? imageSplit = result!.DescriptionB?.Split("/");
+                string guid = "";
+                if (imageSplit != null && imageSplit?.Length > 2)
+                {
+                    guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
+                }
+
+                GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
+                string? image = getBinariesProcess.GetImage(guid);
+                QuizEntity quizEntity = new(
+                    resultId: result.ResultId.ToString(),
+                    eventId: EventId,
+                    quiz: result.DescriptionA,
+                    quizImage: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                    hint: result.DescriptionD,
+                    maxPoint: Convert.ToInt32(result.NumA),
+                    answer: result.ClassB,
+                    explanation: result.DescriptionB
+                );
+
+                return quizEntity;
+            }
+
         }
 
         public QuizEntity Get(string resultId)
@@ -70,6 +110,16 @@ namespace offlineMeeting.Models.Process.Quiz
             }
 
             return quizEntityList;
+        }
+
+        public List<int> GetActiveQuizId(int quizSiteId)
+        {
+            return base
+                .GetFromSiteId(quizSiteId)
+                .Where(x => x.ClassA == EventId)
+                .Where(x => x.CheckA == true)
+                .Select(x => Convert.ToInt32(x.ResultId))
+                .ToList();
         }
     }
 }

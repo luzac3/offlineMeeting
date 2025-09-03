@@ -1,4 +1,4 @@
-﻿using offlineMeeting.Models.Entity.Quiz;
+using offlineMeeting.Models.Entity.Quiz;
 
 namespace offlineMeeting.Models.ViewModel
 {
@@ -14,7 +14,7 @@ namespace offlineMeeting.Models.ViewModel
         {
             QuizEntityList = quizEntityList;
         }
-        public void setQuizEntity(QuizEntity quizEntity)
+        public void setQuizEntity(QuizEntity? quizEntity)
         {
             QuizEntity = quizEntity;
         }
