@@ -66,7 +66,7 @@ namespace offlineMeeting.Models.Process.Pos
         public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<int, int> categoryDic)
         {
             List<ResultsEntity> results = base
-                .GetFromSiteId(EventFoodSiteId, resultId)
+                .GetFromResultIdList(resultId)
                 .Where(x => x.ClassD == EventId)
                 .ToList();
 

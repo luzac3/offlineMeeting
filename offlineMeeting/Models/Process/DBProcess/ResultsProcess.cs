@@ -35,5 +35,12 @@ namespace offlineMeeting.Models.Process.DBProcess
                 .Where(x => Convert.ToInt32(x.ResultId) == Convert.ToInt32(resultId))
                 .FirstOrDefault() ?? throw new Exception("invalid resultId");
         }
+
+        protected List<ResultsEntity> GetFromResultIdList(List<int> resultIdList)
+        {
+            return Results
+                .Where(y => resultIdList.Contains(Convert.ToInt32(y.ResultId)))
+                .ToList();
+        }
     }
 }
