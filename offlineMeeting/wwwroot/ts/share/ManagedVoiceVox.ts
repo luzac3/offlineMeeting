@@ -1,15 +1,18 @@
 export class ManagedVoiceVox {
     playVoiceVox = async (text: string, speaker: number = 3, ctx: AudioContext) => {
+        // const apiBaseUrl = "http://localhost:50021";
+        const apiBaseUrl = "/voicevox-api";
+
         // audio_query生成
         const queryRes = await fetch(
-            `http://localhost:50021/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`,
+            `${apiBaseUrl}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`,
             { method: "POST" }
         );
         const audioQuery = await queryRes.json();
 
         // 音声合成（WAVデータ取得）
         const synthRes = await fetch(
-            `http://localhost:50021/synthesis?speaker=${speaker}`,
+            `${apiBaseUrl}/synthesis?speaker=${speaker}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
