@@ -13,6 +13,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/2.0.1/spinkit.min.css">
     </head>
     <body>
         <header>
@@ -90,6 +91,9 @@
             }
         </header>
         <div class="container">
+            <div id="loading-overlay" class="loading-overlay nodisplay">
+                <div class="loading"></div>
+            </div>
             <main id="main" role="main" class="pb-3">
                 @RenderBody()
             </main>

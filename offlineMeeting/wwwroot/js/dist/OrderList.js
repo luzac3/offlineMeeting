@@ -287,6 +287,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   FetchApi: () => (/* binding */ FetchApi)
 /* harmony export */ });
+var _a;
 class FetchApi {
     constructor() {
         this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
@@ -304,11 +305,14 @@ class FetchApi {
                     body: JSON.stringify(body)
                 });
             }
+            ManageLoadElement.set();
             const response = await fetch(request).catch(e => { throw e; });
             if (!response.ok) {
+                ManageLoadElement.remove();
                 throw new Error(response.statusText);
             }
             if (!needResponseData) {
+                ManageLoadElement.remove();
                 return;
             }
             switch (responseKind) {
@@ -327,9 +331,22 @@ class FetchApi {
             // エラー処理
             console.log(error);
             throw error;
+        })
+            .finally(() => {
+            ManageLoadElement.remove();
         });
     }
 }
+class ManageLoadElement {
+}
+_a = ManageLoadElement;
+ManageLoadElement.loadElement = document.getElementById("loading-overlay");
+ManageLoadElement.set = () => {
+    _a.loadElement.classList.remove("nodisplay");
+};
+ManageLoadElement.remove = () => {
+    _a.loadElement.classList.add("nodisplay");
+};
 
 
 /***/ }),
