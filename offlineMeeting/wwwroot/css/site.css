@@ -32,8 +32,8 @@ body {
     background-color:dimgray;
 }
 
-.nodisplay{
-    display: none;
+.nodisplay {
+    display: none !important;
 }
 
 #menu {
