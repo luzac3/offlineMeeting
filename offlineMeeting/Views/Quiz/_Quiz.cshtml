@@ -9,7 +9,11 @@
         <p>@(Model.QuizEntity?.Quiz)</p>
         @if (@Model.QuizEntity?.QuizImage != "")
         {
-            <img src="@(Model.QuizEntity?.QuizImage)" class="quiz_image" />
+            <div>
+                <a href="@(Model.QuizEntity?.QuizImage)" class="quiz_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="quiz">
+                    <img src="@(Model.QuizEntity?.QuizImage)" class="quiz_image" />
+                </a>
+            </div>
         }
     }
 }

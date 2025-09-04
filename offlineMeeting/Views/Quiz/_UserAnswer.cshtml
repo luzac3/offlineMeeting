@@ -5,7 +5,11 @@
     var path = Context.Request.Path.ToString();
     <div class="answer">
         <div>
-            <img src="@(Model.AnswerEntity?.Image)" class="quiz_image" />
+            <div>
+                <a href="@(Model.AnswerEntity?.Image)" class="quiz_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="quiz">
+                    <img src="@(Model.AnswerEntity?.Image)" class="quiz_image" />
+                </a>
+            </div>
         </div>
         <div>
             <p>@(Model.AnswerEntity?.UserName)</p>

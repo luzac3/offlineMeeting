@@ -29,7 +29,7 @@ namespace offlineMeeting.Models.Process.Quiz
             {
                 return null;
             } else { 
-                string[]? imageSplit = result!.DescriptionB?.Split("/");
+                string[]? imageSplit = result!.DescriptionC?.Split("/");
                 string guid = "";
                 if (imageSplit != null && imageSplit?.Length > 2)
                 {
@@ -59,7 +59,7 @@ namespace offlineMeeting.Models.Process.Quiz
             ResultsEntity result = base
                 .GetSingleRecord(resultId);
 
-            string[]? imageSplit = result!.DescriptionB?.Split("/");
+            string[]? imageSplit = result!.DescriptionC?.Split("/");
             string guid = "";
             if (imageSplit != null && imageSplit?.Length > 2)
             {
@@ -99,9 +99,9 @@ namespace offlineMeeting.Models.Process.Quiz
                         new QuizEntity(
                             resultId: result.ResultId.ToString(),
                             eventId: EventId,
-                            quiz: result.DescriptionA,
+                            quiz: result.ClassC,
                             quizImage: "",
-                            hint: result.DescriptionD,
+                            hint: "",
                             maxPoint: Convert.ToInt32(result.NumA),
                             answer: result.ClassB,
                             explanation: result.DescriptionB
