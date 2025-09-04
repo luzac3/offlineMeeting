@@ -3,8 +3,15 @@
     ViewData["Title"] = "ShowQuiz";
 }
 @section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
     <script src="~/js/dist/QuizOrner.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
 }
 @model offlineMeeting.Models.ViewModel.QuizViewModel
 
@@ -15,7 +22,9 @@
         {
             <div class="answer">
                 <div>
-                    <img src="@(answerEntity.Image)" class="quiz_image" />
+                    <a href="@(answerEntity.Image)" class="quiz_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="quiz">
+                        <img src="@(answerEntity.Image)" class="quiz_image" />
+                    </a>
                 </div>
                 <div>
                     <p>@(answerEntity.UserName)</p>
