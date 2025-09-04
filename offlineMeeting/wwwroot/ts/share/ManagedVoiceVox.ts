@@ -1,7 +1,8 @@
 export class ManagedVoiceVox {
     playVoiceVox = async (text: string, speaker: number = 3, ctx: AudioContext) => {
-        // const apiBaseUrl = "http://localhost:50021";
-        const apiBaseUrl = "/voicevox-api";
+        const apiBaseUrl = process.env.NODE_ENV === "development"
+            ? "http://localhost:50021"
+            : "/voicevox-api";
 
         // audio_query生成
         const queryRes = await fetch(
