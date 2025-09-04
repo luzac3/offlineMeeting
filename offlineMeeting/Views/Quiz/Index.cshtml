@@ -2,8 +2,15 @@
     ViewData["Title"] = "Quiz";
 }
 @section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
     <script src="~/js/dist/QuizUser.js" defer></script>
     <link rel="stylesheet" href="~/css/Quiz/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
 }
 <div id="quiz">
     <partial name="/Views/Quiz/_Quiz.cshtml" />
