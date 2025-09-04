@@ -1,0 +1,11 @@
+#main {
+    position: relative;
+    margin-top: 20%;
+}
+    #main div {
+        text-align: center;
+    }
+
+#qr img {
+    margin:auto;
+}
