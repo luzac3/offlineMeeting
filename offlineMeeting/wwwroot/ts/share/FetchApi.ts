@@ -22,13 +22,17 @@ export class FetchApi {
             });
         }
 
+        ManageLoadElement.set();
+
         const response = await fetch(request).catch(e => { throw e });
 
         if (!response.ok) {
+            ManageLoadElement.remove();
             throw new Error(response.statusText);
         }
 
         if (!needResponseData) {
+            ManageLoadElement.remove();
             return;
         }
 
@@ -48,6 +52,20 @@ export class FetchApi {
             // エラー処理
             console.log(error);
             throw error;
+        })
+        .finally(() => {
+            ManageLoadElement.remove();
         });
+    }
+}
+
+class  ManageLoadElement {
+    static　loadElement = document.getElementById("loading-overlay") as HTMLElement;
+    static　set = () => {
+        this.loadElement.classList.remove("nodisplay");
+    }
+
+    static　remove = () => {
+        this.loadElement.classList.add("nodisplay");
     }
 }
