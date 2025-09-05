@@ -9,3 +9,12 @@
 #qr img {
     margin:auto;
 }
+
+.comingsoon {
+    font-size: 20px;
+    color: gray;
+    margin-top: 10%;
+}
+    .comingsoon h1 {
+        text-align: center;
+    }

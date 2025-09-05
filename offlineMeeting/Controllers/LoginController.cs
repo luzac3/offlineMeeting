@@ -59,10 +59,24 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public async Task<IActionResult> QrRegister([FromQuery] string eid, string uid)
         {
+            // 特定日時の設定
+            var openDate = new DateTime(2025, 9, 7, 10, 0, 0);
+
+            // 現在時刻がopenDateより前ならリダイレクト
+            if (DateTime.Now < openDate)
+            {
+                return Redirect("~/Login/ComingSoon");
+            }
+
             SendRegisterProcess sendRegisterProcess = new (hubContext: _hubContext, eventId: eid, userCd: uid);
             RegisterViewModel registerViewModel = new (await sendRegisterProcess.Send());
 
             return View(registerViewModel);
+        }
+
+        public IActionResult ComingSoon()
+        {
+            return View();
         }
     }
 }
