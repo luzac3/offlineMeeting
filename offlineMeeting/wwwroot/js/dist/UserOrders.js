@@ -4175,8 +4175,9 @@ __webpack_require__.r(__webpack_exports__);
 class ManagedVoiceVox {
     constructor() {
         this.playVoiceVox = async (text, speaker = 3, ctx) => {
-            // const apiBaseUrl = "http://localhost:50021";
-            const apiBaseUrl = "/voicevox-api";
+            const apiBaseUrl =  true
+                ? "http://localhost:50021"
+                : 0;
             // audio_query生成
             const queryRes = await fetch(`${apiBaseUrl}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`, { method: "POST" });
             const audioQuery = await queryRes.json();
