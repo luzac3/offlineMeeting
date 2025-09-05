@@ -73,5 +73,10 @@ namespace offlineMeeting.Controllers
 
             return View(registerViewModel);
         }
+
+        public IActionResult ComingSoon()
+        {
+            return View();
+        }
     }
 }
