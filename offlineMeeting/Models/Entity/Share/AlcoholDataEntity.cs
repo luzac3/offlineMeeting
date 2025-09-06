@@ -20,6 +20,7 @@ namespace offlineMeeting.Models.Entity.Share
         public bool Priority { get; set; } // 優先
         public bool Hide { get; set; } // 隠す
         public bool Ordered { get; set; } = false; // 注文済み
+        public string? Taseting { get; set; } // 合う料理
         public string? RarityReason { get; set; } // レアリティの理由
         public string? Explanation { get; set; } // 説明
         public string? MainLabel { get; set; } // メインラベル
@@ -48,6 +49,7 @@ namespace offlineMeeting.Models.Entity.Share
             bool priority,
             bool hide,
             bool ordered,
+            string? taseting,
             string? rarityReason = null,
             string? explanation = null,
             string? mainLabel = null,
@@ -77,6 +79,7 @@ namespace offlineMeeting.Models.Entity.Share
             Priority = priority;
             Hide = hide;
             Ordered = ordered;
+            Taseting = taseting;
             RarityReason = rarityReason;
             Explanation = explanation;
             MainLabel = mainLabel;

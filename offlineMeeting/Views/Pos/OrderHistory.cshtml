@@ -1,0 +1,53 @@
+@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    ViewData["Title"] = "注文履歴";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
+    <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
+    <script src="~/js/dist/UserOrders.js" defer></script>
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script>
+         document.addEventListener('DOMContentLoaded', function () {
+            new SmartPhoto(".js-smartPhoto");
+        });
+    </script>
+}
+
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+<h1 class="order_histroy_title">注文履歴</h1>
+<table id="user_order_list">
+    <thead>
+        <tr>
+            <th>商品名</th>
+            <th>数量(分量)</th>
+        </tr>
+    </thead>
+    <tbody id="contents">
+        @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
+        {
+            <tr>
+                <td>@orderTableEntity?.PurchaseName</td>
+                <td>
+                    @if (orderTableEntity?.AlcoholQuantity == 36)
+                    {
+                        @($"{orderTableEntity?.Number * 2}勺")
+                    }
+                    else if (orderTableEntity?.AlcoholQuantity == 180)
+                    {
+                        @($"{orderTableEntity?.Number}合")
+                    }
+                    else
+                    {
+                        @($"{orderTableEntity?.Number}")
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <br /><button id="back" type="button">戻る</button>
+</div>
