@@ -93,6 +93,10 @@
                             <td class="abv">@(Model.AlcoholDataEntity?.RicePolishingRatio)度</td>
                         </tr>
                         <tr>
+                            <td>合う料理</td>
+                            <td class="taseting">@Html.Raw(Model.AlcoholDataEntity?.Taseting)度</td>
+                        </tr>
+                        <tr>
                             <td>レア度の理由</td>
                             <td class="reality_reason">@Html.Raw(Model.AlcoholDataEntity?.RarityReason)</td>
                         </tr>
