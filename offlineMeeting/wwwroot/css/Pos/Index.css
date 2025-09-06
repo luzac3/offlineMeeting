@@ -134,3 +134,7 @@ table {
         border: 1px solid #888; /* 枠線の色や太さはお好みで調整可能 */
         padding: 6px; /* 余白（任意） */
     }
+
+.order_histroy_title {
+    text-align: center;
+}
