@@ -73,7 +73,7 @@
                                 }
                             </p>
                             <p class="alcoholName">
-                                <span>@(alcoholDataEntity.Priority ? "☆" : "")@(alcoholDataEntity.Abbreviation == "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
+                                <span>@(alcoholDataEntity.Priority ? "☆" : "")@(alcoholDataEntity.Abbreviation != "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
                             </p>
                             <p class="alcohol_poncoin">
                                 <img src="/image/poncoin.png" alt="image" />
