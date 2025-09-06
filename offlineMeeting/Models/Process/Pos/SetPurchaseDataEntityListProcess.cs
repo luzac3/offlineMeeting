@@ -104,6 +104,7 @@ namespace offlineMeeting.Models.Process.Pos
                         resultId: result.ResultId,
                         image: image == null ? "" : $"data:image/jpeg;base64,{image}",
                         purchaseName: purchaseName,
+                        foodCategory: result.ClassB,
                         category: getCategory(result),
                         coinNumber: Convert.ToInt32(result.NumG),
                         leftAmount: Convert.ToInt32(result.NumE),
