@@ -137,7 +137,8 @@ namespace offlineMeeting.Models.Process.Share
                             leftAmount: Convert.ToInt32(result.NumH),
                             priority: result.CheckA ?? false,
                             hide: result.CheckB ?? false,
-                            ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
+                            ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
+                            taseting: result.DescriptionE?.Replace("\n", "<br>")
                         )
                     );
             }
@@ -183,6 +184,7 @@ namespace offlineMeeting.Models.Process.Share
                 priority: result.CheckA ?? false,
                 hide: result.CheckB ?? false,
                 ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
+                taseting: result.DescriptionE?.Replace("\n", "<br>"),
                 rarityReason: result.DescriptionF?.Replace("\n", "<br>"),
                 explanation: result.DescriptionC?.Replace("\n", "<br>"),
                 mainLabel: brewery?.DescriptionA?.Replace("\n", "<br>"),
