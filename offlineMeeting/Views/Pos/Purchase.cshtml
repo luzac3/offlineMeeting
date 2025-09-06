@@ -24,56 +24,113 @@
             foreach (PurchaseDataEntity purchaseDataEntity in Model.PurchaseDataEntityList ?? new List<PurchaseDataEntity> { })
             {
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
-                <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
-                    <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
-                        <input class="category nodisplay" value="1" />
-                        <div class="open_modal">
-                            <p class="food_image_container">
-                                @if (@purchaseDataEntity.Image == "")
+                @if (purchaseDataEntity.FoodCategory != "1" && purchaseDataEntity.FoodCategory != "2")
+                {
+                    <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                        <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
+                            <input class="category nodisplay" value="1" />
+                            <div class="open_modal">
+                                <p class="food_image_container">
+                                    @if (@purchaseDataEntity.Image == "")
+                                    {
+                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                    }
+                                    @if (purchaseDataEntity.Ordered)
+                                    {
+                                        <img src="/image/ordered.png" class="orderd" alt="image" />
+                                    }
+                                </p>
+                                <p class="alcoholName">
+                                    <span>@(purchaseDataEntity.PurchaseName)</span>
+                                </p>
+                                <p>
+                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <span> × </span>
+                                    <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                    <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
+                                </p>
+                                <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
+                            </div>
+                            <p>
+                                <span>×</span>
+                                <select class="order_number">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </p>
+                            <p>
+                                @if (purchaseDataEntity.LeftAmount <= 0)
                                 {
-                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    <span>品切れ</span>
                                 }
                                 else
                                 {
-                                    <img src="@(purchaseDataEntity.Image)" class="food_image" />
-                                }
-                                @if (purchaseDataEntity.Ordered)
-                                {
-                                    <img src="/image/ordered.png" class="orderd" alt="image" />
+                                    <button class="order_button" type="button">注文に追加</button>
                                 }
                             </p>
-                            <p class="alcoholName">
-                                <span>@(purchaseDataEntity.PurchaseName)</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                        <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
+                            <input class="category nodisplay" value="1" />
+                            <div class="open_modal">
+                                <p class="food_image_container">
+                                    @if (@purchaseDataEntity.Image == "")
+                                    {
+                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                    }
+                                    @if (purchaseDataEntity.Ordered)
+                                    {
+                                        <img src="/image/ordered.png" class="orderd" alt="image" />
+                                    }
+                                </p>
+                                <p class="alcoholName">
+                                    <span>ごはん　@(purchaseDataEntity.PurchaseName)</span>
+                                </p>
+                                <p>
+                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <span> × </span>
+                                    <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                    <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
+                                </p>
+                                <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
+                            </div>
+                            <p>
+                                <span>×</span>
+                                <select class="order_number">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
                             </p>
                             <p>
-                                <img class="poncoin_img" src="/image/poncoin.png" />
-                                <span> × </span>
-                                <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
-                                <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
-                            </p>
-                            <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
-                        </div>
-                        <p>
-                            <span>×</span>
-                            <select class="order_number">
-                                @for (int i = 1; i <= 5; i++)
+                                @if (purchaseDataEntity.LeftAmount <= 0)
                                 {
-                                    <option value="@i">@i</option>
+                                    <span>品切れ</span>
                                 }
-                            </select>
-                        </p>
-                        <p>
-                            @if (purchaseDataEntity.LeftAmount <= 0)
-                            {
-                                <span>品切れ</span>
-                            }
-                            else
-                            {
-                                <button class="order_button" type="button">注文に追加</button>
-                            }
-                        </p>
+                                else
+                                {
+                                    <button class="order_button" type="button">注文に追加</button>
+                                }
+                            </p>
+                        </div>
                     </div>
-                </div>
+                }
+                
             }
         }
     </div>
