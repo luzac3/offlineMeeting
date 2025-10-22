@@ -1,3 +1,4 @@
+/// <reference path="../../types/electron.d.ts" />
 export class PrintOrder {
     // Electron が利用可能ならテンプレート印刷を要求する
     private RequestElectronPrint = (orderId: number) => {
