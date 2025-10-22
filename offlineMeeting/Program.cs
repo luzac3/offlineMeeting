@@ -13,6 +13,9 @@ builder.Services.AddSignalR();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add PWA to the container.
+builder.Services.AddProgressiveWebApp();
+
 var app = builder.Build();
 
 app.UseStaticFiles(new StaticFileOptions
