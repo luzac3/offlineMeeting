@@ -3,9 +3,18 @@
   "version": "0.1.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "build": "webpack --mode development",
+    "watch": "webpack -w",
+    "start": "webpack-dev-server --host=0.0.0.0 --hot --inline --progress --colors  --history-api-fallback",
+    "release": "webpack --mode=production",
+    "publish": "npm run release && dotnet publish -c Release"
   },
   "devDependencies": {
-    "electron": "^26.0.0"
+    "@electron-forge/cli": "",
+    "@types/node": "",
+    "electron": "",
+    "ts-loader": "^9.2.3",
+    "webpack-cli": "^6.0.1",
+    "tsconfig-paths-webpack-plugin": ""
   }
 }
