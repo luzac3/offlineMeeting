@@ -2,12 +2,10 @@ using Microsoft.AspNetCore.Http;
 using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
-using System.Net.Http;
 
 namespace offlineMeeting.Models.Process.Pos
 {
@@ -18,16 +16,25 @@ namespace offlineMeeting.Models.Process.Pos
         private int JoinerSiteId;
         private string EventId;
 
-        public GetUsersOrderProcess(int orderSiteId, int joinerSiteId, HttpContext httpContext)
+        public GetUsersOrderProcess(int orderSiteId, int joinerSiteId, HttpContext httpContext, string electronEid = "")
         {
             HttpContext = httpContext;
-            ManageEventId manageEventId = new ManageEventId(httpContext);
 
-            EventId = manageEventId.GetEventId();
+            if(electronEid != "")
+            {
+                EventId = electronEid;
+            }
+            else
+            {
+                ManageEventId manageEventId = new ManageEventId(httpContext);
+                EventId = manageEventId.GetEventId();
+            }
+
             if (EventId == "0")
             {
                 throw new DataException("イベントIDが不正です");
             }
+
             OrderSiteId = orderSiteId;
             JoinerSiteId = joinerSiteId;
         }

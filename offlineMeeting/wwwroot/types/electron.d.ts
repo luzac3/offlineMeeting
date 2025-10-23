@@ -1,12 +1,10 @@
 declare global {
     interface ElectronPrintArgs {
-        template: string;
-        apiPath: string;
-        headers?: Record<string, string>;
+        url: string;
     }
 
     interface ElectronAPI {
-        printWithTemplate: (args: ElectronPrintArgs) => Promise<{ ok: boolean; reason?: string }>;
+        printReceipt: (args: ElectronPrintArgs) => Promise<{ ok: boolean; reason?: string }>;
     }
 
     interface Window {

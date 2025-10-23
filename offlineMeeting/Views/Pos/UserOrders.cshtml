@@ -1,6 +1,12 @@
+@using offlineMeeting.Models.Entity.Share;
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
+    ElectronEntity? electron = ViewData["Electron"] as offlineMeeting.Models.Entity.Share.ElectronEntity;
+    @if (electron!.IsElectron)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
     ViewData["Title"] = "ユーザーオーダー";
 }
 
