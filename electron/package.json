@@ -12,9 +12,11 @@
   "devDependencies": {
     "@electron-forge/cli": "",
     "@types/node": "",
-    "electron": "",
     "ts-loader": "^9.2.3",
     "webpack-cli": "^6.0.1",
     "tsconfig-paths-webpack-plugin": ""
+  },
+  "dependencies": {
+    "electron": "^26.0.0"
   }
 }
