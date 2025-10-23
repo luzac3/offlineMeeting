@@ -138,3 +138,8 @@ table {
 .order_histroy_title {
     text-align: center;
 }
+
+.electron_body{
+    position: relative;
+    margin: 5%;
+}

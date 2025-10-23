@@ -44,7 +44,8 @@ namespace offlineMeeting.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["UserData"] = setViewDataProcess.Set(HttpContext);
+            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext);
+            ViewData["Electron"] = setViewDataProcess.SetElectron();
             base.OnActionExecuting(context);
         }
 
@@ -133,6 +134,20 @@ namespace offlineMeeting.Controllers
         public IActionResult UserOrders()
         {
             GetUsersOrderProcess getUsersOrderProcess = new (OrderSiteId, JoinerSiteId, HttpContext);
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
+
+            return View(PosViewModel);
+        }
+
+
+        // electron経由で表示する場合
+        [HttpGet]
+        public IActionResult UserOrders([FromQuery] string eid)
+        {
+            SetViewDataProcess setViewDataProcess = new();
+            ViewData["Electron"] = setViewDataProcess.SetElectron(true);
+
+            GetUsersOrderProcess getUsersOrderProcess = new(OrderSiteId, JoinerSiteId, HttpContext, eid);
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return View(PosViewModel);

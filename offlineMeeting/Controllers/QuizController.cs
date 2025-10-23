@@ -43,7 +43,7 @@ namespace offlineMeeting.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["UserData"] = setViewDataProcess.Set(HttpContext);
+            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext);
             base.OnActionExecuting(context);
         }
 

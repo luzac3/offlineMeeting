@@ -1,27 +1,15 @@
 /// <reference path="../../types/electron.d.ts" />
 export class PrintOrder {
-    // Electron ‚ª—˜—p‰Â”\‚È‚çƒeƒ“ƒvƒŒ[ƒgˆóü‚ð—v‹‚·‚é
+    // Electron ãŒåˆ©ç”¨å¯èƒ½ãªã‚‰ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå°åˆ·ã‚’è¦æ±‚ã™ã‚‹
     private RequestElectronPrint = (orderId: number) => {
-        const apiPath = `/Pos/GetPrintData?orderId=${encodeURIComponent(orderId)}`; // ƒT[ƒo‘¤‚Å JSON ‚ð•Ô‚· endpoint
         const args = {
-            template: 'order.html',
-            apiPath: apiPath,
-            // headers: { Authorization: 'Bearer ...' } // •K—v‚È‚ç“n‚·
+            url: 'https://sample'
         };
 
-        if (window.electronAPI && window.electronAPI.printWithTemplate) {
-            window.electronAPI.printWithTemplate(args)
-                .then(res => {
-                    if (!res.ok) {
-                        console.error('ˆóüŽ¸”s:', res.reason);
-                        alert('ˆóü‚ÉŽ¸”s‚µ‚Ü‚µ‚½:' + (res.reason || 'unknown'));
-                    }
-                }).catch(err => {
-                    console.error(err);
-                    alert('ˆóüƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B');
-                });
+        if (window.electronAPI && window.electronAPI.printReceipt) {
+            window.electronAPI.printReceipt(args);
         } else {
-            alert('Electron API ‚ª—˜—p‚Å‚«‚Ü‚¹‚ñB’Êí‚Ìƒuƒ‰ƒEƒUˆóü‚ÉƒtƒH[ƒ‹ƒoƒbƒN‚µ‚Ä‚­‚¾‚³‚¢B');
+            alert('Electron API ãŒåˆ©ç”¨ã§ãã¾ã›ã‚“ã€‚é€šå¸¸ã®ãƒ–ãƒ©ã‚¦ã‚¶å°åˆ·ã«ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ã—ã¦ãã ã•ã„ã€‚');
         }
     }
 }
