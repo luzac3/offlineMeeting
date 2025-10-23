@@ -4,11 +4,11 @@ const webpack = require('webpack');
 
 let entries = {};
 glob
-    .sync("./wwwroot/ts/**/Index.ts", {
-        ignore: "./wwwroot/ts/**/*.d.ts"
+    .sync("./appData/ts/**/Index.ts", {
+        ignore: "./appData/ts/**/*.d.ts"
     }).
     map(function (file) {
-        const key = file.replace("./wwwroot/ts/", "").replace(/\.ts$/, "").split("/")[0];
+        const key = file.replace("./appData/ts/", "").replace(/\.ts$/, "").split("/")[0];
         entries[key] = file;
     });
 
@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         entry: entries,
 
         output: {
-            path: path.join(__dirname, "/wwwroot/js/dist"),
+            path: path.join(__dirname, "./"),
             filename: '[name].js'
         },
 
@@ -42,10 +42,10 @@ module.exports = (env, argv) => {
                 '.ts', '.js',
             ],
             alias: {
-                '@root': path.resolve(__dirname, './wwwroot/ts/')
+                '@root': path.resolve(__dirname, './appData/ts/')
             }
         },
-        target: 'node'
+        target: 'electron-renderer'
     }
 
     if (IS_DEVELOPMENT) {
