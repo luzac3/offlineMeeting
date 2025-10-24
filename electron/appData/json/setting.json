@@ -1,5 +1,11 @@
 {
   "url": "http://localhost:58874/Pos/UserOrders?eid=812",
   "printUrlBase": "http://localhost:58874/Pos/PrintOrders?eid=812&resultId=",
-  "deviceName": "Brother HL-2240D series"
+  "deviceName": "Brother HL-2240D series",
+  "printOptions": {
+    "pageSize": "A4",
+    "marginsType": 1,
+    "landscape": false,
+    "fitToPageEnabled": true
+  }
 }
