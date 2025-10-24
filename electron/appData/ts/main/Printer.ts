@@ -8,23 +8,16 @@ export class Printer {
             const bufferData = fs.readFileSync('./appData/json/setting.json');
             const data = JSON.parse(bufferData.toString());
 
-            const printWindow = new BrowserWindow({
-                show: false,
-                webPreferences: {
-                    contextIsolation: true
-                }
-            });
             args.resultIds.forEach(async (resultId) => {
                 const url = data.printUrlBase + resultId;
-                try {
-                    await printWindow.loadURL(url);
-                } catch (loadErr: unknown) {
-                        const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
-                    const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
-                        CreateLog.WriteLog(msg);
-                }
+                const printWindow = new BrowserWindow({
+                    show: false,
+                    webPreferences: {
+                        contextIsolation: true
+                    }
+                });
 
-                printWindow.webContents.on('did-finish-load', () => {
+                printWindow.webContents.once('did-finish-load', () => {
                     try {
                         printWindow.webContents.print({
                             silent: true,
@@ -43,6 +36,14 @@ export class Printer {
                         try { printWindow.close(); } catch (e) { /* ignore */ }
                     }
                 });
+
+                try {
+                    await printWindow.loadURL(url);
+                } catch (loadErr: unknown) {
+                    const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
+                    const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
+                    CreateLog.WriteLog(msg);
+                }
             });
         } catch (err) {
             const msg = `Printer.Print: unexpected error ${err && (err as any).stack ? (err as any).stack : String(err)}`;

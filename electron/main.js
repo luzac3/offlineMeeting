@@ -76,7 +76,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../share/CreateLog */ "./appData/ts/share/CreateLog.ts");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! electron */ "electron");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
 var _a;
+
 
 
 class Printer {
@@ -84,51 +87,49 @@ class Printer {
 _a = Printer;
 Printer.Print = async (event, args) => {
     try {
-        const url = typeof args === 'string' ? args : args?.url;
-        if (!url) {
-            const msg = 'Printer.Print: no url provided';
-            console.error(msg);
-            void _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-            return;
-        }
-        const printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
-            show: false,
-            webPreferences: {
-                contextIsolation: true
-            }
-        });
-        try {
-            await printWindow.loadURL(url);
-        }
-        catch (loadErr) {
-            const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
-            const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
-            _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-        }
-        printWindow.webContents.on('did-finish-load', () => {
-            try {
-                printWindow.webContents.print({
-                    silent: true,
-                    deviceName: 'Brother HL-2240D series'
-                }, (success, failureReason) => {
-                    if (!success) {
-                        const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;
-                        _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-                    }
+        const bufferData = fs__WEBPACK_IMPORTED_MODULE_2___default().readFileSync('./appData/json/setting.json');
+        const data = JSON.parse(bufferData.toString());
+        args.resultIds.forEach(async (resultId) => {
+            const url = data.printUrlBase + resultId;
+            const printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
+                show: false,
+                webPreferences: {
+                    contextIsolation: true
+                }
+            });
+            printWindow.webContents.once('did-finish-load', () => {
+                try {
+                    printWindow.webContents.print({
+                        silent: true,
+                        deviceName: data.deviceName
+                    }, (success, failureReason) => {
+                        if (!success) {
+                            const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;
+                            _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+                        }
+                        try {
+                            printWindow.close();
+                        }
+                        catch (e) { /* ignore */ }
+                    });
+                }
+                catch (printErr) {
+                    const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
+                    const msg = `Printer.Print: print exception url=${url} err=${errMsg}`;
+                    _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
                     try {
                         printWindow.close();
                     }
                     catch (e) { /* ignore */ }
-                });
-            }
-            catch (printErr) {
-                const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
-                const msg = `Printer.Print: print exception url=${url}} err=${errMsg}`;
-                _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-                try {
-                    printWindow.close();
                 }
-                catch (e) { /* ignore */ }
+            });
+            try {
+                await printWindow.loadURL(url);
+            }
+            catch (loadErr) {
+                const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
+                const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
+                _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
             }
         });
     }
@@ -214,7 +215,7 @@ class CreateLog {
 _a = CreateLog;
 CreateLog.WriteLog = async (message) => {
     try {
-        const dir = path__WEBPACK_IMPORTED_MODULE_0___default().resolve(process.cwd(), 'wwwroot', 'log');
+        const dir = path__WEBPACK_IMPORTED_MODULE_0___default().resolve(process.cwd(), 'appData', 'log');
         await fs__WEBPACK_IMPORTED_MODULE_1___default().promises.mkdir(dir, { recursive: true });
         const file = _a.MakeLogFilePath();
         const timestamp = new Date().toISOString();
