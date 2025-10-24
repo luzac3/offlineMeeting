@@ -7,6 +7,7 @@ export class Printer {
         try {
             const bufferData = fs.readFileSync('./appData/json/setting.json');
             const data = JSON.parse(bufferData.toString());
+            const printOptions = data.printOptions || {};
 
             args.resultIds.forEach(async (resultId) => {
                 const url = data.printUrlBase + resultId;
@@ -21,7 +22,8 @@ export class Printer {
                     try {
                         printWindow.webContents.print({
                             silent: true,
-                            deviceName: data.deviceName
+                            deviceName: data.deviceName,
+                            ...printOptions
                         }, (success, failureReason) => {
                             if (!success) {
                                 const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;

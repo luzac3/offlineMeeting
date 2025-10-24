@@ -89,6 +89,7 @@ Printer.Print = async (event, args) => {
     try {
         const bufferData = fs__WEBPACK_IMPORTED_MODULE_2___default().readFileSync('./appData/json/setting.json');
         const data = JSON.parse(bufferData.toString());
+        const printOptions = data.printOptions || {};
         args.resultIds.forEach(async (resultId) => {
             const url = data.printUrlBase + resultId;
             const printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
@@ -101,7 +102,8 @@ Printer.Print = async (event, args) => {
                 try {
                     printWindow.webContents.print({
                         silent: true,
-                        deviceName: data.deviceName
+                        deviceName: data.deviceName,
+                        ...printOptions
                     }, (success, failureReason) => {
                         if (!success) {
                             const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;
