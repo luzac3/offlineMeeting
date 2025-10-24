@@ -2,13 +2,18 @@
 
 @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
 {
+    int row = @orderTableEntity!.OrderPurchaseTableEntityList?.Count() ?? 0;
     <tr>
-        <th>
+        <th rowspan="@(row + 1)">
+            <input type="checkbox" class="completed_check" name="completed_check" />
+            <input type="text" value="@(orderTableEntity.ResultId)" class="nodisplay" />
+        </th>
+        <th colspan="4">
             <span>@orderTableEntity.OrderNumber </span>
             <span>@orderTableEntity.UserName </span>
-            <span>@(orderTableEntity.IsAlcohol ? "(Al)" : "")</span>
+            <span>@(orderTableEntity.IsAlcohol ? "(C2H5OH)" : "")</span>
         </th>
-        <th>
+        <th rowspan="@(row + 1)">
             <button type="button" class="completed">提供済</button>
             <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
         </th>
@@ -16,10 +21,6 @@
     @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
     {
         <tr>
-            <td>
-                <input type="checkbox" class="completed_check" name="completed_check" />
-                <input type="text" value="@(orderPurchaseTableEntity?.ResultId)" class="nodisplay" />
-            </td>
             <td>@orderPurchaseTableEntity?.ResultId</td>
             <td>@orderPurchaseTableEntity?.PurchaseCd</td>
             <td>@orderPurchaseTableEntity?.PurchaseName</td>

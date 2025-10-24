@@ -8,7 +8,6 @@ using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
-using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Text.Json;
@@ -18,13 +17,14 @@ namespace offlineMeeting.Models.Process.Pos
     public class SendOrderProcess : ResultsProcess
     {
         private int OrderSiteId;
+        private int OrderPurchaseSiteId;
         private int JoinerSiteId;
         private string EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
+        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId,int orderPurchseSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
@@ -34,6 +34,7 @@ namespace offlineMeeting.Models.Process.Pos
                 throw new DataException("イベントIDが不正です");
             }
             OrderSiteId = orderSiteId;
+            OrderPurchaseSiteId = orderPurchseSiteId;
             JoinerSiteId = joinerSiteId;
             HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
@@ -100,7 +101,7 @@ namespace offlineMeeting.Models.Process.Pos
             List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
 
             // アルコールの登録
-            if (alcoholOrderPostEntityList.Count() > 0 || orderPostEntityList.Any(x => x.ResultId == extraId))
+            if (alcoholOrderPostEntityList.Count() > 0 || nonAlcoholOrderPostEntityList.Any(x => x.ResultId == extraId))
             {
                 orderResultId = await SendOrder(
                     orderPostEntity: alcoholOrderPostEntityList.FirstOrDefault()!,
@@ -176,7 +177,7 @@ namespace offlineMeeting.Models.Process.Pos
 
             try
             {
-                PleasanterApiResponseEntity response = await pleasanterApi.BulkInsert(sendOrderPurchaseEntityList, OrderSiteId.ToString());
+                PleasanterApiResponseEntity response = await pleasanterApi.BulkInsert(sendOrderPurchaseEntityList, OrderPurchaseSiteId.ToString());
                 ErrorCheck(response);
 
                 // 正常終了時、OrderListに通知
@@ -250,16 +251,23 @@ namespace offlineMeeting.Models.Process.Pos
 
             string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
 
-            if (orderNumbers.Length >= 4)
+            if (orderNumbers.Length >= 3)
             {
-                orderNumber = $"{orderNumbers[2]}-{orderNumbers[3]}";
+                orderNumber = $"{orderNumbers[2]}";
             }
 
-            List<List<SendOrderPurchaseEntity>> separateSendOrderPurchaseEntityList = new List<List<SendOrderPurchaseEntity>>()
+            List<List<SendOrderPurchaseEntity>> separateSendOrderPurchaseEntityList = new List<List<SendOrderPurchaseEntity>>();
+            List<SendOrderPurchaseEntity> alcoholList = sendOrderPurchaseEntityList.Where(x => x.CheckHash.CheckA).ToList();
+            List<SendOrderPurchaseEntity> nonAlcoholList = sendOrderPurchaseEntityList.Where(x => !x.CheckHash.CheckA).ToList();
+
+            if (alcoholList.Any())
             {
-                sendOrderPurchaseEntityList.Where(x => x.CheckHash.CheckA).ToList(),
-                sendOrderPurchaseEntityList.Where(x => !x.CheckHash.CheckA).ToList()
-            };
+                separateSendOrderPurchaseEntityList.Add(alcoholList);
+            }
+            if (nonAlcoholList.Any())
+            {
+                separateSendOrderPurchaseEntityList.Add(nonAlcoholList);
+            }
 
             separateSendOrderPurchaseEntityList.ForEach(separateSendOrderPurchaseEntity =>
             {
@@ -322,7 +330,7 @@ namespace offlineMeeting.Models.Process.Pos
         {
             return JsonSerializer.Serialize(new Dictionary<string, string> {
                 { "status", response.StatusCode.ToString() },
-                { "message", response.Message.ToString() },
+                { "message", response.Message ?? "" },
                 { "targeturl", response.Url ?? "" },
                 { "sendData", response.SendData ?? "" }
             });
@@ -330,7 +338,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         private void ErrorCheck(PleasanterApiResponseEntity response)
         {
-            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            if (!response.StatusCode.Equals(HttpStatusCode.OK) && response.StatusCode != 200)
             {
                 throw new HttpRequestException(
                     JsonSerialize(response)

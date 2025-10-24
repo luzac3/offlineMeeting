@@ -143,3 +143,22 @@ table {
     position: relative;
     margin: 5%;
 }
+#print {
+    width: 400px;
+}
+    #print h1 {
+        font-size: 3em;
+    }
+    #print td {
+        font-size: 2em;
+    }
+    #print table, th, td {
+        border: none !important;
+    }
+
+.purchase_name{
+    width:75%;
+}
+.order_number {
+    width: 10%;
+}

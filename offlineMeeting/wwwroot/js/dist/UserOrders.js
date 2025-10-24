@@ -3943,11 +3943,10 @@ class GetNewOrder {
                     document.getElementById("contents").innerHTML = data;
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
-                _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(Number(parsedData.orderId));
-                // fixme そもそも転送先のURLでDBたたくので取得するのはResultIdだけでよいのでは
-                // Get用のResultIdだけをPrintに転送して、表示用のURLを送ればよさそう
-                // 厳密にいうとリストだけど
-                JSON.parse(parsedData.orderTableEntityList).forEach(async (order) => {
+                const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
+                const resultIds = orderTableEntityList.map(x => x.ResultId);
+                _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(resultIds);
+                orderTableEntityList.forEach(async (order) => {
                     /*
                     if (order.Hide) {
                         return;
@@ -4074,9 +4073,9 @@ __webpack_require__.r(__webpack_exports__);
 class PrintOrder {
 }
 // Electron が利用可能ならテンプレート印刷を要求する
-PrintOrder.RequestElectronPrint = (orderId) => {
+PrintOrder.RequestElectronPrint = (orderIds) => {
     const args = {
-        url: ['https://sample']
+        resultIds: orderIds
     };
     if (window.electronAPI && window.electronAPI.printReceipt) {
         window.electronAPI.printReceipt(args);

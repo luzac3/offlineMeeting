@@ -1,5 +1,4 @@
 using offlineMeeting.Models.Entity.Share;
-using System.Security.Policy;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Share
@@ -33,7 +32,7 @@ namespace offlineMeeting.Models.Share
             StringContent content = MakeJson(sendPlesanterApiEntity);
             string url = $"{pleasanterUrlBase}/api/items/{siteId}/bulkupsert";
 
-            return await HttpClient.PostAsync(url, content);
+            return await SendPost(url, content);
         }
 
         public async Task<PleasanterApiResponseEntity> Insert(Object data, string siteId)
@@ -41,13 +40,37 @@ namespace offlineMeeting.Models.Share
             StringContent content = MakeJson(data);
             string url = $"{pleasanterUrlBase}/api/items/{siteId}/create";
 
-            return AddInformation(await HttpClient.PostAsync(url, content), url, content);
+            return await SendPost(url, content);
         }
 
         private StringContent MakeJson(Object data)
         {
             string json = JsonSerializer.Serialize(data);
             return new(json, System.Text.Encoding.UTF8, "application/json");
+        }
+
+        private async Task<PleasanterApiResponseEntity> SendPost(string url, StringContent content)
+        {
+            PleasanterApiResponseEntity info = new();
+
+            try
+            {
+                HttpResponseMessage response = await HttpClient.PostAsync(url, content);
+                string responseBody = await response.Content.ReadAsStringAsync();
+                info = AddInformation(DeserializeJson(responseBody), url, content);
+            }
+            catch (HttpRequestException ex)
+            {
+                var error = ex.Message;
+            }
+
+            return info;
+        }
+
+        private PleasanterApiResponseEntity DeserializeJson(string responseBody)
+        {
+            return JsonSerializer.Deserialize<PleasanterApiResponseEntity>(responseBody)
+                   ?? new PleasanterApiResponseEntity();
         }
 
         private PleasanterApiResponseEntity AddInformation(
