@@ -1,6 +1,6 @@
 declare global {
     interface ElectronPrintArgs {
-        url: string;
+        url: string[];
     }
 
     interface ElectronAPI {

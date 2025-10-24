@@ -3927,6 +3927,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
 /* harmony import */ var _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ManagedVoiceVox */ "./wwwroot/ts/share/ManagedVoiceVox.ts");
+/* harmony import */ var _PrintOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PrintOrder */ "./wwwroot/ts/UserOrders/PrintOrder.ts");
+
 
 
 class GetNewOrder {
@@ -3941,7 +3943,12 @@ class GetNewOrder {
                     document.getElementById("contents").innerHTML = data;
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
-                JSON.parse(parsedData.orderTableEntity).forEach(async (order) => {
+                _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(Number(parsedData.orderId));
+                // fixme そもそも転送先のURLでDBたたくので取得するのはResultIdだけでよいのでは
+                // Get用のResultIdだけをPrintに転送して、表示用のURLを送ればよさそう
+                // 厳密にいうとリストだけど
+                JSON.parse(parsedData.orderTableEntityList).forEach(async (order) => {
+                    /*
                     if (order.Hide) {
                         return;
                     }
@@ -3949,13 +3956,12 @@ class GetNewOrder {
                     readText += `商品名、${order.PurchaseRead}。`;
                     if (order.AlcoholQuantity == 36) {
                         readText += `分量、${Number(order.Number) * 2}勺。`;
-                    }
-                    else if (order.AlcoholQuantity == 180) {
+                    } else if (order.AlcoholQuantity == 180) {
                         readText += `分量、${order.Number}合。`;
-                    }
-                    else {
+                    } else {
                         readText += `オーダー数、${order.Number}。`;
                     }
+                */
                 });
                 await managedVoiceVox.playVoiceVox(readText, 3, ctx);
             });
@@ -4049,6 +4055,36 @@ class OrderComplete {
         this.Complete();
     }
 }
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/UserOrders/PrintOrder.ts":
+/*!*********************************************!*\
+  !*** ./wwwroot/ts/UserOrders/PrintOrder.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PrintOrder: () => (/* binding */ PrintOrder)
+/* harmony export */ });
+/// <reference path="../../types/electron.d.ts" />
+class PrintOrder {
+}
+// Electron が利用可能ならテンプレート印刷を要求する
+PrintOrder.RequestElectronPrint = (orderId) => {
+    const args = {
+        url: ['https://sample']
+    };
+    if (window.electronAPI && window.electronAPI.printReceipt) {
+        window.electronAPI.printReceipt(args);
+    }
+    else {
+        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
+    }
+};
 
 
 /***/ }),

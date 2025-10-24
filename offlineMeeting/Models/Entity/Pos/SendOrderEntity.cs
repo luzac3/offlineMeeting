@@ -9,66 +9,56 @@ namespace offlineMeeting.Models.Entity.Pos.SendOrderEntity
         public SendOrderEntity(
             string eventNumber,
             string userCd,
-            string resultId,
-            int orderNumber,
             int orderCoins,
-            int alcoholAmount
+            bool isAlcohol
         )
         {
             ClassHash = new ClassHashEntity(
                 eventNumber: eventNumber,
-                userCd: userCd,
-                resultId: resultId
+                userCd: userCd
             );
             NumHash = new NumHashEntity(
-                orderNumber: orderNumber,
-                orderCoins: orderCoins,
-                alcoholAmount: alcoholAmount
+                orderCoins: orderCoins
             );
-            CheckHash = new CheckHashEntity();
+            CheckHash = new CheckHashEntity(isAlcohol: isAlcohol);
         }
     }
 
     public class ClassHashEntity
     {
         public string ClassA { get; set; } // EventNumber
-        public string ClassB { get; set; } // UserCd
-        public string ClassC { get; set; } // ここのResultIdは、商品のId
+        public string ClassD { get; set; } // UserCd
         public ClassHashEntity(
             string eventNumber,
-            string userCd,
-            string resultId
+            string userCd
         )
         {
             ClassA = eventNumber;
-            ClassB = userCd;
-            ClassC = resultId;
+            ClassD = userCd;
         }
     }
 
     public class NumHashEntity
     {
-        public int NumA { get; set; } // OrderNumber
-        public int NumB { get; set; } // OrderNumber
-        public int NumC { get; set; } // AlcoholAmount
+        public int NumA { get; set; } // OrderCoins
         public NumHashEntity(
-            int orderNumber,
-            int orderCoins,
-            int alcoholAmount
+            int orderCoins
         )
         {
-            NumA = orderNumber;
-            NumB = orderCoins;
-            NumC = alcoholAmount;
+            NumA = orderCoins;
         }
     }
 
     public class CheckHashEntity
     {
         public bool CheckA { get; set; } // InProgress
-        public CheckHashEntity()
+        public bool CheckB { get; set; } // IsAlcohol
+        public CheckHashEntity(
+            bool isAlcohol
+        )
         {
             CheckA = true;
+            CheckB = isAlcohol;
         }
     }
 }
