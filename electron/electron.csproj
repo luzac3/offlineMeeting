@@ -65,6 +65,7 @@
     <Content Include="appData\lib\jquery\dist\jquery.min.js" />
     <Content Include="appData\lib\jquery\dist\jquery.min.map" />
     <Content Include="appData\lib\jquery\LICENSE.txt" />
+    <Content Include="appData\log\20251023-12-45-53.log" />
     <Content Include="appData\ts\main\CreateWindow.ts" />
     <Content Include="appData\ts\main\Index.ts" />
     <Content Include="appData\ts\main\Printer.ts" />
@@ -72,6 +73,10 @@
     <Content Include="appData\ts\preload\Index.ts" />
     <Content Include="appData\ts\share\CreateLog.ts" />
     <Content Include="appData\types\electron-ambient.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

@@ -1,3 +1,5 @@
 {
-  "url": "http://localhost:58874/Pos/UserOrders?eid=56275"
+  "url": "http://localhost:58874/Pos/UserOrders?eid=56275",
+  "printUrlBase": "http://localhost:58874/Pos/PrintOrders?resultId",
+  "deviceName": "Brother HL-2240D series"
 }
