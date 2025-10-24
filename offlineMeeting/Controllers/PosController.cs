@@ -9,6 +9,7 @@ using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace offlineMeeting.Controllers
 {
@@ -197,13 +198,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintOrders([FromQuery] string resultId)
+        public IActionResult PrintOrders([FromQuery] string eid, string resultId)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
-                HttpContext
+                HttpContext,
+                eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
 

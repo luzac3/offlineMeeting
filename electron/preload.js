@@ -91,7 +91,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
 
 electron__WEBPACK_IMPORTED_MODULE_0__.contextBridge.exposeInMainWorld('electronAPI', {
-    printReceipt: (url) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('printReceipt', url)
+    printReceipt: (args) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('printReceipt', args)
 });
 
 })();
