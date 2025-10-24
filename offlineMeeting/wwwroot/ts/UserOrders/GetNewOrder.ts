@@ -22,6 +22,7 @@ export class GetNewOrder {
     GetNewOrder = (signalR: SignalR, ctx: AudioContext) => {
         signalR.get("NewOrder", async (data) => {
             const parsedData = <{ [key: string]: string }>data;
+
             // 読み上げる
             console.log(parsedData.userName);
 
@@ -30,13 +31,12 @@ export class GetNewOrder {
                 document.getElementById("contents")!.innerHTML = data;
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
+            const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList) as { [key: string]: string }[];
+            const resultIds = orderTableEntityList.map(x => x.ResultId);
 
-            PrintOrder.RequestElectronPrint(Number(parsedData.orderId));
-            // fixme そもそも転送先のURLでDBたたくので取得するのはResultIdだけでよいのでは
-            // Get用のResultIdだけをPrintに転送して、表示用のURLを送ればよさそう
-            // 厳密にいうとリストだけど
+            PrintOrder.RequestElectronPrint(resultIds);
 
-            JSON.parse(parsedData.orderTableEntityList).forEach(async (order: { [key: string]: string | number }) => {
+            orderTableEntityList.forEach(async (order: { [key: string]: string | number }) => {
                 /*
                 if (order.Hide) {
                     return;

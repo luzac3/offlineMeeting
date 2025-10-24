@@ -126,6 +126,7 @@ namespace offlineMeeting.Controllers
             SendOrderProcess sendOrderProcess = new(
                 orderPostEntityList,
                 orderSiteId: OrderSiteId,
+                orderPurchseSiteId: OrderPurchaseSiteId,
                 joinerSiteId: JoinerSiteId,
                 httpContext: HttpContext,
                 hubContext: _hubContext
@@ -133,25 +134,15 @@ namespace offlineMeeting.Controllers
             return await sendOrderProcess.Send(SakeSiteId);
         }
 
-        public IActionResult UserOrders()
-        {
-            GetUsersOrderProcess getUsersOrderProcess = new (
-                OrderSiteId,
-                OrderPurchaseSiteId,
-                JoinerSiteId,
-                HttpContext
-            );
-            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
-
-            return View(PosViewModel);
-        }
-
-        // electron経由で表示する場合
         [HttpGet]
         public IActionResult UserOrders([FromQuery] string eid)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["Electron"] = setViewDataProcess.SetElectron(true);
+            // electron経由で表示する場合
+            if (!string.IsNullOrEmpty(eid))
+            {
+                ViewData["Electron"] = setViewDataProcess.SetElectron(true);
+            }
 
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,

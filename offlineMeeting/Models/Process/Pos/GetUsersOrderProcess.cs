@@ -21,7 +21,7 @@ namespace offlineMeeting.Models.Process.Pos
         {
             HttpContext = httpContext;
 
-            if(electronEid != "")
+            if(!string.IsNullOrEmpty(electronEid))
             {
                 EventId = electronEid;
             }
@@ -86,13 +86,13 @@ namespace offlineMeeting.Models.Process.Pos
             foreach (ResultsEntity resultsEntity in resultsEntityList)
             {
                 GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
-                JoinerEntity userData = getUsersProcess.GetUserData(resultsEntity.ClassB ?? string.Empty);
+                JoinerEntity userData = getUsersProcess.GetUserData(resultsEntity.ClassD ?? string.Empty);
 
-                string? orderNumber = resultsEntity?.ClassC?.ToString();
+                string? orderNumber = resultsEntity?.ClassB?.ToString();
                 string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
-                if (orderNumbers.Length >= 4)
+                if (orderNumbers.Length >= 3)
                 {
-                    orderNumber = $"{orderNumbers[2]}-{orderNumbers[3]}";
+                    orderNumber = $"{orderNumbers[2]}";
                 }
 
                 orderTableEntity
@@ -120,7 +120,6 @@ namespace offlineMeeting.Models.Process.Pos
                 .GetFromSiteId(OrderPurchaseSiteId)
                 .Where(x => x.ClassA == EventId)
                 .Where(x => x.ClassE == resultId)
-                .Where(x => x.CheckA == true)
                 .OrderByDescending(x=>x.ResultId)
                 .ToList();
 

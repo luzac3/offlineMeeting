@@ -1,6 +1,8 @@
+using offlineMeeting.Models.Entity.Share;
+
 namespace offlineMeeting.Models.Entity.Pos.SendOrderEntity
 {
-    public class SendOrderEntity
+    public class SendOrderEntity: ApiEntity
     {
         public ClassHashEntity ClassHash { get; set; }
         public NumHashEntity NumHash { get; set; }

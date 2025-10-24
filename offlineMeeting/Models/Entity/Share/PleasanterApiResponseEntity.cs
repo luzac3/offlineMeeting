@@ -7,7 +7,7 @@ namespace offlineMeeting.Models.Entity.Share
         public int StatusCode { get; set; }
         public int LimitPerDate { get; set; }
         public int LimitRemaining { get; set; }
-        public int Message { get; set; }
+        public string? Message { get; set; }
         public string? Url { get; set; }
         public string? SendData { get; set; }
 
