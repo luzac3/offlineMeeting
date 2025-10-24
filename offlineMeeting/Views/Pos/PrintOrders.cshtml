@@ -1,0 +1,34 @@
+@using offlineMeeting.Models.Entity.Pos;
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+@{
+    Layout = null;
+}
+
+<div>
+    @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
+    {
+        <h1>@orderTableEntity.OrderNumber<span>@(orderTableEntity.IsAlcohol ? "(Al)" : "")</span></h1>
+        <h2>―――――――――――――――</h2>
+        @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
+        {
+            <p>
+                <span class="purchase_name">@orderPurchaseTableEntity?.PurchaseName</span>
+                <span class="order_number">
+                    @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
+                    {
+                        @($"{orderPurchaseTableEntity?.Number * 2}勺")
+                    }
+                    else if (orderPurchaseTableEntity?.AlcoholQuantity == 180)
+                    {
+                        @($"{orderPurchaseTableEntity?.Number}合")
+                    }
+                    else
+                    {
+                        @($"{orderPurchaseTableEntity?.Number}")
+                    }
+                </span>
+            </p>
+        }
+    }
+</div>

@@ -1,6 +1,7 @@
 import { SignalR } from "@root/share/SignalR";
 import { FetchApi } from "@root/share/FetchApi"
 import { ManagedVoiceVox } from "@root/share/ManagedVoiceVox";
+import { PrintOrder } from "./PrintOrder";
 
 export class GetNewOrder {
     private url: string;
@@ -30,7 +31,13 @@ export class GetNewOrder {
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
 
-            JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
+            PrintOrder.RequestElectronPrint(Number(parsedData.orderId));
+            // fixme そもそも転送先のURLでDBたたくので取得するのはResultIdだけでよいのでは
+            // Get用のResultIdだけをPrintに転送して、表示用のURLを送ればよさそう
+            // 厳密にいうとリストだけど
+
+            JSON.parse(parsedData.orderTableEntityList).forEach(async (order: { [key: string]: string | number }) => {
+                /*
                 if (order.Hide) {
                     return;
                 }
@@ -43,6 +50,7 @@ export class GetNewOrder {
                 } else {
                     readText += `オーダー数、${order.Number}。`;
                 }
+            */
             });
             await managedVoiceVox.playVoiceVox(readText, 3, ctx);
         });

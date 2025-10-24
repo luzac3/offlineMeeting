@@ -1,9 +1,9 @@
 /// <reference path="../../types/electron.d.ts" />
 export class PrintOrder {
     // Electron が利用可能ならテンプレート印刷を要求する
-    private RequestElectronPrint = (orderId: number) => {
+    static RequestElectronPrint = (orderId: number) => {
         const args = {
-            url: 'https://sample'
+            url: ['https://sample']
         };
 
         if (window.electronAPI && window.electronAPI.printReceipt) {

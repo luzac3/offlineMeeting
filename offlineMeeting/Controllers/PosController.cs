@@ -22,6 +22,7 @@ namespace offlineMeeting.Controllers
         private int EventFoodSiteId;
         private int RawFoodSiteId;
         private int OrderSiteId;
+        private int OrderPurchaseSiteId;
         private int JoinerSiteId;
 
         public PosController(
@@ -38,6 +39,7 @@ namespace offlineMeeting.Controllers
             EventFoodSiteId = tableIdProperty.EventFoodSiteId;
             RawFoodSiteId = tableIdProperty.RawFoodSiteId;
             OrderSiteId = tableIdProperty.OrderSiteId;
+            OrderPurchaseSiteId = tableIdProperty.OrderPurchaseSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
         }
 
@@ -133,12 +135,16 @@ namespace offlineMeeting.Controllers
 
         public IActionResult UserOrders()
         {
-            GetUsersOrderProcess getUsersOrderProcess = new (OrderSiteId, JoinerSiteId, HttpContext);
+            GetUsersOrderProcess getUsersOrderProcess = new (
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext
+            );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return View(PosViewModel);
         }
-
 
         // electron経由で表示する場合
         [HttpGet]
@@ -147,7 +153,13 @@ namespace offlineMeeting.Controllers
             SetViewDataProcess setViewDataProcess = new();
             ViewData["Electron"] = setViewDataProcess.SetElectron(true);
 
-            GetUsersOrderProcess getUsersOrderProcess = new(OrderSiteId, JoinerSiteId, HttpContext, eid);
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                eid
+            );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return View(PosViewModel);
@@ -155,7 +167,12 @@ namespace offlineMeeting.Controllers
 
         public IActionResult UserOrdersPartial()
         {
-            GetUsersOrderProcess getUsersOrderProcess = new(OrderSiteId, JoinerSiteId, HttpContext);
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext
+            );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
             return PartialView("_UserOrderContents", PosViewModel);
@@ -177,8 +194,27 @@ namespace offlineMeeting.Controllers
 
         public IActionResult OrderHistory()
         {
-            GetUsersOrderProcess getUsersOrderProcess = new(OrderSiteId, JoinerSiteId, HttpContext);
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext
+            );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.GetOwn(HttpContext));
+
+            return View(PosViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult PrintOrders([FromQuery] string resultId)
+        {
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
 
             return View(PosViewModel);
         }
