@@ -4,7 +4,7 @@ import path from 'path';
 
 export class CreateWindow {
     CreateWindow = (url: string, show = true) => {
-        app.whenReady().then(() => {
+        app.whenReady().then(async () => {
             console.log('createWindow ready');
             const win = new BrowserWindow({
                 width: 800,
@@ -16,8 +16,11 @@ export class CreateWindow {
                     nodeIntegration: false
                 }
             });
+            win.webContents.openDevTools();
 
-            // 読み込み完了で表示
+            // キャッシュクリア
+            await win.webContents.session.clearCache();
+
             win.once('ready-to-show', () => {
                 if (show) win.show();
             });
@@ -31,7 +34,6 @@ export class CreateWindow {
                 CreateLog.WriteLog(msg);
             }
 
-            // did-fail-load を監視してログ出力
             win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
                 const msg = `did-fail-load url=${validatedURL} code=${errorCode} desc=${errorDescription} isMainFrame=${isMainFrame}`;
                 CreateLog.WriteLog(msg);
@@ -39,6 +41,5 @@ export class CreateWindow {
 
             return win;
         });
-        
     }
 }

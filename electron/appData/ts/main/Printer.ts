@@ -3,53 +3,61 @@ import { BrowserWindow } from 'electron';
 import fs from 'fs';
 
 export class Printer {
-    static Print = async (event: any, args: { resultIds: string[] }) => {
+    printWindow: BrowserWindow;
+    url: string;
+    data: any;
+    constructor(resultId: string) {
+        const bufferData = fs.readFileSync('./appData/json/setting.json');
+        this.data = JSON.parse(bufferData.toString());
+        this.url = this.data.printUrlBase + resultId;;
+
+        this.printWindow = new BrowserWindow({
+            show: false,
+            webPreferences: {
+                contextIsolation: true
+            }
+        });
+
+    }
+    Print = async () => {
         try {
-            const bufferData = fs.readFileSync('./appData/json/setting.json');
-            const data = JSON.parse(bufferData.toString());
-            const printOptions = data.printOptions || {};
-
-            args.resultIds.forEach(async (resultId) => {
-                const url = data.printUrlBase + resultId;
-                const printWindow = new BrowserWindow({
-                    show: false,
-                    webPreferences: {
-                        contextIsolation: true
-                    }
-                });
-
-                printWindow.webContents.once('did-finish-load', () => {
-                    try {
-                        printWindow.webContents.print({
-                            silent: true,
-                            deviceName: data.deviceName,
-                            ...printOptions
-                        }, (success, failureReason) => {
-                            if (!success) {
-                                const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;
-                                CreateLog.WriteLog(msg);
-                            }
-                            try { printWindow.close(); } catch (e) { /* ignore */ }
-                        });
-                    } catch (printErr: unknown) {
-                        const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
-                        const msg = `Printer.Print: print exception url=${url} err=${errMsg}`;
-                        CreateLog.WriteLog(msg);
-                        try { printWindow.close(); } catch (e) { /* ignore */ }
-                    }
-                });
-
-                try {
-                    await printWindow.loadURL(url);
-                } catch (loadErr: unknown) {
-                    const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
-                    const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
-                    CreateLog.WriteLog(msg);
-                }
+            this.printWindow.webContents.once('did-finish-load', () => {
+                this.LoadedPrint();
             });
+
+            try {
+                await this.printWindow.loadURL(this.url);
+            } catch (loadErr: unknown) {
+                const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
+                const msg = `Printer.Print: loadURL failed url=${this.url} err=${errMsg}`;
+                CreateLog.WriteLog(msg);
+            }
         } catch (err) {
             const msg = `Printer.Print: unexpected error ${err && (err as any).stack ? (err as any).stack : String(err)}`;
             CreateLog.WriteLog(msg);
+        }
+    }
+
+    private LoadedPrint = () => {
+        try {
+            const printOptions = this.data.printOptions || {};
+
+            this.printWindow.webContents.print({
+                silent: true,
+                deviceName: this.data.deviceName,
+                ...printOptions
+            }, (success, failureReason) => {
+                if (!success) {
+                    const msg = `Printer.Print: print failed url=${this.url} reason=${failureReason}`;
+                    CreateLog.WriteLog(msg);
+                }
+                try { this.printWindow.close(); } catch (e) { /* ignore */ }
+            });
+        } catch (printErr: unknown) {
+            const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
+            const msg = `Printer.Print: print exception url=${this.url} err=${errMsg}`;
+            CreateLog.WriteLog(msg);
+            try { this.printWindow.close(); } catch (e) { /* ignore */ }
         }
     }
 }

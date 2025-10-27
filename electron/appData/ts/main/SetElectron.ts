@@ -13,6 +13,11 @@ export class SetElectron {
         const createWindow = new CreateWindow();
         createWindow.CreateWindow(data.url);
 
-        ipcMain.handle('printReceipt', (event, args) => Printer.Print(event, args));
+        ipcMain.handle('printReceipt', (event, args) => {
+            args.resultIds.forEach((resultId: string) => {
+                const printer = new Printer(resultId);
+                printer.Print();
+            });
+        });
     }
 }

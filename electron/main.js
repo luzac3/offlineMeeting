@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 class CreateWindow {
     constructor() {
         this.CreateWindow = (url, show = true) => {
-            electron__WEBPACK_IMPORTED_MODULE_1__.app.whenReady().then(() => {
+            electron__WEBPACK_IMPORTED_MODULE_1__.app.whenReady().then(async () => {
                 console.log('createWindow ready');
                 const win = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
                     width: 800,
@@ -35,7 +35,9 @@ class CreateWindow {
                         nodeIntegration: false
                     }
                 });
-                // 読み込み完了で表示
+                win.webContents.openDevTools();
+                // キャッシュクリア
+                await win.webContents.session.clearCache();
                 win.once('ready-to-show', () => {
                     if (show)
                         win.show();
@@ -49,7 +51,6 @@ class CreateWindow {
                     const msg = `loadURL failed url=${url} err=${errMsg}`;
                     _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
                 }
-                // did-fail-load を監視してログ出力
                 win.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
                     const msg = `did-fail-load url=${validatedURL} code=${errorCode} desc=${errorDescription} isMainFrame=${isMainFrame}`;
                     _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
@@ -78,68 +79,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
-var _a;
 
 
 
 class Printer {
-}
-_a = Printer;
-Printer.Print = async (event, args) => {
-    try {
-        const bufferData = fs__WEBPACK_IMPORTED_MODULE_2___default().readFileSync('./appData/json/setting.json');
-        const data = JSON.parse(bufferData.toString());
-        const printOptions = data.printOptions || {};
-        args.resultIds.forEach(async (resultId) => {
-            const url = data.printUrlBase + resultId;
-            const printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
-                show: false,
-                webPreferences: {
-                    contextIsolation: true
-                }
-            });
-            printWindow.webContents.once('did-finish-load', () => {
+    constructor(resultId) {
+        this.Print = async () => {
+            try {
+                this.printWindow.webContents.once('did-finish-load', () => {
+                    this.LoadedPrint();
+                });
                 try {
-                    printWindow.webContents.print({
-                        silent: true,
-                        deviceName: data.deviceName,
-                        ...printOptions
-                    }, (success, failureReason) => {
-                        if (!success) {
-                            const msg = `Printer.Print: print failed url=${url} reason=${failureReason}`;
-                            _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-                        }
-                        try {
-                            printWindow.close();
-                        }
-                        catch (e) { /* ignore */ }
-                    });
+                    await this.printWindow.loadURL(this.url);
                 }
-                catch (printErr) {
-                    const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
-                    const msg = `Printer.Print: print exception url=${url} err=${errMsg}`;
+                catch (loadErr) {
+                    const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
+                    const msg = `Printer.Print: loadURL failed url=${this.url} err=${errMsg}`;
                     _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+                }
+            }
+            catch (err) {
+                const msg = `Printer.Print: unexpected error ${err && err.stack ? err.stack : String(err)}`;
+                _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+            }
+        };
+        this.LoadedPrint = () => {
+            try {
+                const printOptions = this.data.printOptions || {};
+                this.printWindow.webContents.print({
+                    silent: true,
+                    deviceName: this.data.deviceName,
+                    ...printOptions
+                }, (success, failureReason) => {
+                    if (!success) {
+                        const msg = `Printer.Print: print failed url=${this.url} reason=${failureReason}`;
+                        _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+                    }
                     try {
-                        printWindow.close();
+                        this.printWindow.close();
                     }
                     catch (e) { /* ignore */ }
-                }
-            });
-            try {
-                await printWindow.loadURL(url);
+                });
             }
-            catch (loadErr) {
-                const errMsg = loadErr instanceof Error ? (loadErr.stack ?? loadErr.message) : String(loadErr);
-                const msg = `Printer.Print: loadURL failed url=${url} err=${errMsg}`;
+            catch (printErr) {
+                const errMsg = printErr instanceof Error ? (printErr.stack ?? printErr.message) : String(printErr);
+                const msg = `Printer.Print: print exception url=${this.url} err=${errMsg}`;
                 _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+                try {
+                    this.printWindow.close();
+                }
+                catch (e) { /* ignore */ }
+            }
+        };
+        const bufferData = fs__WEBPACK_IMPORTED_MODULE_2___default().readFileSync('./appData/json/setting.json');
+        this.data = JSON.parse(bufferData.toString());
+        this.url = this.data.printUrlBase + resultId;
+        ;
+        this.printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
+            show: false,
+            webPreferences: {
+                contextIsolation: true
             }
         });
     }
-    catch (err) {
-        const msg = `Printer.Print: unexpected error ${err && err.stack ? err.stack : String(err)}`;
-        _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
-    }
-};
+}
 
 
 /***/ }),
@@ -171,7 +174,12 @@ class SetElectron {
         const data = JSON.parse(bufferData.toString());
         const createWindow = new _CreateWindow__WEBPACK_IMPORTED_MODULE_0__.CreateWindow();
         createWindow.CreateWindow(data.url);
-        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printReceipt', (event, args) => _Printer__WEBPACK_IMPORTED_MODULE_1__.Printer.Print(event, args));
+        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printReceipt', (event, args) => {
+            args.resultIds.forEach((resultId) => {
+                const printer = new _Printer__WEBPACK_IMPORTED_MODULE_1__.Printer(resultId);
+                printer.Print();
+            });
+        });
     }
 }
 

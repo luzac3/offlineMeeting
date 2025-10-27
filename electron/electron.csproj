@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appData\css\electron.css" />
     <Content Include="appData\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <Content Include="appData\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
@@ -73,10 +80,6 @@
     <Content Include="appData\ts\preload\Index.ts" />
     <Content Include="appData\ts\share\CreateLog.ts" />
     <Content Include="appData\types\electron-ambient.d.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
