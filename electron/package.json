@@ -17,6 +17,6 @@
     "tsconfig-paths-webpack-plugin": ""
   },
   "dependencies": {
-    "electron": "^26.0.0"
+    "electron": "38.4.0"
   }
 }

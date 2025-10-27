@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    printReceipt: (args: { resultId: string[] }) => ipcRenderer.invoke('printReceipt', args)
+    printReceipt: (args: { resultIds: string[] }) => ipcRenderer.invoke('printReceipt', args)
 });
