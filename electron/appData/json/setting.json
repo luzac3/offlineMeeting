@@ -4,8 +4,8 @@
   "deviceName": "Brother HL-2240D series",
   "printOptions": {
     "pageSize": "A4",
-    "marginsType": 1,
-    "landscape": false,
-    "fitToPageEnabled": true
+    "margins": {
+      "marginType": "none" // マージンを無効化
+    }
   }
 }
