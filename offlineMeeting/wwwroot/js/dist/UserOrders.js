@@ -3941,11 +3941,11 @@ class GetNewOrder {
                 const managedVoiceVox = new _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__.ManagedVoiceVox();
                 this.send().then((data) => {
                     document.getElementById("contents").innerHTML = data;
+                    _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(resultIds);
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
                 const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
                 const resultIds = orderTableEntityList.map(x => x.ResultId);
-                _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(resultIds);
                 orderTableEntityList.forEach(async (order) => {
                     /*
                     if (order.Hide) {
@@ -3973,8 +3973,16 @@ class GetNewOrder {
                 throw e;
             });
         };
-        this.url = '/Pos/UserOrdersPartial';
-        this.method = 'POST';
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        if (params.has('eid')) {
+            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
+            this.method = 'GET';
+        }
+        else {
+            this.url = '/Pos/UserOrdersPartial';
+            this.method = 'POST';
+        }
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -4187,9 +4195,15 @@ class ManageLoadElement {
 _a = ManageLoadElement;
 ManageLoadElement.loadElement = document.getElementById("loading-overlay");
 ManageLoadElement.set = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.remove("nodisplay");
 };
 ManageLoadElement.remove = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.add("nodisplay");
 };
 

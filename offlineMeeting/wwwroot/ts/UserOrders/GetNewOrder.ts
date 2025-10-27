@@ -10,8 +10,17 @@ export class GetNewOrder {
     private responseKind: string;
 
     constructor() {
-        this.url = '/Pos/UserOrdersPartial';
-        this.method = 'POST';
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        if (params.has('eid')) {
+            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
+            this.method = 'GET';
+        } else {
+            this.url = '/Pos/UserOrdersPartial';
+            this.method = 'POST';
+        }
+
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -29,12 +38,12 @@ export class GetNewOrder {
             const managedVoiceVox = new ManagedVoiceVox();
             this.send().then((data) => {
                 document.getElementById("contents")!.innerHTML = data;
+                PrintOrder.RequestElectronPrint(resultIds);
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
             const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList) as { [key: string]: string }[];
             const resultIds = orderTableEntityList.map(x => x.ResultId);
 
-            PrintOrder.RequestElectronPrint(resultIds);
 
             orderTableEntityList.forEach(async (order: { [key: string]: string | number }) => {
                 /*
