@@ -157,13 +157,15 @@ namespace offlineMeeting.Controllers
             return View(PosViewModel);
         }
 
-        public IActionResult UserOrdersPartial()
+        [HttpGet]
+        public IActionResult UserOrdersPartial([FromQuery] string eid)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
-                HttpContext
+                HttpContext,
+                eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 

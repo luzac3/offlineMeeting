@@ -345,9 +345,15 @@ class ManageLoadElement {
 _a = ManageLoadElement;
 ManageLoadElement.loadElement = document.getElementById("loading-overlay");
 ManageLoadElement.set = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.remove("nodisplay");
 };
 ManageLoadElement.remove = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.add("nodisplay");
 };
 
