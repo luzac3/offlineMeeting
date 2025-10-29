@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "electron", "electron\electr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "printerSdk", "printerSdk\printerSdk.csproj", "{B86734B6-425B-45B4-AE93-41C35B6C8140}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ElectronSetup", "ElectronSetup\ElectronSetup.vdproj", "{B51C3FD1-D2DA-6235-6108-3CA09AAEAE8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,8 @@ Global
 		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B51C3FD1-D2DA-6235-6108-3CA09AAEAE8B}.Debug|Any CPU.ActiveCfg = Debug
+		{B51C3FD1-D2DA-6235-6108-3CA09AAEAE8B}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
