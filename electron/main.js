@@ -77,8 +77,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../share/CreateLog */ "./appData/ts/share/CreateLog.ts");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! electron */ "electron");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _share_GetSetting__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../share/GetSetting */ "./appData/ts/share/GetSetting.ts");
 
 
 
@@ -131,8 +130,7 @@ class Printer {
                 catch (e) { /* ignore */ }
             }
         };
-        const bufferData = fs__WEBPACK_IMPORTED_MODULE_2___default().readFileSync('./appData/json/setting.json');
-        this.data = JSON.parse(bufferData.toString());
+        this.data = _share_GetSetting__WEBPACK_IMPORTED_MODULE_2__.GetSetting.Setting();
         this.url = this.data.printUrlBase + resultId;
         ;
         this.printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
@@ -161,8 +159,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Printer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Printer */ "./appData/ts/main/Printer.ts");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! electron */ "electron");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _share_GetSetting__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../share/GetSetting */ "./appData/ts/share/GetSetting.ts");
 
 
 
@@ -170,8 +167,7 @@ __webpack_require__.r(__webpack_exports__);
 class SetElectron {
     constructor() {
         console.log('start set electron');
-        const bufferData = fs__WEBPACK_IMPORTED_MODULE_3___default().readFileSync('./appData/json/setting.json');
-        const data = JSON.parse(bufferData.toString());
+        const data = _share_GetSetting__WEBPACK_IMPORTED_MODULE_3__.GetSetting.Setting();
         const createWindow = new _CreateWindow__WEBPACK_IMPORTED_MODULE_0__.CreateWindow();
         createWindow.CreateWindow(data.url);
         electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printReceipt', (event, args) => {
@@ -249,6 +245,36 @@ CreateLog.MakeLogFilePath = () => {
     const fileName = `${y}${m}${d}-${hh}-${mm}-${ss}.log`;
     const dir = path__WEBPACK_IMPORTED_MODULE_0___default().resolve(process.cwd(), 'wwwroot', 'log');
     return path__WEBPACK_IMPORTED_MODULE_0___default().join(dir, fileName);
+};
+
+
+/***/ }),
+
+/***/ "./appData/ts/share/GetSetting.ts":
+/*!****************************************!*\
+  !*** ./appData/ts/share/GetSetting.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GetSetting: () => (/* binding */ GetSetting)
+/* harmony export */ });
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
+
+
+class GetSetting {
+}
+GetSetting.Setting = () => {
+    const isDev =  true || 0;
+    const settingPath = isDev
+        ? path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, 'appData/json/setting.json')
+        : path__WEBPACK_IMPORTED_MODULE_0___default().join(path__WEBPACK_IMPORTED_MODULE_0___default().dirname(process.execPath), 'setting.json');
+    const bufferData = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(settingPath);
+    return JSON.parse(bufferData.toString());
 };
 
 
