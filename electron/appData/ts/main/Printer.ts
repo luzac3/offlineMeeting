@@ -1,14 +1,13 @@
 import { CreateLog } from '../share/CreateLog';
 import { BrowserWindow } from 'electron';
-import fs from 'fs';
+import { GetSetting } from '../share/GetSetting';
 
 export class Printer {
     printWindow: BrowserWindow;
     url: string;
     data: any;
     constructor(resultId: string) {
-        const bufferData = fs.readFileSync('./appData/json/setting.json');
-        this.data = JSON.parse(bufferData.toString());
+        this.data = GetSetting.Setting();
         this.url = this.data.printUrlBase + resultId;;
 
         this.printWindow = new BrowserWindow({
