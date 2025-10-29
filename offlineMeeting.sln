@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "offlineMeeting", "offlineMe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "electron", "electron\electron.csproj", "{F8235A8C-C737-4525-870F-45FDD2EDC1C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "printerSdk", "printerSdk\printerSdk.csproj", "{B86734B6-425B-45B4-AE93-41C35B6C8140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F8235A8C-C737-4525-870F-45FDD2EDC1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8235A8C-C737-4525-870F-45FDD2EDC1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8235A8C-C737-4525-870F-45FDD2EDC1C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86734B6-425B-45B4-AE93-41C35B6C8140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
