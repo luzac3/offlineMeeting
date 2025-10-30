@@ -1,6 +1,12 @@
+@using offlineMeeting.Models.Entity.Share;
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
+    ElectronEntity? electron = ViewData["Electron"] as offlineMeeting.Models.Entity.Share.ElectronEntity;
+    @if (electron!.IsElectron)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
     ViewData["Title"] = "ユーザーオーダー";
 }
 
@@ -22,13 +28,15 @@
 <table id="user_order_list">
     <thead>
         <tr>
-            <th></th>
+            <th rowspan="2"></th>
+            <th colspan="4">連番 ユーザー名</th>
+            <th rowspan="2">提供済</th>
+        </tr>
+        <tr>
             <th>オーダーID</th>
-            <th>ユーザー名</th>
             <th>商品番号</th>
             <th>商品名</th>
             <th>数量(分量)</th>
-            <th>提供済</th>
         </tr>
     </thead>
     <tbody id="contents">
@@ -36,5 +44,9 @@
     </tbody>
 </table>
 <div>
-    <br /><button id="back" type="button">戻る</button>
+    @if (!electron!.IsElectron)
+    {
+        <br />
+        <button id="back" type="button">戻る</button>
+    }
 </div>

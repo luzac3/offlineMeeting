@@ -3927,6 +3927,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
 /* harmony import */ var _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ManagedVoiceVox */ "./wwwroot/ts/share/ManagedVoiceVox.ts");
+/* harmony import */ var _PrintOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PrintOrder */ "./wwwroot/ts/UserOrders/PrintOrder.ts");
+
 
 
 class GetNewOrder {
@@ -3939,9 +3941,13 @@ class GetNewOrder {
                 const managedVoiceVox = new _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__.ManagedVoiceVox();
                 this.send().then((data) => {
                     document.getElementById("contents").innerHTML = data;
+                    _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(resultIds);
                 });
                 let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
-                JSON.parse(parsedData.orderTableEntity).forEach(async (order) => {
+                const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
+                const resultIds = orderTableEntityList.map(x => x.ResultId);
+                orderTableEntityList.forEach(async (order) => {
+                    /*
                     if (order.Hide) {
                         return;
                     }
@@ -3949,13 +3955,12 @@ class GetNewOrder {
                     readText += `商品名、${order.PurchaseRead}。`;
                     if (order.AlcoholQuantity == 36) {
                         readText += `分量、${Number(order.Number) * 2}勺。`;
-                    }
-                    else if (order.AlcoholQuantity == 180) {
+                    } else if (order.AlcoholQuantity == 180) {
                         readText += `分量、${order.Number}合。`;
-                    }
-                    else {
+                    } else {
                         readText += `オーダー数、${order.Number}。`;
                     }
+                */
                 });
                 await managedVoiceVox.playVoiceVox(readText, 3, ctx);
             });
@@ -3968,8 +3973,16 @@ class GetNewOrder {
                 throw e;
             });
         };
-        this.url = '/Pos/UserOrdersPartial';
-        this.method = 'POST';
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        if (params.has('eid')) {
+            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
+            this.method = 'GET';
+        }
+        else {
+            this.url = '/Pos/UserOrdersPartial';
+            this.method = 'POST';
+        }
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -4049,6 +4062,36 @@ class OrderComplete {
         this.Complete();
     }
 }
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/UserOrders/PrintOrder.ts":
+/*!*********************************************!*\
+  !*** ./wwwroot/ts/UserOrders/PrintOrder.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PrintOrder: () => (/* binding */ PrintOrder)
+/* harmony export */ });
+/// <reference path="../../types/electron.d.ts" />
+class PrintOrder {
+}
+// Electron が利用可能ならテンプレート印刷を要求する
+PrintOrder.RequestElectronPrint = (orderIds) => {
+    const args = {
+        resultIds: orderIds
+    };
+    if (window.electronAPI && window.electronAPI.printReceipt) {
+        window.electronAPI.printReceipt(args);
+    }
+    else {
+        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
+    }
+};
 
 
 /***/ }),
@@ -4152,9 +4195,15 @@ class ManageLoadElement {
 _a = ManageLoadElement;
 ManageLoadElement.loadElement = document.getElementById("loading-overlay");
 ManageLoadElement.set = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.remove("nodisplay");
 };
 ManageLoadElement.remove = () => {
+    if (_a.loadElement == null) {
+        return;
+    }
     _a.loadElement.classList.add("nodisplay");
 };
 

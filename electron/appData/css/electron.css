@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 12px;
+}
+
+h1 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.name {
+    flex: 1;
+}
+
+.qty {
+    width: 60px;
+    text-align: right;
+}
+
+.price {
+    width: 80px;
+    text-align: right;
+}
+
+.footer {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #666;
+}
