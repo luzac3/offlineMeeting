@@ -13,10 +13,10 @@
         {
             <h1>
                 @orderTableEntity.OrderNumber
-                <span>@(orderTableEntity.IsAlcohol ? "(C2H5OH)" : "") </span>
+                <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "") </span>
                 <span>@(orderTableEntity.UserName)</span>
             </h1>
-        <h2>―――――――――――</h2>
+        <h2>―――――――――――――</h2>
             <table>
                 @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
                 {
