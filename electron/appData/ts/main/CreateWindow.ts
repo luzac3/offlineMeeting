@@ -16,7 +16,6 @@ export class CreateWindow {
                     nodeIntegration: false
                 }
             });
-            win.webContents.openDevTools();
 
             // キャッシュクリア
             await win.webContents.session.clearCache();
