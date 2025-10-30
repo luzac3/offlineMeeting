@@ -1,0 +1,35 @@
+body{
+    width: 100%;
+}
+
+.container{
+    margin: 0;
+    padding: 0;
+}
+
+.electron_body {
+    width: 75mm;
+    position: relative;
+    margin-left: 1%;
+}
+#print {
+    width: 70mm;
+    margin:0;
+}
+    #print h1 {
+        font-size: 2em;
+    }
+    #print h2 {
+        font-size: 1.3em;
+    }
+    #print td {
+        font-size: 1.1em;
+    }
+
+.purchase_name{
+    width:75%;
+}
+.order_number {
+    width: 10%;
+    text-align: right;
+}

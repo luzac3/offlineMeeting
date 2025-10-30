@@ -90,9 +90,10 @@ namespace offlineMeeting.Models.Process.Pos
         {
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
             int orderResultId = 0;
+            List<int> orderResultIdList = new ();
 
-            #if DEBUG
-                int extraId = 1014;
+#if DEBUG
+            int extraId = 1014;
             #else
                 int extraId = 56483;
             #endif
@@ -109,6 +110,7 @@ namespace offlineMeeting.Models.Process.Pos
                     coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
                     isAlcohol: true
                 );
+                orderResultIdList.Add(orderResultId);
             }
 
             if (orderPostEntityList.Any(x => x.ResultId == extraId))
@@ -154,6 +156,7 @@ namespace offlineMeeting.Models.Process.Pos
                     coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
                     isAlcohol: false
                 );
+                orderResultIdList.Add(orderResultId);
             }
 
             sendOrderPurchaseEntityList.AddRange(
@@ -168,7 +171,7 @@ namespace offlineMeeting.Models.Process.Pos
             // 印刷(表示)用リストの作成
             List<OrderTableEntity> orderTableEntityList = CreateBackOrderTableEntityList(
                 sendOrderPurchaseEntityList: sendOrderPurchaseEntityList,
-                orderResultId: orderResultId,
+                orderResultIdList: orderResultIdList,
                 userCd: userCd,
                 userName: userName
             );
@@ -238,57 +241,47 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderTableEntity> CreateBackOrderTableEntityList(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            int orderResultId,
+            List<int> orderResultIdList,
             string userCd,
             string userName
         )
         {
-            List<OrderTableEntity> orderTableEntity = new List<OrderTableEntity>();
+            List<OrderTableEntity> orderTableEntityList = new List<OrderTableEntity>();
 
-            ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderResultId.ToString()) ? null : base.GetSingleRecord(orderResultId.ToString());
-
-            string? orderNumber = resultsEntity?.ClassC?.ToString();
-
-            string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
-
-            if (orderNumbers.Length >= 3)
+            orderResultIdList.ForEach(orderResultId =>
             {
-                orderNumber = $"{orderNumbers[2]}";
-            }
 
-            List<List<SendOrderPurchaseEntity>> separateSendOrderPurchaseEntityList = new List<List<SendOrderPurchaseEntity>>();
-            List<SendOrderPurchaseEntity> alcoholList = sendOrderPurchaseEntityList.Where(x => x.CheckHash.CheckA).ToList();
-            List<SendOrderPurchaseEntity> nonAlcoholList = sendOrderPurchaseEntityList.Where(x => !x.CheckHash.CheckA).ToList();
+                ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderResultId.ToString()) ? null : base.GetSingleRecord(orderResultId.ToString());
 
-            if (alcoholList.Any())
-            {
-                separateSendOrderPurchaseEntityList.Add(alcoholList);
-            }
-            if (nonAlcoholList.Any())
-            {
-                separateSendOrderPurchaseEntityList.Add(nonAlcoholList);
-            }
+                string? orderNumber = resultsEntity?.ClassC?.ToString();
 
-            separateSendOrderPurchaseEntityList.ForEach(separateSendOrderPurchaseEntity =>
-            {
-                orderTableEntity.Add(
+                string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
+
+                if (orderNumbers.Length >= 3)
+                {
+                    orderNumber = $"{orderNumbers[2]}";
+                }
+
+                orderTableEntityList.Add(
                     new OrderTableEntity(
                         resultId: resultsEntity?.ResultId.ToString(),
                         userCd: userCd,
                         userName: userName,
                         orderNumber: orderNumber,
-                        isAlcohol: separateSendOrderPurchaseEntity[0].CheckHash.CheckA,
+                        isAlcohol: resultsEntity?.CheckB ?? false,
                         orderPurchaseTableEntityList: CreateBackOrderPurchaseTableEntity(
-                            sendOrderPurchaseEntityList: sendOrderPurchaseEntityList,
+                            sendOrderPurchaseEntityList: sendOrderPurchaseEntityList
+                                .Where(x => x.CheckHash.CheckA == (resultsEntity?.CheckB ?? false))
+                                .ToList(),
                             userCd: userCd,
                             userName: userName,
-                            isAlcohol: separateSendOrderPurchaseEntity[0].CheckHash.CheckA
+                            isAlcohol: resultsEntity?.CheckB ?? false
                         )
                     )
                 );
             });
 
-            return orderTableEntity;
+            return orderTableEntityList;
         }
 
         private List<OrderPurchaseTableEntity> CreateBackOrderPurchaseTableEntity(
