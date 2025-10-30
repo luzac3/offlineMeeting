@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutPrint.cshtml";
 }
 @section Scripts {
-    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Pos/PosPrint.css" asp-append-version="true" />
 }
 @model offlineMeeting.Models.ViewModel.PosViewModel;
 
@@ -16,7 +16,7 @@
                 <span>@(orderTableEntity.IsAlcohol ? "(C2H5OH)" : "") </span>
                 <span>@(orderTableEntity.UserName)</span>
             </h1>
-        <h2>―――――――――――――</h2>
+        <h2>―――――――――――</h2>
             <table>
                 @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
                 {
