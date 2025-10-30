@@ -1,0 +1,58 @@
+body{
+    width: 100%;
+}
+
+.electron_body {
+    width: 98%;
+    position: relative;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+#print {
+    width: 78mm;
+    margin:0;
+}
+    #print h1 {
+        font-size: 2em;
+    }
+    #print h2 {
+        font-size: 1.3em;
+    }
+    #print td {
+        font-size: 1.2em;
+    }
+
+.purchase_name{
+    width:75%;
+}
+.order_number {
+    width: 10%;
+    text-align: right;
+}
+
+@media print {
+    #print {
+        width: 98%;
+        height: auto;
+        margin: 0 auto;
+        padding: 0;
+        overflow: visible;
+        page-break-after: auto;
+        page-break-before: auto;
+        box-sizing: border-box;
+        display: block !important;
+    }
+
+    .purchase_name {
+        width: 75%;
+    }
+
+    .order_number {
+        width: 10%;
+        text-align: right;
+    }
+
+    table {
+        width: 100%;
+    }
+}
