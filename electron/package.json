@@ -16,7 +16,7 @@
     "ts-loader": "^9.2.3",
     "tsconfig-paths-webpack-plugin": "",
     "webpack-cli": "^6.0.1",
-    "electron": "38.4.0"
+    "electron": "^38.4.0"
   },
   "dependencies": {
   }
