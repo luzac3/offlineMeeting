@@ -11,10 +11,5 @@ win:
 extraFiles:
   - from: ./appData/json/setting.json
     to: ./
-nsis:
-  oneClick: false
-  perMachine: true
-  allowElevation: true
-  allowToChangeInstallationDirectory: true
 files: []
 electronVersion: 38.4.0
