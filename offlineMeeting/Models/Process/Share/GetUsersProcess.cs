@@ -12,12 +12,25 @@ namespace offlineMeeting.Models.Process.Share
         public GetUsersProcess(int joinerSiteId, HttpContext httpContext)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
-            if (manageEventId.GetEventId() == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
             JoinerSiteId = joinerSiteId;
         }
+        public JoinerEntity GetUserData()
+        {
+            return new JoinerEntity(
+                eventId:  "",
+                userCd: "0",
+                userName:  "",
+                sex: "",
+                contact:  "",
+                handoverNotes:  "",
+                coins: 0,
+                exp: 0,
+                expNext: 0,
+                level: 0,
+                isAdmin: false
+            );
+        }
+
         public JoinerEntity GetUserData(string myUserCd)
         {
             ResultsEntity resultsEntity = GetSingleRecord(myUserCd);
@@ -36,6 +49,7 @@ namespace offlineMeeting.Models.Process.Share
                 isAdmin: resultsEntity.CheckB ?? false
             );
         }
+
         public Dictionary<int, string> GetUsers()
         {
             Dictionary<int, string> usersDicList = new Dictionary<int, string>();

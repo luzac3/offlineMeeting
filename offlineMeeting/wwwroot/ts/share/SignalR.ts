@@ -30,7 +30,7 @@ export class SignalR {
         this.connection.send(sendProcessName, ...args);
     }
 
-    get = (getProcessName: string, callback: (json: { [key: string]: string | number | boolean } | { [key: string]: string | number }[]) => void) => {
+    get = (getProcessName: string, callback: (json: any) => void) => {
         this.connection.on(getProcessName, (
             strJson: any
         ) => {

@@ -1,0 +1,43 @@
+@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Pos/PosPrint.css" asp-append-version="true" />
+}
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+<div id="print">
+        @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
+        {
+            <h1>
+                @orderTableEntity.OrderNumber
+                <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "") </span>
+                <span>@(orderTableEntity.UserName)</span>
+            </h1>
+        <h2>―――――――――――――</h2>
+            <table>
+                @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
+                {
+                    <tr>
+                        <td class="purchase_name">@orderPurchaseTableEntity?.PurchaseName</td>
+                        <td class="order_number">
+                            @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
+                            {
+                                @($"{orderPurchaseTableEntity?.Number * 2}勺")
+                            }
+                            else if (orderPurchaseTableEntity?.AlcoholQuantity == 180)
+                            {
+                                @($"{orderPurchaseTableEntity?.Number}合")
+                            }
+                            else
+                            {
+                                @($"{orderPurchaseTableEntity?.Number}")
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+</div>

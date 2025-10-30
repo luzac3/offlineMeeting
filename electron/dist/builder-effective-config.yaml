@@ -1,0 +1,15 @@
+directories:
+  output: dist
+  buildResources: build
+appId: electorn-print
+win:
+  target:
+    target: zip
+    arch:
+      - x64
+      - ia32
+extraFiles:
+  - from: ./appData/json/setting.json
+    to: ./
+files: []
+electronVersion: 38.4.0
