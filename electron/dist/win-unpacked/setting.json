@@ -1,0 +1,11 @@
+{
+  "url": "http://localhost:58874/Pos/UserOrders?eid=812",
+  "printUrlBase": "http://localhost:58874/Pos/PrintOrders?eid=812&resultId=",
+  "deviceName": "Microsoft Print to PDF",
+  "printOptions": {
+    "pageSize": "A4",
+    "margins": {
+      "marginType": "none"
+    }
+  }
+}

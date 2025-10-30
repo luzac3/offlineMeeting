@@ -60,12 +60,18 @@ export class FetchApi {
 }
 
 class  ManageLoadElement {
-    static　loadElement = document.getElementById("loading-overlay") as HTMLElement;
-    static　set = () => {
+    static loadElement = document.getElementById("loading-overlay") as HTMLElement;
+    static set = () => {
+        if (this.loadElement == null) {
+            return;
+        }
         this.loadElement.classList.remove("nodisplay");
     }
 
-    static　remove = () => {
+    static remove = () => {
+        if (this.loadElement == null) {
+            return;
+        }
         this.loadElement.classList.add("nodisplay");
     }
 }
