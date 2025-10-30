@@ -35,7 +35,6 @@ class CreateWindow {
                         nodeIntegration: false
                     }
                 });
-                win.webContents.openDevTools();
                 // キャッシュクリア
                 await win.webContents.session.clearCache();
                 win.once('ready-to-show', () => {
