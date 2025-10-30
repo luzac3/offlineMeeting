@@ -138,3 +138,48 @@ table {
 .order_histroy_title {
     text-align: center;
 }
+
+.electron_body{
+    position: relative;
+    margin: 5%;
+}
+#print {
+    width: 400px;
+}
+    #print h1 {
+        font-size: 3em;
+    }
+    #print td {
+        font-size: 2em;
+    }
+    #print table, th, td {
+        border: none !important;
+    }
+
+.purchase_name{
+    width:75%;
+}
+.order_number {
+    width: 10%;
+}
+
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    #print {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 100%;
+    }
+}

@@ -1,6 +1,7 @@
 import { SignalR } from "@root/share/SignalR";
 import { FetchApi } from "@root/share/FetchApi"
 import { ManagedVoiceVox } from "@root/share/ManagedVoiceVox";
+import { PrintOrder } from "./PrintOrder";
 
 export class GetNewOrder {
     private url: string;
@@ -9,8 +10,17 @@ export class GetNewOrder {
     private responseKind: string;
 
     constructor() {
-        this.url = '/Pos/UserOrdersPartial';
-        this.method = 'POST';
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        if (params.has('eid')) {
+            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
+            this.method = 'GET';
+        } else {
+            this.url = '/Pos/UserOrdersPartial';
+            this.method = 'POST';
+        }
+
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -21,16 +31,22 @@ export class GetNewOrder {
     GetNewOrder = (signalR: SignalR, ctx: AudioContext) => {
         signalR.get("NewOrder", async (data) => {
             const parsedData = <{ [key: string]: string }>data;
+
             // 読み上げる
             console.log(parsedData.userName);
 
             const managedVoiceVox = new ManagedVoiceVox();
             this.send().then((data) => {
                 document.getElementById("contents")!.innerHTML = data;
+                PrintOrder.RequestElectronPrint(resultIds);
             });
             let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
+            const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList) as { [key: string]: string }[];
+            const resultIds = orderTableEntityList.map(x => x.ResultId);
 
-            JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
+
+            orderTableEntityList.forEach(async (order: { [key: string]: string | number }) => {
+                /*
                 if (order.Hide) {
                     return;
                 }
@@ -43,6 +59,7 @@ export class GetNewOrder {
                 } else {
                     readText += `オーダー数、${order.Number}。`;
                 }
+            */
             });
             await managedVoiceVox.playVoiceVox(readText, 3, ctx);
         });

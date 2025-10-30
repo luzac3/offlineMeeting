@@ -1,0 +1,26 @@
+const builder = require('electron-builder');
+
+builder.build({
+    config: {
+        'appId': 'electorn-print',
+        'win':{
+            'target': {
+                'target': 'zip',
+                'arch': [
+                    'x64',
+                    'ia32',
+                ]
+            }
+        },
+        extraFiles: {
+            from: "./appData/json/setting.json",
+            to: "./" // exeと同じ場所に展開
+        },
+        nsis: {
+            oneClick: false, // ユーザーがインストール先を選択可能
+            perMachine: true, // Program Filesにインストール
+            allowElevation: true, // 管理者権限要求
+            allowToChangeInstallationDirectory: true // インストール先変更可
+        }
+    }
+});
