@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\css\Pos\Index.css">
+    <Content Update="wwwroot\css\Pos\PosPrint.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
