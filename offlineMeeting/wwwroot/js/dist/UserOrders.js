@@ -4023,7 +4023,7 @@ class OrderComplete {
             });
         };
         this.Complete = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEvent(this.parentElement, 'click', '.completed', (e) => {
+            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEventAll(this.parentElement, 'click', '.completed', (e) => {
                 const target = e.target;
                 const resultId = target.nextElementSibling.value;
                 this.send({ "ResultIdList": [resultId] }).then((data) => {
@@ -4043,13 +4043,12 @@ class OrderComplete {
             const result = JSON.parse(data);
             if (result.status == "200") {
                 elements.forEach(element => {
-                    const tr = element.closest("tr");
-                    if (tr) {
-                        tr.remove();
+                    const tbody = element.closest("tbody");
+                    if (tbody) {
+                        tbody.remove();
                     }
                 });
             }
-            window.alert(result.message);
         };
         this.url = '/Pos/OrderComplete';
         this.method = 'POST';
@@ -4276,6 +4275,19 @@ SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = 
     const returnHandler = (event) => {
         const targetElement = parentElement?.querySelector(targetName);
         if (event.target == targetElement) {
+            callback(event);
+            if (atOnce) {
+                parentElement?.removeEventListener(type, returnHandler);
+            }
+        }
+    };
+    parentElement?.addEventListener(type, returnHandler);
+    return returnHandler;
+};
+SetEventListner.setEventAll = (parentElement, type, targetName, callback, atOnce = false) => {
+    const returnHandler = (event) => {
+        const targetElements = parentElement?.querySelectorAll(targetName);
+        if (targetElements && Array.from(targetElements).includes(event.target)) {
             callback(event);
             if (atOnce) {
                 parentElement?.removeEventListener(type, returnHandler);
