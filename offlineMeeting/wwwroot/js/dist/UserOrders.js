@@ -4049,7 +4049,6 @@ class OrderComplete {
                     }
                 });
             }
-            window.alert(result.message);
         };
         this.url = '/Pos/OrderComplete';
         this.method = 'POST';

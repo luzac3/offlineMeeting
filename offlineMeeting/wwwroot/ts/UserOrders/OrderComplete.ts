@@ -71,6 +71,5 @@ export class OrderComplete {
                 }
             });
         }
-        window.alert(result.message);
     }
 }
