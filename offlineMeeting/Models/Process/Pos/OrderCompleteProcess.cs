@@ -1,5 +1,7 @@
 using offlineMeeting.Models.Entity.Pos.SendOrderCompletedEntity;
-using System.Net;
+using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Share;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -13,39 +15,26 @@ namespace offlineMeeting.Models.Process.Pos
             CompletedResultIdList = completedResultIdList ?? new List<int> { };
         }
 
-        public async Task<Dictionary<string, string>> Send()
+        public async Task<List<Dictionary<string, string>>> Send()
         {
-            #if DEBUG
-                string pleasanterUrlBase = "http://localhost:59802";
-            #else
-                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
-            #endif
+            PleasanterApi pleasanterApi = new();
 
-            HttpClient httpClient = new();
-            bool isError = false;
-            foreach (int resultId in CompletedResultIdList)
+            Dictionary<string, SendOrderCompletedEntity> dic = CompletedResultIdList.ToDictionary(id => id.ToString(), id => new SendOrderCompletedEntity());
+
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
-                string json = JsonSerializer.Serialize(new SendOrderCompletedEntity());
-                StringContent content = new(json, System.Text.Encoding.UTF8, "application/json");
-                string url = $"{pleasanterUrlBase}/api/items/{resultId}/update";
-                var response = await httpClient.PostAsync(url, content);
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
 
-                if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            List<PleasanterApiResponseEntity> results = await pleasanterApi.BulkUpdate(dic);
+
+            return results.Select(x =>
+                new Dictionary<string, string>()
                 {
-                    isError = true;
+                    {"status", x.StatusCode.ToString() },
+                    {"response", JsonSerializer.Serialize(x, options) }
                 }
-            }
-
-            if (!isError)
-            {
-                return new Dictionary<string, string> { { "status", "200" }, { "message", "注文完了を更新しました" } };
-
-            }
-            else
-            {
-                return new Dictionary<string, string> { { "status", "500" }, { "message", "注文完了の更新に失敗しました" } };
-
-            }
+            ).ToList();
         }
     }
 }
