@@ -92,8 +92,8 @@ namespace offlineMeeting.Models.Process.Pos
             int orderResultId = 0;
             List<int> orderResultIdList = new ();
 
-#if DEBUG
-            int extraId = 1014;
+            #if DEBUG
+                int extraId = 1014;
             #else
                 int extraId = 56483;
             #endif
