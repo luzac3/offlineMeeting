@@ -1,6 +1,6 @@
 {
-  "url": "https://sake.wolfslab.jp/Pos/UserOrders?eid=56275",
-  "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=56275&resultId=",
+  "url": "https://sake.wolfslab.jp/Pos/UserOrders?eid=58875",
+  "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=58875&resultId=",
   "deviceName": "POS-80C",
   "printOptions": {
     "margins": {
