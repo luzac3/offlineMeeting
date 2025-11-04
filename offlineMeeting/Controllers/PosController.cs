@@ -186,11 +186,18 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
+        public string OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
         {
             OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
 
-            return Json(await orderCompleteProcess.Send());
+            _ = Task.Run(async () =>
+            {
+                List<Dictionary<string, string>> results = await orderCompleteProcess.Send();
+
+                ResponseLogProcess.OrderCompleteLog(results);
+            });
+
+            return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" } });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
