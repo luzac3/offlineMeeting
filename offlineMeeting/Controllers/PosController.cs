@@ -9,7 +9,7 @@ using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
-using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace offlineMeeting.Controllers
 {
@@ -122,7 +122,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
+        public string SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
             SendOrderProcess sendOrderProcess = new(
                 orderPostEntityList,
@@ -132,7 +132,14 @@ namespace offlineMeeting.Controllers
                 httpContext: HttpContext,
                 hubContext: _hubContext
             );
-            return await sendOrderProcess.Send(SakeSiteId);
+
+            _ = Task.Run(async () =>
+            {
+                await sendOrderProcess.Send(SakeSiteId);
+                // fixme これをログに吐く
+            });
+
+            return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "送信完了" } });
         }
 
         [HttpGet]
