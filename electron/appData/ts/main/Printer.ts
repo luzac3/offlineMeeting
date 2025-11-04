@@ -18,6 +18,7 @@ export class Printer {
         });
 
     }
+
     Print = async () => {
         try {
             this.printWindow.webContents.once('did-finish-load', () => {

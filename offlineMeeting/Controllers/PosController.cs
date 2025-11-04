@@ -9,7 +9,7 @@ using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
 using System.Diagnostics;
-using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace offlineMeeting.Controllers
 {
@@ -18,6 +18,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
+        private ResponseLogProcess ResponseLogProcess;
         private int SakeSiteId;
         private int ExtraSiteId;
         private int EventFoodSiteId;
@@ -34,6 +35,7 @@ namespace offlineMeeting.Controllers
             _logger = logger;
             _hubContext = hubContext;
             PosViewModel = new ();
+            ResponseLogProcess = new (_logger);
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             ExtraSiteId = tableIdProperty.ExtraSiteId;
@@ -122,7 +124,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
+        public string SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
             SendOrderProcess sendOrderProcess = new(
                 orderPostEntityList,
@@ -132,7 +134,18 @@ namespace offlineMeeting.Controllers
                 httpContext: HttpContext,
                 hubContext: _hubContext
             );
-            return await sendOrderProcess.Send(SakeSiteId);
+
+            _ = Task.Run(async () =>
+            {
+                string result = await sendOrderProcess.Send(SakeSiteId);
+
+                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                string status = dict?["status"] ?? "";
+
+                ResponseLogProcess.OutputResponseLog(status, result ?? "");
+            });
+
+            return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "送信完了" } });
         }
 
         [HttpGet]
