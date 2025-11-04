@@ -338,6 +338,19 @@ SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = 
     parentElement?.addEventListener(type, returnHandler);
     return returnHandler;
 };
+SetEventListner.setEventAll = (parentElement, type, targetName, callback, atOnce = false) => {
+    const returnHandler = (event) => {
+        const targetElements = parentElement?.querySelectorAll(targetName);
+        if (targetElements && Array.from(targetElements).includes(event.target)) {
+            callback(event);
+            if (atOnce) {
+                parentElement?.removeEventListener(type, returnHandler);
+            }
+        }
+    };
+    parentElement?.addEventListener(type, returnHandler);
+    return returnHandler;
+};
 SetEventListner.removeEvent = (parentElement, type, handler) => {
     parentElement?.removeEventListener(type, handler);
 };
