@@ -3,41 +3,43 @@
 @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
 {
     int row = @orderTableEntity!.OrderPurchaseTableEntityList?.Count() ?? 0;
-    <tr>
-        <th rowspan="@(row + 1)">
-            <input type="checkbox" class="completed_check" name="completed_check" />
-            <input type="text" value="@(orderTableEntity.ResultId)" class="nodisplay" />
-        </th>
-        <th colspan="4">
-            <span>@orderTableEntity.OrderNumber </span>
-            <span>@orderTableEntity.UserName </span>
-            <span>@(orderTableEntity.IsAlcohol ? "(C2H5OH)" : "")</span>
-        </th>
-        <th rowspan="@(row + 1)">
-            <button type="button" class="completed">提供済</button>
-            <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
-        </th>
-    </tr>
-    @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
-    {
+    <tbody>
         <tr>
-            <td>@orderPurchaseTableEntity?.ResultId</td>
-            <td>@orderPurchaseTableEntity?.PurchaseCd</td>
-            <td>@orderPurchaseTableEntity?.PurchaseName</td>
-            <td>
-                @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
-                {
-                    @($"{orderPurchaseTableEntity?.Number * 2}勺")
-                }
-                else if (orderPurchaseTableEntity?.AlcoholQuantity == 180)
-                {
-                    @($"{orderPurchaseTableEntity?.Number}合")
-                }
-                else
-                {
-                    @($"{orderPurchaseTableEntity?.Number}")
-                }
-            </td>
+            <th rowspan="@(row + 1)">
+                <input type="checkbox" class="completed_check" name="completed_check" />
+                <input type="text" value="@(orderTableEntity.ResultId)" class="nodisplay" />
+            </th>
+            <th colspan="4">
+                <span>@orderTableEntity.OrderNumber </span>
+                <span>@orderTableEntity.UserName </span>
+                <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "")</span>
+            </th>
+            <th rowspan="@(row + 1)">
+                <button type="button" class="completed">提供済</button>
+                <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
+            </th>
         </tr>
-    }
+        @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
+        {
+            <tr>
+                <td>@orderPurchaseTableEntity?.ResultId</td>
+                <td>@orderPurchaseTableEntity?.PurchaseCd</td>
+                <td>@orderPurchaseTableEntity?.PurchaseName</td>
+                <td>
+                    @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
+                    {
+                        @($"{orderPurchaseTableEntity?.Number * 2}勺")
+                    }
+                    else if (orderPurchaseTableEntity?.AlcoholQuantity == 180)
+                    {
+                        @($"{orderPurchaseTableEntity?.Number}合")
+                    }
+                    else
+                    {
+                        @($"{orderPurchaseTableEntity?.Number}")
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
 }
