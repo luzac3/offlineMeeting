@@ -18,6 +18,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private PosViewModel PosViewModel;
+        private ResponseLogProcess ResponseLogProcess;
         private int SakeSiteId;
         private int ExtraSiteId;
         private int EventFoodSiteId;
@@ -34,6 +35,7 @@ namespace offlineMeeting.Controllers
             _logger = logger;
             _hubContext = hubContext;
             PosViewModel = new ();
+            ResponseLogProcess = new (_logger);
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
             ExtraSiteId = tableIdProperty.ExtraSiteId;
@@ -135,8 +137,12 @@ namespace offlineMeeting.Controllers
 
             _ = Task.Run(async () =>
             {
-                await sendOrderProcess.Send(SakeSiteId);
-                // fixme これをログに吐く
+                string result = await sendOrderProcess.Send(SakeSiteId);
+
+                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                string status = dict?["status"] ?? "";
+
+                ResponseLogProcess.OutputResponseLog(status, result ?? "");
             });
 
             return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "送信完了" } });

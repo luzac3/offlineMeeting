@@ -29,7 +29,7 @@ namespace offlineMeeting.Models.Process.Share
                 File.WriteAllText(fullPath, createText);
             }
 
-            File.AppendAllText(fullPath, $"{timestamp} {logLevel} {logData}");
+            File.AppendAllText(fullPath, $"{timestamp} {logLevel} {logData}\n");
         }
     }
 }
