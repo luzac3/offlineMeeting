@@ -2,6 +2,7 @@ using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
+using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
@@ -41,18 +42,27 @@ namespace offlineMeeting.Models.Process.Pos
                 case 0:
                     results = base
                         .GetFromSiteId(ExtraFoodSiteId)
-                        .Where(x => x.ClassD == EventId)
+                        .Where(x =>
+                            !string.IsNullOrEmpty(x.ClassD) &&
+                            JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
+                        )
                         .ToList();
                     break;
                 case 1:
                     results = base
                         .GetFromSiteId(EventFoodSiteId)
-                        .Where(x => x.ClassD == EventId)
+                        .Where(x =>
+                            !string.IsNullOrEmpty(x.ClassD) &&
+                            JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
+                        )
                         .ToList();
                     results.AddRange(
                         base
                             .GetFromSiteId(RawFoodSiteId)
-                            .Where(x => x.ClassD == EventId)
+                            .Where(x =>
+                                !string.IsNullOrEmpty(x.ClassD) &&
+                                JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
+                            )
                             .ToList()
                     );
                     break;
@@ -67,7 +77,10 @@ namespace offlineMeeting.Models.Process.Pos
         {
             List<ResultsEntity> results = base
                 .GetFromResultIdList(resultId)
-                .Where(x => x.ClassD == EventId)
+                .Where(x =>
+                    !string.IsNullOrEmpty(x.ClassD) &&
+                    JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
+                )
                 .ToList();
 
             GetPurchaseDataEntityList(results, result => categoryDic[Convert.ToInt32(result.ResultId)]);
