@@ -8,6 +8,7 @@ namespace offlineMeeting.Models.Entity.Pos
         public string? PurchaseCd { get; set; }
         public string? PurchaseName { get; set; }
         public string? PurchaseRead { get; set; }
+        public string? PurchaseAbbreviation { get; set; }
         public string? OrderResultId { get; set; }
         public int Number { get; set; }
         public string? Unit { get; set; }
@@ -22,6 +23,7 @@ namespace offlineMeeting.Models.Entity.Pos
             string? purchaseCd = null,
             string? purchaseName = null,
             string? purchaseRead = null,
+            string? purchaseAbbreviation = null,
             string? orderResultId = null,
             int number = 0,
             string? unit = null,
@@ -37,6 +39,7 @@ namespace offlineMeeting.Models.Entity.Pos
             PurchaseCd = purchaseCd;
             PurchaseName = purchaseName;
             PurchaseRead = purchaseRead;
+            PurchaseAbbreviation = purchaseAbbreviation;
             OrderResultId = orderResultId;
             Number = number;
             Unit = unit;
