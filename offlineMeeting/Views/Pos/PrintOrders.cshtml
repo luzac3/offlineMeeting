@@ -16,12 +16,12 @@
                 <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "") </span>
                 <span>@(orderTableEntity.UserName)</span>
             </h1>
-        <h2>―――――――――――――</h2>
+            <h2>―――――――――――――</h2>
             <table>
                 @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
                 {
                     <tr>
-                        <td class="purchase_name">@orderPurchaseTableEntity?.PurchaseName</td>
+                    <td class="purchase_name">@orderPurchaseTableEntity?.PurchaseAbbreviation</td>
                         <td class="order_number">
                             @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
                             {
