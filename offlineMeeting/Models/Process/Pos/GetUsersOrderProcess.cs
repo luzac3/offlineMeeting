@@ -142,6 +142,7 @@ namespace offlineMeeting.Models.Process.Pos
                             purchaseCd: resultsEntity.ClassC,
                             purchaseName: purchaseName,
                             purchaseRead: purchaseData?.ClassJ,
+                            purchaseAbbreviation: purchaseData?.ClassI,
                             number: Convert.ToInt32(resultsEntity.NumA),
                             unit: resultsEntity.ClassD,
                             coins: Convert.ToInt32(resultsEntity.NumB),
