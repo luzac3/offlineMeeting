@@ -1,6 +1,7 @@
 using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.DBProcess;
+using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Share
 {
@@ -27,7 +28,10 @@ namespace offlineMeeting.Models.Process.Share
 
             List<ResultsEntity> results = 
                 GetFromSiteId(SakeSiteId)
-                .Where(x=>x.ClassH == EventId)
+                .Where(x =>
+                    !string.IsNullOrEmpty(x.ClassH) &&
+                    JsonSerializer.Deserialize<string[]>(x.ClassH)?.Contains(EventId) == true
+                )
                 .ToList();
 
             GetAlcoholDataEntityList(results, choicesTextDic);
@@ -41,7 +45,10 @@ namespace offlineMeeting.Models.Process.Share
 
             List<ResultsEntity> results = 
                 GetFromSiteId(SakeSiteId, resultId)
-                .Where(x => x.ClassH == EventId)
+                .Where(x =>
+                    !string.IsNullOrEmpty(x.ClassH) &&
+                    JsonSerializer.Deserialize<string[]>(x.ClassH)?.Contains(EventId) == true
+                )
                 .ToList();
 
             GetAlcoholDataEntityList(results, choicesTextDic);

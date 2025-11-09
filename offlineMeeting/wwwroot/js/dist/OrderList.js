@@ -83,6 +83,9 @@ class SendOrder {
     constructor() {
         this.setOrderList = () => {
             document.getElementById("send_order")?.addEventListener("click", async () => {
+                const orderButton = document.getElementById("send_order");
+                // ボタンを殺す
+                orderButton.disabled = true;
                 const orderElements = Array.from(document.getElementsByClassName("order"));
                 let orderEntityList = [];
                 if (orderElements.length > 0) {
@@ -108,6 +111,7 @@ class SendOrder {
                             document.getElementById("pon_coins").innerText = "0";
                             document.getElementById("pon_coins_input").value = "0";
                         }
+                        orderButton.disabled = false;
                         window.alert(result.message);
                     });
                 }

@@ -92,8 +92,8 @@ namespace offlineMeeting.Models.Process.Pos
             int orderResultId = 0;
             List<int> orderResultIdList = new ();
 
-#if DEBUG
-            int extraId = 1014;
+            #if DEBUG
+                int extraId = 1014;
             #else
                 int extraId = 56483;
             #endif
@@ -321,12 +321,16 @@ namespace offlineMeeting.Models.Process.Pos
 
         private string JsonSerialize(PleasanterApiResponseEntity response)
         {
+            var options = new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
             return JsonSerializer.Serialize(new Dictionary<string, string> {
                 { "status", response.StatusCode.ToString() },
                 { "message", response.Message ?? "" },
                 { "targeturl", response.Url ?? "" },
                 { "sendData", response.SendData ?? "" }
-            });
+            }, options);
         }
 
         private void ErrorCheck(PleasanterApiResponseEntity response)
