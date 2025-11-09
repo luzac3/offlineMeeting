@@ -8,7 +8,7 @@ export class CreateLog {
 
     static WriteLog = async (message: string) => {
         try {
-            const dir = path.resolve(process.cwd(), 'appData', 'log');
+            const dir = CreateLog.getLogDir();
             await fs.promises.mkdir(dir, { recursive: true });
             const file = this.MakeLogFilePath();
             const timestamp = new Date().toISOString();
@@ -30,9 +30,14 @@ export class CreateLog {
         const mm = CreateLog.pad(now.getMinutes());
         const ss = CreateLog.pad(now.getSeconds());
         const fileName = `${y}${m}${d}-${hh}-${mm}-${ss}.log`;
-        const baseDir = path.dirname(process.execPath);
-        const dir = path.resolve(baseDir, 'log');
+        const dir = CreateLog.getLogDir();
         return path.join(dir, fileName);
+    }
+
+    // ログディレクトリのパスを統一
+    private static getLogDir() {
+        const baseDir = path.dirname(process.execPath);
+        return path.resolve(baseDir, 'log');
     }
 
     private static pad(n: number) { return String(n).padStart(2, '0'); }

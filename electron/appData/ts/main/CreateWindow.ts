@@ -20,6 +20,11 @@ export class CreateWindow {
             // キャッシュクリア
             await win.webContents.session.clearCache();
 
+            // 開発時のみDevToolsを開く例
+            if (process.env.NODE_ENV === 'development') {
+                win.webContents.openDevTools({ mode: 'detach' });
+            }
+
             win.once('ready-to-show', () => {
                 if (show) win.show();
             });
