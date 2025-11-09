@@ -18,12 +18,12 @@ namespace offlineMeeting.Models.Share
             HttpClient = new();
         }
 
-        public async Task<HttpResponseMessage> Update(Object data, string resultId)
+        public async Task<PleasanterApiResponseEntity> Update(Object data, string resultId)
         {
             StringContent content = MakeJson(data);
             string url = $"{pleasanterUrlBase}/api/items/{resultId}/update";
 
-            return await HttpClient.PostAsync(url, content);
+            return await SendPost(url, content);
         }
 
         public async Task<PleasanterApiResponseEntity> BulkInsert<T>(IEnumerable<T> dataList, string siteId)
@@ -33,6 +33,16 @@ namespace offlineMeeting.Models.Share
             string url = $"{pleasanterUrlBase}/api/items/{siteId}/bulkupsert";
 
             return await SendPost(url, content);
+        }
+
+        public async Task<List<PleasanterApiResponseEntity>> BulkUpdate<T>(Dictionary<string, T> dataDic)
+        {
+            // 各UpdateのTaskを作成
+            List<Task<PleasanterApiResponseEntity>> tasks = dataDic.Select(data => Update(data.Value!, data.Key)).ToList();
+
+            List<PleasanterApiResponseEntity> results = (await Task.WhenAll(tasks)).ToList();
+
+            return results;
         }
 
         public async Task<PleasanterApiResponseEntity> Insert(Object data, string siteId)
