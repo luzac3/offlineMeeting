@@ -30,7 +30,8 @@ export class CreateLog {
         const mm = CreateLog.pad(now.getMinutes());
         const ss = CreateLog.pad(now.getSeconds());
         const fileName = `${y}${m}${d}-${hh}-${mm}-${ss}.log`;
-        const dir = path.resolve(process.cwd(), 'wwwroot', 'log');
+        const baseDir = path.dirname(process.execPath);
+        const dir = path.resolve(baseDir, 'log');
         return path.join(dir, fileName);
     }
 
