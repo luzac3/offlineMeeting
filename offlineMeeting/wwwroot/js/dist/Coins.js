@@ -232,46 +232,49 @@ class Counter {
             const counterElements = Array.from(document.getElementsByClassName('counter'));
             counterElements.forEach((element) => {
                 const counterElement = element;
+                const incrementButtonElement = counterElement.querySelector('.counter_increment');
+                const decrementButtonElement = counterElement.querySelector('.counter_decrement');
                 if (!counterElement) {
                     return;
                 }
-                const incrementButtonElement = counterElement.querySelector('.counter_increment');
-                const decrementButtonElement = counterElement.querySelector('.counter_decrement');
-                const decrementNumberElement = counterElement.querySelector('.counter_number');
-                const max = parseInt(counterElement.max) || 100;
-                const min = parseInt(counterElement.min) || 0;
-                let timer;
-                let interval = 200; // 長押し時の間隔(ms)
-                let step = 1;
-                let longPressStep = 5;
-                function changeValue(delta) {
-                    let value = parseInt(decrementNumberElement.value) || 0;
-                    value += delta;
-                    value = Math.max(min, Math.min(max, value));
-                    decrementNumberElement.value = String(value);
-                }
-                function handlePress(buttonElement, delta) {
-                    buttonElement.addEventListener('mousedown', function () {
-                        step = 1;
-                        changeValue(delta);
-                        timer = setTimeout(function repeat() {
-                            step = longPressStep;
-                            changeValue(delta * step);
-                            timer = setTimeout(repeat, interval);
-                        }, 500); // 0.5秒後に長押し判定
-                    });
-                    buttonElement.addEventListener('mouseup', function () {
-                        clearTimeout(timer);
-                    });
-                    buttonElement.addEventListener('mouseleave', function () {
-                        clearTimeout(timer);
-                    });
-                    buttonElement.addEventListener('touchend', function () {
-                        clearTimeout(timer);
-                    });
-                }
-                handlePress(incrementButtonElement, 1);
-                handlePress(decrementButtonElement, -1);
+                this.HandlePress(counterElement, incrementButtonElement, 1);
+                this.HandlePress(counterElement, decrementButtonElement, -1);
+            });
+        };
+        this.ChangeValue = (counterElement, delta) => {
+            const decrementNumberElement = counterElement.querySelector('.counter_number');
+            const max = parseInt(counterElement.max) || 100;
+            const min = parseInt(counterElement.min) || 0;
+            let value = parseInt(decrementNumberElement.value) || 0;
+            value += delta;
+            value = Math.max(min, Math.min(max, value));
+            decrementNumberElement.value = String(value);
+            const event = new Event('change', { bubbles: true });
+            decrementNumberElement.dispatchEvent(event);
+        };
+        this.HandlePress = (counterElement, buttonElement, delta) => {
+            const interval = 200; // 長押し時の間隔(ms)
+            let timer;
+            let step = 1;
+            let longPressStep = 5;
+            buttonElement.addEventListener('mousedown', () => {
+                step = 1;
+                this.ChangeValue(counterElement, delta);
+                const repeat = () => {
+                    step = longPressStep;
+                    this.ChangeValue(counterElement, delta * step);
+                    timer = setTimeout(repeat, interval);
+                }; // 0.5秒後に長押し判定
+                timer = setTimeout(repeat, 500);
+            });
+            buttonElement.addEventListener('mouseup', () => {
+                clearTimeout(timer);
+            });
+            buttonElement.addEventListener('mouseleave', () => {
+                clearTimeout(timer);
+            });
+            buttonElement.addEventListener('touchend', () => {
+                clearTimeout(timer);
             });
         };
     }
