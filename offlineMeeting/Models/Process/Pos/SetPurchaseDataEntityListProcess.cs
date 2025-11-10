@@ -73,7 +73,7 @@ namespace offlineMeeting.Models.Process.Pos
             return PurchaseDataEntityList;
         }
 
-        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<int, int> categoryDic)
+        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<string, int> categoryDic)
         {
             List<ResultsEntity> results = base
                 .GetFromResultIdList(resultId)
@@ -83,7 +83,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
                 .ToList();
 
-            GetPurchaseDataEntityList(results, result => categoryDic[Convert.ToInt32(result.ResultId)]);
+            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ResultId.ToString()}_{result.NumE.ToString()}"]);
 
             return PurchaseDataEntityList;
         }
