@@ -83,7 +83,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
                 .ToList();
 
-            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ResultId.ToString()}_{result.NumE.ToString()}"]);
+            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ResultId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
 
             return PurchaseDataEntityList;
         }
@@ -120,7 +120,7 @@ namespace offlineMeeting.Models.Process.Pos
                         foodCategory: result.ClassB,
                         category: getCategory(result),
                         coinNumber: Convert.ToInt32(result.NumG),
-                        leftAmount: Convert.ToInt32(result.NumE),
+                        leftAmount: Convert.ToInt32(result.NumH),
                         ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
                     )
                 );
