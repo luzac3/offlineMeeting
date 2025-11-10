@@ -92,17 +92,11 @@ namespace offlineMeeting.Models.Process.Pos
             int orderResultId = 0;
             List<int> orderResultIdList = new ();
 
-            #if DEBUG
-                int extraId = 1014;
-            #else
-                int extraId = 56483;
-            #endif
-
             List<OrderPostEntity> alcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category == 2).ToList();
             List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
 
             // アルコールの登録
-            if (alcoholOrderPostEntityList.Count() > 0 || nonAlcoholOrderPostEntityList.Any(x => x.ResultId == extraId))
+            if (alcoholOrderPostEntityList.Count() > 0)
             {
                 orderResultId = await SendOrder(
                     orderPostEntity: alcoholOrderPostEntityList.FirstOrDefault()!,
@@ -111,31 +105,6 @@ namespace offlineMeeting.Models.Process.Pos
                     isAlcohol: true
                 );
                 orderResultIdList.Add(orderResultId);
-            }
-
-            if (orderPostEntityList.Any(x => x.ResultId == extraId))
-            {
-                // extraリストを分離してアルコールを登録
-                OrderPostEntity extraOrderPostEntity = OrderPostEntityList.Where(x => x.ResultId == extraId).FirstOrDefault()!;
-                SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(sakeSiteId, OrderSiteId, EventId, userCd);
-                List<int> extraAlcoholIdList = setAlcoholDataEntityProcess.GetHidedIdList();
-
-                foreach (int extraAlcoholId in extraAlcoholIdList)
-                {
-                    sendOrderPurchaseEntityList.Add(
-                        new SendOrderPurchaseEntity
-                        (
-                            eventNumber: EventId,
-                            orderResultId: orderResultId.ToString(),
-                            userCd: userCd,
-                            purchaseResultId: extraAlcoholId.ToString(),
-                            orderNumber: extraOrderPostEntity.OrderNumber,
-                            orderCoins: extraOrderPostEntity.OrderCoins,
-                            alcoholAmount: extraOrderPostEntity.AlcoholAmount,
-                            isAlcohol: true
-                        )
-                    );
-                }
             }
 
             sendOrderPurchaseEntityList.AddRange(
