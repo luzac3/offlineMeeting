@@ -3921,12 +3921,11 @@ class GetNewOrder {
         const params = new URLSearchParams(url.search);
         if (params.has('eid')) {
             this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
-            this.method = 'GET';
         }
         else {
             this.url = '/Pos/UserOrdersPartial';
-            this.method = 'POST';
         }
+        this.method = 'GET';
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'

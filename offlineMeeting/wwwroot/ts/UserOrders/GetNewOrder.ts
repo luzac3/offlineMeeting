@@ -14,11 +14,10 @@ export class GetNewOrder {
 
         if (params.has('eid')) {
             this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
-            this.method = 'GET';
         } else {
             this.url = '/Pos/UserOrdersPartial';
-            this.method = 'POST';
         }
+        this.method = 'GET';
 
         this.headers = {
             "Content-Type": "application/json",
