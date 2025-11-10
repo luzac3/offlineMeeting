@@ -138,3 +138,13 @@ table {
 .order_histroy_title {
     text-align: center;
 }
+
+thead {
+    border-collapse: collapse;
+    border: 3px solid #333; /* 外枠を太く */
+}
+
+tbody {
+    border-collapse: collapse;
+    border: 3px solid #333; /* 外枠を太く */
+}
