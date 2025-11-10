@@ -37,7 +37,7 @@ namespace offlineMeeting.Models.Process.Coins
                 eventNumber: EventId,
                 userCd: UserCd,
                 gar: "250",
-                coins: GiveCoinsEntity.Coins,
+                coins: GiveCoinsEntity.Coins * -1,
                 value: GiveCoinsEntity.Value
             );
 
