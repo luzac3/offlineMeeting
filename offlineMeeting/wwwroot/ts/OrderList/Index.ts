@@ -6,10 +6,10 @@ import { SendOrder } from "./SendOrder";
 
 (async () => {
     new ControlNavbar();
+    const backButton = new BackButton();
     const getOrderList = new GetOrderList();
     const sendOrder = new SendOrder();
-    const backButton = new BackButton();
+    backButton.Buck();
     getOrderList.setOrderList();
     sendOrder.setOrderList();
-    backButton.Buck();
 })();

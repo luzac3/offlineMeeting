@@ -113,7 +113,7 @@
     max-width: 50px;
 }
 
-.order {
+.order_list {
     display: flex;
     flex-wrap: wrap;
     gap: 2%; /* 要素間の隙間を均等に */
@@ -122,7 +122,7 @@
     border-radius: 16px; /* 角を丸く */
     box-sizing: border-box;
 }
-    .order > div {
+    .order_list > div {
         width: 48%;
     }
 
