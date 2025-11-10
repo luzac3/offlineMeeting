@@ -30,7 +30,7 @@
                 if (alcoholDataEntity.Rarity == 0){
                     continue;
                 }
-                <div class="purchase_order alcohol_order modal_parent @(alcoholDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                <div class="order purchase_order alcohol_order modal_parent @(alcoholDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
                         <input class="category nodisplay" value="2" />
                         <div class="open_modal">

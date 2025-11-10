@@ -1,7 +1,9 @@
-﻿import { ControlNavbar } from "@root/share/ControlNavbar";
+import { ControlNavbar } from "@root/share/ControlNavbar";
 import { Counter } from "@root/share/Counter";
 import { LocalStrage } from "@root/share/LocalStrage"
 import { FetchApi } from "@root/share/FetchApi"
+import { CaliculateCoinNumber } from "../pos//CaliculateCoinNumber";
+import { CaliculateTotalCoins } from "./CaliculateTotalCoins";
 
 export class GetOrderList {
     private url: string;
@@ -27,20 +29,18 @@ export class GetOrderList {
             orderEntityList = LocalStrage.get("OrderEntityList");
         }
 
-        let totalCoins = 0;
-
         this.send(orderEntityList).then((data: string) => {
             document.getElementById("order_list")!.innerHTML = data;
-            document.getElementById("pon_coins")!.innerText = totalCoins.toString();
-            (<HTMLInputElement>document.getElementById("pon_coins_input")!).value = totalCoins.toString();
             // カウンターをアクティブ
             counter.SetCounter();
             // ナビバーの位置を調整
             new ControlNavbar();
-        });
 
-        orderEntityList.forEach(order => {
-            totalCoins += order.OrderCoins;
+            // コインの計算をセット
+            const caliculateCoinNumber = new CaliculateCoinNumber();
+            const caliculateTotalCoins = new CaliculateTotalCoins();
+            caliculateCoinNumber.setCoin();
+            caliculateTotalCoins.SetTotalCoins();
         });
     }
 
