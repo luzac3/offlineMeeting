@@ -2,6 +2,7 @@ import { ControlModal } from "@root/share/ControlModal";
 import { ControlNavbar } from "@root/share/ControlNavbar";
 import { BackButton } from "@root//share/BackButton";
 import { CaliculateCoinNumber } from "./CaliculateCoinNumber";
+import { CaliculateAlcoholCoinNumber } from "./CaliculateAlcoholCoinNumber";
 import { StockOrder } from "./StockOrder";
 
 
@@ -9,11 +10,13 @@ import { StockOrder } from "./StockOrder";
     new ControlNavbar();
     const controlModal = new ControlModal();
     const caliculateCoinNumber = new CaliculateCoinNumber();
+    const caliculateAlcoholCoinNumber = new CaliculateAlcoholCoinNumber();
     const stockOrder = new StockOrder();
     const backButton = new BackButton();
 
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
+    caliculateAlcoholCoinNumber.setCoin();
     stockOrder.addOrder();
     backButton.Buck();
 })();

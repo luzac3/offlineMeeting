@@ -2,19 +2,19 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
-/*!************************************************!*\
-  !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
-  \************************************************/
+/***/ "./wwwroot/ts/pos/CaliculateAlcoholCoinNumber.ts":
+/*!*******************************************************!*\
+  !*** ./wwwroot/ts/pos/CaliculateAlcoholCoinNumber.ts ***!
+  \*******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   CaliculateCoinNumber: () => (/* binding */ CaliculateCoinNumber)
+/* harmony export */   CaliculateAlcoholCoinNumber: () => (/* binding */ CaliculateAlcoholCoinNumber)
 /* harmony export */ });
 /* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
 
-class CaliculateCoinNumber {
+class CaliculateAlcoholCoinNumber {
     constructor() {
         this.setCoin = () => {
             Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
@@ -77,6 +77,67 @@ class CaliculateCoinNumber {
             }
             coinNumber = (coinPer2shaku * orderAmount - adjustmentCoin) * orderNumber;
             return coinNumber;
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
+/*!************************************************!*\
+  !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CaliculateCoinNumber: () => (/* binding */ CaliculateCoinNumber)
+/* harmony export */ });
+/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
+
+class CaliculateCoinNumber {
+    constructor() {
+        this.setCoin = () => {
+            Array.from(document.getElementsByClassName("purchase_order")).forEach((element) => {
+                const htmlElement = element;
+                const coinNumberElement = htmlElement.querySelector(".coin_number");
+                const coinNumberShowElement = htmlElement.querySelector(".coin_number_show");
+                const coinNumberModalShowElement = htmlElement.querySelector(".coin_number_modal_show");
+                let coinNumber = 0;
+                if (coinNumberElement == null) {
+                    return;
+                }
+                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number", async (event) => {
+                    //(<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                });
+                /*
+                SetEventListner.setEvent(
+                    <HTMLElement>element,
+                    "change",
+                    ".order_number_modal",
+                    async (event: Event) => {
+                        (<HTMLInputElement>element.querySelector(".order_number")).value = (<HTMLInputElement>event.target).value;
+                        coinNumber = this.caliculateCoinNumber(htmlElement);
+                        coinNumberElement.value = coinNumber.toString();
+                        coinNumberShowElement.innerText = coinNumber.toString();
+                        coinNumberModalShowElement.innerText = coinNumber.toString();
+                    }
+                );
+                */
+            });
+        };
+        this.caliculateCoinNumber = (htmlElement) => {
+            const coinNumber = parseInt(htmlElement.querySelector(".coin_number")?.value ?? "0");
+            const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
+            if (orderNumber == 0) {
+                return 0;
+            }
+            return coinNumber * orderNumber;
         };
     }
 }
@@ -425,7 +486,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
 /* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
 /* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+/* harmony import */ var _CaliculateAlcoholCoinNumber__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CaliculateAlcoholCoinNumber */ "./wwwroot/ts/pos/CaliculateAlcoholCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+
 
 
 
@@ -435,10 +498,12 @@ __webpack_require__.r(__webpack_exports__);
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
     const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__.CaliculateCoinNumber();
-    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_4__.StockOrder();
+    const caliculateAlcoholCoinNumber = new _CaliculateAlcoholCoinNumber__WEBPACK_IMPORTED_MODULE_4__.CaliculateAlcoholCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_5__.StockOrder();
     const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
+    caliculateAlcoholCoinNumber.setCoin();
     stockOrder.addOrder();
     backButton.Buck();
 })();
