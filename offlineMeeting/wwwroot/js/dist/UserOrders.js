@@ -3955,14 +3955,10 @@ __webpack_require__.r(__webpack_exports__);
 class OrderComplete {
     constructor() {
         this.parentElement = document.getElementById("user_order_list");
-        this.Batch = () => {
-            const batchButtonElement = document.getElementById("batch_processing");
-            batchButtonElement.addEventListener("click", () => {
-                const checkedResultElements = Array.from(this.parentElement?.querySelectorAll('.completed_check[type="checkbox"]:checked + input') ?? []);
-                const checkedResultIdArray = checkedResultElements.map(el => el.value);
-                this.send({ "ResultIdList": checkedResultIdArray }).then((data) => {
-                    this.OrderCompleted(data, checkedResultElements);
-                });
+        this.Reload = () => {
+            const reloadButtonElement = document.getElementById("reload");
+            reloadButtonElement.addEventListener("click", () => {
+                location.reload();
             });
         };
         this.Complete = () => {
@@ -4000,7 +3996,7 @@ class OrderComplete {
             'X-Requested-With': 'XMLHttpRequest'
         };
         this.responseKind = "text";
-        this.Batch();
+        this.Reload();
         this.Complete();
     }
 }
