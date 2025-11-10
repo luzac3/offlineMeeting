@@ -37,6 +37,10 @@ class CreateWindow {
                 });
                 // キャッシュクリア
                 await win.webContents.session.clearCache();
+                // 開発時のみDevToolsを開く例
+                if (true) {
+                    win.webContents.openDevTools({ mode: 'detach' });
+                }
                 win.once('ready-to-show', () => {
                     if (show)
                         win.show();
@@ -191,11 +195,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   CreateLog: () => (/* binding */ CreateLog)
 /* harmony export */ });
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ "electron");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
 var _a;
+
 
 
 class CreateLog {
@@ -215,17 +222,22 @@ class CreateLog {
         };
         this.OutputWholeError();
     }
+    // ログディレクトリのパスを統一
+    static getLogDir() {
+        const baseDir = electron__WEBPACK_IMPORTED_MODULE_0__.app.getPath('exe');
+        return path__WEBPACK_IMPORTED_MODULE_1___default().resolve(baseDir, 'log');
+    }
     static pad(n) { return String(n).padStart(2, '0'); }
 }
 _a = CreateLog;
 CreateLog.WriteLog = async (message) => {
     try {
-        const dir = path__WEBPACK_IMPORTED_MODULE_0___default().resolve(process.cwd(), 'appData', 'log');
-        await fs__WEBPACK_IMPORTED_MODULE_1___default().promises.mkdir(dir, { recursive: true });
+        const dir = _a.getLogDir();
+        await fs__WEBPACK_IMPORTED_MODULE_2___default().promises.mkdir(dir, { recursive: true });
         const file = _a.MakeLogFilePath();
         const timestamp = new Date().toISOString();
         const entry = `[${timestamp}] ${message}\n`;
-        await fs__WEBPACK_IMPORTED_MODULE_1___default().promises.appendFile(file, entry, 'utf8');
+        await fs__WEBPACK_IMPORTED_MODULE_2___default().promises.appendFile(file, entry, 'utf8');
     }
     catch (e) {
         // ログ自体の失敗はコンソールに出す（ここで例外を投げない）
@@ -242,8 +254,8 @@ CreateLog.MakeLogFilePath = () => {
     const mm = _a.pad(now.getMinutes());
     const ss = _a.pad(now.getSeconds());
     const fileName = `${y}${m}${d}-${hh}-${mm}-${ss}.log`;
-    const dir = path__WEBPACK_IMPORTED_MODULE_0___default().resolve(process.cwd(), 'wwwroot', 'log');
-    return path__WEBPACK_IMPORTED_MODULE_0___default().join(dir, fileName);
+    const dir = _a.getLogDir();
+    return path__WEBPACK_IMPORTED_MODULE_1___default().join(dir, fileName);
 };
 
 

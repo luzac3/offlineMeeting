@@ -1,3 +1,4 @@
+import { app } from 'electron';
 import path from 'path';
 import fs from 'fs';
 
@@ -36,7 +37,7 @@ export class CreateLog {
 
     // ログディレクトリのパスを統一
     private static getLogDir() {
-        const baseDir = path.dirname(process.execPath);
+        const baseDir = app.getPath('exe');
         return path.resolve(baseDir, 'log');
     }
 
