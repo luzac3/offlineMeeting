@@ -3881,39 +3881,6 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/UserOrders/AudioStart.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/UserOrders/AudioStart.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AudioStart: () => (/* binding */ AudioStart)
-/* harmony export */ });
-class AudioStart {
-    constructor() {
-        this.Play = (ctx) => {
-            document.addEventListener('DOMContentLoaded', () => {
-                // 再生ボタンのイベント
-                document.getElementById('play-audio')?.addEventListener('click', async () => {
-                    const audio = new Audio('/music/activateAudio.wav');
-                    audio.play();
-                    // AudioContextのアンロック（無音再生）
-                    const source = ctx.createBufferSource();
-                    source.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
-                    source.connect(ctx.destination);
-                    source.start(0);
-                });
-            });
-        };
-    }
-}
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/UserOrders/GetNewOrder.ts":
 /*!**********************************************!*\
   !*** ./wwwroot/ts/UserOrders/GetNewOrder.ts ***!
@@ -3926,9 +3893,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   GetNewOrder: () => (/* binding */ GetNewOrder)
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ManagedVoiceVox */ "./wwwroot/ts/share/ManagedVoiceVox.ts");
-/* harmony import */ var _PrintOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PrintOrder */ "./wwwroot/ts/UserOrders/PrintOrder.ts");
-
+/* harmony import */ var _PrintOrder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PrintOrder */ "./wwwroot/ts/UserOrders/PrintOrder.ts");
 
 
 class GetNewOrder {
@@ -3936,33 +3901,12 @@ class GetNewOrder {
         this.GetNewOrder = (signalR, ctx) => {
             signalR.get("NewOrder", async (data) => {
                 const parsedData = data;
-                // 読み上げる
-                console.log(parsedData.userName);
-                const managedVoiceVox = new _root_share_ManagedVoiceVox__WEBPACK_IMPORTED_MODULE_1__.ManagedVoiceVox();
-                this.send().then((data) => {
-                    document.getElementById("contents").innerHTML = data;
-                    _PrintOrder__WEBPACK_IMPORTED_MODULE_2__.PrintOrder.RequestElectronPrint(resultIds);
-                });
-                let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
                 const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
                 const resultIds = orderTableEntityList.map(x => x.ResultId);
-                orderTableEntityList.forEach(async (order) => {
-                    /*
-                    if (order.Hide) {
-                        return;
-                    }
-                    readText += `注文番号、${order.PurchaseCd}。`;
-                    readText += `商品名、${order.PurchaseRead}。`;
-                    if (order.AlcoholQuantity == 36) {
-                        readText += `分量、${Number(order.Number) * 2}勺。`;
-                    } else if (order.AlcoholQuantity == 180) {
-                        readText += `分量、${order.Number}合。`;
-                    } else {
-                        readText += `オーダー数、${order.Number}。`;
-                    }
-                */
+                this.send().then((senrOrderdata) => {
+                    document.getElementById("contents").innerHTML = senrOrderdata;
+                    _PrintOrder__WEBPACK_IMPORTED_MODULE_1__.PrintOrder.RequestElectronPrint(resultIds);
                 });
-                await managedVoiceVox.playVoiceVox(readText, 3, ctx);
             });
         };
         this.send = async () => {
@@ -3977,12 +3921,11 @@ class GetNewOrder {
         const params = new URLSearchParams(url.search);
         if (params.has('eid')) {
             this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
-            this.method = 'GET';
         }
         else {
             this.url = '/Pos/UserOrdersPartial';
-            this.method = 'POST';
         }
+        this.method = 'GET';
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -4205,55 +4148,6 @@ ManageLoadElement.remove = () => {
     }
     _a.loadElement.classList.add("nodisplay");
 };
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/share/ManagedVoiceVox.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/share/ManagedVoiceVox.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ManagedVoiceVox: () => (/* binding */ ManagedVoiceVox)
-/* harmony export */ });
-class ManagedVoiceVox {
-    constructor() {
-        this.playVoiceVox = async (text, speaker = 3, ctx) => {
-            const apiBaseUrl =  true
-                ? "http://localhost:50021"
-                : 0;
-            // audio_query生成
-            const queryRes = await fetch(`${apiBaseUrl}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`, { method: "POST" });
-            const audioQuery = await queryRes.json();
-            // 音声合成（WAVデータ取得）
-            const synthRes = await fetch(`${apiBaseUrl}/synthesis?speaker=${speaker}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(audioQuery)
-            });
-            // arrayBufferで一度だけbodyを消費
-            const arrayBuffer = await synthRes.arrayBuffer();
-            if (ctx.state === "suspended") {
-                await ctx.resume();
-            }
-            try {
-                const buffer = await ctx.decodeAudioData(arrayBuffer);
-                const source = ctx.createBufferSource();
-                source.buffer = buffer;
-                source.connect(ctx.destination);
-                source.start(0);
-            }
-            catch (e) {
-                console.error("decodeAudioData失敗:", e);
-                alert("音声再生がブラウザによりブロックされました。再生ボタンを押してください。");
-            }
-        };
-    }
-}
 
 
 /***/ }),
@@ -4497,9 +4391,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
 /* harmony import */ var _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetNewOrder */ "./wwwroot/ts/UserOrders/GetNewOrder.ts");
-/* harmony import */ var _AudioStart__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AudioStart */ "./wwwroot/ts/UserOrders/AudioStart.ts");
-/* harmony import */ var _OrderComplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./OrderComplete */ "./wwwroot/ts/UserOrders/OrderComplete.ts");
-
+/* harmony import */ var _OrderComplete__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OrderComplete */ "./wwwroot/ts/UserOrders/OrderComplete.ts");
 
 
 
@@ -4507,13 +4399,11 @@ __webpack_require__.r(__webpack_exports__);
 (async () => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
-    new _OrderComplete__WEBPACK_IMPORTED_MODULE_4__.OrderComplete();
+    new _OrderComplete__WEBPACK_IMPORTED_MODULE_3__.OrderComplete();
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     const getNewOrder = new _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__.GetNewOrder();
-    const audioStart = new _AudioStart__WEBPACK_IMPORTED_MODULE_3__.AudioStart();
     signalR.activate();
     getNewOrder.GetNewOrder(signalR, ctx);
-    audioStart.Play(ctx);
 })();
 
 })();
