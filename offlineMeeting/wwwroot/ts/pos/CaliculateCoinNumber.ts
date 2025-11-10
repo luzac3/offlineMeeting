@@ -1,13 +1,13 @@
-﻿import { SetEventListner } from "@root/share/SetEventListner"
+import { SetEventListner } from "@root/share/SetEventListner"
 
 export class CaliculateCoinNumber {
     setCoin = () => {
-        Array.from(document.getElementsByClassName("alcohol_order")).forEach((element: Element) => {
+        Array.from(document.getElementsByClassName("order")).forEach((element: Element) => {
             const htmlElement = <HTMLElement>element;
 
             const coinNumberElement = <HTMLInputElement>htmlElement.querySelector(".coin_number");
             const coinNumberShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_show");
-            const coinNumberModalShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_modal_show");
+            // const coinNumberModalShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_modal_show");
 
             let coinNumber = 0;
 
@@ -18,9 +18,35 @@ export class CaliculateCoinNumber {
             SetEventListner.setEvent(
                 <HTMLElement>element,
                 "change",
+                ".order_number",
+                async (event: Event) => {
+                    //(<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculate(htmlElement, (<HTMLElement>event.currentTarget).classList.contains('alcohol_order'));
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    // coinNumberModalShowElement.innerText = coinNumber.toString();
+                }
+            );
+
+            SetEventListner.setEvent(
+                <HTMLElement>element,
+                "change",
                 ".alcohol_amount",
                 async (event: Event) => {
-                    (<HTMLInputElement>element.querySelector(".alcohol_amount_modal")).value = (<HTMLInputElement>event.target).value;
+                    // (<HTMLInputElement>element.querySelector(".alcohol_amount_modal")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculate(htmlElement, true);
+                    coinNumberElement.value = coinNumber.toString();
+                    coinNumberShowElement.innerText = coinNumber.toString();
+                    // coinNumberModalShowElement.innerText = coinNumber.toString();
+                }
+            );
+            /*
+            SetEventListner.setEvent(
+                <HTMLElement>element,
+                "change",
+                ".order_number_modal",
+                async (event: Event) => {
+                    (<HTMLInputElement>element.querySelector(".order_number")).value = (<HTMLInputElement>event.target).value;
                     coinNumber = this.caliculateCoinNumber(htmlElement);
                     coinNumberElement.value = coinNumber.toString();
                     coinNumberShowElement.innerText = coinNumber.toString();
@@ -40,36 +66,30 @@ export class CaliculateCoinNumber {
                     coinNumberModalShowElement.innerText = coinNumber.toString();
                 }
             );
-
-            SetEventListner.setEvent(
-                <HTMLElement>element,
-                "change",
-                ".order_number",
-                async (event: Event) => {
-                    (<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
-                    coinNumberElement.value = coinNumber.toString();
-                    coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
-                }
-            );
-
-            SetEventListner.setEvent(
-                <HTMLElement>element,
-                "change",
-                ".order_number_modal",
-                async (event: Event) => {
-                    (<HTMLInputElement>element.querySelector(".order_number")).value = (<HTMLInputElement>event.target).value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
-                    coinNumberElement.value = coinNumber.toString();
-                    coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
-                }
-            );
+            */
         });
     }
 
-    caliculateCoinNumber = (htmlElement: HTMLElement) => {
+    private caliculate = (htmlElement: HTMLElement, isAlcohol: boolean) =>  {
+        if (isAlcohol) {
+            return this.caliculateAlcoholCoinNumber(htmlElement);
+        } else {
+            return this.caliculateCoinNumber(htmlElement);
+        }
+    }
+
+    private caliculateCoinNumber = (htmlElement: HTMLElement) => {
+        const purhcase_coin_number = parseInt((<HTMLInputElement>htmlElement.querySelector(".purhcase_coin_number"))?.value ?? "0");
+        const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
+
+        if (orderNumber == 0) {
+            return 0;
+        }
+
+        return purhcase_coin_number * orderNumber;
+    }
+
+    private caliculateAlcoholCoinNumber = (htmlElement: HTMLElement) => {
         const alcoholAmount = parseInt((<HTMLInputElement>htmlElement.querySelector(".alcohol_amount"))?.value ?? "0");
         const orderNumber = parseInt((<HTMLInputElement>htmlElement.querySelector(".order_number"))?.value ?? "0");
         const coinPer2shaku = parseInt((<HTMLInputElement>htmlElement.querySelector(".coin_per_2shaku"))?.value ?? "0");
