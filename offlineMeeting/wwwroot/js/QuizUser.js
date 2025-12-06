@@ -54,14 +54,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   AccessTokenHttpClient: () => (/* binding */ AccessTokenHttpClient)
 /* harmony export */ });
-/* harmony import */ var _HeaderNames__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HeaderNames */ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js");
-/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
+/* harmony import */ var _HeaderNames__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HeaderNames */ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js");
+/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 
 /** @private */
-class AccessTokenHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient {
+class AccessTokenHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpClient {
     constructor(innerClient, accessTokenFactory) {
         super();
         this._innerClient = innerClient;
@@ -88,12 +88,12 @@ class AccessTokenHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.Htt
             request.headers = {};
         }
         if (this._accessToken) {
-            request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_1__.HeaderNames.Authorization] = `Bearer ${this._accessToken}`;
+            request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_0__.HeaderNames.Authorization] = `Bearer ${this._accessToken}`;
         }
         // don't remove the header if there isn't an access token factory, the user manually added the header in this case
         else if (this._accessTokenFactory) {
-            if (request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_1__.HeaderNames.Authorization]) {
-                delete request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_1__.HeaderNames.Authorization];
+            if (request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_0__.HeaderNames.Authorization]) {
+                delete request.headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_0__.HeaderNames.Authorization];
             }
         }
     }
@@ -116,11 +116,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   DefaultHttpClient: () => (/* binding */ DefaultHttpClient)
 /* harmony export */ });
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _FetchHttpClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FetchHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js");
-/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
-/* harmony import */ var _XhrHttpClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./XhrHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _FetchHttpClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FetchHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js");
+/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _XhrHttpClient__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./XhrHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -129,15 +129,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /** Default implementation of {@link @microsoft/signalr.HttpClient}. */
-class DefaultHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient {
+class DefaultHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_2__.HttpClient {
     /** Creates a new instance of the {@link @microsoft/signalr.DefaultHttpClient}, using the provided {@link @microsoft/signalr.ILogger} to log messages. */
     constructor(logger) {
         super();
-        if (typeof fetch !== "undefined" || _Utils__WEBPACK_IMPORTED_MODULE_1__.Platform.isNode) {
-            this._httpClient = new _FetchHttpClient__WEBPACK_IMPORTED_MODULE_2__.FetchHttpClient(logger);
+        if (typeof fetch !== "undefined" || _Utils__WEBPACK_IMPORTED_MODULE_3__.Platform.isNode) {
+            this._httpClient = new _FetchHttpClient__WEBPACK_IMPORTED_MODULE_1__.FetchHttpClient(logger);
         }
         else if (typeof XMLHttpRequest !== "undefined") {
-            this._httpClient = new _XhrHttpClient__WEBPACK_IMPORTED_MODULE_3__.XhrHttpClient(logger);
+            this._httpClient = new _XhrHttpClient__WEBPACK_IMPORTED_MODULE_4__.XhrHttpClient(logger);
         }
         else {
             throw new Error("No usable HttpClient found.");
@@ -147,7 +147,7 @@ class DefaultHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpCli
     send(request) {
         // Check that abort was not signaled before calling send
         if (request.abortSignal && request.abortSignal.aborted) {
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_4__.AbortError());
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.AbortError());
         }
         if (!request.method) {
             return Promise.reject(new Error("No method defined."));
@@ -422,11 +422,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   FetchHttpClient: () => (/* binding */ FetchHttpClient)
 /* harmony export */ });
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
-/* harmony import */ var _DynamicImports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DynamicImports */ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _DynamicImports__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DynamicImports */ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -434,22 +434,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient {
+class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpClient {
     constructor(logger) {
         super();
         this._logger = logger;
         // This is how you do "reference" arguments
         const fetchObj = { _fetchType: undefined, _jar: undefined };
-        if ((0,_DynamicImports__WEBPACK_IMPORTED_MODULE_1__.configureFetch)(fetchObj)) {
+        if ((0,_DynamicImports__WEBPACK_IMPORTED_MODULE_4__.configureFetch)(fetchObj)) {
             this._fetchType = fetchObj._fetchType;
             this._jar = fetchObj._jar;
         }
         else {
-            this._fetchType = fetch.bind((0,_Utils__WEBPACK_IMPORTED_MODULE_2__.getGlobalThis)());
+            this._fetchType = fetch.bind((0,_Utils__WEBPACK_IMPORTED_MODULE_3__.getGlobalThis)());
         }
         this._abortControllerType = AbortController;
         const abortObj = { _abortControllerType: this._abortControllerType };
-        if ((0,_DynamicImports__WEBPACK_IMPORTED_MODULE_1__.configureAbortController)(abortObj)) {
+        if ((0,_DynamicImports__WEBPACK_IMPORTED_MODULE_4__.configureAbortController)(abortObj)) {
             this._abortControllerType = abortObj._abortControllerType;
         }
     }
@@ -457,7 +457,7 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
     async send(request) {
         // Check that abort was not signaled before calling send
         if (request.abortSignal && request.abortSignal.aborted) {
-            throw new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError();
+            throw new _Errors__WEBPACK_IMPORTED_MODULE_0__.AbortError();
         }
         if (!request.method) {
             throw new Error("No method defined.");
@@ -471,7 +471,7 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
         if (request.abortSignal) {
             request.abortSignal.onabort = () => {
                 abortController.abort();
-                error = new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError();
+                error = new _Errors__WEBPACK_IMPORTED_MODULE_0__.AbortError();
             };
         }
         // If a timeout has been passed in, setup a timeout to call abort
@@ -481,8 +481,8 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
             const msTimeout = request.timeout;
             timeoutId = setTimeout(() => {
                 abortController.abort();
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Warning, `Timeout from HTTP request.`);
-                error = new _Errors__WEBPACK_IMPORTED_MODULE_3__.TimeoutError();
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Warning, `Timeout from HTTP request.`);
+                error = new _Errors__WEBPACK_IMPORTED_MODULE_0__.TimeoutError();
             }, msTimeout);
         }
         if (request.content === "") {
@@ -491,7 +491,7 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
         if (request.content) {
             // Explicitly setting the Content-Type header for React Native on Android platform.
             request.headers = request.headers || {};
-            if ((0,_Utils__WEBPACK_IMPORTED_MODULE_2__.isArrayBuffer)(request.content)) {
+            if ((0,_Utils__WEBPACK_IMPORTED_MODULE_3__.isArrayBuffer)(request.content)) {
                 request.headers["Content-Type"] = "application/octet-stream";
             }
             else {
@@ -518,7 +518,7 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
             if (error) {
                 throw error;
             }
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Warning, `Error from HTTP request. ${e}.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Warning, `Error from HTTP request. ${e}.`);
             throw e;
         }
         finally {
@@ -531,15 +531,15 @@ class FetchHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClien
         }
         if (!response.ok) {
             const errorMessage = await deserializeContent(response, "text");
-            throw new _Errors__WEBPACK_IMPORTED_MODULE_3__.HttpError(errorMessage || response.statusText, response.status);
+            throw new _Errors__WEBPACK_IMPORTED_MODULE_0__.HttpError(errorMessage || response.statusText, response.status);
         }
         const content = deserializeContent(response, request.responseType);
         const payload = await content;
-        return new _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpResponse(response.status, response.statusText, payload);
+        return new _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpResponse(response.status, response.statusText, payload);
     }
     getCookieString(url) {
         let cookies = "";
-        if (_Utils__WEBPACK_IMPORTED_MODULE_2__.Platform.isNode && this._jar) {
+        if (_Utils__WEBPACK_IMPORTED_MODULE_3__.Platform.isNode && this._jar) {
             // @ts-ignore: unused variable
             this._jar.getCookies(url, (e, c) => cookies = c.join("; "));
         }
@@ -731,16 +731,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   HttpConnection: () => (/* binding */ HttpConnection),
 /* harmony export */   TransportSendQueue: () => (/* binding */ TransportSendQueue)
 /* harmony export */ });
-/* harmony import */ var _AccessTokenHttpClient__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AccessTokenHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js");
-/* harmony import */ var _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DefaultHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js");
-/* harmony import */ var _DynamicImports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DynamicImports */ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js");
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
-/* harmony import */ var _LongPollingTransport__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./LongPollingTransport */ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js");
-/* harmony import */ var _ServerSentEventsTransport__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ServerSentEventsTransport */ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
-/* harmony import */ var _WebSocketTransport__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./WebSocketTransport */ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js");
+/* harmony import */ var _AccessTokenHttpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AccessTokenHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js");
+/* harmony import */ var _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DefaultHttpClient */ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js");
+/* harmony import */ var _DynamicImports__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DynamicImports */ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
+/* harmony import */ var _LongPollingTransport__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./LongPollingTransport */ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js");
+/* harmony import */ var _ServerSentEventsTransport__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ServerSentEventsTransport */ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _WebSocketTransport__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./WebSocketTransport */ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -760,8 +760,8 @@ class HttpConnection {
         this._stopPromiseResolver = () => { };
         this.features = {};
         this._negotiateVersion = 1;
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isRequired(url, "url");
-        this._logger = (0,_Utils__WEBPACK_IMPORTED_MODULE_0__.createLogger)(options.logger);
+        _Utils__WEBPACK_IMPORTED_MODULE_8__.Arg.isRequired(url, "url");
+        this._logger = (0,_Utils__WEBPACK_IMPORTED_MODULE_8__.createLogger)(options.logger);
         this.baseUrl = this._resolveUrl(url);
         options = options || {};
         options.logMessageContent = options.logMessageContent === undefined ? false : options.logMessageContent;
@@ -774,27 +774,27 @@ class HttpConnection {
         options.timeout = options.timeout === undefined ? 100 * 1000 : options.timeout;
         let webSocketModule = null;
         let eventSourceModule = null;
-        if (_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode && "function" !== "undefined") {
-            webSocketModule = (0,_DynamicImports__WEBPACK_IMPORTED_MODULE_1__.getWS)();
-            eventSourceModule = (0,_DynamicImports__WEBPACK_IMPORTED_MODULE_1__.getEventSource)();
+        if (_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isNode && "function" !== "undefined") {
+            webSocketModule = (0,_DynamicImports__WEBPACK_IMPORTED_MODULE_2__.getWS)();
+            eventSourceModule = (0,_DynamicImports__WEBPACK_IMPORTED_MODULE_2__.getEventSource)();
         }
-        if (!_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode && typeof WebSocket !== "undefined" && !options.WebSocket) {
+        if (!_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isNode && typeof WebSocket !== "undefined" && !options.WebSocket) {
             options.WebSocket = WebSocket;
         }
-        else if (_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode && !options.WebSocket) {
+        else if (_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isNode && !options.WebSocket) {
             if (webSocketModule) {
                 options.WebSocket = webSocketModule;
             }
         }
-        if (!_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode && typeof EventSource !== "undefined" && !options.EventSource) {
+        if (!_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isNode && typeof EventSource !== "undefined" && !options.EventSource) {
             options.EventSource = EventSource;
         }
-        else if (_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode && !options.EventSource) {
+        else if (_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isNode && !options.EventSource) {
             if (typeof eventSourceModule !== "undefined") {
                 options.EventSource = eventSourceModule;
             }
         }
-        this._httpClient = new _AccessTokenHttpClient__WEBPACK_IMPORTED_MODULE_2__.AccessTokenHttpClient(options.httpClient || new _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_3__.DefaultHttpClient(this._logger), options.accessTokenFactory);
+        this._httpClient = new _AccessTokenHttpClient__WEBPACK_IMPORTED_MODULE_0__.AccessTokenHttpClient(options.httpClient || new _DefaultHttpClient__WEBPACK_IMPORTED_MODULE_1__.DefaultHttpClient(this._logger), options.accessTokenFactory);
         this._connectionState = "Disconnected" /* ConnectionState.Disconnected */;
         this._connectionStarted = false;
         this._options = options;
@@ -802,9 +802,9 @@ class HttpConnection {
         this.onclose = null;
     }
     async start(transferFormat) {
-        transferFormat = transferFormat || _ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat.Binary;
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat, "transferFormat");
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Starting connection with transfer format '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat[transferFormat]}'.`);
+        transferFormat = transferFormat || _ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat.Binary;
+        _Utils__WEBPACK_IMPORTED_MODULE_8__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat, "transferFormat");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Starting connection with transfer format '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat[transferFormat]}'.`);
         if (this._connectionState !== "Disconnected" /* ConnectionState.Disconnected */) {
             return Promise.reject(new Error("Cannot start an HttpConnection that is not in the 'Disconnected' state."));
         }
@@ -815,16 +815,16 @@ class HttpConnection {
         if (this._connectionState === "Disconnecting" /* ConnectionState.Disconnecting */) {
             // stop() was called and transitioned the client into the Disconnecting state.
             const message = "Failed to start the HttpConnection before stop() was called.";
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, message);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, message);
             // We cannot await stopPromise inside startInternal since stopInternal awaits the startInternalPromise.
             await this._stopPromise;
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.AbortError(message));
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError(message));
         }
         else if (this._connectionState !== "Connected" /* ConnectionState.Connected */) {
             // stop() was called and transitioned the client into the Disconnecting state.
             const message = "HttpConnection.startInternal completed gracefully but didn't enter the connection into the connected state!";
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, message);
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.AbortError(message));
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, message);
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError(message));
         }
         this._connectionStarted = true;
     }
@@ -840,11 +840,11 @@ class HttpConnection {
     }
     async stop(error) {
         if (this._connectionState === "Disconnected" /* ConnectionState.Disconnected */) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnected state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnected state.`);
             return Promise.resolve();
         }
         if (this._connectionState === "Disconnecting" /* ConnectionState.Disconnecting */) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnecting state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnecting state.`);
             return this._stopPromise;
         }
         this._connectionState = "Disconnecting" /* ConnectionState.Disconnecting */;
@@ -875,13 +875,13 @@ class HttpConnection {
                 await this.transport.stop();
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, `HttpConnection.transport.stop() threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, `HttpConnection.transport.stop() threw error '${e}'.`);
                 this._stopConnection();
             }
             this.transport = undefined;
         }
         else {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, "HttpConnection.transport is undefined in HttpConnection.stop() because start() failed.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, "HttpConnection.transport is undefined in HttpConnection.stop() because start() failed.");
         }
     }
     async _startInternal(transferFormat) {
@@ -892,9 +892,9 @@ class HttpConnection {
         this._httpClient._accessTokenFactory = this._accessTokenFactory;
         try {
             if (this._options.skipNegotiation) {
-                if (this._options.transport === _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.WebSockets) {
+                if (this._options.transport === _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.WebSockets) {
                     // No need to add a connection ID in this case
-                    this.transport = this._constructTransport(_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.WebSockets);
+                    this.transport = this._constructTransport(_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.WebSockets);
                     // We should just call connect directly in this case.
                     // No fallback or negotiate in this case.
                     await this._startTransport(url, transferFormat);
@@ -910,7 +910,7 @@ class HttpConnection {
                     negotiateResponse = await this._getNegotiationResponse(url);
                     // the user tries to stop the connection when it is being started
                     if (this._connectionState === "Disconnecting" /* ConnectionState.Disconnecting */ || this._connectionState === "Disconnected" /* ConnectionState.Disconnected */) {
-                        throw new _Errors__WEBPACK_IMPORTED_MODULE_6__.AbortError("The connection was stopped during negotiation.");
+                        throw new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError("The connection was stopped during negotiation.");
                     }
                     if (negotiateResponse.error) {
                         throw new Error(negotiateResponse.error);
@@ -937,13 +937,13 @@ class HttpConnection {
                 }
                 await this._createTransport(url, this._options.transport, negotiateResponse, transferFormat);
             }
-            if (this.transport instanceof _LongPollingTransport__WEBPACK_IMPORTED_MODULE_7__.LongPollingTransport) {
+            if (this.transport instanceof _LongPollingTransport__WEBPACK_IMPORTED_MODULE_6__.LongPollingTransport) {
                 this.features.inherentKeepAlive = true;
             }
             if (this._connectionState === "Connecting" /* ConnectionState.Connecting */) {
                 // Ensure the connection transitions to the connected state prior to completing this.startInternalPromise.
                 // start() will handle the case when stop was called and startInternal exits still in the disconnecting state.
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, "The HttpConnection connected successfully.");
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, "The HttpConnection connected successfully.");
                 this._connectionState = "Connected" /* ConnectionState.Connected */;
             }
             // stop() is waiting on us via this.startInternalPromise so keep this.transport around so it can clean up.
@@ -951,7 +951,7 @@ class HttpConnection {
             // will transition to the disconnected state. start() will wait for the transition using the stopPromise.
         }
         catch (e) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, "Failed to start the connection: " + e);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, "Failed to start the connection: " + e);
             this._connectionState = "Disconnected" /* ConnectionState.Disconnected */;
             this.transport = undefined;
             // if start fails, any active calls to stop assume that start will complete the stop promise
@@ -961,10 +961,10 @@ class HttpConnection {
     }
     async _getNegotiationResponse(url) {
         const headers = {};
-        const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getUserAgentHeader)();
+        const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_8__.getUserAgentHeader)();
         headers[name] = value;
         const negotiateUrl = this._resolveNegotiateUrl(url);
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Sending negotiation request: ${negotiateUrl}.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Sending negotiation request: ${negotiateUrl}.`);
         try {
             const response = await this._httpClient.post(negotiateUrl, {
                 content: "",
@@ -982,19 +982,19 @@ class HttpConnection {
                 negotiateResponse.connectionToken = negotiateResponse.connectionId;
             }
             if (negotiateResponse.useStatefulReconnect && this._options._useStatefulReconnect !== true) {
-                return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.FailedToNegotiateWithServerError("Client didn't negotiate Stateful Reconnect but the server did."));
+                return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.FailedToNegotiateWithServerError("Client didn't negotiate Stateful Reconnect but the server did."));
             }
             return negotiateResponse;
         }
         catch (e) {
             let errorMessage = "Failed to complete negotiation with the server: " + e;
-            if (e instanceof _Errors__WEBPACK_IMPORTED_MODULE_6__.HttpError) {
+            if (e instanceof _Errors__WEBPACK_IMPORTED_MODULE_3__.HttpError) {
                 if (e.statusCode === 404) {
                     errorMessage = errorMessage + " Either this is not a SignalR endpoint or there is a proxy blocking the connection.";
                 }
             }
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, errorMessage);
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.FailedToNegotiateWithServerError(errorMessage));
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, errorMessage);
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.FailedToNegotiateWithServerError(errorMessage));
         }
     }
     _createConnectUrl(url, connectionToken) {
@@ -1006,7 +1006,7 @@ class HttpConnection {
     async _createTransport(url, requestedTransport, negotiateResponse, requestedTransferFormat) {
         let connectUrl = this._createConnectUrl(url, negotiateResponse.connectionToken);
         if (this._isITransport(requestedTransport)) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, "Connection was provided an instance of ITransport, using that directly.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, "Connection was provided an instance of ITransport, using that directly.");
             this.transport = requestedTransport;
             await this._startTransport(connectUrl, requestedTransferFormat);
             this.connectionId = negotiateResponse.connectionId;
@@ -1039,36 +1039,36 @@ class HttpConnection {
                     return;
                 }
                 catch (ex) {
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, `Failed to start the transport '${endpoint.transport}': ${ex}`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, `Failed to start the transport '${endpoint.transport}': ${ex}`);
                     negotiate = undefined;
-                    transportExceptions.push(new _Errors__WEBPACK_IMPORTED_MODULE_6__.FailedToStartTransportError(`${endpoint.transport} failed: ${ex}`, _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[endpoint.transport]));
+                    transportExceptions.push(new _Errors__WEBPACK_IMPORTED_MODULE_3__.FailedToStartTransportError(`${endpoint.transport} failed: ${ex}`, _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[endpoint.transport]));
                     if (this._connectionState !== "Connecting" /* ConnectionState.Connecting */) {
                         const message = "Failed to select transport before stop() was called.";
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, message);
-                        return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.AbortError(message));
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, message);
+                        return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.AbortError(message));
                     }
                 }
             }
         }
         if (transportExceptions.length > 0) {
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_6__.AggregateErrors(`Unable to connect to the server with any of the available transports. ${transportExceptions.join(" ")}`, transportExceptions));
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_3__.AggregateErrors(`Unable to connect to the server with any of the available transports. ${transportExceptions.join(" ")}`, transportExceptions));
         }
         return Promise.reject(new Error("None of the transports supported by the client are supported by the server."));
     }
     _constructTransport(transport) {
         switch (transport) {
-            case _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.WebSockets:
+            case _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.WebSockets:
                 if (!this._options.WebSocket) {
                     throw new Error("'WebSocket' is not supported in your environment.");
                 }
-                return new _WebSocketTransport__WEBPACK_IMPORTED_MODULE_8__.WebSocketTransport(this._httpClient, this._accessTokenFactory, this._logger, this._options.logMessageContent, this._options.WebSocket, this._options.headers || {});
-            case _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.ServerSentEvents:
+                return new _WebSocketTransport__WEBPACK_IMPORTED_MODULE_9__.WebSocketTransport(this._httpClient, this._accessTokenFactory, this._logger, this._options.logMessageContent, this._options.WebSocket, this._options.headers || {});
+            case _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.ServerSentEvents:
                 if (!this._options.EventSource) {
                     throw new Error("'EventSource' is not supported in your environment.");
                 }
-                return new _ServerSentEventsTransport__WEBPACK_IMPORTED_MODULE_9__.ServerSentEventsTransport(this._httpClient, this._httpClient._accessToken, this._logger, this._options);
-            case _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.LongPolling:
-                return new _LongPollingTransport__WEBPACK_IMPORTED_MODULE_7__.LongPollingTransport(this._httpClient, this._logger, this._options);
+                return new _ServerSentEventsTransport__WEBPACK_IMPORTED_MODULE_7__.ServerSentEventsTransport(this._httpClient, this._httpClient._accessToken, this._logger, this._options);
+            case _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.LongPolling:
+                return new _LongPollingTransport__WEBPACK_IMPORTED_MODULE_6__.LongPollingTransport(this._httpClient, this._logger, this._options);
             default:
                 throw new Error(`Unknown transport: ${transport}.`);
         }
@@ -1103,24 +1103,24 @@ class HttpConnection {
         return this.transport.connect(url, transferFormat);
     }
     _resolveTransportOrError(endpoint, requestedTransport, requestedTransferFormat, useStatefulReconnect) {
-        const transport = _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[endpoint.transport];
+        const transport = _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[endpoint.transport];
         if (transport === null || transport === undefined) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Skipping transport '${endpoint.transport}' because it is not supported by this client.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Skipping transport '${endpoint.transport}' because it is not supported by this client.`);
             return new Error(`Skipping transport '${endpoint.transport}' because it is not supported by this client.`);
         }
         else {
             if (transportMatches(requestedTransport, transport)) {
-                const transferFormats = endpoint.transferFormats.map((s) => _ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat[s]);
+                const transferFormats = endpoint.transferFormats.map((s) => _ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat[s]);
                 if (transferFormats.indexOf(requestedTransferFormat) >= 0) {
-                    if ((transport === _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.WebSockets && !this._options.WebSocket) ||
-                        (transport === _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.ServerSentEvents && !this._options.EventSource)) {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' because it is not supported in your environment.'`);
-                        return new _Errors__WEBPACK_IMPORTED_MODULE_6__.UnsupportedTransportError(`'${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' is not supported in your environment.`, transport);
+                    if ((transport === _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.WebSockets && !this._options.WebSocket) ||
+                        (transport === _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.ServerSentEvents && !this._options.EventSource)) {
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' because it is not supported in your environment.'`);
+                        return new _Errors__WEBPACK_IMPORTED_MODULE_3__.UnsupportedTransportError(`'${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' is not supported in your environment.`, transport);
                     }
                     else {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Selecting transport '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}'.`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Selecting transport '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}'.`);
                         try {
-                            this.features.reconnect = transport === _ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType.WebSockets ? useStatefulReconnect : undefined;
+                            this.features.reconnect = transport === _ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType.WebSockets ? useStatefulReconnect : undefined;
                             return this._constructTransport(transport);
                         }
                         catch (ex) {
@@ -1129,13 +1129,13 @@ class HttpConnection {
                     }
                 }
                 else {
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' because it does not support the requested transfer format '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat[requestedTransferFormat]}'.`);
-                    return new Error(`'${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' does not support ${_ITransport__WEBPACK_IMPORTED_MODULE_4__.TransferFormat[requestedTransferFormat]}.`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' because it does not support the requested transfer format '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat[requestedTransferFormat]}'.`);
+                    return new Error(`'${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' does not support ${_ITransport__WEBPACK_IMPORTED_MODULE_5__.TransferFormat[requestedTransferFormat]}.`);
                 }
             }
             else {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' because it was disabled by the client.`);
-                return new _Errors__WEBPACK_IMPORTED_MODULE_6__.DisabledTransportError(`'${_ITransport__WEBPACK_IMPORTED_MODULE_4__.HttpTransportType[transport]}' is disabled by the client.`, transport);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Skipping transport '${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' because it was disabled by the client.`);
+                return new _Errors__WEBPACK_IMPORTED_MODULE_3__.DisabledTransportError(`'${_ITransport__WEBPACK_IMPORTED_MODULE_5__.HttpTransportType[transport]}' is disabled by the client.`, transport);
             }
         }
     }
@@ -1143,17 +1143,17 @@ class HttpConnection {
         return transport && typeof (transport) === "object" && "connect" in transport;
     }
     _stopConnection(error) {
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `HttpConnection.stopConnection(${error}) called while in state ${this._connectionState}.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `HttpConnection.stopConnection(${error}) called while in state ${this._connectionState}.`);
         this.transport = undefined;
         // If we have a stopError, it takes precedence over the error from the transport
         error = this._stopError || error;
         this._stopError = undefined;
         if (this._connectionState === "Disconnected" /* ConnectionState.Disconnected */) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Debug, `Call to HttpConnection.stopConnection(${error}) was ignored because the connection is already in the disconnected state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Debug, `Call to HttpConnection.stopConnection(${error}) was ignored because the connection is already in the disconnected state.`);
             return;
         }
         if (this._connectionState === "Connecting" /* ConnectionState.Connecting */) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Warning, `Call to HttpConnection.stopConnection(${error}) was ignored because the connection is still in the connecting state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Warning, `Call to HttpConnection.stopConnection(${error}) was ignored because the connection is still in the connecting state.`);
             throw new Error(`HttpConnection.stopConnection(${error}) was called while the connection is still in the connecting state.`);
         }
         if (this._connectionState === "Disconnecting" /* ConnectionState.Disconnecting */) {
@@ -1162,14 +1162,14 @@ class HttpConnection {
             this._stopPromiseResolver();
         }
         if (error) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, `Connection disconnected with error '${error}'.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, `Connection disconnected with error '${error}'.`);
         }
         else {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Information, "Connection disconnected.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Information, "Connection disconnected.");
         }
         if (this._sendQueue) {
             this._sendQueue.stop().catch((e) => {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, `TransportSendQueue.stop() threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, `TransportSendQueue.stop() threw error '${e}'.`);
             });
             this._sendQueue = undefined;
         }
@@ -1183,7 +1183,7 @@ class HttpConnection {
                 }
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Error, `HttpConnection.onclose(${error}) threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Error, `HttpConnection.onclose(${error}) threw error '${e}'.`);
             }
         }
     }
@@ -1192,7 +1192,7 @@ class HttpConnection {
         if (url.lastIndexOf("https://", 0) === 0 || url.lastIndexOf("http://", 0) === 0) {
             return url;
         }
-        if (!_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isBrowser) {
+        if (!_Utils__WEBPACK_IMPORTED_MODULE_8__.Platform.isBrowser) {
             throw new Error(`Cannot resolve '${url}'.`);
         }
         // Setting the url to the href propery of an anchor tag handles normalization
@@ -1202,7 +1202,7 @@ class HttpConnection {
         // 3. Networkpath reference normalization e.g "//localhost:5000/a/b" -> "http://localhost:5000/a/b"
         const aTag = window.document.createElement("a");
         aTag.href = url;
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_5__.LogLevel.Information, `Normalizing '${url}' to '${aTag.href}'.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Information, `Normalizing '${url}' to '${aTag.href}'.`);
         return aTag.href;
     }
     _resolveNegotiateUrl(url) {
@@ -1324,13 +1324,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   HubConnection: () => (/* binding */ HubConnection),
 /* harmony export */   HubConnectionState: () => (/* binding */ HubConnectionState)
 /* harmony export */ });
-/* harmony import */ var _HandshakeProtocol__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HandshakeProtocol */ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js");
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _Subject__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Subject */ "./node_modules/@microsoft/signalr/dist/esm/Subject.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
-/* harmony import */ var _MessageBuffer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MessageBuffer */ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js");
+/* harmony import */ var _HandshakeProtocol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HandshakeProtocol */ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _Subject__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Subject */ "./node_modules/@microsoft/signalr/dist/esm/Subject.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _MessageBuffer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MessageBuffer */ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -1370,11 +1370,11 @@ class HubConnection {
     constructor(connection, logger, protocol, reconnectPolicy, serverTimeoutInMilliseconds, keepAliveIntervalInMilliseconds, statefulReconnectBufferSize) {
         this._nextKeepAlive = 0;
         this._freezeEventListener = () => {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning, "The page is being frozen, this will likely lead to the connection being closed and messages being lost. For more information see the docs at https://learn.microsoft.com/aspnet/core/signalr/javascript-client#bsleep");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, "The page is being frozen, this will likely lead to the connection being closed and messages being lost. For more information see the docs at https://learn.microsoft.com/aspnet/core/signalr/javascript-client#bsleep");
         };
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(connection, "connection");
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(logger, "logger");
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(protocol, "protocol");
+        _Utils__WEBPACK_IMPORTED_MODULE_5__.Arg.isRequired(connection, "connection");
+        _Utils__WEBPACK_IMPORTED_MODULE_5__.Arg.isRequired(logger, "logger");
+        _Utils__WEBPACK_IMPORTED_MODULE_5__.Arg.isRequired(protocol, "protocol");
         this.serverTimeoutInMilliseconds = serverTimeoutInMilliseconds !== null && serverTimeoutInMilliseconds !== void 0 ? serverTimeoutInMilliseconds : DEFAULT_TIMEOUT_IN_MS;
         this.keepAliveIntervalInMilliseconds = keepAliveIntervalInMilliseconds !== null && keepAliveIntervalInMilliseconds !== void 0 ? keepAliveIntervalInMilliseconds : DEFAULT_PING_INTERVAL_IN_MS;
         this._statefulReconnectBufferSize = statefulReconnectBufferSize !== null && statefulReconnectBufferSize !== void 0 ? statefulReconnectBufferSize : DEFAULT_STATEFUL_RECONNECT_BUFFER_SIZE;
@@ -1382,7 +1382,7 @@ class HubConnection {
         this._protocol = protocol;
         this.connection = connection;
         this._reconnectPolicy = reconnectPolicy;
-        this._handshakeProtocol = new _HandshakeProtocol__WEBPACK_IMPORTED_MODULE_2__.HandshakeProtocol();
+        this._handshakeProtocol = new _HandshakeProtocol__WEBPACK_IMPORTED_MODULE_0__.HandshakeProtocol();
         this.connection.onreceive = (data) => this._processIncomingData(data);
         this.connection.onclose = (error) => this._connectionClosed(error);
         this._callbacks = {};
@@ -1394,7 +1394,7 @@ class HubConnection {
         this._receivedHandshakeResponse = false;
         this._connectionState = HubConnectionState.Disconnected;
         this._connectionStarted = false;
-        this._cachedPingMessage = this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Ping });
+        this._cachedPingMessage = this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Ping });
     }
     /** Indicates the state of the {@link HubConnection} to the server. */
     get state() {
@@ -1437,20 +1437,20 @@ class HubConnection {
             return Promise.reject(new Error("Cannot start a HubConnection that is not in the 'Disconnected' state."));
         }
         this._connectionState = HubConnectionState.Connecting;
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Starting HubConnection.");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Starting HubConnection.");
         try {
             await this._startInternal();
-            if (_Utils__WEBPACK_IMPORTED_MODULE_1__.Platform.isBrowser) {
+            if (_Utils__WEBPACK_IMPORTED_MODULE_5__.Platform.isBrowser) {
                 // Log when the browser freezes the tab so users know why their connection unexpectedly stopped working
                 window.document.addEventListener("freeze", this._freezeEventListener);
             }
             this._connectionState = HubConnectionState.Connected;
             this._connectionStarted = true;
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "HubConnection connected successfully.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "HubConnection connected successfully.");
         }
         catch (e) {
             this._connectionState = HubConnectionState.Disconnected;
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `HubConnection failed to start successfully because of error '${e}'.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `HubConnection failed to start successfully because of error '${e}'.`);
             return Promise.reject(e);
         }
     }
@@ -1474,9 +1474,9 @@ class HubConnection {
                 protocol: this._protocol.name,
                 version,
             };
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Sending handshake request.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Sending handshake request.");
             await this._sendMessage(this._handshakeProtocol.writeHandshakeRequest(handshakeRequest));
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `Using HubProtocol '${this._protocol.name}'.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, `Using HubProtocol '${this._protocol.name}'.`);
             // defensively cleanup timeout in case we receive a message from the server before we finish start
             this._cleanupTimeout();
             this._resetTimeoutPeriod();
@@ -1494,7 +1494,7 @@ class HubConnection {
             }
             const useStatefulReconnect = this.connection.features.reconnect || false;
             if (useStatefulReconnect) {
-                this._messageBuffer = new _MessageBuffer__WEBPACK_IMPORTED_MODULE_4__.MessageBuffer(this._protocol, this.connection, this._statefulReconnectBufferSize);
+                this._messageBuffer = new _MessageBuffer__WEBPACK_IMPORTED_MODULE_6__.MessageBuffer(this._protocol, this.connection, this._statefulReconnectBufferSize);
                 this.connection.features.disconnected = this._messageBuffer._disconnected.bind(this._messageBuffer);
                 this.connection.features.resend = () => {
                     if (this._messageBuffer) {
@@ -1507,7 +1507,7 @@ class HubConnection {
             }
         }
         catch (e) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `Hub handshake failed with error '${e}' during start(). Stopping HubConnection.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `Hub handshake failed with error '${e}' during start(). Stopping HubConnection.`);
             this._cleanupTimeout();
             this._cleanupPingTimer();
             // HttpConnection.stop() should not complete until after the onclose callback is invoked.
@@ -1536,21 +1536,21 @@ class HubConnection {
     }
     _stopInternal(error) {
         if (this._connectionState === HubConnectionState.Disconnected) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `Call to HubConnection.stop(${error}) ignored because it is already in the disconnected state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `Call to HubConnection.stop(${error}) ignored because it is already in the disconnected state.`);
             return Promise.resolve();
         }
         if (this._connectionState === HubConnectionState.Disconnecting) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnecting state.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `Call to HttpConnection.stop(${error}) ignored because the connection is already in the disconnecting state.`);
             return this._stopPromise;
         }
         const state = this._connectionState;
         this._connectionState = HubConnectionState.Disconnecting;
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Stopping HubConnection.");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Stopping HubConnection.");
         if (this._reconnectDelayHandle) {
             // We're in a reconnect delay which means the underlying connection is currently already stopped.
             // Just clear the handle to stop the reconnect loop (which no one is waiting on thankfully) and
             // fire the onclose callbacks.
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Connection stopped during reconnect delay. Done reconnecting.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Connection stopped during reconnect delay. Done reconnecting.");
             clearTimeout(this._reconnectDelayHandle);
             this._reconnectDelayHandle = undefined;
             this._completeClose();
@@ -1562,7 +1562,7 @@ class HubConnection {
         }
         this._cleanupTimeout();
         this._cleanupPingTimer();
-        this._stopDuringStartError = error || new _Errors__WEBPACK_IMPORTED_MODULE_5__.AbortError("The connection was stopped before the hub handshake could complete.");
+        this._stopDuringStartError = error || new _Errors__WEBPACK_IMPORTED_MODULE_1__.AbortError("The connection was stopped before the hub handshake could complete.");
         // HttpConnection.stop() should not complete until after either HttpConnection.start() fails
         // or the onclose callback is invoked. The onclose callback will transition the HubConnection
         // to the disconnected state if need be before HttpConnection.stop() completes.
@@ -1588,7 +1588,7 @@ class HubConnection {
         const invocationDescriptor = this._createStreamInvocation(methodName, args, streamIds);
         // eslint-disable-next-line prefer-const
         let promiseQueue;
-        const subject = new _Subject__WEBPACK_IMPORTED_MODULE_6__.Subject();
+        const subject = new _Subject__WEBPACK_IMPORTED_MODULE_4__.Subject();
         subject.cancelCallback = () => {
             const cancelInvocation = this._createCancelInvocation(invocationDescriptor.invocationId);
             delete this._callbacks[invocationDescriptor.invocationId];
@@ -1603,7 +1603,7 @@ class HubConnection {
             }
             else if (invocationEvent) {
                 // invocationEvent will not be null when an error is not passed to the callback
-                if (invocationEvent.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion) {
+                if (invocationEvent.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion) {
                     if (invocationEvent.error) {
                         subject.error(new Error(invocationEvent.error));
                     }
@@ -1678,7 +1678,7 @@ class HubConnection {
                 }
                 else if (invocationEvent) {
                     // invocationEvent will not be null when an error is not passed to the callback
-                    if (invocationEvent.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion) {
+                    if (invocationEvent.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion) {
                         if (invocationEvent.error) {
                             reject(new Error(invocationEvent.error));
                         }
@@ -1780,31 +1780,31 @@ class HubConnection {
                     continue;
                 }
                 switch (message.type) {
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation:
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Invocation:
                         // eslint-disable-next-line @typescript-eslint/no-floating-promises
                         this._invokeClientMethod(message);
                         break;
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.StreamItem:
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion: {
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.StreamItem:
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion: {
                         const callback = this._callbacks[message.invocationId];
                         if (callback) {
-                            if (message.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion) {
+                            if (message.type === _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion) {
                                 delete this._callbacks[message.invocationId];
                             }
                             try {
                                 callback(message);
                             }
                             catch (e) {
-                                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `Stream callback threw error: ${(0,_Utils__WEBPACK_IMPORTED_MODULE_1__.getErrorString)(e)}`);
+                                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `Stream callback threw error: ${(0,_Utils__WEBPACK_IMPORTED_MODULE_5__.getErrorString)(e)}`);
                             }
                         }
                         break;
                     }
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Ping:
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Ping:
                         // Don't care about pings
                         break;
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Close: {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, "Close message received from server.");
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Close: {
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, "Close message received from server.");
                         const error = message.error ? new Error("Server returned an error on close: " + message.error) : undefined;
                         if (message.allowReconnect === true) {
                             // It feels wrong not to await connection.stop() here, but processIncomingData is called as part of an onreceive callback which is not async,
@@ -1818,18 +1818,18 @@ class HubConnection {
                         }
                         break;
                     }
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Ack:
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Ack:
                         if (this._messageBuffer) {
                             this._messageBuffer._ack(message);
                         }
                         break;
-                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Sequence:
+                    case _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Sequence:
                         if (this._messageBuffer) {
                             this._messageBuffer._resetSequence(message);
                         }
                         break;
                     default:
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning, `Invalid message type: ${message.type}.`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `Invalid message type: ${message.type}.`);
                         break;
                 }
             }
@@ -1844,20 +1844,20 @@ class HubConnection {
         }
         catch (e) {
             const message = "Error parsing handshake response: " + e;
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, message);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, message);
             const error = new Error(message);
             this._handshakeRejecter(error);
             throw error;
         }
         if (responseMessage.error) {
             const message = "Server returned handshake error: " + responseMessage.error;
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, message);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, message);
             const error = new Error(message);
             this._handshakeRejecter(error);
             throw error;
         }
         else {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Server handshake complete.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Server handshake complete.");
         }
         this._handshakeResolver();
         return remainingData;
@@ -1908,10 +1908,10 @@ class HubConnection {
         const methodName = invocationMessage.target.toLowerCase();
         const methods = this._methods[methodName];
         if (!methods) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning, `No client method with the name '${methodName}' found.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `No client method with the name '${methodName}' found.`);
             // No handlers provided by client but the server is expecting a response still, so we send an error
             if (invocationMessage.invocationId) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning, `No result given for '${methodName}' method and invocation ID '${invocationMessage.invocationId}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `No result given for '${methodName}' method and invocation ID '${invocationMessage.invocationId}'.`);
                 await this._sendWithProtocol(this._createCompletionMessage(invocationMessage.invocationId, "Client didn't provide a result.", null));
             }
             return;
@@ -1929,7 +1929,7 @@ class HubConnection {
                 const prevRes = res;
                 res = await m.apply(this, invocationMessage.arguments);
                 if (expectsResponse && res && prevRes) {
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `Multiple results provided for '${methodName}'. Sending error to server.`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `Multiple results provided for '${methodName}'. Sending error to server.`);
                     completionMessage = this._createCompletionMessage(invocationMessage.invocationId, `Client provided multiple results.`, null);
                 }
                 // Ignore exception if we got a result after, the exception will be logged
@@ -1937,7 +1937,7 @@ class HubConnection {
             }
             catch (e) {
                 exception = e;
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `A callback for the method '${methodName}' threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `A callback for the method '${methodName}' threw error '${e}'.`);
             }
         }
         if (completionMessage) {
@@ -1952,7 +1952,7 @@ class HubConnection {
                 completionMessage = this._createCompletionMessage(invocationMessage.invocationId, null, res);
             }
             else {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning, `No result given for '${methodName}' method and invocation ID '${invocationMessage.invocationId}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `No result given for '${methodName}' method and invocation ID '${invocationMessage.invocationId}'.`);
                 // Client didn't provide a result or throw from a handler, server expects a response so we send an error
                 completionMessage = this._createCompletionMessage(invocationMessage.invocationId, "Client didn't provide a result.", null);
             }
@@ -1960,14 +1960,14 @@ class HubConnection {
         }
         else {
             if (res) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `Result given for '${methodName}' method but server is not expecting a result.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `Result given for '${methodName}' method but server is not expecting a result.`);
             }
         }
     }
     _connectionClosed(error) {
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `HubConnection.connectionClosed(${error}) called while in state ${this._connectionState}.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `HubConnection.connectionClosed(${error}) called while in state ${this._connectionState}.`);
         // Triggering this.handshakeRejecter is insufficient because it could already be resolved without the continuation having run yet.
-        this._stopDuringStartError = this._stopDuringStartError || error || new _Errors__WEBPACK_IMPORTED_MODULE_5__.AbortError("The underlying connection was closed before the hub handshake could complete.");
+        this._stopDuringStartError = this._stopDuringStartError || error || new _Errors__WEBPACK_IMPORTED_MODULE_1__.AbortError("The underlying connection was closed before the hub handshake could complete.");
         // If the handshake is in progress, start will be waiting for the handshake promise, so we complete it.
         // If it has already completed, this should just noop.
         if (this._handshakeResolver) {
@@ -2000,14 +2000,14 @@ class HubConnection {
                 this._messageBuffer._dispose(error !== null && error !== void 0 ? error : new Error("Connection closed."));
                 this._messageBuffer = undefined;
             }
-            if (_Utils__WEBPACK_IMPORTED_MODULE_1__.Platform.isBrowser) {
+            if (_Utils__WEBPACK_IMPORTED_MODULE_5__.Platform.isBrowser) {
                 window.document.removeEventListener("freeze", this._freezeEventListener);
             }
             try {
                 this._closedCallbacks.forEach((c) => c.apply(this, [error]));
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `An onclose callback called with error '${error}' threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `An onclose callback called with error '${error}' threw error '${e}'.`);
             }
         }
     }
@@ -2017,58 +2017,58 @@ class HubConnection {
         let retryError = error !== undefined ? error : new Error("Attempting to reconnect due to a unknown error.");
         let nextRetryDelay = this._getNextRetryDelay(previousReconnectAttempts++, 0, retryError);
         if (nextRetryDelay === null) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Connection not reconnecting because the IRetryPolicy returned null on the first reconnect attempt.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Connection not reconnecting because the IRetryPolicy returned null on the first reconnect attempt.");
             this._completeClose(error);
             return;
         }
         this._connectionState = HubConnectionState.Reconnecting;
         if (error) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `Connection reconnecting because of error '${error}'.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, `Connection reconnecting because of error '${error}'.`);
         }
         else {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, "Connection reconnecting.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, "Connection reconnecting.");
         }
         if (this._reconnectingCallbacks.length !== 0) {
             try {
                 this._reconnectingCallbacks.forEach((c) => c.apply(this, [error]));
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `An onreconnecting callback called with error '${error}' threw error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `An onreconnecting callback called with error '${error}' threw error '${e}'.`);
             }
             // Exit early if an onreconnecting callback called connection.stop().
             if (this._connectionState !== HubConnectionState.Reconnecting) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Connection left the reconnecting state in onreconnecting callback. Done reconnecting.");
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Connection left the reconnecting state in onreconnecting callback. Done reconnecting.");
                 return;
             }
         }
         while (nextRetryDelay !== null) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `Reconnect attempt number ${previousReconnectAttempts} will start in ${nextRetryDelay} ms.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, `Reconnect attempt number ${previousReconnectAttempts} will start in ${nextRetryDelay} ms.`);
             await new Promise((resolve) => {
                 this._reconnectDelayHandle = setTimeout(resolve, nextRetryDelay);
             });
             this._reconnectDelayHandle = undefined;
             if (this._connectionState !== HubConnectionState.Reconnecting) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, "Connection left the reconnecting state during reconnect delay. Done reconnecting.");
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, "Connection left the reconnecting state during reconnect delay. Done reconnecting.");
                 return;
             }
             try {
                 await this._startInternal();
                 this._connectionState = HubConnectionState.Connected;
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, "HubConnection reconnected successfully.");
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, "HubConnection reconnected successfully.");
                 if (this._reconnectedCallbacks.length !== 0) {
                     try {
                         this._reconnectedCallbacks.forEach((c) => c.apply(this, [this.connection.connectionId]));
                     }
                     catch (e) {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `An onreconnected callback called with connectionId '${this.connection.connectionId}; threw error '${e}'.`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `An onreconnected callback called with connectionId '${this.connection.connectionId}; threw error '${e}'.`);
                     }
                 }
                 return;
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `Reconnect attempt failed because of error '${e}'.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, `Reconnect attempt failed because of error '${e}'.`);
                 if (this._connectionState !== HubConnectionState.Reconnecting) {
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug, `Connection moved to the '${this._connectionState}' from the reconnecting state during reconnect attempt. Done reconnecting.`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug, `Connection moved to the '${this._connectionState}' from the reconnecting state during reconnect attempt. Done reconnecting.`);
                     // The TypeScript compiler thinks that connectionState must be Connected here. The TypeScript compiler is wrong.
                     if (this._connectionState === HubConnectionState.Disconnecting) {
                         this._completeClose();
@@ -2079,7 +2079,7 @@ class HubConnection {
                 nextRetryDelay = this._getNextRetryDelay(previousReconnectAttempts++, Date.now() - reconnectStartTime, retryError);
             }
         }
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `Reconnect retries have been exhausted after ${Date.now() - reconnectStartTime} ms and ${previousReconnectAttempts} failed attempts. Connection disconnecting.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, `Reconnect retries have been exhausted after ${Date.now() - reconnectStartTime} ms and ${previousReconnectAttempts} failed attempts. Connection disconnecting.`);
         this._completeClose();
     }
     _getNextRetryDelay(previousRetryCount, elapsedMilliseconds, retryReason) {
@@ -2091,7 +2091,7 @@ class HubConnection {
             });
         }
         catch (e) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `IRetryPolicy.nextRetryDelayInMilliseconds(${previousRetryCount}, ${elapsedMilliseconds}) threw error '${e}'.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `IRetryPolicy.nextRetryDelayInMilliseconds(${previousRetryCount}, ${elapsedMilliseconds}) threw error '${e}'.`);
             return null;
         }
     }
@@ -2105,7 +2105,7 @@ class HubConnection {
                 callback(null, error);
             }
             catch (e) {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error, `Stream 'error' callback called with '${error}' threw error: ${(0,_Utils__WEBPACK_IMPORTED_MODULE_1__.getErrorString)(e)}`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `Stream 'error' callback called with '${error}' threw error: ${(0,_Utils__WEBPACK_IMPORTED_MODULE_5__.getErrorString)(e)}`);
             }
         });
     }
@@ -2127,14 +2127,14 @@ class HubConnection {
                     arguments: args,
                     streamIds,
                     target: methodName,
-                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation,
+                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Invocation,
                 };
             }
             else {
                 return {
                     arguments: args,
                     target: methodName,
-                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation,
+                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Invocation,
                 };
             }
         }
@@ -2147,7 +2147,7 @@ class HubConnection {
                     invocationId: invocationId.toString(),
                     streamIds,
                     target: methodName,
-                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation,
+                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Invocation,
                 };
             }
             else {
@@ -2155,7 +2155,7 @@ class HubConnection {
                     arguments: args,
                     invocationId: invocationId.toString(),
                     target: methodName,
-                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation,
+                    type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Invocation,
                 };
             }
         }
@@ -2224,7 +2224,7 @@ class HubConnection {
                 invocationId: invocationId.toString(),
                 streamIds,
                 target: methodName,
-                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.StreamInvocation,
+                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.StreamInvocation,
             };
         }
         else {
@@ -2232,21 +2232,21 @@ class HubConnection {
                 arguments: args,
                 invocationId: invocationId.toString(),
                 target: methodName,
-                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.StreamInvocation,
+                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.StreamInvocation,
             };
         }
     }
     _createCancelInvocation(id) {
         return {
             invocationId: id,
-            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.CancelInvocation,
+            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.CancelInvocation,
         };
     }
     _createStreamItemMessage(id, item) {
         return {
             invocationId: id,
             item,
-            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.StreamItem,
+            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.StreamItem,
         };
     }
     _createCompletionMessage(id, error, result) {
@@ -2254,17 +2254,17 @@ class HubConnection {
             return {
                 error,
                 invocationId: id,
-                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion,
+                type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion,
             };
         }
         return {
             invocationId: id,
             result,
-            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion,
+            type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Completion,
         };
     }
     _createCloseMessage() {
-        return { type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Close };
+        return { type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_2__.MessageType.Close };
     }
 }
 //# sourceMappingURL=HubConnection.js.map
@@ -2282,13 +2282,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   HubConnectionBuilder: () => (/* binding */ HubConnectionBuilder)
 /* harmony export */ });
-/* harmony import */ var _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DefaultReconnectPolicy */ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js");
-/* harmony import */ var _HttpConnection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HttpConnection */ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js");
-/* harmony import */ var _HubConnection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./HubConnection */ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./JsonHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js");
+/* harmony import */ var _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DefaultReconnectPolicy */ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js");
+/* harmony import */ var _HttpConnection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HttpConnection */ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js");
+/* harmony import */ var _HubConnection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HubConnection */ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./JsonHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js");
 /* harmony import */ var _Loggers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Loggers */ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -2299,15 +2299,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const LogLevelNameMapping = {
-    trace: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Trace,
-    debug: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Debug,
-    info: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information,
-    information: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information,
-    warn: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning,
-    warning: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Warning,
-    error: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Error,
-    critical: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Critical,
-    none: _ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.None,
+    trace: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace,
+    debug: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Debug,
+    info: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information,
+    information: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information,
+    warn: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning,
+    warning: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning,
+    error: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error,
+    critical: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Critical,
+    none: _ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.None,
 };
 function parseLogLevel(name) {
     // Case-insensitive matching via lower-casing
@@ -2324,22 +2324,22 @@ function parseLogLevel(name) {
 /** A builder for configuring {@link @microsoft/signalr.HubConnection} instances. */
 class HubConnectionBuilder {
     configureLogging(logging) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(logging, "logging");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isRequired(logging, "logging");
         if (isLogger(logging)) {
             this.logger = logging;
         }
         else if (typeof logging === "string") {
             const logLevel = parseLogLevel(logging);
-            this.logger = new _Utils__WEBPACK_IMPORTED_MODULE_1__.ConsoleLogger(logLevel);
+            this.logger = new _Utils__WEBPACK_IMPORTED_MODULE_6__.ConsoleLogger(logLevel);
         }
         else {
-            this.logger = new _Utils__WEBPACK_IMPORTED_MODULE_1__.ConsoleLogger(logging);
+            this.logger = new _Utils__WEBPACK_IMPORTED_MODULE_6__.ConsoleLogger(logging);
         }
         return this;
     }
     withUrl(url, transportTypeOrOptions) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(url, "url");
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isNotEmpty(url, "url");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isRequired(url, "url");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isNotEmpty(url, "url");
         this.url = url;
         // Flow-typing knows where it's at. Since HttpTransportType is a number and IHttpConnectionOptions is guaranteed
         // to be an object, we know (as does TypeScript) this comparison is all we need to figure out which overload was called.
@@ -2359,7 +2359,7 @@ class HubConnectionBuilder {
      * @param {IHubProtocol} protocol The {@link @microsoft/signalr.IHubProtocol} implementation to use.
      */
     withHubProtocol(protocol) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(protocol, "protocol");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isRequired(protocol, "protocol");
         this.protocol = protocol;
         return this;
     }
@@ -2368,10 +2368,10 @@ class HubConnectionBuilder {
             throw new Error("A reconnectPolicy has already been set.");
         }
         if (!retryDelaysOrReconnectPolicy) {
-            this.reconnectPolicy = new _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_2__.DefaultReconnectPolicy();
+            this.reconnectPolicy = new _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_0__.DefaultReconnectPolicy();
         }
         else if (Array.isArray(retryDelaysOrReconnectPolicy)) {
-            this.reconnectPolicy = new _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_2__.DefaultReconnectPolicy(retryDelaysOrReconnectPolicy);
+            this.reconnectPolicy = new _DefaultReconnectPolicy__WEBPACK_IMPORTED_MODULE_0__.DefaultReconnectPolicy(retryDelaysOrReconnectPolicy);
         }
         else {
             this.reconnectPolicy = retryDelaysOrReconnectPolicy;
@@ -2383,7 +2383,7 @@ class HubConnectionBuilder {
      * @returns The {@link @microsoft/signalr.HubConnectionBuilder} instance, for chaining.
      */
     withServerTimeout(milliseconds) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(milliseconds, "milliseconds");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isRequired(milliseconds, "milliseconds");
         this._serverTimeoutInMilliseconds = milliseconds;
         return this;
     }
@@ -2392,7 +2392,7 @@ class HubConnectionBuilder {
      * @returns The {@link @microsoft/signalr.HubConnectionBuilder} instance, for chaining.
      */
     withKeepAliveInterval(milliseconds) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(milliseconds, "milliseconds");
+        _Utils__WEBPACK_IMPORTED_MODULE_6__.Arg.isRequired(milliseconds, "milliseconds");
         this._keepAliveIntervalInMilliseconds = milliseconds;
         return this;
     }
@@ -2425,8 +2425,8 @@ class HubConnectionBuilder {
         if (!this.url) {
             throw new Error("The 'HubConnectionBuilder.withUrl' method must be called before building the connection.");
         }
-        const connection = new _HttpConnection__WEBPACK_IMPORTED_MODULE_3__.HttpConnection(this.url, httpConnectionOptions);
-        return _HubConnection__WEBPACK_IMPORTED_MODULE_4__.HubConnection.create(connection, this.logger || _Loggers__WEBPACK_IMPORTED_MODULE_5__.NullLogger.instance, this.protocol || new _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_6__.JsonHubProtocol(), this.reconnectPolicy, this._serverTimeoutInMilliseconds, this._keepAliveIntervalInMilliseconds, this._statefulReconnectBufferSize);
+        const connection = new _HttpConnection__WEBPACK_IMPORTED_MODULE_1__.HttpConnection(this.url, httpConnectionOptions);
+        return _HubConnection__WEBPACK_IMPORTED_MODULE_2__.HubConnection.create(connection, this.logger || _Loggers__WEBPACK_IMPORTED_MODULE_5__.NullLogger.instance, this.protocol || new _JsonHubProtocol__WEBPACK_IMPORTED_MODULE_4__.JsonHubProtocol(), this.reconnectPolicy, this._serverTimeoutInMilliseconds, this._keepAliveIntervalInMilliseconds, this._statefulReconnectBufferSize);
     }
 }
 function isLogger(logger) {
@@ -2562,11 +2562,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   JsonHubProtocol: () => (/* binding */ JsonHubProtocol)
 /* harmony export */ });
-/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
-/* harmony import */ var _Loggers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loggers */ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js");
-/* harmony import */ var _TextMessageFormat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TextMessageFormat */ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js");
+/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
+/* harmony import */ var _Loggers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Loggers */ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js");
+/* harmony import */ var _TextMessageFormat__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TextMessageFormat */ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -2583,7 +2583,7 @@ class JsonHubProtocol {
         /** @inheritDoc */
         this.version = 2;
         /** @inheritDoc */
-        this.transferFormat = _ITransport__WEBPACK_IMPORTED_MODULE_0__.TransferFormat.Text;
+        this.transferFormat = _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat.Text;
     }
     /** Creates an array of {@link @microsoft/signalr.HubMessage} objects from the specified serialized representation.
      *
@@ -2599,10 +2599,10 @@ class JsonHubProtocol {
             return [];
         }
         if (logger === null) {
-            logger = _Loggers__WEBPACK_IMPORTED_MODULE_1__.NullLogger.instance;
+            logger = _Loggers__WEBPACK_IMPORTED_MODULE_3__.NullLogger.instance;
         }
         // Parse the messages
-        const messages = _TextMessageFormat__WEBPACK_IMPORTED_MODULE_2__.TextMessageFormat.parse(input);
+        const messages = _TextMessageFormat__WEBPACK_IMPORTED_MODULE_4__.TextMessageFormat.parse(input);
         const hubMessages = [];
         for (const message of messages) {
             const parsedMessage = JSON.parse(message);
@@ -2610,30 +2610,30 @@ class JsonHubProtocol {
                 throw new Error("Invalid payload.");
             }
             switch (parsedMessage.type) {
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Invocation:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Invocation:
                     this._isInvocationMessage(parsedMessage);
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.StreamItem:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.StreamItem:
                     this._isStreamItemMessage(parsedMessage);
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Completion:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Completion:
                     this._isCompletionMessage(parsedMessage);
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Ping:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Ping:
                     // Single value, no need to validate
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Close:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Close:
                     // All optional values, no need to validate
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Ack:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Ack:
                     this._isAckMessage(parsedMessage);
                     break;
-                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_3__.MessageType.Sequence:
+                case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Sequence:
                     this._isSequenceMessage(parsedMessage);
                     break;
                 default:
                     // Future protocol changes can add message types, old clients can ignore them
-                    logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_4__.LogLevel.Information, "Unknown message type '" + parsedMessage.type + "' ignored.");
+                    logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Information, "Unknown message type '" + parsedMessage.type + "' ignored.");
                     continue;
             }
             hubMessages.push(parsedMessage);
@@ -2646,7 +2646,7 @@ class JsonHubProtocol {
      * @returns {string} A string containing the serialized representation of the message.
      */
     writeMessage(message) {
-        return _TextMessageFormat__WEBPACK_IMPORTED_MODULE_2__.TextMessageFormat.write(JSON.stringify(message));
+        return _TextMessageFormat__WEBPACK_IMPORTED_MODULE_4__.TextMessageFormat.write(JSON.stringify(message));
     }
     _isInvocationMessage(message) {
         this._assertNotEmptyString(message.target, "Invalid payload for Invocation message.");
@@ -2728,10 +2728,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   LongPollingTransport: () => (/* binding */ LongPollingTransport)
 /* harmony export */ });
 /* harmony import */ var _AbortController__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AbortController */ "./node_modules/@microsoft/signalr/dist/esm/AbortController.js");
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -2756,17 +2756,17 @@ class LongPollingTransport {
         this.onclose = null;
     }
     async connect(url, transferFormat) {
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(url, "url");
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isRequired(transferFormat, "transferFormat");
-        _Utils__WEBPACK_IMPORTED_MODULE_1__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat, "transferFormat");
+        _Utils__WEBPACK_IMPORTED_MODULE_4__.Arg.isRequired(url, "url");
+        _Utils__WEBPACK_IMPORTED_MODULE_4__.Arg.isRequired(transferFormat, "transferFormat");
+        _Utils__WEBPACK_IMPORTED_MODULE_4__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_3__.TransferFormat, "transferFormat");
         this._url = url;
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Connecting.");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Connecting.");
         // Allow binary format on Node and Browsers that support binary content (indicated by the presence of responseType property)
-        if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat.Binary &&
+        if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_3__.TransferFormat.Binary &&
             (typeof XMLHttpRequest !== "undefined" && typeof new XMLHttpRequest().responseType !== "string")) {
             throw new Error("Binary protocols over XmlHttpRequest not implementing advanced features are not supported.");
         }
-        const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_1__.getUserAgentHeader)();
+        const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_4__.getUserAgentHeader)();
         const headers = { [name]: value, ...this._options.headers };
         const pollOptions = {
             abortSignal: this._pollAbort.signal,
@@ -2774,18 +2774,18 @@ class LongPollingTransport {
             timeout: 100000,
             withCredentials: this._options.withCredentials,
         };
-        if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat.Binary) {
+        if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_3__.TransferFormat.Binary) {
             pollOptions.responseType = "arraybuffer";
         }
         // Make initial long polling request
         // Server uses first long polling request to finish initializing connection and it returns without data
         const pollUrl = `${url}&_=${Date.now()}`;
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) polling: ${pollUrl}.`);
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) polling: ${pollUrl}.`);
         const response = await this._httpClient.get(pollUrl, pollOptions);
         if (response.statusCode !== 200) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `(LongPolling transport) Unexpected response code: ${response.statusCode}.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Error, `(LongPolling transport) Unexpected response code: ${response.statusCode}.`);
             // Mark running as false so that the poll immediately ends and runs the close logic
-            this._closeError = new _Errors__WEBPACK_IMPORTED_MODULE_4__.HttpError(response.statusText || "", response.statusCode);
+            this._closeError = new _Errors__WEBPACK_IMPORTED_MODULE_1__.HttpError(response.statusText || "", response.statusCode);
             this._running = false;
         }
         else {
@@ -2798,41 +2798,41 @@ class LongPollingTransport {
             while (this._running) {
                 try {
                     const pollUrl = `${url}&_=${Date.now()}`;
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) polling: ${pollUrl}.`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) polling: ${pollUrl}.`);
                     const response = await this._httpClient.get(pollUrl, pollOptions);
                     if (response.statusCode === 204) {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Information, "(LongPolling transport) Poll terminated by server.");
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Information, "(LongPolling transport) Poll terminated by server.");
                         this._running = false;
                     }
                     else if (response.statusCode !== 200) {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Error, `(LongPolling transport) Unexpected response code: ${response.statusCode}.`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Error, `(LongPolling transport) Unexpected response code: ${response.statusCode}.`);
                         // Unexpected status code
-                        this._closeError = new _Errors__WEBPACK_IMPORTED_MODULE_4__.HttpError(response.statusText || "", response.statusCode);
+                        this._closeError = new _Errors__WEBPACK_IMPORTED_MODULE_1__.HttpError(response.statusText || "", response.statusCode);
                         this._running = false;
                     }
                     else {
                         // Process the response
                         if (response.content) {
-                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_1__.getDataDetail)(response.content, this._options.logMessageContent)}.`);
+                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_4__.getDataDetail)(response.content, this._options.logMessageContent)}.`);
                             if (this.onreceive) {
                                 this.onreceive(response.content);
                             }
                         }
                         else {
                             // This is another way timeout manifest.
-                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Poll timed out, reissuing.");
+                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Poll timed out, reissuing.");
                         }
                     }
                 }
                 catch (e) {
                     if (!this._running) {
                         // Log but disregard errors that occur after stopping
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) Poll errored after shutdown: ${e.message}`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) Poll errored after shutdown: ${e.message}`);
                     }
                     else {
-                        if (e instanceof _Errors__WEBPACK_IMPORTED_MODULE_4__.TimeoutError) {
+                        if (e instanceof _Errors__WEBPACK_IMPORTED_MODULE_1__.TimeoutError) {
                             // Ignore timeouts and reissue the poll.
-                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Poll timed out, reissuing.");
+                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Poll timed out, reissuing.");
                         }
                         else {
                             // Close the connection with the error as the result.
@@ -2844,7 +2844,7 @@ class LongPollingTransport {
             }
         }
         finally {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Polling complete.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Polling complete.");
             // We will reach here with pollAborted==false when the server returned a response causing the transport to stop.
             // If pollAborted==true then client initiated the stop and the stop method will raise the close event after DELETE is sent.
             if (!this.pollAborted) {
@@ -2856,19 +2856,19 @@ class LongPollingTransport {
         if (!this._running) {
             return Promise.reject(new Error("Cannot send until the transport is connected"));
         }
-        return (0,_Utils__WEBPACK_IMPORTED_MODULE_1__.sendMessage)(this._logger, "LongPolling", this._httpClient, this._url, data, this._options);
+        return (0,_Utils__WEBPACK_IMPORTED_MODULE_4__.sendMessage)(this._logger, "LongPolling", this._httpClient, this._url, data, this._options);
     }
     async stop() {
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Stopping polling.");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Stopping polling.");
         // Tell receiving loop to stop, abort any current request, and then wait for it to finish
         this._running = false;
         this._pollAbort.abort();
         try {
             await this._receiving;
             // Send DELETE to clean up long polling on the server
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) sending DELETE request to ${this._url}.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) sending DELETE request to ${this._url}.`);
             const headers = {};
-            const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_1__.getUserAgentHeader)();
+            const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_4__.getUserAgentHeader)();
             headers[name] = value;
             const deleteOptions = {
                 headers: { ...headers, ...this._options.headers },
@@ -2883,21 +2883,21 @@ class LongPollingTransport {
                 error = err;
             }
             if (error) {
-                if (error instanceof _Errors__WEBPACK_IMPORTED_MODULE_4__.HttpError) {
+                if (error instanceof _Errors__WEBPACK_IMPORTED_MODULE_1__.HttpError) {
                     if (error.statusCode === 404) {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) A 404 response was returned from sending a DELETE request.");
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) A 404 response was returned from sending a DELETE request.");
                     }
                     else {
-                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, `(LongPolling transport) Error sending a DELETE request: ${error}`);
+                        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(LongPolling transport) Error sending a DELETE request: ${error}`);
                     }
                 }
             }
             else {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) DELETE request accepted.");
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) DELETE request accepted.");
             }
         }
         finally {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, "(LongPolling transport) Stop finished.");
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(LongPolling transport) Stop finished.");
             // Raise close event here instead of in polling
             // It needs to happen after the DELETE request is sent
             this._raiseOnClose();
@@ -2909,7 +2909,7 @@ class LongPollingTransport {
             if (this._closeError) {
                 logMessage += " Error: " + this._closeError;
             }
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Trace, logMessage);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, logMessage);
             this.onclose(this._closeError);
         }
     }
@@ -2929,8 +2929,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   MessageBuffer: () => (/* binding */ MessageBuffer)
 /* harmony export */ });
-/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IHubProtocol */ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -2959,7 +2959,7 @@ class MessageBuffer {
             this._totalMessageCount++;
             let backpressurePromiseResolver = () => { };
             let backpressurePromiseRejector = () => { };
-            if ((0,_Utils__WEBPACK_IMPORTED_MODULE_0__.isArrayBuffer)(serializedMessage)) {
+            if ((0,_Utils__WEBPACK_IMPORTED_MODULE_1__.isArrayBuffer)(serializedMessage)) {
                 this._bufferedByteCount += serializedMessage.byteLength;
             }
             else {
@@ -2994,7 +2994,7 @@ class MessageBuffer {
             const element = this._messages[index];
             if (element._id <= ackMessage.sequenceId) {
                 newestAckedMessage = index;
-                if ((0,_Utils__WEBPACK_IMPORTED_MODULE_0__.isArrayBuffer)(element._message)) {
+                if ((0,_Utils__WEBPACK_IMPORTED_MODULE_1__.isArrayBuffer)(element._message)) {
                     this._bufferedByteCount -= element._message.byteLength;
                 }
                 else {
@@ -3018,7 +3018,7 @@ class MessageBuffer {
     }
     _shouldProcessMessage(message) {
         if (this._waitForSequenceMessage) {
-            if (message.type !== _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Sequence) {
+            if (message.type !== _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Sequence) {
                 return false;
             }
             else {
@@ -3063,7 +3063,7 @@ class MessageBuffer {
         const sequenceId = this._messages.length !== 0
             ? this._messages[0]._id
             : this._totalMessageCount + 1;
-        await this._connection.send(this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Sequence, sequenceId }));
+        await this._connection.send(this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Sequence, sequenceId }));
         // Get a local variable to the _messages, just in case messages are acked while resending
         // Which would slice the _messages array (which creates a new copy)
         const messages = this._messages;
@@ -3086,16 +3086,16 @@ class MessageBuffer {
         // seeing the function returns a value and it will do the
         // exhaustive check for us on the switch statement, since we don't use 'case default'
         switch (message.type) {
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Invocation:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.StreamItem:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Completion:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.StreamInvocation:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.CancelInvocation:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Invocation:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.StreamItem:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Completion:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.StreamInvocation:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.CancelInvocation:
                 return true;
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Close:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Sequence:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Ping:
-            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Ack:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Close:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Sequence:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Ping:
+            case _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Ack:
                 return false;
         }
     }
@@ -3104,7 +3104,7 @@ class MessageBuffer {
             this._ackTimerHandle = setTimeout(async () => {
                 try {
                     if (!this._reconnectInProgress) {
-                        await this._connection.send(this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_1__.MessageType.Ack, sequenceId: this._latestReceivedSequenceId }));
+                        await this._connection.send(this._protocol.writeMessage({ type: _IHubProtocol__WEBPACK_IMPORTED_MODULE_0__.MessageType.Ack, sequenceId: this._latestReceivedSequenceId }));
                     }
                     // Ignore errors, that means the connection is closed and we don't care about the Ack message anymore.
                 }
@@ -3139,9 +3139,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ServerSentEventsTransport: () => (/* binding */ ServerSentEventsTransport)
 /* harmony export */ });
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
 /* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -3158,10 +3158,10 @@ class ServerSentEventsTransport {
         this.onclose = null;
     }
     async connect(url, transferFormat) {
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isRequired(url, "url");
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isRequired(transferFormat, "transferFormat");
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_1__.TransferFormat, "transferFormat");
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(SSE transport) Connecting.");
+        _Utils__WEBPACK_IMPORTED_MODULE_2__.Arg.isRequired(url, "url");
+        _Utils__WEBPACK_IMPORTED_MODULE_2__.Arg.isRequired(transferFormat, "transferFormat");
+        _Utils__WEBPACK_IMPORTED_MODULE_2__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_1__.TransferFormat, "transferFormat");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Trace, "(SSE transport) Connecting.");
         // set url before accessTokenFactory because this._url is only for send and we set the auth header instead of the query string for send
         this._url = url;
         if (this._accessToken) {
@@ -3174,7 +3174,7 @@ class ServerSentEventsTransport {
                 return;
             }
             let eventSource;
-            if (_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isBrowser || _Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isWebWorker) {
+            if (_Utils__WEBPACK_IMPORTED_MODULE_2__.Platform.isBrowser || _Utils__WEBPACK_IMPORTED_MODULE_2__.Platform.isWebWorker) {
                 eventSource = new this._options.EventSource(url, { withCredentials: this._options.withCredentials });
             }
             else {
@@ -3182,7 +3182,7 @@ class ServerSentEventsTransport {
                 const cookies = this._httpClient.getCookieString(url);
                 const headers = {};
                 headers.Cookie = cookies;
-                const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getUserAgentHeader)();
+                const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_2__.getUserAgentHeader)();
                 headers[name] = value;
                 eventSource = new this._options.EventSource(url, { withCredentials: this._options.withCredentials, headers: { ...headers, ...this._options.headers } });
             }
@@ -3190,7 +3190,7 @@ class ServerSentEventsTransport {
                 eventSource.onmessage = (e) => {
                     if (this.onreceive) {
                         try {
-                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(SSE transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getDataDetail)(e.data, this._options.logMessageContent)}.`);
+                            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Trace, `(SSE transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_2__.getDataDetail)(e.data, this._options.logMessageContent)}.`);
                             this.onreceive(e.data);
                         }
                         catch (error) {
@@ -3212,7 +3212,7 @@ class ServerSentEventsTransport {
                     }
                 };
                 eventSource.onopen = () => {
-                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Information, `SSE connected to ${this._url}`);
+                    this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_0__.LogLevel.Information, `SSE connected to ${this._url}`);
                     this._eventSource = eventSource;
                     opened = true;
                     resolve();
@@ -3228,7 +3228,7 @@ class ServerSentEventsTransport {
         if (!this._eventSource) {
             return Promise.reject(new Error("Cannot send until the transport is connected"));
         }
-        return (0,_Utils__WEBPACK_IMPORTED_MODULE_0__.sendMessage)(this._logger, "SSE", this._httpClient, this._url, data, this._options);
+        return (0,_Utils__WEBPACK_IMPORTED_MODULE_2__.sendMessage)(this._logger, "SSE", this._httpClient, this._url, data, this._options);
     }
     stop() {
         this._close();
@@ -3618,10 +3618,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   WebSocketTransport: () => (/* binding */ WebSocketTransport)
 /* harmony export */ });
-/* harmony import */ var _HeaderNames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderNames */ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _HeaderNames__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HeaderNames */ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _ITransport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ITransport */ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
@@ -3641,10 +3641,10 @@ class WebSocketTransport {
         this._headers = headers;
     }
     async connect(url, transferFormat) {
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isRequired(url, "url");
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isRequired(transferFormat, "transferFormat");
-        _Utils__WEBPACK_IMPORTED_MODULE_0__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_1__.TransferFormat, "transferFormat");
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(WebSockets transport) Connecting.");
+        _Utils__WEBPACK_IMPORTED_MODULE_3__.Arg.isRequired(url, "url");
+        _Utils__WEBPACK_IMPORTED_MODULE_3__.Arg.isRequired(transferFormat, "transferFormat");
+        _Utils__WEBPACK_IMPORTED_MODULE_3__.Arg.isIn(transferFormat, _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat, "transferFormat");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Trace, "(WebSockets transport) Connecting.");
         let token;
         if (this._accessTokenFactory) {
             token = await this._accessTokenFactory();
@@ -3654,15 +3654,15 @@ class WebSocketTransport {
             let webSocket;
             const cookies = this._httpClient.getCookieString(url);
             let opened = false;
-            if (_Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isNode || _Utils__WEBPACK_IMPORTED_MODULE_0__.Platform.isReactNative) {
+            if (_Utils__WEBPACK_IMPORTED_MODULE_3__.Platform.isNode || _Utils__WEBPACK_IMPORTED_MODULE_3__.Platform.isReactNative) {
                 const headers = {};
-                const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getUserAgentHeader)();
+                const [name, value] = (0,_Utils__WEBPACK_IMPORTED_MODULE_3__.getUserAgentHeader)();
                 headers[name] = value;
                 if (token) {
-                    headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_3__.HeaderNames.Authorization] = `Bearer ${token}`;
+                    headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_0__.HeaderNames.Authorization] = `Bearer ${token}`;
                 }
                 if (cookies) {
-                    headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_3__.HeaderNames.Cookie] = cookies;
+                    headers[_HeaderNames__WEBPACK_IMPORTED_MODULE_0__.HeaderNames.Cookie] = cookies;
                 }
                 // Only pass headers when in non-browser environments
                 webSocket = new this._webSocketConstructor(url, undefined, {
@@ -3678,11 +3678,11 @@ class WebSocketTransport {
                 // Chrome is not happy with passing 'undefined' as protocol
                 webSocket = new this._webSocketConstructor(url);
             }
-            if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_1__.TransferFormat.Binary) {
+            if (transferFormat === _ITransport__WEBPACK_IMPORTED_MODULE_2__.TransferFormat.Binary) {
                 webSocket.binaryType = "arraybuffer";
             }
             webSocket.onopen = (_event) => {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Information, `WebSocket connected to ${url}.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Information, `WebSocket connected to ${url}.`);
                 this._webSocket = webSocket;
                 opened = true;
                 resolve();
@@ -3696,10 +3696,10 @@ class WebSocketTransport {
                 else {
                     error = "There was an error with the transport";
                 }
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Information, `(WebSockets transport) ${error}.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Information, `(WebSockets transport) ${error}.`);
             };
             webSocket.onmessage = (message) => {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(WebSockets transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getDataDetail)(message.data, this._logMessageContent)}.`);
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Trace, `(WebSockets transport) data received. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_3__.getDataDetail)(message.data, this._logMessageContent)}.`);
                 if (this.onreceive) {
                     try {
                         this.onreceive(message.data);
@@ -3735,7 +3735,7 @@ class WebSocketTransport {
     }
     send(data) {
         if (this._webSocket && this._webSocket.readyState === this._webSocketConstructor.OPEN) {
-            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, `(WebSockets transport) sending data. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_0__.getDataDetail)(data, this._logMessageContent)}.`);
+            this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Trace, `(WebSockets transport) sending data. ${(0,_Utils__WEBPACK_IMPORTED_MODULE_3__.getDataDetail)(data, this._logMessageContent)}.`);
             this._webSocket.send(data);
             return Promise.resolve();
         }
@@ -3759,7 +3759,7 @@ class WebSocketTransport {
             this._webSocket.close();
             this._webSocket = undefined;
         }
-        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Trace, "(WebSockets transport) socket closed.");
+        this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_1__.LogLevel.Trace, "(WebSockets transport) socket closed.");
         if (this.onclose) {
             if (this._isCloseEvent(event) && (event.wasClean === false || event.code !== 1000)) {
                 this.onclose(new Error(`WebSocket closed with status code: ${event.code} (${event.reason || "no reason given"}).`));
@@ -3791,17 +3791,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   XhrHttpClient: () => (/* binding */ XhrHttpClient)
 /* harmony export */ });
-/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
-/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
-/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Errors */ "./node_modules/@microsoft/signalr/dist/esm/Errors.js");
+/* harmony import */ var _HttpClient__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HttpClient */ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js");
+/* harmony import */ var _ILogger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ILogger */ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js");
+/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Utils */ "./node_modules/@microsoft/signalr/dist/esm/Utils.js");
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 
 
 
-class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient {
+class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpClient {
     constructor(logger) {
         super();
         this._logger = logger;
@@ -3810,7 +3810,7 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
     send(request) {
         // Check that abort was not signaled before calling send
         if (request.abortSignal && request.abortSignal.aborted) {
-            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_1__.AbortError());
+            return Promise.reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.AbortError());
         }
         if (!request.method) {
             return Promise.reject(new Error("No method defined."));
@@ -3828,7 +3828,7 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
             }
             if (request.content) {
                 // Explicitly setting the Content-Type header for React Native on Android platform.
-                if ((0,_Utils__WEBPACK_IMPORTED_MODULE_2__.isArrayBuffer)(request.content)) {
+                if ((0,_Utils__WEBPACK_IMPORTED_MODULE_3__.isArrayBuffer)(request.content)) {
                     xhr.setRequestHeader("Content-Type", "application/octet-stream");
                 }
                 else {
@@ -3848,7 +3848,7 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
             if (request.abortSignal) {
                 request.abortSignal.onabort = () => {
                     xhr.abort();
-                    reject(new _Errors__WEBPACK_IMPORTED_MODULE_1__.AbortError());
+                    reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.AbortError());
                 };
             }
             if (request.timeout) {
@@ -3859,19 +3859,19 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
                     request.abortSignal.onabort = null;
                 }
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve(new _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpResponse(xhr.status, xhr.statusText, xhr.response || xhr.responseText));
+                    resolve(new _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpResponse(xhr.status, xhr.statusText, xhr.response || xhr.responseText));
                 }
                 else {
-                    reject(new _Errors__WEBPACK_IMPORTED_MODULE_1__.HttpError(xhr.response || xhr.responseText || xhr.statusText, xhr.status));
+                    reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.HttpError(xhr.response || xhr.responseText || xhr.statusText, xhr.status));
                 }
             };
             xhr.onerror = () => {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `Error from HTTP request. ${xhr.status}: ${xhr.statusText}.`);
-                reject(new _Errors__WEBPACK_IMPORTED_MODULE_1__.HttpError(xhr.statusText, xhr.status));
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Warning, `Error from HTTP request. ${xhr.status}: ${xhr.statusText}.`);
+                reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.HttpError(xhr.statusText, xhr.status));
             };
             xhr.ontimeout = () => {
-                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_3__.LogLevel.Warning, `Timeout from HTTP request.`);
-                reject(new _Errors__WEBPACK_IMPORTED_MODULE_1__.TimeoutError());
+                this._logger.log(_ILogger__WEBPACK_IMPORTED_MODULE_2__.LogLevel.Warning, `Timeout from HTTP request.`);
+                reject(new _Errors__WEBPACK_IMPORTED_MODULE_0__.TimeoutError());
             };
             xhr.send(request.content);
         });
@@ -3881,155 +3881,256 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_0__.HttpClient 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/UserOrders/GetNewOrder.ts":
-/*!**********************************************!*\
-  !*** ./wwwroot/ts/UserOrders/GetNewOrder.ts ***!
-  \**********************************************/
+/***/ "./wwwroot/ts/QuizUser/Canvas.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/QuizUser/Canvas.ts ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GetNewOrder: () => (/* binding */ GetNewOrder)
+/* harmony export */   Canvas: () => (/* binding */ Canvas)
 /* harmony export */ });
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _PrintOrder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PrintOrder */ "./wwwroot/ts/UserOrders/PrintOrder.ts");
-
-
-class GetNewOrder {
+class Canvas {
     constructor() {
-        this.GetNewOrder = (signalR, ctx) => {
-            signalR.get("NewOrder", async (data) => {
-                const parsedData = data;
-                const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
-                const resultIds = orderTableEntityList.map(x => x.ResultId);
-                this.send().then((senrOrderdata) => {
-                    document.getElementById("contents").innerHTML = senrOrderdata;
-                    _PrintOrder__WEBPACK_IMPORTED_MODULE_1__.PrintOrder.RequestElectronPrint(resultIds);
-                });
+        this.isDrawing = false;
+        this.lastX = 0;
+        this.lastY = 0;
+        this.SetCanvas = () => {
+            this.ClearButtonElement.addEventListener("click", () => {
+                this.ActivateCanvas();
             });
         };
-        this.send = async () => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, null, this.responseKind).then(async (data) => {
-                return data;
-            }).catch(e => {
-                throw e;
+        this.ActivateCanvas = () => {
+            this.Ctx.clearRect(0, 0, this.CanvasElement.width, this.CanvasElement.height);
+        };
+        this.SetCanvasSizeForDpi = () => {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = this.CanvasElement.getBoundingClientRect();
+            this.CanvasElement.width = rect.width * dpr;
+            this.CanvasElement.height = rect.height * dpr;
+            this.CanvasElement.style.width = rect.width + "px";
+            this.CanvasElement.style.height = rect.height + "px";
+        };
+        this.SetDrawingPc = () => {
+            this.CanvasElement.addEventListener('mousedown', (e) => {
+                this.isDrawing = true;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                this.lastX = (e.clientX - rect.left) * dpr;
+                this.lastY = (e.clientY - rect.top) * dpr;
+            });
+            this.CanvasElement.addEventListener('mousemove', (e) => {
+                if (!this.isDrawing)
+                    return;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const x = (e.clientX - rect.left) * dpr;
+                const y = (e.clientY - rect.top) * dpr;
+                if (this.lastX === x && this.lastY === y) {
+                    this.Ctx.beginPath();
+                    this.Ctx.arc(x, y, 1 * dpr, 0, Math.PI * 2);
+                    this.Ctx.fillStyle = "#333";
+                    this.Ctx.fill();
+                }
+                else {
+                    this.Ctx.beginPath();
+                    this.Ctx.moveTo(this.lastX, this.lastY);
+                    this.Ctx.lineTo(x, y);
+                    this.Ctx.strokeStyle = "#333";
+                    this.Ctx.lineWidth = 2 * dpr;
+                    this.Ctx.lineCap = "round";
+                    this.Ctx.stroke();
+                }
+                this.lastX = x;
+                this.lastY = y;
+            });
+            this.CanvasElement.addEventListener('mouseup', () => {
+                this.isDrawing = false;
+            });
+            this.CanvasElement.addEventListener('mouseleave', () => {
+                this.isDrawing = false;
             });
         };
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-        if (params.has('eid')) {
-            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
-        }
-        else {
-            this.url = '/Pos/UserOrdersPartial';
-        }
-        this.method = 'GET';
-        this.headers = {
-            "Content-Type": "application/json",
-            'X-Requested-With': 'XMLHttpRequest'
+        this.SetDrawingPhone = () => {
+            this.CanvasElement.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.isDrawing = true;
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const touch = e.touches[0];
+                this.lastX = (touch.clientX - rect.left) * dpr;
+                this.lastY = (touch.clientY - rect.top) * dpr;
+            }, { passive: false });
+            this.CanvasElement.addEventListener('touchmove', (e) => {
+                if (!this.isDrawing)
+                    return;
+                e.preventDefault();
+                const rect = this.CanvasElement.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                const touch = e.touches[0];
+                const x = (touch.clientX - rect.left) * dpr;
+                const y = (touch.clientY - rect.top) * dpr;
+                if (this.lastX === x && this.lastY === y) {
+                    this.Ctx.beginPath();
+                    this.Ctx.arc(x, y, 1 * dpr, 0, Math.PI * 2);
+                    this.Ctx.fillStyle = "#333";
+                    this.Ctx.fill();
+                }
+                else {
+                    this.Ctx.beginPath();
+                    this.Ctx.moveTo(this.lastX, this.lastY);
+                    this.Ctx.lineTo(x, y);
+                    this.Ctx.strokeStyle = "#333";
+                    this.Ctx.lineWidth = 2 * dpr;
+                    this.Ctx.lineCap = "round";
+                    this.Ctx.stroke();
+                }
+                this.lastX = x;
+                this.lastY = y;
+            }, { passive: false });
+            this.CanvasElement.addEventListener('touchend', () => {
+                this.isDrawing = false;
+            });
+            this.CanvasElement.addEventListener('touchcancel', () => {
+                this.isDrawing = false;
+            });
         };
-        this.responseKind = "text";
+        this.CanvasElement = document.getElementById('textCanvas');
+        this.ClearButtonElement = document.getElementById('clear');
+        this.SetCanvasSizeForDpi();
+        this.Ctx = this.CanvasElement.getContext('2d');
+        this.SetCanvas();
+        this.ActivateCanvas();
+        this.SetDrawingPc();
+        this.SetDrawingPhone();
+        // ウィンドウリサイズ時にCanvasサイズを再設定
+        window.addEventListener('resize', () => {
+            this.SetCanvasSizeForDpi();
+            this.ActivateCanvas();
+        });
     }
 }
 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/UserOrders/OrderComplete.ts":
-/*!************************************************!*\
-  !*** ./wwwroot/ts/UserOrders/OrderComplete.ts ***!
-  \************************************************/
+/***/ "./wwwroot/ts/QuizUser/GetQuiz.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/QuizUser/GetQuiz.ts ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   OrderComplete: () => (/* binding */ OrderComplete)
+/* harmony export */   GetQuiz: () => (/* binding */ GetQuiz)
+/* harmony export */ });
+class GetQuiz {
+    constructor() {
+        this.GetQuiz = async (signalR) => {
+            signalR.get("ReceiveQuizId", async (quizId) => {
+                const parsedQuizId = quizId;
+                const response = await fetch(this.url + `/${parsedQuizId.QuizId}`, {
+                    method: this.method,
+                    headers: this.headers
+                });
+                await response.text().then(data => {
+                    console.log(data);
+                    document.getElementById("quiz").innerHTML = data;
+                });
+                // 問題を受信したらボタンをアクティブに
+                const sendElement = document.getElementById('send');
+                sendElement.disabled = false;
+            });
+        };
+        this.url = '/Quiz/GetQuiz';
+        this.method = 'Get';
+        this.headers = {
+            "Content-Type": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+    }
+}
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/QuizUser/SendAnswer.ts":
+/*!*******************************************!*\
+  !*** ./wwwroot/ts/QuizUser/SendAnswer.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SendAnswer: () => (/* binding */ SendAnswer)
 /* harmony export */ });
 /* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
 
-
-class OrderComplete {
+class SendAnswer {
     constructor() {
-        this.parentElement = document.getElementById("user_order_list");
-        this.Reload = () => {
-            const reloadButtonElement = document.getElementById("reload");
-            reloadButtonElement.addEventListener("click", () => {
-                location.reload();
-            });
-        };
-        this.Complete = () => {
-            _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_1__.SetEventListner.setEventAll(this.parentElement, 'click', '.completed', (e) => {
-                const target = e.target;
-                const resultId = target.nextElementSibling.value;
-                this.send({ "ResultIdList": [resultId] }).then((data) => {
-                    this.OrderCompleted(data, [target.parentElement]);
+        this.SendCanvas = () => {
+            const sendElement = document.getElementById('send');
+            const canvasElement = document.getElementById('textCanvas');
+            sendElement.onclick = () => {
+                const quizId = document.getElementById('quiz_id').value;
+                const dataUrl = canvasElement.toDataURL("image/png");
+                const answerEntity = {
+                    quizId: quizId,
+                    image: dataUrl
+                };
+                this.Send(answerEntity).then((data) => {
+                    const result = JSON.parse(data);
+                    sendElement.disabled = true;
+                    window.alert(result.message);
                 });
-            });
+            };
         };
-        this.send = async (resultIds) => {
+        this.Send = async (answerEntity) => {
             const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-            return await fetchApi.send(this.url, this.method, this.headers, resultIds, this.responseKind).then(async (data) => {
+            return await fetchApi.send(this.url, this.method, this.headers, answerEntity, this.responseKind).then(async (data) => {
                 return data;
             }).catch(e => {
                 throw e;
             });
         };
-        this.OrderCompleted = (data, elements) => {
-            const result = JSON.parse(data);
-            if (result.status == "200") {
-                elements.forEach(element => {
-                    const tbody = element.closest("tbody");
-                    if (tbody) {
-                        tbody.remove();
-                    }
-                });
-            }
-        };
-        this.url = '/Pos/OrderComplete';
+        this.url = '/Quiz/SendAnswer';
         this.method = 'POST';
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
         };
-        this.responseKind = "text";
-        this.Reload();
-        this.Complete();
+        this.responseKind = "json";
     }
 }
 
 
 /***/ }),
 
-/***/ "./wwwroot/ts/UserOrders/PrintOrder.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/UserOrders/PrintOrder.ts ***!
-  \*********************************************/
+/***/ "./wwwroot/ts/share/BackButton.ts":
+/*!****************************************!*\
+  !*** ./wwwroot/ts/share/BackButton.ts ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   PrintOrder: () => (/* binding */ PrintOrder)
+/* harmony export */   BackButton: () => (/* binding */ BackButton)
 /* harmony export */ });
-/// <reference path="../../types/electron.d.ts" />
-class PrintOrder {
+class BackButton {
+    constructor() {
+        this.Buck = () => {
+            const element = document.getElementById('back');
+            element.addEventListener("click", () => {
+                history.back();
+            });
+        };
+    }
 }
-// Electron が利用可能ならテンプレート印刷を要求する
-PrintOrder.RequestElectronPrint = (orderIds) => {
-    const args = {
-        resultIds: orderIds
-    };
-    if (window.electronAPI && window.electronAPI.printReceipt) {
-        window.electronAPI.printReceipt(args);
-    }
-    else {
-        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
-    }
-};
 
 
 /***/ }),
@@ -4148,52 +4249,6 @@ ManageLoadElement.remove = () => {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/SetEventListner.ts":
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/share/SetEventListner.ts ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SetEventListner: () => (/* binding */ SetEventListner)
-/* harmony export */ });
-class SetEventListner {
-}
-SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = false) => {
-    const returnHandler = (event) => {
-        const targetElement = parentElement?.querySelector(targetName);
-        if (event.target == targetElement) {
-            callback(event);
-            if (atOnce) {
-                parentElement?.removeEventListener(type, returnHandler);
-            }
-        }
-    };
-    parentElement?.addEventListener(type, returnHandler);
-    return returnHandler;
-};
-SetEventListner.setEventAll = (parentElement, type, targetName, callback, atOnce = false) => {
-    const returnHandler = (event) => {
-        const targetElements = parentElement?.querySelectorAll(targetName);
-        if (targetElements && Array.from(targetElements).includes(event.target)) {
-            callback(event);
-            if (atOnce) {
-                parentElement?.removeEventListener(type, returnHandler);
-            }
-        }
-    };
-    parentElement?.addEventListener(type, returnHandler);
-    return returnHandler;
-};
-SetEventListner.removeEvent = (parentElement, type, handler) => {
-    parentElement?.removeEventListener(type, handler);
-};
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/share/SignalR.ts":
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/SignalR.ts ***!
@@ -4248,10 +4303,30 @@ class SignalR {
 
 /***/ }),
 
+/***/ "?1b30":
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
 /***/ "?6cf0":
 /*!**********************************!*\
   !*** abort-controller (ignored) ***!
   \**********************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?7cbe":
+/*!******************************!*\
+  !*** tough-cookie (ignored) ***!
+  \******************************/
 /***/ (() => {
 
 /* (ignored) */
@@ -4282,26 +4357,6 @@ class SignalR {
 /*!****************************!*\
   !*** node-fetch (ignored) ***!
   \****************************/
-/***/ (() => {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ "?7cbe":
-/*!******************************!*\
-  !*** tough-cookie (ignored) ***!
-  \******************************/
-/***/ (() => {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ "?1b30":
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
 /***/ (() => {
 
 /* (ignored) */
@@ -4377,33 +4432,40 @@ class SignalR {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
-/*!****************************************!*\
-  !*** ./wwwroot/ts/UserOrders/Index.ts ***!
-  \****************************************/
+/*!**************************************!*\
+  !*** ./wwwroot/ts/QuizUser/Index.ts ***!
+  \**************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetNewOrder */ "./wwwroot/ts/UserOrders/GetNewOrder.ts");
-/* harmony import */ var _OrderComplete__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./OrderComplete */ "./wwwroot/ts/UserOrders/OrderComplete.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _SendAnswer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendAnswer */ "./wwwroot/ts/QuizUser/SendAnswer.ts");
+/* harmony import */ var _Canvas__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Canvas */ "./wwwroot/ts/QuizUser/Canvas.ts");
+/* harmony import */ var _GetQuiz__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GetQuiz */ "./wwwroot/ts/QuizUser/GetQuiz.ts");
 
 
 
 
-(async () => {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
-    new _OrderComplete__WEBPACK_IMPORTED_MODULE_3__.OrderComplete();
+
+
+(() => {
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
-    const getNewOrder = new _GetNewOrder__WEBPACK_IMPORTED_MODULE_2__.GetNewOrder();
     signalR.activate();
-    getNewOrder.GetNewOrder(signalR, ctx);
+    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
+    new _Canvas__WEBPACK_IMPORTED_MODULE_4__.Canvas();
+    const getQuiz = new _GetQuiz__WEBPACK_IMPORTED_MODULE_5__.GetQuiz();
+    const sendAnswer = new _SendAnswer__WEBPACK_IMPORTED_MODULE_3__.SendAnswer();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    sendAnswer.SendCanvas();
+    getQuiz.GetQuiz(signalR);
+    backButton.Buck();
 })();
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=UserOrders.js.map
+//# sourceMappingURL=QuizUser.js.map
