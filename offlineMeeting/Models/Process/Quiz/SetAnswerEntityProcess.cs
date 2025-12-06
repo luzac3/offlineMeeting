@@ -28,30 +28,7 @@ namespace offlineMeeting.Models.Process.Quiz
             ResultsEntity result = base
                 .GetSingleRecord(resultId);
 
-            string[]? imageSplit = result!.DescriptionA?.Split("/");
-            string guid = "";
-            if (imageSplit != null && imageSplit?.Length > 2)
-            {
-                guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
-            }
-            string? image = GetBinariesProcess.GetImage(guid);
-
-            JoinerEntity userData = getUsersProcess.GetUserData(result.ClassB ?? "0");
-
-            // Nullチェックを追加
-            ResultsEntity? resultsEntity = result.ClassC != null ? GetSingleRecord(result.ClassC) : null;
-
-            return new AnswerEntity(
-                resultId: result.ResultId.ToString(),
-                userCd: result.ClassB,
-                userName: userData.UserName,
-                quizId: result.ClassC,
-                image: $"data:image/jpeg;base64,{image}",
-                lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
-                maxPoint: Convert.ToInt32(resultsEntity?.NumA ?? 0),
-                point: Convert.ToInt32(result.NumA),
-                answerTime: result.DateA ?? DateTime.MinValue
-            );
+            return CreateAnswerEntity(result);
         }
 
         public List<AnswerEntity> GetList(int answerSiteId, string quizId)
@@ -68,6 +45,14 @@ namespace offlineMeeting.Models.Process.Quiz
             List<AnswerEntity> answerEntityList = new List<AnswerEntity>();
             foreach (var result in results)
             {
+                answerEntityList.Add(CreateAnswerEntity(result));
+            }
+            return answerEntityList;
+        }
+        private AnswerEntity CreateAnswerEntity(ResultsEntity result)
+        {
+            GetUsersProcess getUsersProcess = new(JoinerSiteId, httpContext);
+
                 string[]? imageSplit = result!.DescriptionA?.Split("/");
                 string guid = "";
                 if (imageSplit != null && imageSplit?.Length > 2)
