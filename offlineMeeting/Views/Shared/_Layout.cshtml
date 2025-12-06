@@ -14,6 +14,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/2.0.1/spinkit.min.css">
+        @RenderSection("Styles", required: false)
     </head>
     <body>
         <header>
@@ -92,7 +93,7 @@
             <div id="loading-overlay" class="loading-overlay nodisplay">
                 <div class="loading"></div>
             </div>
-            <main id="main" role="main" class="pb-3">
+            <main id="main" role="main" class="pb-3 nodisplay">
                 @RenderBody()
             </main>
         </div>
