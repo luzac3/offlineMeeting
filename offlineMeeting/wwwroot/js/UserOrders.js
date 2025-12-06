@@ -4051,6 +4051,7 @@ class ControlNavbar {
             const navbar = document.querySelector('.navbar');
             let subbarHeight = 0;
             if (navbar) {
+                document.body.classList.remove('nodisplay');
                 const subbar = document.querySelector('.navbar-sub');
                 if (subbar) {
                     subbarHeight = navbar.offsetHeight;
@@ -4058,8 +4059,6 @@ class ControlNavbar {
                 }
                 document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
             }
-            // 画面の表示はNavbarの調整を行った後
-            document.getElementById("main")?.classList.remove("nodisplay");
         };
         this.setPadding();
         window.addEventListener('resize', this.setPadding);
