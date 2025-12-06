@@ -6,10 +6,11 @@ let entries = {};
 glob
     .sync("./wwwroot/ts/**/Index.ts", {
         ignore: "./wwwroot/ts/**/*.d.ts"
-    }).
-    map(function (file) {
-        const key = file.replace("./wwwroot/ts/", "").replace(/\.ts$/, "").split("/")[0];
-        entries[key] = file;
+    })
+    .map(function (file) {
+        const rel = path.relative(path.join(__dirname, 'wwwroot/ts'), file).replace(/\\/g, '/');
+        const key = rel.replace(/\.ts$/, "").split("/")[0];
+        entries[key] = path.resolve(__dirname, file);
     });
 
 module.exports = (env, argv) => {
@@ -25,7 +26,7 @@ module.exports = (env, argv) => {
         entry: entries,
 
         output: {
-            path: path.join(__dirname, "/wwwroot/js/dist"),
+            path: path.join(__dirname, "/wwwroot/js"),
             filename: '[name].js'
         },
 
@@ -34,6 +35,7 @@ module.exports = (env, argv) => {
                 {
                     test: /\.ts$/,
                     use: 'ts-loader',
+                    exclude: /node_modules/,
                 }
             ],
         },

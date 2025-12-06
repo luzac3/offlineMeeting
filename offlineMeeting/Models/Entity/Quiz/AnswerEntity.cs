@@ -9,6 +9,7 @@ namespace offlineMeeting.Models.Entity.Quiz
         public string? UserName { get; set; }
         public string? QuizId { get; set; }
         public string? Image { get; set; }
+        public string? LowImage { get; set; }
         public int MaxPoint { get; set; }
         public int Point { get; set; }
         public DateTime? AnswerTime { get; set; }
@@ -19,6 +20,7 @@ namespace offlineMeeting.Models.Entity.Quiz
             string? userName,
             string? quizId,
             string? image,
+            string? lowImage,
             int maxPoint,
             int point,
             DateTime answerTime
@@ -29,6 +31,7 @@ namespace offlineMeeting.Models.Entity.Quiz
             UserName = userName;
             QuizId = quizId;
             Image = image;
+            LowImage = lowImage;
             MaxPoint = maxPoint;
             Point = point;
             AnswerTime = answerTime;

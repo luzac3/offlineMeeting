@@ -17,21 +17,14 @@ export class OrderComplete {
         };
         this.responseKind = "text";
 
-        this.Batch();
+        this.Reload();
         this.Complete();
     }
 
-    private Batch = () => {
-        const batchButtonElement = document.getElementById("batch_processing") as HTMLButtonElement;
-        batchButtonElement.addEventListener("click", () => {
-            const checkedResultElements = Array.from(
-                this.parentElement?.querySelectorAll('.completed_check[type="checkbox"]:checked + input') ?? []
-            );
-            const checkedResultIdArray = checkedResultElements.map(el => (<HTMLInputElement>el).value);
-
-            this.send({ "ResultIdList": checkedResultIdArray }).then((data) => {
-                this.OrderCompleted(data, checkedResultElements as HTMLElement[]);
-            });
+    private Reload = () => {
+        const reloadButtonElement = document.getElementById("reload") as HTMLButtonElement;
+        reloadButtonElement.addEventListener("click", () => {
+            location.reload();
         });
     }
 
