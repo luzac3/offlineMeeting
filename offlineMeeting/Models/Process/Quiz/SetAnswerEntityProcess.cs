@@ -47,6 +47,7 @@ namespace offlineMeeting.Models.Process.Quiz
                 userName: userData.UserName,
                 quizId: result.ClassC,
                 image: $"data:image/jpeg;base64,{image}",
+                lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                 maxPoint: Convert.ToInt32(resultsEntity?.NumA ?? 0),
                 point: Convert.ToInt32(result.NumA),
                 answerTime: result.DateA ?? DateTime.MinValue
@@ -83,6 +84,7 @@ namespace offlineMeeting.Models.Process.Quiz
                     userName: userData.UserName,
                     quizId: result.ClassC,
                     image: $"data:image/jpeg;base64,{image}",
+                    lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                     maxPoint: Convert.ToInt32(resultsEntity?.NumA ?? 0),
                     point: Convert.ToInt32(result.NumA),
                     answerTime: result.DateA ?? DateTime.MinValue

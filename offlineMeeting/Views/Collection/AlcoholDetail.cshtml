@@ -25,12 +25,18 @@
                     <p class="food_image_container">
                         @if (@Model.AlcoholDataEntity?.Image == "")
                         {
-                            <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                            <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                 data-src="/image/noImage.jpg"
+                                 class="food_image blur-up"
+                                 loading="lazy" />
                         }
                         else
                         {
                             <a href="@(Model.AlcoholDataEntity?.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                <img src="@(Model.AlcoholDataEntity?.Image)" class="food_image" />
+                                <img src="@(Model.AlcoholDataEntity.LowImage)"
+                                     data-src="@(Model.AlcoholDataEntity.Image)"
+                                     class="food_image blur-up"
+                                     loading="lazy" />
                             </a>
                         }
                         @switch (Model.AlcoholDataEntity?.Rarity)
@@ -63,7 +69,7 @@
                     </h2>
                     <p class="alcohol_poncoin">
                         <span>1合</span>
-                        <img src="/image/poncoin.png" alt="image" />
+                        <img src="/image/poncoin_192.png" alt="image" />
                         <span> × </span>
                         <span class="coin_number_modal_show">@(Model.AlcoholDataEntity?.CoinNumber * 5 - Model.AlcoholDataEntity?.CoinNumber)</span>
                     </p>

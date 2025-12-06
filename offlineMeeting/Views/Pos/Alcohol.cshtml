@@ -37,11 +37,17 @@
                             <p class="food_image_container">
                                 @if (@alcoholDataEntity.Image == "")
                                 {
-                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                         data-src="/image/noImage.jpg"
+                                         class="food_image blur-up"
+                                         loading="lazy" />
                                 }
                                 else
                                 {
-                                    <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                    <img src="@(alcoholDataEntity.LowImage)"
+                                         data-src="@(alcoholDataEntity.Image)"
+                                         class="food_image blur-up"
+                                         loading="lazy" />
                                 }
                                 @if (alcoholDataEntity.Ordered)
                                 {
@@ -76,7 +82,7 @@
                                 <span>@(alcoholDataEntity.Priority ? "☆" : "")@(alcoholDataEntity.Abbreviation != "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
                             </p>
                             <p class="alcohol_poncoin">
-                                <img src="/image/poncoin.png" alt="image" />
+                                <img src="/image/poncoin_192.png" alt="image" />
                                 <span> × </span>
                                 <span class="coin_number_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
@@ -115,12 +121,18 @@
                                 <p class="food_image_modal_container">
                                     @if (@alcoholDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
                                         <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                            <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                            <img src="@(alcoholDataEntity.LowImage)"
+                                                 data-src="@(alcoholDataEntity.Image)"
+                                                 class="food_image blur-up"
+                                                 loading="lazy" />
                                         </a>
                                     }
                                     @if (alcoholDataEntity.Ordered)
@@ -156,7 +168,7 @@
                                     <span>@alcoholDataEntity.AlcoholName</span>
                                 </p>
                                 <p class="alcohol_modal_poncoin">
-                                    <img src="/image/poncoin.png" alt="image" />
+                                    <img src="/image/poncoin_192.png" alt="image" />
                                     <span> × </span>
                                     <span class="coin_number_modal_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 </p>
