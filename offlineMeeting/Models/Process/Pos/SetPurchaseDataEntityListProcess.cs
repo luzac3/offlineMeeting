@@ -116,6 +116,7 @@ namespace offlineMeeting.Models.Process.Pos
                     new PurchaseDataEntity(
                         resultId: result.ResultId,
                         image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                        lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                         purchaseName: purchaseName,
                         foodCategory: result.ClassB,
                         category: getCategory(result),

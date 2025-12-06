@@ -185,3 +185,11 @@ body {
         transform: rotate(360deg);
     }
 }
+
+.blur-up {
+    filter: blur(20px);
+    transition: filter 0.5s;
+}
+    .blur-up.loaded {
+        filter: blur(0);
+    }
