@@ -4149,33 +4149,22 @@ __webpack_require__.r(__webpack_exports__);
 class BlurImage {
 }
 BlurImage.loaded = () => {
-    // DOMContentLoadedを待つことで、HTML要素の準備を保証
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('img.blur-up').forEach(_img => {
             const img = _img;
-            // 既にロード済みまたはsrcがない場合はスキップ
             if (!img.dataset.src || img.classList.contains('loaded')) {
                 return;
             }
-            // 1. 高画質画像ロード用のイベントリスナーを登録
             const loadHDImage = () => {
-                // **重要:** 新しい画像がロード完了した時の処理
                 img.onload = () => {
-                    // 1. ブラー解除クラスを追加（CSSで設定）
                     img.classList.add('loaded');
-                    // 2. ブラー解除後のonloadイベントが再発火しないようにイベントを削除
                     img.onload = null;
-                    // 3. ローディングGIFなどの低解像度srcを、ここで削除/変更しても良い
-                    // 例: img.removeAttribute('src'); 
                 };
-                // 2. data-src の画像を src にセットし、HD画像のダウンロードを開始
                 if (img.dataset.src) {
-                    img.src = img.dataset.src; // OK: string | undefined → string（undefinedは代入しない）
+                    img.src = img.dataset.src;
                 }
             };
-            // 3. 画像がビューポートに入った時、または即時にロードを開始
             if (img.loading === 'lazy' && 'IntersectionObserver' in window) {
-                // Intersection Observerを使って遅延ロードを開始
                 const observer = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -4187,7 +4176,6 @@ BlurImage.loaded = () => {
                 observer.observe(img);
             }
             else {
-                // IEなど非対応環境、またはlazy="eager" の場合、即時ロード開始
                 loadHDImage();
             }
         });
