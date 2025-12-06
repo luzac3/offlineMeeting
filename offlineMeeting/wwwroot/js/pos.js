@@ -318,40 +318,6 @@ class ControlModal {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
-/* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
-            }
-            // 画面の表示はNavbarの調整を行った後
-            document.getElementById("main")?.classList.remove("nodisplay");
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/share/LocalStrage.ts":
 /*!*****************************************!*\
   !*** ./wwwroot/ts/share/LocalStrage.ts ***!
@@ -502,28 +468,25 @@ var __webpack_exports__ = {};
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root//share/BlurImage */ "./wwwroot/ts/share/BlurImage.ts");
-/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
-
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BlurImage */ "./wwwroot/ts/share/BlurImage.ts");
+/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
 
 
 
 
 
 (async () => {
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
-    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__.CaliculateCoinNumber();
-    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_5__.StockOrder();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__.CaliculateCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_4__.StockOrder();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
     stockOrder.addOrder();
     backButton.Buck();
-    _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__.BlurImage.loaded();
+    _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_2__.BlurImage.loaded();
 })();
 
 })();

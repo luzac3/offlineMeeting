@@ -4060,41 +4060,6 @@ class BackButton {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
-/* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
-            }
-            // 画面の表示はNavbarの調整を行った後
-            document.getElementById("main")?.classList.remove("nodisplay");
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
-    }
-}
-
-
-/***/ }),
-
 /***/ "./wwwroot/ts/share/FetchApi.ts":
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
@@ -4367,12 +4332,10 @@ var __webpack_exports__ = {};
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _SendQuiz__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendQuiz */ "./wwwroot/ts/QuizOrner/SendQuiz.ts");
-/* harmony import */ var _SendUserPoints__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SendUserPoints */ "./wwwroot/ts/QuizOrner/SendUserPoints.ts");
-/* harmony import */ var _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GetUsersAnswer */ "./wwwroot/ts/QuizOrner/GetUsersAnswer.ts");
-
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _SendQuiz__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendQuiz */ "./wwwroot/ts/QuizOrner/SendQuiz.ts");
+/* harmony import */ var _SendUserPoints__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendUserPoints */ "./wwwroot/ts/QuizOrner/SendUserPoints.ts");
+/* harmony import */ var _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GetUsersAnswer */ "./wwwroot/ts/QuizOrner/GetUsersAnswer.ts");
 
 
 
@@ -4381,11 +4344,10 @@ __webpack_require__.r(__webpack_exports__);
 (() => {
     const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
     signalR.activate();
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
-    new _SendQuiz__WEBPACK_IMPORTED_MODULE_3__.SendQuiz(signalR);
-    const getUsersAnswer = new _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_5__.GetUsersAnswer();
-    const sendUserPoints = new _SendUserPoints__WEBPACK_IMPORTED_MODULE_4__.SendUserPoints();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    new _SendQuiz__WEBPACK_IMPORTED_MODULE_2__.SendQuiz(signalR);
+    const getUsersAnswer = new _GetUsersAnswer__WEBPACK_IMPORTED_MODULE_4__.GetUsersAnswer();
+    const sendUserPoints = new _SendUserPoints__WEBPACK_IMPORTED_MODULE_3__.SendUserPoints();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
     getUsersAnswer.GetAnswer(signalR);
     sendUserPoints.SendPoints();
     backButton.Buck();

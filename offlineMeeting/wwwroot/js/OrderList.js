@@ -347,6 +347,7 @@ class ControlNavbar {
             const navbar = document.querySelector('.navbar');
             let subbarHeight = 0;
             if (navbar) {
+                document.body.classList.remove('nodisplay');
                 const subbar = document.querySelector('.navbar-sub');
                 if (subbar) {
                     subbarHeight = navbar.offsetHeight;
@@ -354,8 +355,6 @@ class ControlNavbar {
                 }
                 document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
             }
-            // 画面の表示はNavbarの調整を行った後
-            document.getElementById("main")?.classList.remove("nodisplay");
         };
         this.setPadding();
         window.addEventListener('resize', this.setPadding);
@@ -661,19 +660,16 @@ var __webpack_exports__ = {};
   !*** ./wwwroot/ts/OrderList/Index.ts ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
-/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
-
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _GetOrderList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GetOrderList */ "./wwwroot/ts/OrderList/GetOrderList.ts");
+/* harmony import */ var _SendOrder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendOrder */ "./wwwroot/ts/OrderList/SendOrder.ts");
 
 
 
 (async () => {
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
-    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_2__.GetOrderList();
-    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_3__.SendOrder();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_0__.BackButton();
+    const getOrderList = new _GetOrderList__WEBPACK_IMPORTED_MODULE_1__.GetOrderList();
+    const sendOrder = new _SendOrder__WEBPACK_IMPORTED_MODULE_2__.SendOrder();
     backButton.Buck();
     getOrderList.setOrderList();
     sendOrder.setOrderList();

@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/2.0.1/spinkit.min.css">
         @RenderSection("Styles", required: false)
     </head>
-    <body>
+    <body class="nodisplay">
         <header>
             <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div id="menu" class="container-fluid">
@@ -89,11 +89,13 @@
                 }
             }
         </header>
+        <!-- navbarに関する処理 -->
+        <script src="~/js/Layout.js" defer></script>
         <div class="container">
             <div id="loading-overlay" class="loading-overlay nodisplay">
                 <div class="loading"></div>
             </div>
-            <main id="main" role="main" class="pb-3 nodisplay">
+            <main id="main" role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
