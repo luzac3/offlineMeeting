@@ -240,11 +240,12 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public IActionResult NoImageRender([FromQuery] string src)
         {
-            byte[]? bytes = ImageResize.GetLowQualityBytes(
-                System.IO.File.ReadAllBytes(
+            using ImageHelper imageHelper = new ImageHelper(System.IO.File.ReadAllBytes(
                     PathHelper.WebPathToPhysicalPath(_env, src)
                 )
             );
+
+            byte[]? bytes = imageHelper.GetLowQualityBytes();
             return File(bytes, "image/webp");
         }
     }

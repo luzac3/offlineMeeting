@@ -103,52 +103,9 @@ namespace offlineMeeting.Models.Process.Share
 
         private void GetAlcoholDataEntityList(List<ResultsEntity> results, Dictionary<string, string> choicesTextDic)
         {
-            List<int> orderedResultsIdList = 
-                GetFromSiteId(OrderSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.ClassB == UserCd)
-                .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
-                .ToList();
-
             foreach (ResultsEntity result in results)
             {
-                ResultsEntity? brewery = string.IsNullOrEmpty(result.ClassC) ? null : GetSingleRecord(result.ClassC);
-                string? breweryName = brewery?.Title ?? null;
-                string? prefectures = string.IsNullOrEmpty(brewery?.ClassB) ? null : GetSingleRecord(brewery.ClassB).ClassA;
-                string[]? imageSplit = result!.DescriptionG?.Split("/");
-                string guid = "";
-                if (imageSplit != null && imageSplit?.Length > 2)
-                {
-                    guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
-                }
-
-                GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
-                string? image = getBinariesProcess.GetImage(guid);
-                AlcoholDataEntityList
-                    .Add(
-                        new AlcoholDataEntity(
-                            resultId: result.ResultId,
-                            image: image == null ? "" : $"data:image/jpeg;base64,{image}",
-                            lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
-                            alcoholName: result.ClassA,
-                            abreviation: result.ClassI,
-                            brewery: breweryName,
-                            prefectures: prefectures,
-                            genryoMai: result.ClassD,
-                            speciallyDesignated: string.IsNullOrEmpty(result.ClassE) ? "" : choicesTextDic[result.ClassE], // 特定名称
-                            ricePolishingRatio: Convert.ToInt32(result.NumB),
-                            sakeMeterValue: result.NumC,
-                            acidRate: result.NumG,
-                            abv: result.NumD,
-                            rarity: Convert.ToInt32(result.NumF),
-                            coinNumber: Convert.ToInt32(result.NumI),
-                            leftAmount: Convert.ToInt32(result.NumH),
-                            priority: result.CheckA ?? false,
-                            hide: result.CheckB ?? false,
-                            ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
-                            taseting: result.DescriptionE?.Replace("\n", "<br>")
-                        )
-                    );
+                AlcoholDataEntityList.Add(GetAlcoholDataEntity(result, choicesTextDic));
             }
         }
 
@@ -173,10 +130,32 @@ namespace offlineMeeting.Models.Process.Share
             GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
             string? image = getBinariesProcess.GetImage(guid);
 
+            string imageBase64 = "";
+            string lowImageBase64 = "";
+            int width = 1475;
+            int height = 1258;
+
+            if (!string.IsNullOrEmpty(image))
+            {
+                try
+                {
+                    using ImageHelper imageHelper = new ImageHelper(Convert.FromBase64String(image));
+                    (width, height) = imageHelper.GetSize();
+                    imageBase64 = $"data:image/jpeg;base64,{image}";
+                    lowImageBase64 = $"data:image/webp;base64,{imageHelper.GetLowQualityBase64()}";
+                }
+                catch
+                {
+                    // fixme エラー処理
+                }
+            }
+
             return new AlcoholDataEntity(
                 resultId: result.ResultId,
-                image: image == null ? "" : $"data:image/jpeg;base64,{image}",
-                lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
+                image: imageBase64,
+                lowImage: lowImageBase64,
+                width: width,
+                height: height,
                 alcoholName: result.ClassA,
                 abreviation: result.ClassI,
                 brewery: brewery?.Title,
