@@ -40,6 +40,8 @@
                                     <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
                                          data-src="/image/noImage.jpg"
                                          class="food_image blur-up"
+                                         width="@(alcoholDataEntity.Width)px"
+                                         height="@(alcoholDataEntity.Height)px"
                                          loading="lazy" />
                                 }
                                 else
@@ -47,6 +49,8 @@
                                     <img src="@(alcoholDataEntity.LowImage)"
                                          data-src="@(alcoholDataEntity.Image)"
                                          class="food_image blur-up"
+                                         width="@(alcoholDataEntity.Width)px"
+                                         height="@(alcoholDataEntity.Height)px"
                                          loading="lazy" />
                                 }
                                 @if (alcoholDataEntity.Ordered)
@@ -124,6 +128,8 @@
                                         <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
                                              data-src="/image/noImage.jpg"
                                              class="food_image blur-up"
+                                             width="@(alcoholDataEntity.Width)px"
+                                             height="@(alcoholDataEntity.Height)px"
                                              loading="lazy" />
                                     }
                                     else
@@ -132,6 +138,8 @@
                                             <img src="@(alcoholDataEntity.LowImage)"
                                                  data-src="@(alcoholDataEntity.Image)"
                                                  class="food_image blur-up"
+                                                 width="@(alcoholDataEntity.Width)px"
+                                                 height="@(alcoholDataEntity.Height)px"
                                                  loading="lazy" />
                                         </a>
                                     }
