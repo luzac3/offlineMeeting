@@ -208,6 +208,8 @@ class ControlNavbar {
                 }
                 document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
             }
+            // 画面の表示はNavbarの調整を行った後
+            document.getElementById("main")?.classList.remove("nodisplay");
         };
         this.setPadding();
         window.addEventListener('resize', this.setPadding);
