@@ -4,6 +4,7 @@ namespace offlineMeeting.Models.Entity.Pos
     {
         public long? ResultId {  get; set; }
         public string? Image {  get; set; }
+        public string? LowImage { get; set; }
         public string? PurchaseName { get; set; }
         public string? FoodCategory { get; set; }
         public int Category { get; set; }
@@ -13,6 +14,7 @@ namespace offlineMeeting.Models.Entity.Pos
         public PurchaseDataEntity(
             long? resultId,
             string? image,
+            string? lowImage,
             string? purchaseName,
             string? foodCategory,
             int category,
@@ -23,6 +25,7 @@ namespace offlineMeeting.Models.Entity.Pos
         {
             ResultId = resultId;
             Image = image;
+            LowImage = lowImage;
             PurchaseName = purchaseName;
             FoodCategory = foodCategory;
             Category = category;

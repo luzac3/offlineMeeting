@@ -37,11 +37,17 @@
                             <p class="food_image_container @(alcoholDataEntity.Ordered ? "" : "no_ordered")">
                                 @if (@alcoholDataEntity.Image == "")
                                 {
-                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                         data-src="/image/noImage.jpg"
+                                         class="food_image blur-up"
+                                         loading="lazy" />
                                 }
                                 else
                                 {
-                                    <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                    <img src="@(alcoholDataEntity.LowImage)"
+                                         data-src="@(alcoholDataEntity.Image)"
+                                         class="food_image blur-up"
+                                         loading="lazy" />
                                 }
                                 @switch (alcoholDataEntity.Rarity)
                                 {
@@ -73,7 +79,7 @@
                             </p>
                             <p class="alcohol_poncoin">
                                 <span>1合</span>
-                                <img src="/image/poncoin.png" alt="image" />
+                                <img src="/image/poncoin_192.png" alt="image" />
                                 <span> × </span>
                                 <span class="coin_number_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />

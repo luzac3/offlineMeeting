@@ -4,6 +4,7 @@ namespace offlineMeeting.Models.Entity.Share
     {
         public long? ResultId {  get; set; } // 結果ID
         public string? Image {  get; set; } // 画像URL
+        public string? LowImage { get; set; }
         public string? AlcoholName { get; set; } // 酒名
         public string? Abbreviation { get; set; } // 略称
         public string? Brewery { get; set; } // 醸造所
@@ -33,6 +34,7 @@ namespace offlineMeeting.Models.Entity.Share
         public AlcoholDataEntity(
             long? resultId,
             string? image,
+            string? lowImage,
             string? alcoholName,
             string? abreviation,
             string? brewery,
@@ -63,6 +65,7 @@ namespace offlineMeeting.Models.Entity.Share
         {
             ResultId = resultId;
             Image = image;
+            LowImage = lowImage;
             AlcoholName = alcoholName;
             Abbreviation = abreviation;
             Brewery = brewery;
