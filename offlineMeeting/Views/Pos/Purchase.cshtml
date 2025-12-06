@@ -33,11 +33,17 @@
                                 <p class="food_image_container">
                                     @if (@purchaseDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
-                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                        <img src="@(purchaseDataEntity.LowImage)"
+                                             data-src="@(purchaseDataEntity.Image)"
+                                             class="food_image blur-up"
+                                             loading="lazy" />
                                     }
                                     @if (purchaseDataEntity.Ordered)
                                     {
@@ -48,7 +54,7 @@
                                     <span>@(purchaseDataEntity.PurchaseName)</span>
                                 </p>
                                 <p>
-                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <img class="poncoin_img" src="/image/poncoin_192.png" />
                                     <span> × </span>
                                     <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
                                     <input class="purhcase_coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
@@ -87,11 +93,18 @@
                                 <p class="food_image_container">
                                     @if (@purchaseDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
-                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                        <img src="@(purchaseDataEntity.LowImage)"
+                                             data-src="@(purchaseDataEntity.Image)"
+                                             class="food_image blur-up"
+                                             loading="lazy" />
+
                                     }
                                     @if (purchaseDataEntity.Ordered)
                                     {
@@ -102,7 +115,7 @@
                                     <span>@(purchaseDataEntity.PurchaseName)</span>
                                 </p>
                                 <p>
-                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <img class="poncoin_img" src="/image/poncoin_192.png" />
                                     <span> × </span>
                                     <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
                                     <input class="purhcase_coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />

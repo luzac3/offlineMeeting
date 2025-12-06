@@ -129,6 +129,7 @@ namespace offlineMeeting.Models.Process.Share
                         new AlcoholDataEntity(
                             resultId: result.ResultId,
                             image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                            lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                             alcoholName: result.ClassA,
                             abreviation: result.ClassI,
                             brewery: breweryName,
@@ -175,6 +176,7 @@ namespace offlineMeeting.Models.Process.Share
             return new AlcoholDataEntity(
                 resultId: result.ResultId,
                 image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                 alcoholName: result.ClassA,
                 abreviation: result.ClassI,
                 brewery: brewery?.Title,
