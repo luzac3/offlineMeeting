@@ -52,8 +52,8 @@ namespace offlineMeeting.Models.Process.Pos
                 .Select(x => x.ResultId)
                 .ToList();
 
-            Dictionary<int, int> categoryDic = OrderPostEntityList
-                .ToDictionary(x => x.ResultId, x => x.Category);
+            Dictionary<string, int> categoryDic = OrderPostEntityList
+                .ToDictionary(x => $"{x.ResultId}_{x.AlcoholAmount}", x => x.Category);
 
             ManageUserCd manageUserCd = new (httpContext);
             string userCd = manageUserCd.GetUserCd().ToString();

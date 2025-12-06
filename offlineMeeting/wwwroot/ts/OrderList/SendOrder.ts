@@ -36,7 +36,7 @@ export class SendOrder {
                         parseInt((<HTMLElement>orderElement).dataset.result_id!),
                         parseInt((<HTMLInputElement>orderElement.querySelector('.category'))?.value ?? "0"),
                         parseInt((<HTMLInputElement>orderElement.querySelector(".order_number")).value),
-                        parseInt((<HTMLInputElement>orderElement.querySelector(".order_coins")).value),
+                        parseInt((<HTMLInputElement>orderElement.querySelector(".coin_number")).value),
                         alcoholAmount
                     ));
                 });

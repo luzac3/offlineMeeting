@@ -73,7 +73,7 @@ namespace offlineMeeting.Models.Process.Pos
             return PurchaseDataEntityList;
         }
 
-        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<int, int> categoryDic)
+        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<string, int> categoryDic)
         {
             List<ResultsEntity> results = base
                 .GetFromResultIdList(resultId)
@@ -83,7 +83,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
                 .ToList();
 
-            GetPurchaseDataEntityList(results, result => categoryDic[Convert.ToInt32(result.ResultId)]);
+            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ResultId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
 
             return PurchaseDataEntityList;
         }
@@ -116,11 +116,12 @@ namespace offlineMeeting.Models.Process.Pos
                     new PurchaseDataEntity(
                         resultId: result.ResultId,
                         image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                        lowImage: image == null ? "" : $"data:image/webp;base64,{ImageResize.GetLowQualityBase64(Convert.FromBase64String(image))}",
                         purchaseName: purchaseName,
                         foodCategory: result.ClassB,
                         category: getCategory(result),
                         coinNumber: Convert.ToInt32(result.NumG),
-                        leftAmount: Convert.ToInt32(result.NumE),
+                        leftAmount: Convert.ToInt32(result.NumH),
                         ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
                     )
                 );

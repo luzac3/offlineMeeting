@@ -17,46 +17,75 @@ __webpack_require__.r(__webpack_exports__);
 class CaliculateCoinNumber {
     constructor() {
         this.setCoin = () => {
-            Array.from(document.getElementsByClassName("alcohol_order")).forEach((element) => {
+            Array.from(document.getElementsByClassName("order")).forEach((element) => {
                 const htmlElement = element;
                 const coinNumberElement = htmlElement.querySelector(".coin_number");
                 const coinNumberShowElement = htmlElement.querySelector(".coin_number_show");
-                const coinNumberModalShowElement = htmlElement.querySelector(".coin_number_modal_show");
+                // const coinNumberModalShowElement = <HTMLInputElement>htmlElement.querySelector(".coin_number_modal_show");
                 let coinNumber = 0;
                 if (coinNumberElement == null) {
                     return;
                 }
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount", async (event) => {
-                    element.querySelector(".alcohol_amount_modal").value = event.target.value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
-                    coinNumberElement.value = coinNumber.toString();
-                    coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
-                });
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount_modal", async (event) => {
-                    element.querySelector(".alcohol_amount").value = event.target.value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
-                    coinNumberElement.value = coinNumber.toString();
-                    coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
-                });
                 _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number", async (event) => {
-                    element.querySelector(".order_number_modal").value = event.target.value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                    //(<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculate(htmlElement, event.currentTarget.classList.contains('alcohol_order'));
                     coinNumberElement.value = coinNumber.toString();
                     coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                    // coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number_modal", async (event) => {
-                    element.querySelector(".order_number").value = event.target.value;
-                    coinNumber = this.caliculateCoinNumber(htmlElement);
+                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount", async (event) => {
+                    // (<HTMLInputElement>element.querySelector(".alcohol_amount_modal")).value = (<HTMLInputElement>event.target).value;
+                    coinNumber = this.caliculate(htmlElement, true);
                     coinNumberElement.value = coinNumber.toString();
                     coinNumberShowElement.innerText = coinNumber.toString();
-                    coinNumberModalShowElement.innerText = coinNumber.toString();
+                    // coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
+                /*
+                SetEventListner.setEvent(
+                    <HTMLElement>element,
+                    "change",
+                    ".order_number_modal",
+                    async (event: Event) => {
+                        (<HTMLInputElement>element.querySelector(".order_number")).value = (<HTMLInputElement>event.target).value;
+                        coinNumber = this.caliculateCoinNumber(htmlElement);
+                        coinNumberElement.value = coinNumber.toString();
+                        coinNumberShowElement.innerText = coinNumber.toString();
+                        coinNumberModalShowElement.innerText = coinNumber.toString();
+                    }
+                );
+    
+                SetEventListner.setEvent(
+                    <HTMLElement>element,
+                    "change",
+                    ".alcohol_amount_modal",
+                    async (event: Event) => {
+                        (<HTMLInputElement>element.querySelector(".alcohol_amount")).value = (<HTMLInputElement>event.target).value;
+                        coinNumber = this.caliculateCoinNumber(htmlElement);
+                        coinNumberElement.value = coinNumber.toString();
+                        coinNumberShowElement.innerText = coinNumber.toString();
+                        coinNumberModalShowElement.innerText = coinNumber.toString();
+                    }
+                );
+                */
             });
         };
+        this.caliculate = (htmlElement, isAlcohol) => {
+            if (isAlcohol) {
+                return this.caliculateAlcoholCoinNumber(htmlElement);
+            }
+            else {
+                return this.caliculateCoinNumber(htmlElement);
+            }
+        };
         this.caliculateCoinNumber = (htmlElement) => {
+            const purhcase_coin_number = parseInt(htmlElement.querySelector(".purhcase_coin_number")?.value ?? "0");
+            const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
+            if (orderNumber == 0) {
+                return 0;
+            }
+            return purhcase_coin_number * orderNumber;
+        };
+        this.caliculateAlcoholCoinNumber = (htmlElement) => {
             const alcoholAmount = parseInt(htmlElement.querySelector(".alcohol_amount")?.value ?? "0");
             const orderNumber = parseInt(htmlElement.querySelector(".order_number")?.value ?? "0");
             const coinPer2shaku = parseInt(htmlElement.querySelector(".coin_per_2shaku")?.value ?? "0");
@@ -186,6 +215,67 @@ class BackButton {
         };
     }
 }
+
+
+/***/ }),
+
+/***/ "./wwwroot/ts/share/BlurImage.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/share/BlurImage.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BlurImage: () => (/* binding */ BlurImage)
+/* harmony export */ });
+class BlurImage {
+}
+BlurImage.loaded = () => {
+    // DOMContentLoadedを待つことで、HTML要素の準備を保証
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('img.blur-up').forEach(_img => {
+            const img = _img;
+            // 既にロード済みまたはsrcがない場合はスキップ
+            if (!img.dataset.src || img.classList.contains('loaded')) {
+                return;
+            }
+            // 1. 高画質画像ロード用のイベントリスナーを登録
+            const loadHDImage = () => {
+                // **重要:** 新しい画像がロード完了した時の処理
+                img.onload = () => {
+                    // 1. ブラー解除クラスを追加（CSSで設定）
+                    img.classList.add('loaded');
+                    // 2. ブラー解除後のonloadイベントが再発火しないようにイベントを削除
+                    img.onload = null;
+                    // 3. ローディングGIFなどの低解像度srcを、ここで削除/変更しても良い
+                    // 例: img.removeAttribute('src'); 
+                };
+                // 2. data-src の画像を src にセットし、HD画像のダウンロードを開始
+                if (img.dataset.src) {
+                    img.src = img.dataset.src; // OK: string | undefined → string（undefinedは代入しない）
+                }
+            };
+            // 3. 画像がビューポートに入った時、または即時にロードを開始
+            if (img.loading === 'lazy' && 'IntersectionObserver' in window) {
+                // Intersection Observerを使って遅延ロードを開始
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            loadHDImage();
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+                observer.observe(img);
+            }
+            else {
+                // IEなど非対応環境、またはlazy="eager" の場合、即時ロード開始
+                loadHDImage();
+            }
+        });
+    });
+};
 
 
 /***/ }),
@@ -415,7 +505,7 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!*********************************!*\
   !*** ./wwwroot/ts/pos/Index.ts ***!
@@ -424,8 +514,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
 /* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
-/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+/* harmony import */ var _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root//share/BlurImage */ "./wwwroot/ts/share/BlurImage.ts");
+/* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
+/* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
+
 
 
 
@@ -434,13 +526,14 @@ __webpack_require__.r(__webpack_exports__);
 (async () => {
     new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
-    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__.CaliculateCoinNumber();
-    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_4__.StockOrder();
+    const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__.CaliculateCoinNumber();
+    const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_5__.StockOrder();
     const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
     stockOrder.addOrder();
     backButton.Buck();
+    _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__.BlurImage.loaded();
 })();
 
 })();
