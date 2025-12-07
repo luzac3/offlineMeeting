@@ -112,10 +112,34 @@ namespace offlineMeeting.Models.Process.Pos
 
                 GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
                 string? image = getBinariesProcess.GetImage(guid);
+
+                string imageBase64 = "";
+                string lowImageBase64 = "";
+                int width = 1475;
+                int height = 1258;
+
+                if (!string.IsNullOrEmpty(image))
+                {
+                    try
+                    {
+                        using ImageHelper imageHelper = new ImageHelper(Convert.FromBase64String(image));
+                        (width, height) = imageHelper.GetSize();
+                        imageBase64 = $"data:image/jpeg;base64,{image}";
+                        lowImageBase64 = $"data:image/webp;base64,{imageHelper.GetLowQualityBase64()}";
+                    }
+                    catch
+                    {
+                        // fixme エラー処理
+                    }
+                }
+
                 PurchaseDataEntityList.Add(
                     new PurchaseDataEntity(
                         resultId: result.ResultId,
-                        image: image == null ? "" : $"data:image/jpeg;base64,{image}",
+                        image: imageBase64,
+                        lowImage: lowImageBase64,
+                        width: width,
+                        height: height,
                         purchaseName: purchaseName,
                         foodCategory: result.ClassB,
                         category: getCategory(result),

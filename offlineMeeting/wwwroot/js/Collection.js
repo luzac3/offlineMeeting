@@ -104,38 +104,6 @@ class ControlModal {
 }
 
 
-/***/ }),
-
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
-/* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
-            }
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
-    }
-}
-
-
 /***/ })
 
 /******/ 	});
@@ -195,25 +163,22 @@ class ControlNavbar {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!****************************************!*\
   !*** ./wwwroot/ts/Collection/Index.ts ***!
   \****************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _JumpDetail__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./JumpDetail */ "./wwwroot/ts/Collection/JumpDetail.ts");
-
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _JumpDetail__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JumpDetail */ "./wwwroot/ts/Collection/JumpDetail.ts");
 
 
 
 (async () => {
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
-    const jumpDetail = new _JumpDetail__WEBPACK_IMPORTED_MODULE_3__.JumpDetail();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    const jumpDetail = new _JumpDetail__WEBPACK_IMPORTED_MODULE_2__.JumpDetail();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
     controlModal.setControl();
     jumpDetail.Jump();
     backButton.Buck();
