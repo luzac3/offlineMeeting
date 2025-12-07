@@ -18,6 +18,7 @@ class ControlNavbar {
             const navbar = document.querySelector('.navbar');
             let subbarHeight = 0;
             if (navbar) {
+                document.body.classList.remove('nodisplay');
                 const subbar = document.querySelector('.navbar-sub');
                 if (subbar) {
                     subbarHeight = navbar.offsetHeight;
@@ -91,11 +92,11 @@ class ControlNavbar {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!**********************************!*\
-  !*** ./wwwroot/ts/Home/Index.ts ***!
-  \**********************************/
+/*!************************************!*\
+  !*** ./wwwroot/ts/Layout/Index.ts ***!
+  \************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
 
@@ -107,4 +108,4 @@ __webpack_require__.r(__webpack_exports__);
 
 /******/ })()
 ;
-//# sourceMappingURL=Home.js.map
+//# sourceMappingURL=Layout.js.map

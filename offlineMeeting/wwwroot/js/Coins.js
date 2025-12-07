@@ -86,7 +86,8 @@ class GiveCoins {
                             if (response.StatusCode == "200" || "OK") {
                                 window.alert('譲渡が完了しました');
                             }
-                            else {}
+                            else // removed by dead control flow
+{}
                         });
                     }
                 }
@@ -178,38 +179,6 @@ class BackButton {
                 history.back();
             });
         };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
-/* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
-            }
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
     }
 }
 
@@ -420,28 +389,25 @@ ManageLoadElement.remove = () => {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!***********************************!*\
   !*** ./wwwroot/ts/Coins/Index.ts ***!
   \***********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
-/* harmony import */ var _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreatePaypalButton */ "./wwwroot/ts/Coins/CreatePaypalButton.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
-/* harmony import */ var _GiveCoins__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GiveCoins */ "./wwwroot/ts/Coins/GiveCoins.ts");
-
+/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
+/* harmony import */ var _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreatePaypalButton */ "./wwwroot/ts/Coins/CreatePaypalButton.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _GiveCoins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GiveCoins */ "./wwwroot/ts/Coins/GiveCoins.ts");
 
 
 
 
 (() => {
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
-    const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__.Counter();
-    const createPaypalButton = new _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_2__.CreatePaypalButton();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_3__.BackButton();
-    const giveCoins = new _GiveCoins__WEBPACK_IMPORTED_MODULE_4__.GiveCoins();
+    const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_0__.Counter();
+    const createPaypalButton = new _CreatePaypalButton__WEBPACK_IMPORTED_MODULE_1__.CreatePaypalButton();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    const giveCoins = new _GiveCoins__WEBPACK_IMPORTED_MODULE_3__.GiveCoins();
     createPaypalButton.SetPaypalButton();
     counter.SetCounter();
     backButton.Buck();

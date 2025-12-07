@@ -17,6 +17,7 @@ namespace offlineMeeting.Controllers
     {
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
+        private readonly IWebHostEnvironment _env;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
         private int SakeSiteId;
@@ -29,11 +30,13 @@ namespace offlineMeeting.Controllers
 
         public PosController(
             ILogger<PosController> logger,
-            IHubContext<MyHub> hubContext
+            IHubContext<MyHub> hubContext,
+            IWebHostEnvironment env
         )
         {
             _logger = logger;
             _hubContext = hubContext;
+            _env = env;
             PosViewModel = new ();
             ResponseLogProcess = new (_logger);
             TableIdProperty tableIdProperty = new ();
@@ -232,6 +235,18 @@ namespace offlineMeeting.Controllers
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
 
             return View(PosViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult NoImageRender([FromQuery] string src)
+        {
+            using ImageHelper imageHelper = new ImageHelper(System.IO.File.ReadAllBytes(
+                    PathHelper.WebPathToPhysicalPath(_env, src)
+                )
+            );
+
+            byte[]? bytes = imageHelper.GetLowQualityBytes();
+            return File(bytes, "image/webp");
         }
     }
 }

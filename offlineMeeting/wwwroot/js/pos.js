@@ -219,6 +219,55 @@ class BackButton {
 
 /***/ }),
 
+/***/ "./wwwroot/ts/share/BlurImage.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/share/BlurImage.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BlurImage: () => (/* binding */ BlurImage)
+/* harmony export */ });
+class BlurImage {
+}
+BlurImage.loaded = () => {
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('img.blur-up').forEach(_img => {
+            const img = _img;
+            if (!img.dataset.src || img.classList.contains('loaded')) {
+                return;
+            }
+            const loadHDImage = () => {
+                img.onload = () => {
+                    img.classList.add('loaded');
+                    img.onload = null;
+                };
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                }
+            };
+            if (img.loading === 'lazy' && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            loadHDImage();
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+                observer.observe(img);
+            }
+            else {
+                loadHDImage();
+            }
+        });
+    });
+};
+
+
+/***/ }),
+
 /***/ "./wwwroot/ts/share/ControlModal.ts":
 /*!******************************************!*\
   !*** ./wwwroot/ts/share/ControlModal.ts ***!
@@ -263,38 +312,6 @@ class ControlModal {
         this.hidden = (modalWrapper) => {
             modalWrapper.classList.add("nodisplay");
         };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
-/* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
-            }
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
     }
 }
 
@@ -444,15 +461,15 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!*********************************!*\
   !*** ./wwwroot/ts/pos/Index.ts ***!
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlModal */ "./wwwroot/ts/share/ControlModal.ts");
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root//share/BackButton */ "./wwwroot/ts/share/BackButton.ts");
+/* harmony import */ var _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root//share/BlurImage */ "./wwwroot/ts/share/BlurImage.ts");
 /* harmony import */ var _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
 /* harmony import */ var _StockOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StockOrder */ "./wwwroot/ts/pos/StockOrder.ts");
 
@@ -461,15 +478,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (async () => {
-    new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_1__.ControlNavbar();
     const controlModal = new _root_share_ControlModal__WEBPACK_IMPORTED_MODULE_0__.ControlModal();
     const caliculateCoinNumber = new _CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_3__.CaliculateCoinNumber();
     const stockOrder = new _StockOrder__WEBPACK_IMPORTED_MODULE_4__.StockOrder();
-    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_2__.BackButton();
+    const backButton = new _root_share_BackButton__WEBPACK_IMPORTED_MODULE_1__.BackButton();
     controlModal.setControl();
     caliculateCoinNumber.setCoin();
     stockOrder.addOrder();
     backButton.Buck();
+    _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_2__.BlurImage.loaded();
 })();
 
 })();
