@@ -33,3 +33,7 @@ body{
     width: 10%;
     text-align: right;
 }
+
+.nodisplay {
+    display: none !important;
+}
