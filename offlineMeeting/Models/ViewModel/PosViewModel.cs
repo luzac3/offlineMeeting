@@ -9,6 +9,7 @@ namespace offlineMeeting.Models.ViewModel
         public List<PurchaseDataEntity>? PurchaseDataEntityList { get; set; }
         public List<OrderEntity>? OrderEntityList { get; set; }
         public List<OrderTableEntity>? OrderTableEntityList { get; set; }
+        public string? PrintUrl { get; set; }
 
         public PosViewModel() { }
 
@@ -29,6 +30,11 @@ namespace offlineMeeting.Models.ViewModel
         public void setOrderTableEntityList(List<OrderTableEntity> orderTableEntityList)
         {
             OrderTableEntityList = orderTableEntityList;
+        }
+
+        public void setPrintUrl(string printUrl)
+        {
+            PrintUrl = printUrl;
         }
     }
 }
