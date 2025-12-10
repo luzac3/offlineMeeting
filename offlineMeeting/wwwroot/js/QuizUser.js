@@ -4147,29 +4147,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   BlurImage: () => (/* binding */ BlurImage)
 /* harmony export */ });
 class BlurImage {
-}
-BlurImage.loaded = () => {
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('img.blur-up').forEach(_img => {
+    static initBlurUp(container = document) {
+        container.querySelectorAll('img.blur-up').forEach(_img => {
             const img = _img;
-            if (!img.dataset.src || img.classList.contains('loaded')) {
+            const hdSrc = img.dataset.src;
+            if (!hdSrc || img.classList.contains('loaded'))
                 return;
-            }
+            const onHDLoad = () => {
+                img.classList.add('loaded');
+                img.removeEventListener('load', onHDLoad);
+            };
             const loadHDImage = () => {
-                img.onload = () => {
-                    img.classList.add('loaded');
-                    img.onload = null;
-                };
-                if (img.dataset.src) {
-                    img.src = img.dataset.src;
-                }
+                img.addEventListener('load', onHDLoad);
+                img.src = hdSrc;
             };
             if (img.loading === 'lazy' && 'IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries, observer) => {
+                const observer = new IntersectionObserver((entries, obs) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             loadHDImage();
-                            observer.unobserve(img);
+                            obs.unobserve(img);
                         }
                     });
                 });
@@ -4179,8 +4176,13 @@ BlurImage.loaded = () => {
                 loadHDImage();
             }
         });
-    });
-};
+    }
+    static loaded() {
+        document.addEventListener('DOMContentLoaded', () => {
+            BlurImage.initBlurUp(document);
+        });
+    }
+}
 
 
 /***/ }),
