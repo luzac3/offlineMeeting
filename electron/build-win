@@ -14,7 +14,8 @@ builder.build({
         },
         extraFiles: {
             from: "./appData/json/setting.json",
-            to: "./" // exeと同じ場所に展開
-        }
+            to: "./config/setting.json"
+        },
+        'asar': true
     }
 });

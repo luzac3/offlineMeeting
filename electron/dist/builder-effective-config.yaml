@@ -1,6 +1,7 @@
 directories:
   output: dist
   buildResources: build
+asar: true
 appId: electorn-print
 win:
   target:
@@ -10,6 +11,6 @@ win:
       - ia32
 extraFiles:
   - from: ./appData/json/setting.json
-    to: ./
+    to: ./config/setting.json
 files: []
 electronVersion: 38.4.0
