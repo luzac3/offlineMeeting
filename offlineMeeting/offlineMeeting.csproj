@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,12 +10,16 @@
   <ItemGroup>
     <Compile Remove="Templates\**" />
     <Compile Remove="Views\Streaming\**" />
+    <Compile Remove="wwwroot\js\dist\**" />
     <Content Remove="Templates\**" />
     <Content Remove="Views\Streaming\**" />
+    <Content Remove="wwwroot\js\dist\**" />
     <EmbeddedResource Remove="Templates\**" />
     <EmbeddedResource Remove="Views\Streaming\**" />
+    <EmbeddedResource Remove="wwwroot\js\dist\**" />
     <None Remove="Templates\**" />
     <None Remove="Views\Streaming\**" />
+    <None Remove="wwwroot\js\dist\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Models\Entity\Collection\" />
     <Folder Include="Properties\bk\" />
-    <Folder Include="wwwroot\js\dist\" />
     <Folder Include="wwwroot\plugins\" />
     <Folder Include="wwwroot\log\" />
   </ItemGroup>
