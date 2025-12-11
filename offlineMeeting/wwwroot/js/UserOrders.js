@@ -3903,8 +3903,8 @@ class GetNewOrder {
                 const parsedData = data;
                 const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
                 const resultIds = orderTableEntityList.map(x => x.ResultId);
-                this.send().then((senrOrderdata) => {
-                    document.getElementById("contents").innerHTML = senrOrderdata;
+                this.send().then((orderdata) => {
+                    document.getElementById("contents").innerHTML = orderdata;
                     _PrintOrder__WEBPACK_IMPORTED_MODULE_1__.PrintOrder.RequestElectronPrint(resultIds);
                 });
             });

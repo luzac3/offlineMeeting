@@ -22,25 +22,7 @@
     </script>
 }
 
-<table id="user_order_list">
-    <thead>
-        <tr>
-            <th colspan="4">
-                <button id="reload" type="button">リロード</button>
-                <span>連番 ユーザー名</span>
-            </th>
-        </tr>
-        <tr>
-            <th>オーダーID</th>
-            <th>商品番号</th>
-            <th>商品名</th>
-            <th>数量(分量)</th>
-        </tr>
-    </thead>
-    <tbody id="contents">
-        <partial name="/Views/Pos/_UserOrderContents.cshtml" />
-    </tbody>
-</table>
+<table id="user_order_list"></table>
 <div>
     @if (!electron!.IsElectron)
     {
