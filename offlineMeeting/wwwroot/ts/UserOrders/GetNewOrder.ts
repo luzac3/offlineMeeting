@@ -32,8 +32,8 @@ export class GetNewOrder {
             const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList) as { [key: string]: string }[];
             const resultIds = orderTableEntityList.map(x => x.ResultId);
 
-            this.send().then((senrOrderdata) => {
-                document.getElementById("contents")!.innerHTML = senrOrderdata;
+            this.send().then((orderdata) => {
+                document.getElementById("user_order_list")!.innerHTML = orderdata;
                 PrintOrder.RequestElectronPrint(resultIds);
             });
         });
