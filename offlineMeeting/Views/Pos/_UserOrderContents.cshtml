@@ -1,19 +1,5 @@
 @using offlineMeeting.Models.Entity.Pos;
 
-<thead>
-    <tr>
-        <th colspan="4">
-            <button id="reload" type="button">リロード</button>
-            <span>連番 ユーザー名</span>
-        </th>
-    </tr>
-    <tr>
-        <th>オーダーID</th>
-        <th>商品番号</th>
-        <th>商品名</th>
-        <th>数量(分量)</th>
-    </tr>
-</thead>
 @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
 {
     int row = @orderTableEntity!.OrderPurchaseTableEntityList?.Count() ?? 0;

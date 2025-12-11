@@ -33,10 +33,23 @@ export class GetNewOrder {
             const resultIds = orderTableEntityList.map(x => x.ResultId);
 
             this.send().then((orderdata) => {
-                document.getElementById("user_order_list")!.innerHTML = orderdata;
+                this.updateTableBody(orderdata);
                 PrintOrder.RequestElectronPrint(resultIds);
             });
         });
+    }
+
+    private updateTableBody(newHtml: string): void {
+        const table = document.getElementById("user_order_list");
+        if (!table) return;
+
+        const thead = table.querySelector('thead');
+        if (!thead) return;
+
+        const tbodies = table.querySelectorAll('tbody');
+        tbodies.forEach(tbody => tbody.remove());
+
+        thead.insertAdjacentHTML('afterend', newHtml);
     }
 
     private send = async () => {
