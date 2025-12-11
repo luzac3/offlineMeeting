@@ -238,6 +238,22 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
+        public IActionResult PrintQrOrders([FromQuery] string eid, string resultId)
+        {
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                eid
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
+            PosViewModel.setPrintUrl($"https://sake.wolfslab.jp/Pos/PrintOrders?eid={eid}&resultId={resultId}");
+
+            return View(PosViewModel);
+        }
+
+        [HttpGet]
         public IActionResult NoImageRender([FromQuery] string src)
         {
             using ImageHelper imageHelper = new ImageHelper(System.IO.File.ReadAllBytes(

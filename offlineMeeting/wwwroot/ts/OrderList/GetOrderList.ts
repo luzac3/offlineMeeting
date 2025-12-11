@@ -1,7 +1,7 @@
-import { ControlNavbar } from "@root/share/ControlNavbar";
 import { Counter } from "@root/share/Counter";
 import { LocalStrage } from "@root/share/LocalStrage"
 import { FetchApi } from "@root/share/FetchApi"
+import { BlurImage } from "@root//share/BlurImage";
 import { CaliculateCoinNumber } from "../pos//CaliculateCoinNumber";
 import { CaliculateTotalCoins } from "./CaliculateTotalCoins";
 
@@ -30,11 +30,13 @@ export class GetOrderList {
         }
 
         this.send(orderEntityList).then((data: string) => {
-            document.getElementById("order_list")!.innerHTML = data;
+            const orderListElement = document.getElementById("order_list")!;
+
+            orderListElement.innerHTML = data;
             // カウンターをアクティブ
             counter.SetCounter();
-            // ナビバーの位置を調整
-            new ControlNavbar();
+            // ぼかしの解除
+            BlurImage.initBlurUp(orderListElement);
 
             // コインの計算をセット
             const caliculateCoinNumber = new CaliculateCoinNumber();
