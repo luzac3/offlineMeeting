@@ -3904,7 +3904,7 @@ class GetNewOrder {
                 const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList);
                 const resultIds = orderTableEntityList.map(x => x.ResultId);
                 this.send().then((orderdata) => {
-                    document.getElementById("contents").innerHTML = orderdata;
+                    this.updateTableBody(orderdata);
                     _PrintOrder__WEBPACK_IMPORTED_MODULE_1__.PrintOrder.RequestElectronPrint(resultIds);
                 });
             });
@@ -3931,6 +3931,17 @@ class GetNewOrder {
             'X-Requested-With': 'XMLHttpRequest'
         };
         this.responseKind = "text";
+    }
+    updateTableBody(newHtml) {
+        const table = document.getElementById("user_order_list");
+        if (!table)
+            return;
+        const thead = table.querySelector('thead');
+        if (!thead)
+            return;
+        const tbodies = table.querySelectorAll('tbody');
+        tbodies.forEach(tbody => tbody.remove());
+        thead.insertAdjacentHTML('afterend', newHtml);
     }
 }
 
