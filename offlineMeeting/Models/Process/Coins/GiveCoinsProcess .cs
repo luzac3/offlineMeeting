@@ -27,28 +27,11 @@ namespace offlineMeeting.Models.Process.Coins
 
         public async Task<Dictionary<string, string>> Send()
         {
-            HttpClient httpClient = new();
-
-            #if DEBUG
-                string pleasanterUrlBase = "http://localhost:59802";
-            #else
-                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
-            #endif
-
-            SendCoinsEntity sendCoinsEntity = new
-            (
-                eventNumber: EventId,
+            var responseGive = await SendCoinsAndGetResponse(
                 userCd: UserCd,
                 gar: "250",
-                coins: GiveCoinsEntity.Coins * -1,
-                value: GiveCoinsEntity.Value
+                coins: GiveCoinsEntity.Coins * -1
             );
-
-            string json = JsonSerializer.Serialize(sendCoinsEntity);
-            StringContent content = new (json, System.Text.Encoding.UTF8, "application/json");
-
-            // var responseGive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
-            var responseGive = await _bridge.Insert(CoinsSiteId, sendCoinsEntity);
 
             if (!responseGive.StatusCode.Equals(HttpStatusCode.OK))
             {
@@ -61,19 +44,11 @@ namespace offlineMeeting.Models.Process.Coins
 
             int coinsRate = (int)Math.Round(GiveCoinsEntity.Coins * 0.2) == 0 ? 1 : (int)Math.Round(GiveCoinsEntity.Coins * 0.2);
 
-            sendCoinsEntity = new
-            (
-                eventNumber: EventId,
+            var responseReceive = await SendCoinsAndGetResponse(
                 userCd: GiveCoinsEntity.ForUserCd.ToString(),
                 gar: "150",
-                coins: (int)GiveCoinsEntity.Coins - coinsRate,
-                value: GiveCoinsEntity.Value
+                coins: (int)GiveCoinsEntity.Coins - coinsRate
             );
-
-            json = JsonSerializer.Serialize(sendCoinsEntity);
-            content = new(json, System.Text.Encoding.UTF8, "application/json");
-
-            var responseReceive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
 
             if (!responseReceive.StatusCode.Equals(HttpStatusCode.OK))
             {
@@ -88,6 +63,20 @@ namespace offlineMeeting.Models.Process.Coins
                     {"StatusCode", responseReceive.StatusCode.ToString() },
                     {"Message", "receive coins success"}
                 };
+        }
+
+        private async Task<dynamic> SendCoinsAndGetResponse(string userCd, string gar, int coins)
+        {
+            var sendCoinsEntity = new SendCoinsEntity
+            (
+                eventNumber: EventId,
+                userCd: userCd,
+                gar: gar,
+                coins: coins,
+                value: GiveCoinsEntity.Value
+            );
+
+            return await _bridge.Insert(CoinsSiteId, sendCoinsEntity);
         }
     }
 }

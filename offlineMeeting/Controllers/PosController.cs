@@ -8,6 +8,8 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -18,6 +20,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private readonly IWebHostEnvironment _env;
+        private readonly IPleasanterRepository _pleasanterRepository;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
         private int SakeSiteId;
@@ -31,12 +34,14 @@ namespace offlineMeeting.Controllers
         public PosController(
             ILogger<PosController> logger,
             IHubContext<MyHub> hubContext,
-            IWebHostEnvironment env
+            IWebHostEnvironment env,
+            IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
             _env = env;
+            _pleasanterRepository = pleasanterRepository;
             PosViewModel = new ();
             ResponseLogProcess = new (_logger);
             TableIdProperty tableIdProperty = new ();
@@ -47,6 +52,7 @@ namespace offlineMeeting.Controllers
             OrderSiteId = tableIdProperty.OrderSiteId;
             OrderPurchaseSiteId = tableIdProperty.OrderPurchaseSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
+
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -118,7 +124,8 @@ namespace offlineMeeting.Controllers
                 extraFoodSiteId: ExtraSiteId,
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoodSiteId: RawFoodSiteId,
-                httpContext: HttpContext
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository
             );
             SiteSettingsProcess siteSettingsProcess = new ();
 
