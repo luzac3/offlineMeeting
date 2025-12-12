@@ -1,6 +1,4 @@
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.DBProcess;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
