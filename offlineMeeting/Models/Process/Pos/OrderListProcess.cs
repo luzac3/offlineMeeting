@@ -2,6 +2,7 @@ using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -14,6 +15,7 @@ namespace offlineMeeting.Models.Process.Pos
         private int RawFoodSiteId;
         private string EventId;
         private List<OrderPostEntity> OrderPostEntityList;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
         public OrderListProcess(
             List<OrderPostEntity> orderPostEntityList,
@@ -21,7 +23,8 @@ namespace offlineMeeting.Models.Process.Pos
             int sakeSiteId,
             int eventFoodSiteId,
             int rawFoodSiteId,
-            HttpContext httpContext
+            HttpContext httpContext,
+            IPleasanterRepository pleasanterRepository
         )
         {
             ManageEventId manageEventId = new (httpContext);
@@ -36,6 +39,7 @@ namespace offlineMeeting.Models.Process.Pos
             EventFoodSiteId = eventFoodSiteId;
             RawFoodSiteId= rawFoodSiteId;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
+            _pleasanterRepository = pleasanterRepository;
         }
 
         public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
@@ -68,7 +72,7 @@ namespace offlineMeeting.Models.Process.Pos
             );
             List<PurchaseDataEntity> purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd, _pleasanterRepository);
             List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
