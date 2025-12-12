@@ -6,6 +6,7 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Coins;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.APIBridge;
 using System.Diagnostics;
 
 namespace offlineMeeting.Controllers
@@ -13,13 +14,15 @@ namespace offlineMeeting.Controllers
     public class CoinsController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPleasanterApiBridge _bridge;
         CoinsViewModel CoinsViewModel;
         private int CoinsSiteId;
         private int JoinerSiteId;
 
-        public CoinsController(ILogger<HomeController> logger)
+        public CoinsController(ILogger<HomeController> logger, IPleasanterApiBridge bridge)
         {
             _logger = logger;
+            _bridge = bridge;
             CoinsViewModel = new();
             TableIdProperty tableIdProperty = new();
             CoinsSiteId = tableIdProperty.CoinsSiteId;
@@ -62,7 +65,7 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public async Task<IActionResult> GiveCoins([FromBody] GiveCoinsEntity giveCoinsEntity)
         {
-            GiveCoinsProcess giveCoinsProcess = new (giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
+            GiveCoinsProcess giveCoinsProcess = new (giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext, bridge: _bridge);
 
             Dictionary<string, string> result = await giveCoinsProcess.Send();
 
