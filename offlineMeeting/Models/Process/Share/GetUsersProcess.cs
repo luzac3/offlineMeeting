@@ -10,7 +10,7 @@ namespace offlineMeeting.Models.Process.Share
         private int JoinerSiteId;
         private readonly IPleasanterRepository _pleasanterRepository;
 
-        public GetUsersProcess(int joinerSiteId, HttpContext httpContext, IPleasanterRepository pleasanterRepository)
+        public GetUsersProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, int joinerSiteId)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
             JoinerSiteId = joinerSiteId;

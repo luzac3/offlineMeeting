@@ -1,20 +1,19 @@
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Share
 {
-    public class SetAlcoholDataEntityProcess : ResultsProcess
+    public class SetAlcoholDataEntityProcess
     {
         private int SakeSiteId;
         private int OrderSiteId;
-        private string EventId;
-        private string UserCd;
+        private int EventId;
+        private int UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
         private readonly IPleasanterRepository _repository;
 
-        public SetAlcoholDataEntityProcess(int sakeSiteId, int orderSiteId, string eventId, string userCd, IPleasanterRepository repository)
+        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, int sakeSiteId, int orderSiteId, int eventId, int userCd)
         {
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;

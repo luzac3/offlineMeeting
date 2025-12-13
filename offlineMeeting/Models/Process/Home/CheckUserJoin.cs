@@ -1,20 +1,21 @@
-﻿using offlineMeeting.Models.DBProperty;
-using offlineMeeting.Models.Process.DBProcess;
-using System.Security.Cryptography.X509Certificates;
+﻿using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Home
 {
-    public class CheckUserJoin: ResultsProcess
+    public class CheckUserJoin
     {
-        private string UserCd;
-        public CheckUserJoin(string userCd) {
+        private readonly IPleasanterRepository _pleasanterRepository;
+        private int UserCd;
+        public CheckUserJoin(IPleasanterRepository pleasanterRepository, int userCd) {
+            _pleasanterRepository = pleasanterRepository;
             UserCd = userCd;
         }
 
         public bool Check()
         {
-            ResultsEntity resultsEntity = GetSingleRecord(UserCd);
-            return resultsEntity != null && resultsEntity.CheckA == true;
+            TablesEntity? tablesEntity = _pleasanterRepository.Select(UserCd, true).FirstOrDefault();
+            return tablesEntity != null && tablesEntity.CheckA == true;
         }
     }
 }

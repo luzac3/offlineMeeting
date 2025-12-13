@@ -5,40 +5,48 @@ using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
 using offlineMeeting.Models.Entity.Pos.SendOrderPurchaseEntity;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 using System.Net;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SendOrderProcess : ResultsProcess
+    public class SendOrderProcess
     {
         private int OrderSiteId;
         private int OrderPurchaseSiteId;
         private int JoinerSiteId;
-        private string EventId;
+        private int EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId,int orderPurchseSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
+        public SendOrderProcess(
+            List<OrderPostEntity> orderPostEntityList, 
+            int orderSiteId,
+            int orderPurchseSiteId, 
+            int joinerSiteId,
+            HttpContext httpContext, 
+            IHubContext<MyHub> hubContext,
+            IPleasanterRepository pleasanterRepository
+        )
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
             EventId = manageEventId.GetEventId();
-            if (EventId == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
+
             OrderSiteId = orderSiteId;
             OrderPurchaseSiteId = orderPurchseSiteId;
             JoinerSiteId = joinerSiteId;
             HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
             _hubContext = hubContext;
+            _pleasanterRepository = pleasanterRepository;
         }
 
 
@@ -47,8 +55,8 @@ namespace offlineMeeting.Models.Process.Pos
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
             List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
-            if (userCd == "0")
+            int userCd = manageUserCd.GetUserCd();
+            if (userCd == 0)
             {
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ユーザコードがありません" } });
             }
@@ -56,7 +64,7 @@ namespace offlineMeeting.Models.Process.Pos
             // コインが足りることを確認する
             int totalCoins = 0;
 
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+            GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             if (userData.Coins < totalCoins)
@@ -84,7 +92,7 @@ namespace offlineMeeting.Models.Process.Pos
         private async Task<PleasanterApiResponseEntity> SendOrder(
             List<OrderPostEntity> orderPostEntityList,
             int sakeSiteId,
-            string userCd,
+            int userCd,
             string userName
         )
         {
@@ -166,11 +174,11 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        private async Task<int> SendOrder(OrderPostEntity orderPostEntity, string userCd, int coins, bool isAlcohol)
+        private async Task<int> SendOrder(OrderPostEntity orderPostEntity, int userCd, int coins, bool isAlcohol)
         {   
             SendOrderEntity sendOrderEntity = new(
-                eventNumber: EventId,
-                userCd: userCd,
+                eventNumber: EventId.ToString(),
+                userCd: userCd.ToString(),
                 orderCoins: coins,
                 isAlcohol: isAlcohol
             );
@@ -190,15 +198,15 @@ namespace offlineMeeting.Models.Process.Pos
         private List<SendOrderPurchaseEntity> CreateSendOrderPurchaseEntities(
             List<OrderPostEntity> orderPostEntityList,
             string orderResultId,
-            string userCd,
+            int userCd,
             bool isAlcohol
         )
         {
             return orderPostEntityList.Select(orderPostEntity =>
                 new SendOrderPurchaseEntity(
-                    eventNumber: EventId,
+                    eventNumber: EventId.ToString(),
                     orderResultId: orderResultId,
-                    userCd: userCd,
+                    userCd: userCd.ToString(),
                     purchaseResultId: orderPostEntity.ResultId.ToString(),
                     orderNumber: orderPostEntity.OrderNumber,
                     orderCoins: orderPostEntity.OrderCoins,
@@ -211,7 +219,7 @@ namespace offlineMeeting.Models.Process.Pos
         private List<OrderTableEntity> CreateBackOrderTableEntityList(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
             List<int> orderResultIdList,
-            string userCd,
+            int userCd,
             string userName
         )
         {
@@ -220,9 +228,9 @@ namespace offlineMeeting.Models.Process.Pos
             orderResultIdList.ForEach(orderResultId =>
             {
 
-                ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderResultId.ToString()) ? null : base.GetSingleRecord(orderResultId.ToString());
+                TablesEntity? tablesEntity = _pleasanterRepository.Select(orderResultId, true).FirstOrDefault();
 
-                string? orderNumber = resultsEntity?.ClassC?.ToString();
+                string? orderNumber = tablesEntity?.ClassC?.ToString();
 
                 string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
 
@@ -233,18 +241,18 @@ namespace offlineMeeting.Models.Process.Pos
 
                 orderTableEntityList.Add(
                     new OrderTableEntity(
-                        resultId: resultsEntity?.ResultId.ToString(),
-                        userCd: userCd,
+                        resultId: tablesEntity?.ReferenceId.ToString(),
+                        userCd: userCd.ToString(),
                         userName: userName,
                         orderNumber: orderNumber,
-                        isAlcohol: resultsEntity?.CheckB ?? false,
+                        isAlcohol: tablesEntity?.CheckB ?? false,
                         orderPurchaseTableEntityList: CreateBackOrderPurchaseTableEntity(
                             sendOrderPurchaseEntityList: sendOrderPurchaseEntityList
-                                .Where(x => x.CheckHash.CheckA == (resultsEntity?.CheckB ?? false))
+                                .Where(x => x.CheckA == (tablesEntity?.CheckB ?? false))
                                 .ToList(),
                             userCd: userCd,
                             userName: userName,
-                            isAlcohol: resultsEntity?.CheckB ?? false
+                            isAlcohol: tablesEntity?.CheckB ?? false
                         )
                     )
                 );
@@ -255,7 +263,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderPurchaseTableEntity> CreateBackOrderPurchaseTableEntity(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            string userCd,
+            int userCd,
             string userName,
             bool isAlcohol
         )
@@ -264,23 +272,26 @@ namespace offlineMeeting.Models.Process.Pos
 
             sendOrderPurchaseEntityList.ForEach(sendOrderPurchaseEntity =>
             {
-                ResultsEntity? resultsEntity = String.IsNullOrEmpty(sendOrderPurchaseEntity.ClassHash.ClassC.ToString()) ? null : base.GetSingleRecord(sendOrderPurchaseEntity.ClassHash.ClassC.ToString());
+                // purchaseId
+                TablesEntity? tablesEntity = int.TryParse(sendOrderPurchaseEntity.ClassC, out int purchaseId) ? 
+                    null : 
+                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault();
 
                 orderPurchaseTableEntity
                     .Add(
                         new OrderPurchaseTableEntity(
                             resultId: "",
-                            userCd: userCd,
+                            userCd: userCd.ToString(),
                             userName: userName,
-                            purchaseCd: sendOrderPurchaseEntity.ClassHash.ClassC.ToString(),
-                            purchaseName: resultsEntity?.ClassA,
-                            purchaseRead: resultsEntity?.ClassJ,
-                            number: sendOrderPurchaseEntity.NumHash.NumA,
+                            purchaseCd: sendOrderPurchaseEntity.ClassC.ToString(),
+                            purchaseName: tablesEntity?.ClassA,
+                            purchaseRead: tablesEntity?.ClassJ,
+                            number: sendOrderPurchaseEntity.NumA,
                             unit: "",
-                            coins: sendOrderPurchaseEntity.NumHash.NumB,
-                            alcoholQuantity: sendOrderPurchaseEntity.NumHash.NumC,
+                            coins: sendOrderPurchaseEntity.NumB,
+                            alcoholQuantity: sendOrderPurchaseEntity.NumC,
                             isAlcohol: isAlcohol,
-                            hide: resultsEntity?.CheckZ ?? false
+                            hide: tablesEntity?.CheckZ ?? false
                         )
                     );
             });
