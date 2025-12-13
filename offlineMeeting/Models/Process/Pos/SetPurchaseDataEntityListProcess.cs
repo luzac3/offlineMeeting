@@ -1,28 +1,33 @@
+using MySqlX.XDevAPI.Common;
 using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
-using offlineMeeting.Models.Process.DBProcess;
+using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Share;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SetPurchaseDataEntityListProcess : ResultsProcess
+    public class SetPurchaseDataEntityListProcess
     {
         private int ExtraFoodSiteId;
         private int EventFoodSiteId;
         private int RawFoodSiteId;
         private int OrderSiteId;
-        private string EventId;
-        private string UserCd;
+        private int EventId;
+        private int UserCd;
         List<PurchaseDataEntity> PurchaseDataEntityList;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
         public SetPurchaseDataEntityListProcess(
             int extraFoodSiteId,
             int eventFoodSiteId,
             int rawFoodSiteId,
             int orderSiteId,
-            string eventId,
-            string userCd
+            int eventId,
+            int userCd,
+            IPleasanterRepository pleasanterRepository
         )
         {
             ExtraFoodSiteId = extraFoodSiteId;
@@ -32,41 +37,21 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = eventId;
             UserCd = userCd;
             PurchaseDataEntityList = new List<PurchaseDataEntity> { };
+            _pleasanterRepository = pleasanterRepository;
         }
 
         public List<PurchaseDataEntity> Get(int category)
         {
-            List<ResultsEntity> results = new List<ResultsEntity> { };
-            switch (category)
+            List<TablesEntity> results = category switch
             {
-                case 0:
-                    results = base
-                        .GetFromSiteId(ExtraFoodSiteId)
-                        .Where(x =>
-                            !string.IsNullOrEmpty(x.ClassD) &&
-                            JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
-                        )
-                        .ToList();
-                    break;
-                case 1:
-                    results = base
-                        .GetFromSiteId(EventFoodSiteId)
-                        .Where(x =>
-                            !string.IsNullOrEmpty(x.ClassD) &&
-                            JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
-                        )
-                        .ToList();
-                    results.AddRange(
-                        base
-                            .GetFromSiteId(RawFoodSiteId)
-                            .Where(x =>
-                                !string.IsNullOrEmpty(x.ClassD) &&
-                                JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
-                            )
-                            .ToList()
-                    );
-                    break;
-            }
+                0 => _pleasanterRepository.Select(ExtraFoodSiteId, true),
+                1 => _pleasanterRepository.Select(EventFoodSiteId, true)
+                    .Concat(_pleasanterRepository.Select(RawFoodSiteId, true))
+                    .ToList(),
+                _ => new List<TablesEntity> { }
+            };
+
+            results = FilterByEventId(results);
 
             GetPurchaseDataEntityList(results, _ => category);
 
@@ -75,43 +60,48 @@ namespace offlineMeeting.Models.Process.Pos
 
         public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<string, int> categoryDic)
         {
-            List<ResultsEntity> results = base
-                .GetFromResultIdList(resultId)
-                .Where(x =>
-                    !string.IsNullOrEmpty(x.ClassD) &&
-                    JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId) == true
-                )
-                .ToList();
+            List<TablesEntity> results = FilterByEventId(
+                _pleasanterRepository.Select(resultId, true)
+            );
 
-            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ResultId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
+            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ReferenceId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
 
             return PurchaseDataEntityList;
         }
 
-        private void GetPurchaseDataEntityList(List<ResultsEntity> results, Func<ResultsEntity, int> getCategory)
+        private List<TablesEntity> FilterByEventId(List<TablesEntity> tablesEntities)
         {
-            List<int> orderedResultsIdList = base
-                .GetFromSiteId(OrderSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.ClassB == UserCd)
+            return tablesEntities
+                .Where(x =>
+                    !string.IsNullOrEmpty(x.ClassD) &&
+                    JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId.ToString()) == true
+                )
+                .ToList();
+        }
+
+        private void GetPurchaseDataEntityList(List<TablesEntity> tablesEntities, Func<TablesEntity, int> getCategory)
+        {
+            var where = new Dictionary<string, object>
+            {
+                { "ClassA", EventId.ToString() },
+                { "ClassB", UserCd.ToString() }
+            };
+
+            List<int> orderedResultsIdList = _pleasanterRepository.Select(OrderSiteId, where, true)
                 .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
                 .ToList();
 
-            foreach (ResultsEntity result in results)
+            tablesEntities.Select(tablesEntity =>
             {
-                string? purchaseName = Int32.TryParse(result?.ClassA, out int pursedPurchaseData) ?
-                    base.GetSingleRecord(pursedPurchaseData.ToString()).Title :
-                    result?.ClassA;
-
-                string[]? imageSplit = result!.Body?.Split("/");
-                string guid = "";
-                if (imageSplit != null && imageSplit?.Length > 2)
+                if (tablesEntity == null)
                 {
-                    guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
+                    return null;
                 }
 
-                GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
-                string? image = getBinariesProcess.GetImage(guid);
+                string? purchaseName = Int32.TryParse(tablesEntity?.ClassA, out int pursedPurchaseData) ?
+                    _pleasanterRepository.Select(pursedPurchaseData, true).FirstOrDefault()?.Title :
+                    tablesEntity?.ClassA;
+                string? image = tablesEntity?.Body?[0];
 
                 string imageBase64 = "";
                 string lowImageBase64 = "";
@@ -133,22 +123,20 @@ namespace offlineMeeting.Models.Process.Pos
                     }
                 }
 
-                PurchaseDataEntityList.Add(
-                    new PurchaseDataEntity(
-                        resultId: result.ResultId,
-                        image: imageBase64,
-                        lowImage: lowImageBase64,
-                        width: width,
-                        height: height,
-                        purchaseName: purchaseName,
-                        foodCategory: result.ClassB,
-                        category: getCategory(result),
-                        coinNumber: Convert.ToInt32(result.NumG),
-                        leftAmount: Convert.ToInt32(result.NumH),
-                        ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId))
-                    )
+                return new PurchaseDataEntity(
+                    resultId: tablesEntity!.ReferenceId,
+                    image: imageBase64,
+                    lowImage: lowImageBase64,
+                    width: width,
+                    height: height,
+                    purchaseName: purchaseName,
+                    foodCategory: tablesEntity!.ClassB,
+                    category: getCategory(tablesEntity!),
+                    coinNumber: Convert.ToInt32(tablesEntity!.NumG),
+                    leftAmount: Convert.ToInt32(tablesEntity!.NumH),
+                    ordered: orderedResultsIdList.Contains(Convert.ToInt32(tablesEntity!.ReferenceId))
                 );
-            }
+            });
         }
     }
 }

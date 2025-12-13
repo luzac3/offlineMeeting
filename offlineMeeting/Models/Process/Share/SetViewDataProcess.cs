@@ -1,6 +1,7 @@
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Share
 {
@@ -9,15 +10,15 @@ namespace offlineMeeting.Models.Process.Share
 
         public SetViewDataProcess() { }
 
-        public JoinerEntity SetUserData(HttpContext httpContext)
+        public JoinerEntity SetUserData(HttpContext httpContext, IPleasanterRepository pleasanterRepository)
         {
             TableIdProperty tableIdProperty = new();
             ManageUserCd manageUserCd = new(httpContext);
 
-            string userCd = manageUserCd.GetUserCd();
-            GetUsersProcess getUsersProcess = new GetUsersProcess(tableIdProperty.JoinerSiteId, httpContext);
+            int userCd = manageUserCd.GetUserCd();
+            GetUsersProcess getUsersProcess = new GetUsersProcess(httpContext, pleasanterRepository, tableIdProperty.JoinerSiteId);
 
-            if (userCd == "0")
+            if (userCd == 0)
             {
                 return getUsersProcess.GetUserData();
             }

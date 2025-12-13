@@ -1,6 +1,7 @@
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -8,7 +9,7 @@ namespace offlineMeeting.Models.Process.Pos
     public class AlcoholDataProcess
     {
         private int SakeSiteId;
-        private string EventId;
+        private int EventId;
 
         public AlcoholDataProcess(int sakeSiteId, HttpContext httpContext)
         {
@@ -16,18 +17,13 @@ namespace offlineMeeting.Models.Process.Pos
 
             SakeSiteId = sakeSiteId;
             EventId = manageEventId.GetEventId();
-            if(EventId == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, IPleasanterRepository repository, int orderSiteId)
         {
-            ManageUserCd manageUserCd = new ManageUserCd(httpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
+            int userCd = new ManageUserCd(httpContext).GetUserCd();
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (SakeSiteId, orderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (repository, SakeSiteId, orderSiteId, EventId, userCd);
             return setAlcoholDataEntityProcess
                 .Get(json)
                 .Where(x => !x.Hide)

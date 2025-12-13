@@ -1,65 +1,55 @@
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Quiz
 {
-    public class SetAnswerEntityProcess : ResultsProcess
+    public class SetAnswerEntityProcess
     {
-        private string EventId;
+        private int EventId;
         private int JoinerSiteId;
         private HttpContext httpContext;
-        private GetBinariesProcess GetBinariesProcess;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
-        public SetAnswerEntityProcess(string eventId, int joinerSiteId, HttpContext httpContext)
+        public SetAnswerEntityProcess(int eventId, int joinerSiteId, HttpContext httpContext, IPleasanterRepository pleasanterRepository)
         {
             EventId = eventId;
             JoinerSiteId = joinerSiteId;
             this.httpContext = httpContext;
-            GetBinariesProcess = new GetBinariesProcess();
+            _pleasanterRepository = pleasanterRepository;
         }
 
-        public AnswerEntity Get(string resultId)
+        public AnswerEntity Get(int resultId)
         {
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, httpContext);
+            TablesEntity tablesEntity = _pleasanterRepository.Select(resultId, true).FirstOrDefault()!;
 
-            ResultsEntity result = base
-                .GetSingleRecord(resultId);
-
-            return CreateAnswerEntity(result);
+            return CreateAnswerEntity(tablesEntity);
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, string quizId)
+        public List<AnswerEntity> GetList(int answerSiteId, int quizId)
         {
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, httpContext);
-            List<ResultsEntity> results = GetFromSiteId(answerSiteId)
-                .Where(x => x.ClassC == quizId)
-                .OrderBy(x => x.ResultId)
+            var where = new Dictionary<string, object>
+            {
+                { "ClassC", quizId }
+            };  
+            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(answerSiteId, where, true)
+                .OrderBy(x => x.ReferenceId)
                 .ToList();
 
-            // Nullチェックを追加
-            ResultsEntity? resultsEntity = quizId != null ? GetSingleRecord(quizId) : null;
+            List<AnswerEntity> answerEntityList = tablesEntities
+                .Select(tableEntity => CreateAnswerEntity(tableEntity))
+                .ToList();
 
-            List<AnswerEntity> answerEntityList = new List<AnswerEntity>();
-            foreach (var result in results)
-            {
-                answerEntityList.Add(CreateAnswerEntity(result));
-            }
             return answerEntityList;
         }
-        private AnswerEntity CreateAnswerEntity(ResultsEntity result)
-        {
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, httpContext);
 
-            string[]? imageSplit = result!.DescriptionA?.Split("/");
-            string guid = "";
-            if (imageSplit != null && imageSplit?.Length > 2)
-            {
-                guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
-            }
-            string? image = GetBinariesProcess.GetImage(guid);
+        private AnswerEntity CreateAnswerEntity(TablesEntity tablesEntity)
+        {
+            GetUsersProcess getUsersProcess = new(httpContext, _pleasanterRepository, JoinerSiteId);
+
+            string? image = tablesEntity.DescriptionA?[0];
 
             string imageBase64 = "";
             string lowImageBase64 = "";
@@ -81,23 +71,25 @@ namespace offlineMeeting.Models.Process.Quiz
                 }
             }
 
-            JoinerEntity userData = getUsersProcess.GetUserData(result.ClassB ?? "0");
+            int.TryParse(tablesEntity.ClassC, out int userCd);
+            JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             // Nullチェックを追加
-            ResultsEntity? resultsEntity = result.ClassC != null ? GetSingleRecord(result.ClassC) : null;
+            int.TryParse(tablesEntity.ClassC, out int resultId);
+            TablesEntity? pointResult = _pleasanterRepository.Select(resultId, true).FirstOrDefault();
 
             return new AnswerEntity(
-                resultId: result.ResultId.ToString(),
-                userCd: result.ClassB,
+                resultId: tablesEntity.ReferenceId.ToString(),
+                userCd: tablesEntity.ClassB,
                 userName: userData.UserName,
-                quizId: result.ClassC,
+                quizId: tablesEntity.ClassC,
                 image: imageBase64,
                 lowImage: lowImageBase64,
                 width: width,
                 height: height,
-                maxPoint: Convert.ToInt32(resultsEntity?.NumA ?? 0),
-                point: Convert.ToInt32(result.NumA),
-                answerTime: result.DateA ?? DateTime.MinValue
+                maxPoint: Convert.ToInt32(pointResult?.NumA ?? 0),
+                point: Convert.ToInt32(tablesEntity.NumA),
+                answerTime: tablesEntity.DateA ?? DateTime.MinValue
             );
         }
     }

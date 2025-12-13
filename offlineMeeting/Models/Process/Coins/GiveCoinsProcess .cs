@@ -8,21 +8,21 @@ namespace offlineMeeting.Models.Process.Coins
 {
     public class GiveCoinsProcess
     {
+        private readonly IPleasanterApiBridge _bridge;
         private GiveCoinsEntity GiveCoinsEntity;
         private int CoinsSiteId;
-        private string EventId;
-        private string UserCd;
-        private readonly IPleasanterApiBridge _bridge;
+        private int EventId;
+        private int UserCd;
 
-        public GiveCoinsProcess(GiveCoinsEntity giveCoinsEntity, int coinsSiteId, HttpContext httpContext, IPleasanterApiBridge bridge)
+        public GiveCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, GiveCoinsEntity giveCoinsEntity, int coinsSiteId)
         {
+            _bridge = bridge;
             ManageEventId manageEventId = new ManageEventId(httpContext);
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
             GiveCoinsEntity = giveCoinsEntity;
             CoinsSiteId = coinsSiteId;
             EventId = manageEventId.GetEventId();
-            UserCd = manageUserCd.GetUserCd().ToString();
-            _bridge = bridge;
+            UserCd = manageUserCd.GetUserCd();
         }
 
         public async Task<Dictionary<string, string>> Send()
@@ -45,7 +45,7 @@ namespace offlineMeeting.Models.Process.Coins
             int coinsRate = (int)Math.Round(GiveCoinsEntity.Coins * 0.2) == 0 ? 1 : (int)Math.Round(GiveCoinsEntity.Coins * 0.2);
 
             var responseReceive = await SendCoinsAndGetResponse(
-                userCd: GiveCoinsEntity.ForUserCd.ToString(),
+                userCd: GiveCoinsEntity.ForUserCd,
                 gar: "150",
                 coins: (int)GiveCoinsEntity.Coins - coinsRate
             );
@@ -65,12 +65,12 @@ namespace offlineMeeting.Models.Process.Coins
                 };
         }
 
-        private async Task<dynamic> SendCoinsAndGetResponse(string userCd, string gar, int coins)
+        private async Task<dynamic> SendCoinsAndGetResponse(int userCd, string gar, int coins)
         {
             var sendCoinsEntity = new SendCoinsEntity
             (
-                eventNumber: EventId,
-                userCd: userCd,
+                eventNumber: EventId.ToString(),
+                userCd: userCd.ToString(),
                 gar: gar,
                 coins: coins,
                 value: GiveCoinsEntity.Value

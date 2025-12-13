@@ -8,7 +8,6 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
-using PleasanterBridge.src.APIBridge;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 using System.Text.Json;
@@ -58,7 +57,7 @@ namespace offlineMeeting.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext);
+            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             ViewData["Electron"] = setViewDataProcess.SetElectron();
             base.OnActionExecuting(context);
         }
@@ -78,7 +77,7 @@ namespace offlineMeeting.Controllers
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new ();
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId));
             return View(PosViewModel);
         }
 
@@ -88,7 +87,8 @@ namespace offlineMeeting.Controllers
                 extraSiteId: ExtraSiteId,
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
-                httpContext: HttpContext
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -102,7 +102,8 @@ namespace offlineMeeting.Controllers
                 extraSiteId: ExtraSiteId,
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
-                httpContext: HttpContext
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -142,7 +143,8 @@ namespace offlineMeeting.Controllers
                 orderPurchseSiteId: OrderPurchaseSiteId,
                 joinerSiteId: JoinerSiteId,
                 httpContext: HttpContext,
-                hubContext: _hubContext
+                hubContext: _hubContext,
+                pleasanterRepository: _pleasanterRepository
             );
 
             _ = Task.Run(async () =>
@@ -159,11 +161,11 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrders([FromQuery] string eid)
+        public IActionResult UserOrders([FromQuery] int eid)
         {
             SetViewDataProcess setViewDataProcess = new();
             // electron経由で表示する場合
-            if (!string.IsNullOrEmpty(eid))
+            if (eid != 0)
             {
                 ViewData["Electron"] = setViewDataProcess.SetElectron(true);
             }
@@ -173,6 +175,7 @@ namespace offlineMeeting.Controllers
                 OrderPurchaseSiteId,
                 JoinerSiteId,
                 HttpContext,
+                _pleasanterRepository,
                 eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
@@ -181,13 +184,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrdersPartial([FromQuery] string eid)
+        public IActionResult UserOrdersPartial([FromQuery] int eid)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
                 HttpContext,
+                _pleasanterRepository,
                 eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
@@ -222,7 +226,8 @@ namespace offlineMeeting.Controllers
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
-                HttpContext
+                HttpContext,
+                _pleasanterRepository
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.GetOwn(HttpContext));
 
@@ -230,13 +235,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintOrders([FromQuery] string eid, string resultId)
+        public IActionResult PrintOrders([FromQuery] int eid, int resultId)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
                 HttpContext,
+                _pleasanterRepository,
                 eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
@@ -245,13 +251,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintQrOrders([FromQuery] string eid, string resultId)
+        public IActionResult PrintQrOrders([FromQuery] int eid, int resultId)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,
                 JoinerSiteId,
                 HttpContext,
+                _pleasanterRepository,
                 eid
             );
             PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));

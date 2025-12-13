@@ -1,6 +1,6 @@
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Share;
-using System.Data;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Pos
 {
@@ -9,30 +9,30 @@ namespace offlineMeeting.Models.Process.Pos
         private int ExtraSiteId;
         private int EventFoodSiteId;
         private int RawFoorSiteId;
-        private string EventId;
+        private int EventId;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
         public PurchaseDataProcess(
             int extraSiteId,
             int eventFoodSiteId,
             int rawFoorSiteId,
-            HttpContext httpContext)
+            HttpContext httpContext,
+            IPleasanterRepository pleasanterRepository
+        )
         {
             ManageEventId manageEventId = new (httpContext);
+            _pleasanterRepository = pleasanterRepository;
 
             ExtraSiteId = extraSiteId;
             EventFoodSiteId = eventFoodSiteId;
             RawFoorSiteId = rawFoorSiteId;
             EventId = manageEventId.GetEventId();
-            if(EventId == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
         }
 
         public List<PurchaseDataEntity> Get(HttpContext httpContext, int orderSiteId, int category)
         {
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
+            int userCd = manageUserCd.GetUserCd();
 
             SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new (
                 ExtraSiteId,
@@ -40,7 +40,8 @@ namespace offlineMeeting.Models.Process.Pos
                 RawFoorSiteId,
                 orderSiteId,
                 EventId,
-                userCd
+                userCd,
+                _pleasanterRepository
             );
             return setPurchaseDataEntityListProcess
                 .Get(category)
