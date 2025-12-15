@@ -41,9 +41,9 @@ namespace offlineMeeting.Models.Process.Pos
         {
             List<TablesEntity> results = category switch
             {
-                0 => _pleasanterRepository.Select(ExtraFoodSiteId, true),
-                1 => _pleasanterRepository.Select(EventFoodSiteId, true)
-                    .Concat(_pleasanterRepository.Select(RawFoodSiteId, true))
+                0 => _pleasanterRepository.Select(ExtraFoodSiteId, null, true),
+                1 => _pleasanterRepository.Select(EventFoodSiteId, null, true)
+                    .Concat(_pleasanterRepository.Select(RawFoodSiteId, null, true))
                     .ToList(),
                 _ => new List<TablesEntity> { }
             };
