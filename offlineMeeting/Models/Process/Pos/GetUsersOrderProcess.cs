@@ -52,7 +52,7 @@ namespace offlineMeeting.Models.Process.Pos
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassA", EventId },
+                { "ClassA", EventId.ToString() },
                 { "CheckA", true }
             };
 
@@ -77,7 +77,7 @@ namespace offlineMeeting.Models.Process.Pos
             long userCd = manageUserCd.GetUserCd();
             var where = new Dictionary<string, object>
             {
-                { "ClassA", EventId },
+                { "ClassA", EventId.ToString() },
                 { "ClassD", userCd.ToString() }
             };
 
@@ -128,8 +128,8 @@ namespace offlineMeeting.Models.Process.Pos
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassA", EventId },
-                { "ClassE", resultId }
+                { "ClassA", EventId.ToString() },
+                { "ClassE", resultId.ToString() }
             };
 
             // resultIdのリストで取得する

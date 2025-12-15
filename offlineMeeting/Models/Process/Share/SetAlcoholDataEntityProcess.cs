@@ -27,7 +27,7 @@ namespace offlineMeeting.Models.Process.Share
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassH", EventId }
+                { "ClassH", EventId.ToString() }
             };
 
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
@@ -113,8 +113,8 @@ namespace offlineMeeting.Models.Process.Share
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassA", EventId },
-                { "ClassB", UserCd }
+                { "ClassA", EventId.ToString() },
+                { "ClassB", UserCd.ToString() }
             };
 
             List<long> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)

@@ -87,7 +87,7 @@ namespace offlineMeeting.Models.Process.Quiz
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassA", EventId },
+                { "ClassA", EventId.ToString() },
                 { "CheckA", true }
             };
 
