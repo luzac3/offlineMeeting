@@ -32,7 +32,7 @@ namespace offlineMeeting.Models.Process.Quiz
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassC", quizId }
+                { "ClassC", quizId.ToString() }
             };  
             List<TablesEntity> tablesEntities = _pleasanterRepository.Select(answerSiteId, where, true)
                 .OrderBy(x => x.ReferenceId)
