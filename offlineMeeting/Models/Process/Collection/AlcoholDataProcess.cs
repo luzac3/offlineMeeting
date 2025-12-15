@@ -10,12 +10,12 @@ namespace offlineMeeting.Models.Process.Collection
     {
         private HttpContext HttpContext;
         private IPleasanterRepository _pleasanterRepository;
-        private int SakeSiteId;
-        private int OrderSiteId;
-        private int EventId;
-        private int UserCd;
+        private long SakeSiteId;
+        private long OrderSiteId;
+        private long EventId;
+        private long UserCd;
 
-        public AlcoholDataProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, int sakeSiteId, int orderSiteId)
+        public AlcoholDataProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long sakeSiteId, long orderSiteId)
         {
             _pleasanterRepository = pleasanterRepository;
             UserCd = new ManageUserCd(httpContext).GetUserCd();
@@ -36,7 +36,7 @@ namespace offlineMeeting.Models.Process.Collection
                 .ToList();
         }
 
-        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, int resultId)
+        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, long resultId)
         {
             SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(_pleasanterRepository, SakeSiteId, OrderSiteId, EventId, UserCd);
             return setAlcoholDataEntityProcess.Get(json, resultId);

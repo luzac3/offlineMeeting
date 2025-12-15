@@ -7,10 +7,10 @@ namespace offlineMeeting.Models.Process.Share
 {
     public class GetUsersProcess
     {
-        private int JoinerSiteId;
+        private long JoinerSiteId;
         private readonly IPleasanterRepository _pleasanterRepository;
 
-        public GetUsersProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, int joinerSiteId)
+        public GetUsersProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long joinerSiteId)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
             JoinerSiteId = joinerSiteId;
@@ -33,7 +33,7 @@ namespace offlineMeeting.Models.Process.Share
             );
         }
 
-        public JoinerEntity GetUserData(int myUserCd)
+        public JoinerEntity GetUserData(long myUserCd)
         {
             TablesEntity? tablesEntity = _pleasanterRepository.Select(myUserCd, true).FirstOrDefault();
 

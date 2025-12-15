@@ -8,10 +8,10 @@ namespace offlineMeeting.Models.Process.Quiz
     public class GetAnswerProcess
     {
         private readonly IPleasanterRepository _pleasanterRepository;
-        private int EventId;
+        private long EventId;
         private SetAnswerEntityProcess SetAnswerEntityProcess;
 
-        public GetAnswerProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, int joinerSiteId)
+        public GetAnswerProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long joinerSiteId)
         {
             _pleasanterRepository = pleasanterRepository;
             ManageEventId manageEventId = new(httpContext);
@@ -20,12 +20,12 @@ namespace offlineMeeting.Models.Process.Quiz
             SetAnswerEntityProcess = new(EventId, joinerSiteId, httpContext, _pleasanterRepository);
         }
 
-        public AnswerEntity Get(int resultId)
+        public AnswerEntity Get(long resultId)
         {
             return SetAnswerEntityProcess.Get(resultId);
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, int quizId)
+        public List<AnswerEntity> GetList(long answerSiteId, long quizId)
         {
             return SetAnswerEntityProcess.GetList(answerSiteId, quizId);
         }

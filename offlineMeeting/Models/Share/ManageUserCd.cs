@@ -13,12 +13,12 @@ namespace offlineMeeting.Models.Share
             HttpContext = httpContext;
         }
 
-        public void SetUserCd(int userCd)
+        public void SetUserCd(long userCd)
         {
             HttpContext.Response.Cookies.Append("UserCd", userCd.ToString());
         }
 
-        public int GetUserCd()
+        public long GetUserCd()
         {
             HttpContext.Request.Cookies.TryGetValue("UserCd", out string? userCd);
 
@@ -26,7 +26,7 @@ namespace offlineMeeting.Models.Share
             {
                 throw new DataException("ユーザコードがありません");
             }
-            return int.TryParse(userCd, out var result) ? result : 0;
+            return long.TryParse(userCd, out var result) ? result : 0;
         }
 
         public void ClearUserCd()

@@ -2,12 +2,12 @@
 {
     public class GenerateQr
     {
-        public int EventId { get; set; }
-        public int UserId { get; set; }
+        public long EventId { get; set; }
+        public long UserId { get; set; }
 
         public GenerateQr(
-            int eventId,
-            int userId
+            long eventId,
+            long userId
         ) {
             EventId = eventId;
             UserId = userId;

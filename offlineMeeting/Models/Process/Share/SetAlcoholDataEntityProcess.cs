@@ -6,14 +6,14 @@ namespace offlineMeeting.Models.Process.Share
 {
     public class SetAlcoholDataEntityProcess
     {
-        private int SakeSiteId;
-        private int OrderSiteId;
-        private int EventId;
-        private int UserCd;
+        private long SakeSiteId;
+        private long OrderSiteId;
+        private long EventId;
+        private long UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
         private readonly IPleasanterRepository _repository;
 
-        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, int sakeSiteId, int orderSiteId, int eventId, int userCd)
+        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, long sakeSiteId, long orderSiteId, long eventId, long userCd)
         {
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;
@@ -39,7 +39,7 @@ namespace offlineMeeting.Models.Process.Share
             return AlcoholDataEntityList;
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, List<int> resultIds)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, List<long> resultIds)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
@@ -50,7 +50,7 @@ namespace offlineMeeting.Models.Process.Share
             return AlcoholDataEntityList;
         }
 
-        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, int resultId)
+        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, long resultId)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
@@ -64,7 +64,7 @@ namespace offlineMeeting.Models.Process.Share
             return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
-        public List<int> GetHidedIdList()
+        public List<long> GetHidedIdList()
         {
             var where = new Dictionary<string, object>
             {
@@ -72,7 +72,7 @@ namespace offlineMeeting.Models.Process.Share
             };
             
             return _repository.Select(SakeSiteId, where, true)
-                .Select(x => Convert.ToInt32(x.ReferenceId))
+                .Select(x => x.ReferenceId)
                 .ToList();
         }
 
@@ -117,14 +117,14 @@ namespace offlineMeeting.Models.Process.Share
                 { "ClassB", UserCd }
             };
 
-            List<int> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)
-                .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
+            List<long> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)
+                .Select(x => Convert.ToInt64(x.ClassC ?? "0"))
                 .ToList();
 
-            int classC = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt32(result.ClassC);
+            long classC = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
             TablesEntity? brewery = _repository.Select(classC, true).FirstOrDefault();
 
-            int breweryId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt32(brewery.ClassB);
+            long breweryId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
             string? prefectures = _repository.Select(breweryId, true).FirstOrDefault()?.ClassA;
 
             string? image = null;

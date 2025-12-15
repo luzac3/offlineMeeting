@@ -11,15 +11,15 @@ namespace offlineMeeting.Models.Share
             HttpContext = httpContext;
         }
 
-        public void SetEventId(int eventId)
+        public void SetEventId(long eventId)
         {
             HttpContext.Response.Cookies.Append("EventId", eventId.ToString());
         }
 
-        public int GetEventId()
+        public long GetEventId()
         {
             HttpContext.Request.Cookies.TryGetValue("EventId", out string? eventIdstr);
-            int.TryParse(eventIdstr, out var eventId);
+            long.TryParse(eventIdstr, out var eventId);
 
             if (eventId == 0)
             {

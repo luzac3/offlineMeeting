@@ -15,7 +15,7 @@ namespace offlineMeeting.Models.Process.Share
             TableIdProperty tableIdProperty = new();
             ManageUserCd manageUserCd = new(httpContext);
 
-            int userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
             GetUsersProcess getUsersProcess = new GetUsersProcess(httpContext, pleasanterRepository, tableIdProperty.JoinerSiteId);
 
             if (userCd == 0)

@@ -3,7 +3,7 @@ namespace offlineMeeting.Models.Entity.Share
 {
     public class PleasanterApiResponseEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int StatusCode { get; set; }
         public int LimitPerDate { get; set; }
         public int LimitRemaining { get; set; }

@@ -8,10 +8,10 @@ namespace offlineMeeting.Models.Process.Pos
 {
     public class AlcoholDataProcess
     {
-        private int SakeSiteId;
-        private int EventId;
+        private long SakeSiteId;
+        private long EventId;
 
-        public AlcoholDataProcess(int sakeSiteId, HttpContext httpContext)
+        public AlcoholDataProcess(long sakeSiteId, HttpContext httpContext)
         {
             ManageEventId manageEventId = new (httpContext);
 
@@ -19,9 +19,9 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = manageEventId.GetEventId();
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, IPleasanterRepository repository, int orderSiteId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, IPleasanterRepository repository, long orderSiteId)
         {
-            int userCd = new ManageUserCd(httpContext).GetUserCd();
+            long userCd = new ManageUserCd(httpContext).GetUserCd();
 
             SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (repository, SakeSiteId, orderSiteId, EventId, userCd);
             return setAlcoholDataEntityProcess

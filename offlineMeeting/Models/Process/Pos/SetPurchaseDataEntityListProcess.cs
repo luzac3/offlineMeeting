@@ -1,7 +1,4 @@
-using MySqlX.XDevAPI.Common;
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
-using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Share;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
@@ -11,22 +8,22 @@ namespace offlineMeeting.Models.Process.Pos
 {
     public class SetPurchaseDataEntityListProcess
     {
-        private int ExtraFoodSiteId;
-        private int EventFoodSiteId;
-        private int RawFoodSiteId;
-        private int OrderSiteId;
-        private int EventId;
-        private int UserCd;
+        private long ExtraFoodSiteId;
+        private long EventFoodSiteId;
+        private long RawFoodSiteId;
+        private long OrderSiteId;
+        private long EventId;
+        private long UserCd;
         List<PurchaseDataEntity> PurchaseDataEntityList;
         private readonly IPleasanterRepository _pleasanterRepository;
 
         public SetPurchaseDataEntityListProcess(
-            int extraFoodSiteId,
-            int eventFoodSiteId,
-            int rawFoodSiteId,
-            int orderSiteId,
-            int eventId,
-            int userCd,
+            long extraFoodSiteId,
+            long eventFoodSiteId,
+            long rawFoodSiteId,
+            long orderSiteId,
+            long eventId,
+            long userCd,
             IPleasanterRepository pleasanterRepository
         )
         {
@@ -58,7 +55,7 @@ namespace offlineMeeting.Models.Process.Pos
             return PurchaseDataEntityList;
         }
 
-        public List<PurchaseDataEntity> Get(List<int> resultId, Dictionary<string, int> categoryDic)
+        public List<PurchaseDataEntity> Get(List<long> resultId, Dictionary<string, int> categoryDic)
         {
             List<TablesEntity> results = FilterByEventId(
                 _pleasanterRepository.Select(resultId, true)

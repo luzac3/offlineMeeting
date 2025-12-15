@@ -6,8 +6,8 @@ namespace offlineMeeting.Models.Process.Home
     public class CheckUserJoin
     {
         private readonly IPleasanterRepository _pleasanterRepository;
-        private int UserCd;
-        public CheckUserJoin(IPleasanterRepository pleasanterRepository, int userCd) {
+        private long UserCd;
+        public CheckUserJoin(IPleasanterRepository pleasanterRepository, long userCd) {
             _pleasanterRepository = pleasanterRepository;
             UserCd = userCd;
         }

@@ -22,13 +22,13 @@ namespace offlineMeeting.Controllers
         private readonly IPleasanterRepository _pleasanterRepository;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
-        private int SakeSiteId;
-        private int ExtraSiteId;
-        private int EventFoodSiteId;
-        private int RawFoodSiteId;
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
+        private long SakeSiteId;
+        private long ExtraSiteId;
+        private long EventFoodSiteId;
+        private long RawFoodSiteId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
 
         public PosController(
             ILogger<PosController> logger,
@@ -161,7 +161,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrders([FromQuery] int eid)
+        public IActionResult UserOrders([FromQuery] long eid)
         {
             SetViewDataProcess setViewDataProcess = new();
             // electron経由で表示する場合
@@ -184,7 +184,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrdersPartial([FromQuery] int eid)
+        public IActionResult UserOrdersPartial([FromQuery] long eid)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
@@ -235,7 +235,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintOrders([FromQuery] int eid, int resultId)
+        public IActionResult PrintOrders([FromQuery] long eid, long resultId)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
@@ -251,7 +251,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintQrOrders([FromQuery] int eid, int resultId)
+        public IActionResult PrintQrOrders([FromQuery] long eid, long resultId)
         {
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,

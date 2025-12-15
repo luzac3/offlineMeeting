@@ -8,12 +8,12 @@ namespace offlineMeeting.Models.Process.Quiz
 {
     public class SetAnswerEntityProcess
     {
-        private int EventId;
-        private int JoinerSiteId;
+        private long EventId;
+        private long JoinerSiteId;
         private HttpContext httpContext;
         private readonly IPleasanterRepository _pleasanterRepository;
 
-        public SetAnswerEntityProcess(int eventId, int joinerSiteId, HttpContext httpContext, IPleasanterRepository pleasanterRepository)
+        public SetAnswerEntityProcess(long eventId, long joinerSiteId, HttpContext httpContext, IPleasanterRepository pleasanterRepository)
         {
             EventId = eventId;
             JoinerSiteId = joinerSiteId;
@@ -21,14 +21,14 @@ namespace offlineMeeting.Models.Process.Quiz
             _pleasanterRepository = pleasanterRepository;
         }
 
-        public AnswerEntity Get(int resultId)
+        public AnswerEntity Get(long resultId)
         {
             TablesEntity tablesEntity = _pleasanterRepository.Select(resultId, true).FirstOrDefault()!;
 
             return CreateAnswerEntity(tablesEntity);
         }
 
-        public List<AnswerEntity> GetList(int answerSiteId, int quizId)
+        public List<AnswerEntity> GetList(long answerSiteId, long quizId)
         {
             var where = new Dictionary<string, object>
             {
@@ -71,11 +71,11 @@ namespace offlineMeeting.Models.Process.Quiz
                 }
             }
 
-            int.TryParse(tablesEntity.ClassC, out int userCd);
+            long.TryParse(tablesEntity.ClassC, out long userCd);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             // Nullチェックを追加
-            int.TryParse(tablesEntity.ClassC, out int resultId);
+            long.TryParse(tablesEntity.ClassC, out long resultId);
             TablesEntity? pointResult = _pleasanterRepository.Select(resultId, true).FirstOrDefault();
 
             return new AnswerEntity(
