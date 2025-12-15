@@ -15,15 +15,15 @@ namespace offlineMeeting.Models.Process.Quiz
         private readonly IHubContext<MyHub> _hubContext;
         private readonly IPleasanterApiBridge _bridge;
         private string AnswerSiteId;
-        private int EventId;
+        private long EventId;
         private List<PointPostEntity> PointPostEnties;
         private HttpContext HttpContext;
 
         public SendPointProcess(
             IHubContext<MyHub> hubContext, 
             IPleasanterApiBridge bridge,
-            List<PointPostEntity> pointPostEnties, 
-            int answerSiteId, 
+            List<PointPostEntity> pointPostEnties,
+            long answerSiteId, 
             HttpContext httpContext
         )
         {
@@ -48,7 +48,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
             foreach (var pointPostEntity in PointPostEnties)
             {
-                if (!int.TryParse(pointPostEntity.AnswerId, out int answerId) || !int.TryParse(pointPostEntity.Point, out int point))
+                if (!long.TryParse(pointPostEntity.AnswerId, out long answerId) || !int.TryParse(pointPostEntity.Point, out int point))
                 {
                     return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "点数の送信に失敗しました" } });
                 }

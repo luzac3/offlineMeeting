@@ -1,7 +1,6 @@
 using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.Share;
 using System.Net;
-using System.Text.Json;
 using PleasanterBridge.src.APIBridge;
 
 namespace offlineMeeting.Models.Process.Coins
@@ -10,11 +9,11 @@ namespace offlineMeeting.Models.Process.Coins
     {
         private readonly IPleasanterApiBridge _bridge;
         private GiveCoinsEntity GiveCoinsEntity;
-        private int CoinsSiteId;
-        private int EventId;
-        private int UserCd;
+        private long CoinsSiteId;
+        private long EventId;
+        private long UserCd;
 
-        public GiveCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, GiveCoinsEntity giveCoinsEntity, int coinsSiteId)
+        public GiveCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, GiveCoinsEntity giveCoinsEntity, long coinsSiteId)
         {
             _bridge = bridge;
             ManageEventId manageEventId = new ManageEventId(httpContext);
@@ -65,7 +64,7 @@ namespace offlineMeeting.Models.Process.Coins
                 };
         }
 
-        private async Task<dynamic> SendCoinsAndGetResponse(int userCd, string gar, int coins)
+        private async Task<dynamic> SendCoinsAndGetResponse(long userCd, string gar, int coins)
         {
             var sendCoinsEntity = new SendCoinsEntity
             (

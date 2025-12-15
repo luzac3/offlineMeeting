@@ -23,9 +23,9 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<QuizController> _logger;
         private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
-        private int QuizSiteId;
-        private int AnswerSiteId;
-        private int JoinerSiteId;
+        private long QuizSiteId;
+        private long AnswerSiteId;
+        private long JoinerSiteId;
 
         public QuizController(
             ILogger<QuizController> logger,
@@ -74,7 +74,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/GetQuiz/{quizId}")]
-        public async Task<IActionResult> GetQuiz(int quizId)
+        public async Task<IActionResult> GetQuiz(long quizId)
         {
             // fixme
             GetQuizProcess getQuizProcess = new(HttpContext, _pleasanterRepository, QuizSiteId);
@@ -86,7 +86,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/Orner/{resultId}")]
-        public IActionResult Orner(int resultId)
+        public IActionResult Orner(long resultId)
         {
             // fixme
             GetQuizProcess getQuizProcess = new(HttpContext, _pleasanterRepository, QuizSiteId);
@@ -99,7 +99,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/SendQuiz/{resultId}")]
-        public IActionResult SendQuiz(int resultId)
+        public IActionResult SendQuiz(long resultId)
         {
             // fixme
             SendQuizProcess sendQuizProcess = new(_hubContext, _bridge, _pleasanterRepository, QuizSiteId, HttpContext);
@@ -108,7 +108,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/ShowQuiz/{resultId}")]
-        public IActionResult ShowQuiz(int resultId)
+        public IActionResult ShowQuiz(long resultId)
         {
             // fixme
             GetAnswerProcess getAnswerProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
@@ -119,7 +119,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Quiz/GetAnswer/{resultId}")]
-        public async Task<IActionResult> GetAnswer(int resultId)
+        public async Task<IActionResult> GetAnswer(long resultId)
         {
             // fixme
             GetAnswerProcess getAnswerProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);

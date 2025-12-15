@@ -18,8 +18,8 @@ namespace offlineMeeting.Controllers
         private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
         CoinsViewModel CoinsViewModel;
-        private int CoinsSiteId;
-        private int JoinerSiteId;
+        private long CoinsSiteId;
+        private long JoinerSiteId;
 
         public CoinsController(ILogger<HomeController> logger, IPleasanterApiBridge bridge, IPleasanterRepository pleasanterRepository)
         {

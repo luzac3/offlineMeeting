@@ -4,25 +4,26 @@ using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace offlineMeeting.Models.Process.Pos
 {
     public class OrderListProcess
     {
-        private int ExtraFoodSiteId;
-        private int SakeSiteId;
-        private int EventFoodSiteId;
-        private int RawFoodSiteId;
-        private int EventId;
+        private long ExtraFoodSiteId;
+        private long SakeSiteId;
+        private long EventFoodSiteId;
+        private long RawFoodSiteId;
+        private long EventId;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IPleasanterRepository _pleasanterRepository;
 
         public OrderListProcess(
             List<OrderPostEntity> orderPostEntityList,
-            int extraFoodSiteId,
-            int sakeSiteId,
-            int eventFoodSiteId,
-            int rawFoodSiteId,
+            long extraFoodSiteId,
+            long sakeSiteId,
+            long eventFoodSiteId,
+            long rawFoodSiteId,
             HttpContext httpContext,
             IPleasanterRepository pleasanterRepository
         )
@@ -39,16 +40,16 @@ namespace offlineMeeting.Models.Process.Pos
             _pleasanterRepository = pleasanterRepository;
         }
 
-        public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
+        public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, long orderSiteId)
         {
             List<OrderEntity> orderEntityList = new List<OrderEntity>();
 
-            List<int> purchaseResultIdList = OrderPostEntityList
+            List<long> purchaseResultIdList = OrderPostEntityList
                 .Where(x => x.Category != 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
-            List<int> alcoholResultIdList = OrderPostEntityList
+            List<long> alcoholResultIdList = OrderPostEntityList
                 .Where(x => x.Category == 2)
                 .Select(x => x.ResultId)
                 .ToList();
@@ -57,7 +58,7 @@ namespace offlineMeeting.Models.Process.Pos
                 .ToDictionary(x => $"{x.ResultId}_{x.AlcoholAmount}", x => x.Category);
 
             ManageUserCd manageUserCd = new (httpContext);
-            int userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
 
             SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new(
                 ExtraFoodSiteId,

@@ -7,10 +7,10 @@ namespace offlineMeeting.Models.Process.Quiz
     public class SetQuizEntityProcess
     {
         private readonly IPleasanterRepository _repository;
-        private int QuizSiteId;
-        private int EventId;
+        private long QuizSiteId;
+        private long EventId;
 
-        public SetQuizEntityProcess(IPleasanterRepository repository, int quizSiteId, int eventId)
+        public SetQuizEntityProcess(IPleasanterRepository repository, long quizSiteId, long eventId)
         {
             _repository = repository;
             QuizSiteId = quizSiteId;
@@ -31,7 +31,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
         }
 
-        public QuizEntity Get(int resultId)
+        public QuizEntity Get(long resultId)
         {
             TablesEntity? tablesEntity = _repository.Select(resultId, true).FirstOrDefault();
 
@@ -62,7 +62,7 @@ namespace offlineMeeting.Models.Process.Quiz
             }
         }
 
-        public List<QuizEntity> GetList(int quizSiteId)
+        public List<QuizEntity> GetList(long quizSiteId)
         {
             List<QuizEntity> quizEntityList = new List<QuizEntity> { };
 
@@ -83,7 +83,7 @@ namespace offlineMeeting.Models.Process.Quiz
             }).ToList();
         }
 
-        public List<int> GetActiveQuizId(int quizSiteId)
+        public List<long> GetActiveQuizId(long quizSiteId)
         {
             var where = new Dictionary<string, object>
             {
@@ -92,7 +92,7 @@ namespace offlineMeeting.Models.Process.Quiz
             };
 
             return _repository.Select(quizSiteId, where, true)
-                .Select(x => Convert.ToInt32(x.ReferenceId))
+                .Select(x => Convert.ToInt64(x.ReferenceId))
                 .ToList();
         }
     }

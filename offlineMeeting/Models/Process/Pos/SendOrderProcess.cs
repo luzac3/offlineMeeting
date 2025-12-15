@@ -17,20 +17,20 @@ namespace offlineMeeting.Models.Process.Pos
 {
     public class SendOrderProcess
     {
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
-        private int EventId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
+        private long EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
         private readonly IPleasanterRepository _pleasanterRepository;
 
         public SendOrderProcess(
-            List<OrderPostEntity> orderPostEntityList, 
-            int orderSiteId,
-            int orderPurchseSiteId, 
-            int joinerSiteId,
+            List<OrderPostEntity> orderPostEntityList,
+            long orderSiteId,
+            long orderPurchseSiteId,
+            long joinerSiteId,
             HttpContext httpContext, 
             IHubContext<MyHub> hubContext,
             IPleasanterRepository pleasanterRepository
@@ -50,12 +50,12 @@ namespace offlineMeeting.Models.Process.Pos
         }
 
 
-        public async Task<string> Send(int sakeSiteId)
+        public async Task<string> Send(long sakeSiteId)
         {
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
             List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            int userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
             if (userCd == 0)
             {
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ユーザコードがありません" } });
@@ -91,14 +91,14 @@ namespace offlineMeeting.Models.Process.Pos
 
         private async Task<PleasanterApiResponseEntity> SendOrder(
             List<OrderPostEntity> orderPostEntityList,
-            int sakeSiteId,
-            int userCd,
+            long sakeSiteId,
+            long userCd,
             string userName
         )
         {
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
-            int orderResultId = 0;
-            List<int> orderResultIdList = new ();
+            long orderResultId = 0;
+            List<long> orderResultIdList = new ();
 
             List<OrderPostEntity> alcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category == 2).ToList();
             List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
@@ -174,7 +174,7 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        private async Task<int> SendOrder(OrderPostEntity orderPostEntity, int userCd, int coins, bool isAlcohol)
+        private async Task<long> SendOrder(OrderPostEntity orderPostEntity, long userCd, int coins, bool isAlcohol)
         {   
             SendOrderEntity sendOrderEntity = new(
                 eventNumber: EventId.ToString(),
@@ -198,7 +198,7 @@ namespace offlineMeeting.Models.Process.Pos
         private List<SendOrderPurchaseEntity> CreateSendOrderPurchaseEntities(
             List<OrderPostEntity> orderPostEntityList,
             string orderResultId,
-            int userCd,
+            long userCd,
             bool isAlcohol
         )
         {
@@ -218,8 +218,8 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderTableEntity> CreateBackOrderTableEntityList(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            List<int> orderResultIdList,
-            int userCd,
+            List<long> orderResultIdList,
+            long userCd,
             string userName
         )
         {
@@ -263,7 +263,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderPurchaseTableEntity> CreateBackOrderPurchaseTableEntity(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            int userCd,
+            long userCd,
             string userName,
             bool isAlcohol
         )
@@ -273,7 +273,7 @@ namespace offlineMeeting.Models.Process.Pos
             sendOrderPurchaseEntityList.ForEach(sendOrderPurchaseEntity =>
             {
                 // purchaseId
-                TablesEntity? tablesEntity = int.TryParse(sendOrderPurchaseEntity.ClassC, out int purchaseId) ? 
+                TablesEntity? tablesEntity = long.TryParse(sendOrderPurchaseEntity.ClassC, out long purchaseId) ? 
                     null : 
                     _pleasanterRepository.Select(purchaseId, true).FirstOrDefault();
 

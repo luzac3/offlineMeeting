@@ -4,7 +4,6 @@ using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Share;
 using PleasanterBridge.src.APIBridge;
 using PleasanterBridge.src.APIBridge.Contracts;
-using System.Data;
 using System.Net;
 using System.Text.Json;
 
@@ -14,16 +13,16 @@ namespace offlineMeeting.Models.Process.Quiz
     {
         private readonly IHubContext<MyHub> _hubContext;
         private readonly IPleasanterApiBridge _bridge;
-        private int AnswerSiteId;
-        private int EventId;
+        private long AnswerSiteId;
+        private long EventId;
         private AnswerPostEntity AnswerPostEntity;
         private HttpContext HttpContext;
 
         public SendAnswerProcess(
             IHubContext<MyHub> hubContext,
             IPleasanterApiBridge bridge,
-            AnswerPostEntity answerPostEntity, 
-            int answerSiteId, 
+            AnswerPostEntity answerPostEntity,
+            long answerSiteId, 
             HttpContext httpContext
         )
         {
@@ -41,7 +40,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
         public async Task<string> Send()
         {
-            int userCd = new ManageUserCd(HttpContext).GetUserCd();
+            long userCd = new ManageUserCd(HttpContext).GetUserCd();
             if (userCd == 0)
             {
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ユーザコードがありません" } });

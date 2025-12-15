@@ -9,11 +9,11 @@ namespace offlineMeeting.Models.Process.Coins
     {
         private readonly IPleasanterApiBridge _bridge;
         private CoinsEntity CoinsEntity;
-        private int CoinsSiteId;
-        private int EventId;
-        private int UserCd;
+        private long CoinsSiteId;
+        private long EventId;
+        private long UserCd;
 
-        public SendCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, CoinsEntity coinsEntity, int coinsSiteId)
+        public SendCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, CoinsEntity coinsEntity, long coinsSiteId)
         {
             _bridge = bridge;
             ManageEventId manageEventId = new ManageEventId(httpContext);

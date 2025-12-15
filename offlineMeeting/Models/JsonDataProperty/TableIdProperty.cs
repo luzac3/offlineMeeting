@@ -6,16 +6,16 @@ namespace offlineMeeting.Models.JsonDataProperty
 {
     public class TableIdEntity
     {
-        public int SakeSiteId { get; set; }
-        public int OrderSiteId { get; set; }
-        public int OrderPurchaseSiteId { get; set; }
-        public int JoinerSiteId { get; set; }
-        public int CoinsSiteId { get; set; }
-        public int QuizSiteId { get; set; }
-        public int AnswerSiteId { get; set; }
-        public int ExtraSiteId { get; set; }
-        public int RawFoodSiteId { get; set; }
-        public int EventFoodSiteId { get; set; }
+        public long SakeSiteId { get; set; }
+        public long OrderSiteId { get; set; }
+        public long OrderPurchaseSiteId { get; set; }
+        public long JoinerSiteId { get; set; }
+        public long CoinsSiteId { get; set; }
+        public long QuizSiteId { get; set; }
+        public long AnswerSiteId { get; set; }
+        public long ExtraSiteId { get; set; }
+        public long RawFoodSiteId { get; set; }
+        public long EventFoodSiteId { get; set; }
     }
 
     public class TableIdProperty : TableIdEntity

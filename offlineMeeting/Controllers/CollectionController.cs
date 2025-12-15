@@ -18,8 +18,8 @@ namespace offlineMeeting.Controllers
         private readonly ILogger<CollectionController> _logger;
         private readonly IPleasanterRepository _pleasanterRepository;
         private CollectionViewModel CollectionViewModel;
-        private int SakeSiteId;
-        private int OrderSiteId;
+        private long SakeSiteId;
+        private long OrderSiteId;
 
         public CollectionController(
             ILogger<CollectionController> logger,
@@ -58,7 +58,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Collection/AlcoholDetail/{alcoholId}")]
-        public IActionResult AlcoholDetail(int alcoholId)
+        public IActionResult AlcoholDetail(long alcoholId)
         {
             AlcoholDataProcess alcoholDataProcess = new(
                 httpContext: HttpContext, 

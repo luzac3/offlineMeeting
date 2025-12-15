@@ -15,15 +15,15 @@ namespace offlineMeeting.Models.Process.Quiz
         private readonly IHubContext<MyHub> _hubContext;
         private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
-        private int QuizSiteId;
-        private int EventId;
+        private long QuizSiteId;
+        private long EventId;
         private HttpContext HttpContext;
 
         public SendQuizProcess(
             IHubContext<MyHub> hubContext, 
             IPleasanterApiBridge bridge, 
             IPleasanterRepository pleasanterRepository,
-            int quizSiteId, 
+            long quizSiteId, 
             HttpContext httpContext
         )
         {
@@ -38,11 +38,11 @@ namespace offlineMeeting.Models.Process.Quiz
             HttpContext = httpContext;
         }
 
-        public async Task<string> Send(int quizId)
+        public async Task<string> Send(long quizId)
         {
 
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            int userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
 
             HttpClient httpClient = new HttpClient();
             PleasanterApiResponse response;
@@ -50,8 +50,8 @@ namespace offlineMeeting.Models.Process.Quiz
 
             // 古いアクティブを止める
             SetQuizEntityProcess setQuizEntityProcess = new (_pleasanterRepository, QuizSiteId, EventId);
-            List<int> activeQuizIdList = setQuizEntityProcess.GetActiveQuizId(Convert.ToInt32(QuizSiteId));
-            foreach (int activeQuizId in activeQuizIdList)
+            List<long> activeQuizIdList = setQuizEntityProcess.GetActiveQuizId(QuizSiteId);
+            foreach (long activeQuizId in activeQuizIdList)
             {
                 response = await _bridge.Update(
                     activeQuizId,

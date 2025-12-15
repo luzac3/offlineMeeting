@@ -16,18 +16,18 @@ namespace offlineMeeting.Models.Process.Pos
     {
         private HttpContext HttpContext;
         private readonly IPleasanterRepository _pleasanterRepository;
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
-        private int EventId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
+        private long EventId;
 
         public GetUsersOrderProcess(
-            int orderSiteId, 
-            int orderPurchaseSiteId, 
-            int joinerSiteId, 
+            long orderSiteId,
+            long orderPurchaseSiteId,
+            long joinerSiteId, 
             HttpContext httpContext, 
             IPleasanterRepository pleasanterRepository,
-            int electronEid = 0
+            long electronEid = 0
         )
         {
             HttpContext = httpContext;
@@ -64,7 +64,7 @@ namespace offlineMeeting.Models.Process.Pos
             return GetOrder(tablesEntities);
         }
 
-        public List<OrderTableEntity> Get(int resultId)
+        public List<OrderTableEntity> Get(long resultId)
         {
             List<TablesEntity> tablesEntities = _pleasanterRepository.Select(resultId, true);
 
@@ -74,7 +74,7 @@ namespace offlineMeeting.Models.Process.Pos
         public List<OrderTableEntity> GetOwn(HttpContext httpContext)
         {
             ManageUserCd manageUserCd = new(httpContext);
-            int userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
             var where = new Dictionary<string, object>
             {
                 { "ClassA", EventId },

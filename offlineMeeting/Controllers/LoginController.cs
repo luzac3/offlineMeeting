@@ -27,9 +27,8 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index([FromQuery] int uid, int eid)
+        public IActionResult Index([FromQuery] long uid, long eid)
         {
-            // fixme
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             ManageEventId manageEventId = new ManageEventId(HttpContext);
             CheckUserJoin checkUserJoin = new CheckUserJoin(_pleasanterRepository, uid);
@@ -48,7 +47,7 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult Qr([FromQuery] int uid, int eid)
+        public IActionResult Qr([FromQuery] long uid, long eid)
         {
             GenerateQr generateQr = new(
                 eventId: eid,
