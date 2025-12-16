@@ -4,7 +4,6 @@ using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
-using System.Runtime.CompilerServices;
 
 namespace offlineMeeting.Models.Process.Pos
 {

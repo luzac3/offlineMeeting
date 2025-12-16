@@ -39,41 +39,37 @@ namespace offlineMeeting.Models.Process.Pos
 
         public List<PurchaseDataEntity> Get(int category)
         {
+            var where = new Dictionary<string, object>
+            {
+                { "ClassD", new string[] { EventId.ToString() } }
+            };
+
             List<TablesEntity> results = category switch
             {
-                0 => _pleasanterRepository.Select(ExtraFoodSiteId, null, true),
-                1 => _pleasanterRepository.Select(EventFoodSiteId, null, true)
-                    .Concat(_pleasanterRepository.Select(RawFoodSiteId, null, true))
+                0 => _pleasanterRepository.Select(ExtraFoodSiteId, where, true),
+                1 => _pleasanterRepository.Select(EventFoodSiteId, where, true)
+                    .Concat(_pleasanterRepository.Select(RawFoodSiteId, where, true))
                     .ToList(),
                 _ => new List<TablesEntity> { }
             };
-
-            results = FilterByEventId(results);
 
             GetPurchaseDataEntityList(results, _ => category);
 
             return PurchaseDataEntityList;
         }
 
-        public List<PurchaseDataEntity> Get(List<long> resultId, Dictionary<string, int> categoryDic)
+        public List<PurchaseDataEntity> Get(List<long> resultIds, Dictionary<string, int> categoryDic)
         {
-            List<TablesEntity> results = FilterByEventId(
-                _pleasanterRepository.Select(resultId, true)
-            );
-
-            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ReferenceId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
-
-            return PurchaseDataEntityList;
-        }
-
-        private List<TablesEntity> FilterByEventId(List<TablesEntity> tablesEntities)
-        {
-            return tablesEntities
+            List<TablesEntity> results = _pleasanterRepository.Select(resultIds, true)
                 .Where(x =>
                     !string.IsNullOrEmpty(x.ClassD) &&
                     JsonSerializer.Deserialize<string[]>(x.ClassD)?.Contains(EventId.ToString()) == true
                 )
-                .ToList();
+                .ToList(); ;
+
+            GetPurchaseDataEntityList(results, result => categoryDic[$"{result.ReferenceId.ToString()}_{Convert.ToInt32(result.NumE).ToString()}"]);
+
+            return PurchaseDataEntityList;
         }
 
         private void GetPurchaseDataEntityList(List<TablesEntity> tablesEntities, Func<TablesEntity, int> getCategory)
@@ -81,21 +77,21 @@ namespace offlineMeeting.Models.Process.Pos
             var where = new Dictionary<string, object>
             {
                 { "ClassA", EventId.ToString() },
-                { "ClassB", UserCd.ToString() }
+                { "ClassD", UserCd.ToString() }
             };
 
             List<int> orderedResultsIdList = _pleasanterRepository.Select(OrderSiteId, where, true)
                 .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
                 .ToList();
 
-            tablesEntities.Select(tablesEntity =>
+            tablesEntities.ForEach(tablesEntity =>
             {
                 if (tablesEntity == null)
                 {
-                    return null;
+                    return;
                 }
 
-                string? purchaseName = Int32.TryParse(tablesEntity?.ClassA, out int pursedPurchaseData) ?
+                string? purchaseName = Int64.TryParse(tablesEntity?.ClassA, out long pursedPurchaseData) ?
                     _pleasanterRepository.Select(pursedPurchaseData, true).FirstOrDefault()?.Title :
                     tablesEntity?.ClassA;
                 string? image = tablesEntity?.Body?[0];
@@ -120,7 +116,7 @@ namespace offlineMeeting.Models.Process.Pos
                     }
                 }
 
-                return new PurchaseDataEntity(
+                PurchaseDataEntityList.Add(new PurchaseDataEntity(
                     resultId: tablesEntity!.ReferenceId,
                     image: imageBase64,
                     lowImage: lowImageBase64,
@@ -132,7 +128,7 @@ namespace offlineMeeting.Models.Process.Pos
                     coinNumber: Convert.ToInt32(tablesEntity!.NumG),
                     leftAmount: Convert.ToInt32(tablesEntity!.NumH),
                     ordered: orderedResultsIdList.Contains(Convert.ToInt32(tablesEntity!.ReferenceId))
-                );
+                ));
             });
         }
     }
