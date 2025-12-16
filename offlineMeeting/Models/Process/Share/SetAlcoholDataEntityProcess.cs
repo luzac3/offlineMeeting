@@ -27,7 +27,7 @@ namespace offlineMeeting.Models.Process.Share
         {
             var where = new Dictionary<string, object>
             {
-                { "ClassH", EventId.ToString() }
+                { "ClassH", new string[] {EventId.ToString()} }
             };
 
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
@@ -114,18 +114,18 @@ namespace offlineMeeting.Models.Process.Share
             var where = new Dictionary<string, object>
             {
                 { "ClassA", EventId.ToString() },
-                { "ClassB", UserCd.ToString() }
+                { "ClassD", UserCd.ToString() }
             };
 
             List<long> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)
                 .Select(x => Convert.ToInt64(x.ClassC ?? "0"))
                 .ToList();
 
-            long classC = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
-            TablesEntity? brewery = _repository.Select(classC, true).FirstOrDefault();
+            long breweryId = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
+            TablesEntity? brewery = _repository.Select(breweryId, true).FirstOrDefault();
 
-            long breweryId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
-            string? prefectures = _repository.Select(breweryId, true).FirstOrDefault()?.ClassA;
+            long todohukenId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
+            string? prefectures = _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA;
 
             string? image = null;
             if (result?.DescriptionG != null && result.DescriptionG.Count > 0)
