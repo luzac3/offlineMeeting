@@ -6,7 +6,7 @@ namespace offlineMeeting.Models.Process.Share
     {
         public SiteSettingsProcess() {}
 
-        public new System.Text.Json.Nodes.JsonNode? Get(int siteId)
+        public new System.Text.Json.Nodes.JsonNode? Get(long siteId)
         {
             string? siteSettings = base.Get(siteId).SiteSettings;
             var json = System.Text.Json.Nodes.JsonNode.Parse(siteSettings ?? "");
