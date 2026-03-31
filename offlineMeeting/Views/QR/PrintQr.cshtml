@@ -1,0 +1,26 @@
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+@section Scripts {
+    <link rel="stylesheet" href="~/css/QR/PrintQr.css" asp-append-version="true" />
+    <script src="~/plugins/qrcode.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('print_qr_code');
+            var url = el.getAttribute('data-url');
+            if (url) {
+                new QRCode(el, {
+                    text: url,
+                    width: 128,
+                    height: 128,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        });
+    </script>
+}
+
+<div id="print_qr">
+    <h1 class="print_user_name">@ViewBag.UserName</h1>
+    <div id="print_qr_code" data-url="@ViewBag.QrUrl"></div>
+</div>
