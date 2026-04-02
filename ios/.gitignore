@@ -1,0 +1,10 @@
+# Xcode
+OfflineMeeting.xcodeproj/
+*.xcworkspace/
+build/
+DerivedData/
+*.xcuserstate
+*.xcschememanagement.plist
+
+# macOS
+.DS_Store
