@@ -2,6 +2,7 @@ using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.Share;
 using System.Net;
 using System.Text.Json;
+using PleasanterBridge.src.APIBridge;
 
 namespace offlineMeeting.Models.Process.Coins
 {
@@ -11,8 +12,9 @@ namespace offlineMeeting.Models.Process.Coins
         private int CoinsSiteId;
         private string EventId;
         private string UserCd;
+        private readonly IPleasanterApiBridge _bridge;
 
-        public GiveCoinsProcess(GiveCoinsEntity giveCoinsEntity, int coinsSiteId, HttpContext httpContext)
+        public GiveCoinsProcess(GiveCoinsEntity giveCoinsEntity, int coinsSiteId, HttpContext httpContext, IPleasanterApiBridge bridge)
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
@@ -20,6 +22,7 @@ namespace offlineMeeting.Models.Process.Coins
             CoinsSiteId = coinsSiteId;
             EventId = manageEventId.GetEventId();
             UserCd = manageUserCd.GetUserCd().ToString();
+            _bridge = bridge;
         }
 
         public async Task<Dictionary<string, string>> Send()
@@ -44,7 +47,8 @@ namespace offlineMeeting.Models.Process.Coins
             string json = JsonSerializer.Serialize(sendCoinsEntity);
             StringContent content = new (json, System.Text.Encoding.UTF8, "application/json");
 
-            var responseGive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
+            // var responseGive = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
+            var responseGive = await _bridge.Insert(CoinsSiteId, sendCoinsEntity);
 
             if (!responseGive.StatusCode.Equals(HttpStatusCode.OK))
             {

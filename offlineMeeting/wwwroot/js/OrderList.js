@@ -44,10 +44,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   GetOrderList: () => (/* binding */ GetOrderList)
 /* harmony export */ });
-/* harmony import */ var _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/ControlNavbar */ "./wwwroot/ts/share/ControlNavbar.ts");
-/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
-/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
-/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _root_share_Counter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/Counter */ "./wwwroot/ts/share/Counter.ts");
+/* harmony import */ var _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/LocalStrage */ "./wwwroot/ts/share/LocalStrage.ts");
+/* harmony import */ var _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @root/share/FetchApi */ "./wwwroot/ts/share/FetchApi.ts");
+/* harmony import */ var _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @root//share/BlurImage */ "./wwwroot/ts/share/BlurImage.ts");
 /* harmony import */ var _pos_CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../pos//CaliculateCoinNumber */ "./wwwroot/ts/pos/CaliculateCoinNumber.ts");
 /* harmony import */ var _CaliculateTotalCoins__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CaliculateTotalCoins */ "./wwwroot/ts/OrderList/CaliculateTotalCoins.ts");
 
@@ -59,17 +59,18 @@ __webpack_require__.r(__webpack_exports__);
 class GetOrderList {
     constructor() {
         this.setOrderList = () => {
-            const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_1__.Counter();
+            const counter = new _root_share_Counter__WEBPACK_IMPORTED_MODULE_0__.Counter();
             let orderEntityList = [];
-            if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.check("OrderEntityList")) {
-                orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_2__.LocalStrage.get("OrderEntityList");
+            if (_root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.check("OrderEntityList")) {
+                orderEntityList = _root_share_LocalStrage__WEBPACK_IMPORTED_MODULE_1__.LocalStrage.get("OrderEntityList");
             }
             this.send(orderEntityList).then((data) => {
-                document.getElementById("order_list").innerHTML = data;
+                const orderListElement = document.getElementById("order_list");
+                orderListElement.innerHTML = data;
                 // カウンターをアクティブ
                 counter.SetCounter();
-                // ナビバーの位置を調整
-                new _root_share_ControlNavbar__WEBPACK_IMPORTED_MODULE_0__.ControlNavbar();
+                // ぼかしの解除
+                _root_share_BlurImage__WEBPACK_IMPORTED_MODULE_3__.BlurImage.initBlurUp(orderListElement);
                 // コインの計算をセット
                 const caliculateCoinNumber = new _pos_CaliculateCoinNumber__WEBPACK_IMPORTED_MODULE_4__.CaliculateCoinNumber();
                 const caliculateTotalCoins = new _CaliculateTotalCoins__WEBPACK_IMPORTED_MODULE_5__.CaliculateTotalCoins();
@@ -78,7 +79,7 @@ class GetOrderList {
             });
         };
         this.send = async (orderEntityList) => {
-            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_3__.FetchApi();
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_2__.FetchApi();
             return await fetchApi.send(this.url, this.method, this.headers, orderEntityList, this.responseKind).then(async (data) => {
                 return data;
             }).catch(e => {
@@ -331,33 +332,51 @@ class BackButton {
 
 /***/ }),
 
-/***/ "./wwwroot/ts/share/ControlNavbar.ts":
-/*!*******************************************!*\
-  !*** ./wwwroot/ts/share/ControlNavbar.ts ***!
-  \*******************************************/
+/***/ "./wwwroot/ts/share/BlurImage.ts":
+/*!***************************************!*\
+  !*** ./wwwroot/ts/share/BlurImage.ts ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ControlNavbar: () => (/* binding */ ControlNavbar)
+/* harmony export */   BlurImage: () => (/* binding */ BlurImage)
 /* harmony export */ });
-class ControlNavbar {
-    constructor() {
-        this.setPadding = () => {
-            const navbar = document.querySelector('.navbar');
-            let subbarHeight = 0;
-            if (navbar) {
-                document.body.classList.remove('nodisplay');
-                const subbar = document.querySelector('.navbar-sub');
-                if (subbar) {
-                    subbarHeight = navbar.offsetHeight;
-                    subbar.style.top = subbarHeight + 'px';
-                }
-                document.body.style.paddingTop = (navbar.offsetHeight + subbarHeight + 5) + 'px';
+class BlurImage {
+    static initBlurUp(container = document) {
+        container.querySelectorAll('img.blur-up').forEach(_img => {
+            const img = _img;
+            const hdSrc = img.dataset.src;
+            if (!hdSrc || img.classList.contains('loaded'))
+                return;
+            const onHDLoad = () => {
+                img.classList.add('loaded');
+                img.removeEventListener('load', onHDLoad);
+            };
+            const loadHDImage = () => {
+                img.addEventListener('load', onHDLoad);
+                img.src = hdSrc;
+            };
+            if (img.loading === 'lazy' && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            loadHDImage();
+                            obs.unobserve(img);
+                        }
+                    });
+                });
+                observer.observe(img);
             }
-        };
-        this.setPadding();
-        window.addEventListener('resize', this.setPadding);
+            else {
+                loadHDImage();
+            }
+        });
+    }
+    static loaded() {
+        document.addEventListener('DOMContentLoaded', () => {
+            BlurImage.initBlurUp(document);
+        });
     }
 }
 

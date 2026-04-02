@@ -269,11 +269,18 @@ class GetSetting {
 }
 GetSetting.Setting = () => {
     const isDev =  true || 0;
-    const settingPath = isDev
-        ? path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, 'appData/json/setting.json')
-        : path__WEBPACK_IMPORTED_MODULE_0___default().join(path__WEBPACK_IMPORTED_MODULE_0___default().dirname(process.execPath), 'setting.json');
-    const bufferData = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(settingPath);
-    return JSON.parse(bufferData.toString());
+    const prodPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(path__WEBPACK_IMPORTED_MODULE_0___default().dirname(process.execPath), 'config', '/setting.json');
+    const devPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, 'appData/json/setting.json');
+    const settingPath = isDev ? devPath : prodPath;
+    try {
+        const bufferData = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(settingPath);
+        return JSON.parse(bufferData.toString());
+    }
+    catch (error) {
+        console.error(`Failed to read setting file at: ${settingPath}`, error);
+        // ファイルが存在しない/読み取りエラーの場合のデフォルト設定を返す
+        return { /* default settings */};
+    }
 };
 
 

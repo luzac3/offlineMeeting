@@ -19,14 +19,17 @@ namespace offlineMeeting.Models.Process.Pos
         {
             PleasanterApi pleasanterApi = new();
 
-            Dictionary<string, SendOrderCompletedEntity> dic = CompletedResultIdList.ToDictionary(id => id.ToString(), id => new SendOrderCompletedEntity());
+            var dic = CompletedResultIdList.ToDictionary(
+                id => id.ToString(),
+                id => new { CheckA = false }
+            );
+
+            List<PleasanterApiResponseEntity> results = await pleasanterApi.BulkUpdate(dic);
 
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
-
-            List<PleasanterApiResponseEntity> results = await pleasanterApi.BulkUpdate(dic);
 
             return results.Select(x =>
                 new Dictionary<string, string>()
