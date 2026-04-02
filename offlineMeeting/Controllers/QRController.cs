@@ -87,7 +87,7 @@ namespace offlineMeeting.Controllers
         }
 
         /// <summary>
-        /// Electron印刷用: ユーザ名とQRコードを表示する
+        /// アプリ印刷用: ユーザ名とQRコードを表示する
         /// </summary>
         public IActionResult PrintQr([FromQuery] long eid, long userCd)
         {
