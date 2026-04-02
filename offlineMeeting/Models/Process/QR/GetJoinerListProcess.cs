@@ -19,12 +19,24 @@ namespace offlineMeeting.Models.Process.QR
 
         public List<JoinerEntity> Get(long siteId)
         {
+            // EventIdを条件にサイト内レコードを検索
+            var where = new Dictionary<string, object>
+            {
+                { "ClassA", new string[] { _eventId.ToString() } },
+                { "Status", 200 }
+            };
+
             // usecdのリストを取得
             List<long> userCdList = _repository
-                .Select(siteId, true)
-                .Where(x => x.ClassA == _eventId.ToString())
+                .Select(siteId, where, true)
                 .Select(x => long.Parse(x.ClassB!))
                 .ToList();
+
+            // 該当EventIdの参加者がいない場合は空リストを返す
+            if (userCdList.Count == 0)
+            {
+                return new List<JoinerEntity>();
+            }
 
             List<TablesEntity> tablesEntities = _repository.Select(userCdList, true);
 
