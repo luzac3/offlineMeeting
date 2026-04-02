@@ -278,5 +278,17 @@ namespace offlineMeeting.Controllers
             byte[]? bytes = imageHelper.GetLowQualityBytes();
             return File(bytes, "image/webp");
         }
+
+        [HttpPost]
+        public IActionResult CheckSoldOut([FromBody] List<long> resultIds)
+        {
+            var items = _pleasanterRepository.Select(resultIds, true);
+            var soldOutIds = items
+                .Where(x => Convert.ToInt32(x.NumH) <= 0)
+                .Select(x => x.ReferenceId)
+                .ToList();
+
+            return Json(soldOutIds);
+        }
     }
 }
