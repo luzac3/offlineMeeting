@@ -8,9 +8,9 @@ export class CreateLog {
 
     static WriteLog = async (message: string) => {
         try {
-            const dir = path.resolve(process.cwd(), 'appData', 'log');
-            await fs.promises.mkdir(dir, { recursive: true });
             const file = this.MakeLogFilePath();
+            const dir = path.dirname(file);
+            await fs.promises.mkdir(dir, { recursive: true });
             const timestamp = new Date().toISOString();
             const entry = `[${timestamp}] ${message}\n`;
             await fs.promises.appendFile(file, entry, 'utf8');

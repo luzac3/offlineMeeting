@@ -44,16 +44,21 @@ namespace offlineMeeting.Controllers
             base.OnActionExecuting(context);
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] long eid)
         {
+            ManageEventId manageEventId = new(HttpContext);
+
+            if (eid != 0)
+            {
+                manageEventId.SetEventId(eid);
+            }
+
             GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository);
             var joinerList = getJoinerListProcess.Get(CheckinSiteId);
 
-            ManageEventId manageEventId = new(HttpContext);
-
             QRViewModel viewModel = new()
             {
-                EventId = manageEventId.GetEventId(),
+                EventId = eid != 0 ? eid : manageEventId.GetEventId(),
                 JoinerList = joinerList
             };
 

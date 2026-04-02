@@ -12,10 +12,16 @@ builder.build({
                 ]
             }
         },
-        extraFiles: {
-            from: "./appData/json/setting.json",
-            to: "./config/setting.json"
-        },
+        extraFiles: [
+            {
+                from: "./appData/json/setting.json",
+                to: "./config/setting.json"
+            },
+            {
+                from: "./appData/menu.html",
+                to: "./config/menu.html"
+            }
+        ],
         'asar': true
     }
 });
