@@ -137,6 +137,17 @@ class SendOrder {
                         OrderCoins: order.OrderCoins,
                         AlcoholAmount: order.AlcoholAmount
                     })).filter(x => x.OrderNumber != 0);
+                    // 品切れチェック
+                    const resultIds = orderObjectList.map(x => x.ResultId);
+                    const soldOutIds = await this.checkSoldOut(resultIds);
+                    if (soldOutIds.length > 0) {
+                        const soldOutNames = this.getSoldOutNames(soldOutIds);
+                        const message = `以下の商品は品切れとなっております:\n${soldOutNames.join("\n")}\n\nよろしいですか？`;
+                        if (!window.confirm(message)) {
+                            orderButton.disabled = false;
+                            return;
+                        }
+                    }
                     this.send(orderObjectList).then((data) => {
                         const result = JSON.parse(data);
                         if (result.status == "200") {
@@ -152,6 +163,28 @@ class SendOrder {
                     });
                 }
             });
+        };
+        this.checkSoldOut = async (resultIds) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
+            try {
+                return await fetchApi.send('/Pos/CheckSoldOut', 'POST', this.headers, resultIds, 'json');
+            }
+            catch {
+                return [];
+            }
+        };
+        this.getSoldOutNames = (soldOutIds) => {
+            const names = [];
+            soldOutIds.forEach(id => {
+                const orderElement = document.querySelector(`.order[data-result_id="${id}"]`);
+                if (orderElement) {
+                    const name = orderElement.querySelector(".alcohol_name")?.textContent?.trim() ??
+                        orderElement.querySelector(".food_name")?.textContent?.trim() ??
+                        `ID: ${id}`;
+                    names.push(name);
+                }
+            });
+            return names;
         };
         this.send = async (orderEntityList) => {
             const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
