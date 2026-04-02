@@ -12,5 +12,7 @@ win:
 extraFiles:
   - from: ./appData/json/setting.json
     to: ./config/setting.json
+  - from: ./appData/menu.html
+    to: ./config/menu.html
 files: []
 electronVersion: 38.4.0
