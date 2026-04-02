@@ -87,7 +87,7 @@ namespace offlineMeeting.Models.Process.Quiz
             {
                 try
                 {
-                    await _hubContext.Clients.All.SendAsync("ReceiveQuizId", new Dictionary<string, string> { { "QuizId", quizId.ToString() } });
+                    await _hubContext.Clients.Group($"event_{EventId}").SendAsync("ReceiveQuizId", new Dictionary<string, string> { { "QuizId", quizId.ToString() } });
                 }
                 catch
                 {
