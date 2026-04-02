@@ -1,0 +1,25 @@
+body {
+    width: 100%;
+}
+
+.container {
+    margin: 0;
+    padding: 0;
+}
+
+.electron_body {
+    width: 75mm;
+    position: relative;
+    margin-left: 1%;
+}
+
+#print_qr {
+    width: 70mm;
+    margin: 0;
+    text-align: center;
+}
+
+.print_user_name {
+    font-size: 2em;
+    margin-bottom: 0.5rem;
+}
