@@ -8,5 +8,6 @@
   "AnswerSiteId": 868,
   "ExtraSiteId": 1013,
   "RawFoodSiteId": 961,
-  "EventFoodSiteId": 335
+  "EventFoodSiteId": 335,
+  "CheckinSiteId": 0
 }

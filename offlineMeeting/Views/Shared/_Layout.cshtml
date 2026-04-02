@@ -68,12 +68,6 @@
                                     <a class="nav-link text-dark dot" asp-area="" asp-controller="Quiz" asp-action="QuizList">クイズリスト</a>
                                 </li>
                             }
-                            @if (userData != null && userData.IsAdmin)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark dot" asp-area="" asp-controller="QR" asp-action="Index">QR発行</a>
-                                </li>
-                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="Collection" asp-action="Index">ズカン</a>
                             </li>
