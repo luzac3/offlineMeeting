@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -60,18 +60,6 @@
     <Content Include="appData\lib\bootstrap\dist\js\bootstrap.min.js" />
     <Content Include="appData\lib\bootstrap\dist\js\bootstrap.min.js.map" />
     <Content Include="appData\lib\bootstrap\LICENSE" />
-    <Content Include="appData\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
-    <Content Include="appData\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
-    <Content Include="appData\lib\jquery-validation-unobtrusive\LICENSE.txt" />
-    <Content Include="appData\lib\jquery-validation\dist\additional-methods.js" />
-    <Content Include="appData\lib\jquery-validation\dist\additional-methods.min.js" />
-    <Content Include="appData\lib\jquery-validation\dist\jquery.validate.js" />
-    <Content Include="appData\lib\jquery-validation\dist\jquery.validate.min.js" />
-    <Content Include="appData\lib\jquery-validation\LICENSE.md" />
-    <Content Include="appData\lib\jquery\dist\jquery.js" />
-    <Content Include="appData\lib\jquery\dist\jquery.min.js" />
-    <Content Include="appData\lib\jquery\dist\jquery.min.map" />
-    <Content Include="appData\lib\jquery\LICENSE.txt" />
     <Content Include="appData\log\20251023-12-45-53.log" />
     <Content Include="appData\ts\main\CreateWindow.ts" />
     <Content Include="appData\ts\main\Index.ts" />

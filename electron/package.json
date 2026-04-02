@@ -19,5 +19,8 @@
     "electron": "^38.4.0"
   },
   "dependencies": {
+  },
+  "build": {
+    "asar": false
   }
 }

@@ -1,0 +1,38 @@
+@using offlineMeeting.Models.Entity.Pos;
+
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+@section Scripts {
+    <link rel="stylesheet" href="~/css/Pos/PosPrint.css" asp-append-version="true" />
+    <script src="~/plugins/qrcode.min.js"></script>
+    <script>
+        (()=>{
+            const qrObj = document.getElementById('qr');
+            const url = document.getElementById("qr_input");
+            if (qrObj) {
+                new QRCode(qrObj, {
+                    text: url.value,
+                    width: 128,
+                    height: 128,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        })();
+    </script>
+}
+@model offlineMeeting.Models.ViewModel.PosViewModel;
+
+<div id="print">
+        @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
+        {
+            <h1>
+                @orderTableEntity.OrderNumber
+                <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "") </span>
+                <span>@(orderTableEntity.UserName)</span>
+            </h1>
+            <h2>―――――――――――――</h2>
+            <div id="qr"></div>
+            <input id="qr_input" type="text" class="nodisplay" value="@(Model.PrintUrl)" />
+        }
+</div>
