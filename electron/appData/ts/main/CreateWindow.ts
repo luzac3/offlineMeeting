@@ -3,8 +3,8 @@ import { app, BrowserWindow } from 'electron'
 import path from 'path';
 
 export class CreateWindow {
-    CreateWindow = (url: string, show = true) => {
-        app.whenReady().then(async () => {
+    CreateWindow = (url: string, show = true): Promise<BrowserWindow> => {
+        return app.whenReady().then(async () => {
             console.log('createWindow ready');
             const win = new BrowserWindow({
                 width: 800,
@@ -25,8 +25,8 @@ export class CreateWindow {
             });
 
             try {
-                console.log(`start loda url:${url}`);
-                win.loadURL(url);
+                console.log(`start load url:${url}`);
+                await win.loadURL(url);
             } catch (err) {
                 const errMsg = err instanceof Error ? (err.stack ?? err.message) : String(err);
                 const msg = `loadURL failed url=${url} err=${errMsg}`;
@@ -37,6 +37,34 @@ export class CreateWindow {
                 const msg = `did-fail-load url=${validatedURL} code=${errorCode} desc=${errorDescription} isMainFrame=${isMainFrame}`;
                 CreateLog.WriteLog(msg);
             });
+
+            return win;
+        });
+    }
+
+    CreateWindowFromFile = (filePath: string, show = true): Promise<BrowserWindow> => {
+        return app.whenReady().then(async () => {
+            const win = new BrowserWindow({
+                width: 600,
+                height: 500,
+                show: false,
+                webPreferences: {
+                    preload: path.join(__dirname, "preload.js"),
+                    contextIsolation: true,
+                    nodeIntegration: false
+                }
+            });
+
+            win.once('ready-to-show', () => {
+                if (show) win.show();
+            });
+
+            try {
+                await win.loadFile(filePath);
+            } catch (err) {
+                const errMsg = err instanceof Error ? (err.stack ?? err.message) : String(err);
+                CreateLog.WriteLog(`loadFile failed path=${filePath} err=${errMsg}`);
+            }
 
             return win;
         });

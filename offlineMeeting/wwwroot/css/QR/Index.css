@@ -1,0 +1,92 @@
+#qr_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.qr_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.qr_card_header {
+    margin-bottom: 0.5rem;
+}
+
+.qr_user_name {
+    font-weight: bold;
+    font-family: 'DotGothic16', sans-serif;
+}
+
+#qr_display {
+    text-align: center;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #fff;
+}
+
+#qr_user_name_display {
+    font-size: 1.8em;
+    margin-bottom: 0.5rem;
+}
+
+#joiner_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+}
+
+.joiner_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.joiner_name {
+    font-weight: bold;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 1.2em;
+}
+
+.btn_checkin {
+    padding: 0.4rem 1.2rem;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 1em;
+    border: 2px solid #333;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.btn_checkin:hover {
+    background: #333;
+    color: #fff;
+}
+
+.btn_checkin:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn_checkin.checked_in {
+    background: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.nodisplay {
+    display: none !important;
+}
