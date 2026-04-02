@@ -1,6 +1,10 @@
 {
-  "url": "https://sake.wolfslab.jp/Pos/UserOrders?eid=58875",
+  "orderUrl": "https://sake.wolfslab.jp/Pos/UserOrders?eid=58875",
+  "orderName": "チュウモンイチラン",
+  "checkinUrl": "https://sake.wolfslab.jp/QR/Index?eid=58875",
+  "checkinName": "チェックイン",
   "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=58875&resultId=",
+  "checkinPrintUrlBase": "https://sake.wolfslab.jp/QR/PrintQr?eid=58875&userCd=",
   "deviceName": "POS-80C",
   "printOptions": {
     "margins": {

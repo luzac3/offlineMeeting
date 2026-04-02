@@ -5,6 +5,7 @@ using offlineMeeting.Models.Process.Home;
 using offlineMeeting.Models.Process.Login;
 using offlineMeeting.Models.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Controllers
 {
@@ -12,22 +13,25 @@ namespace offlineMeeting.Controllers
     {
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<HomeController> _logger;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
         public LoginController(
             ILogger<HomeController> logger,
-            IHubContext<MyHub> hubContext
+            IHubContext<MyHub> hubContext,
+            IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
+            _pleasanterRepository = pleasanterRepository;
         }
 
         [HttpGet]
-        public IActionResult Index([FromQuery] string uid, string eid)
+        public IActionResult Index([FromQuery] long uid, long eid)
         {
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             ManageEventId manageEventId = new ManageEventId(HttpContext);
-            CheckUserJoin checkUserJoin = new CheckUserJoin(uid);
+            CheckUserJoin checkUserJoin = new CheckUserJoin(_pleasanterRepository, uid);
             manageUserCd.SetUserCd(uid);
             manageEventId.SetEventId(eid);
 
@@ -43,12 +47,19 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult Qr([FromQuery] string uid, string eid)
+        public IActionResult Qr([FromQuery] long uid, long eid)
         {
+            GenerateQr generateQr = new(
+                eventId: eid,
+                userId: uid
+            );
+            // fixme
+            /*
             GenerateQr generateQr = new (
                 eventId: Int32.TryParse(eid, out int parsedEid) ? parsedEid : 0,
                 userId: Int32.TryParse(uid, out int parsedUid) ? parsedUid : 0
             );
+            */
             LoginViewModel loginViewModel = new ();
             loginViewModel.GenerateQr = generateQr;
             return View(loginViewModel);
