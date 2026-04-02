@@ -16,6 +16,9 @@ body{
     width: 70mm;
     margin:0;
 }
+    #print table {
+        width: 100%;
+    }
     #print h1 {
         font-size: 2em;
     }
