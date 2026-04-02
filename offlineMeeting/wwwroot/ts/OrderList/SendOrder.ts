@@ -49,6 +49,19 @@ export class SendOrder {
                     AlcoholAmount: order.AlcoholAmount
                 })).filter(x => x.OrderNumber != 0);
 
+                // 品切れチェック
+                const resultIds = orderObjectList.map(x => x.ResultId);
+                const soldOutIds = await this.checkSoldOut(resultIds);
+
+                if (soldOutIds.length > 0) {
+                    const soldOutNames = this.getSoldOutNames(soldOutIds);
+                    const message = `以下の商品は品切れとなっております:\n${soldOutNames.join("\n")}\n\nよろしいですか？`;
+                    if (!window.confirm(message)) {
+                        orderButton.disabled = false;
+                        return;
+                    }
+                }
+
                 this.send(orderObjectList).then((data: string) => {
                     const result = JSON.parse(data) as { [key: string]: string };
                     if (result.status == "200") {
@@ -64,6 +77,36 @@ export class SendOrder {
                 });
             }
         });
+    }
+
+    private checkSoldOut = async (resultIds: number[]): Promise<number[]> => {
+        const fetchApi = new FetchApi();
+        try {
+            return await fetchApi.send(
+                '/Pos/CheckSoldOut',
+                'POST',
+                this.headers,
+                resultIds,
+                'json'
+            ) as number[];
+        } catch {
+            return [];
+        }
+    }
+
+    private getSoldOutNames = (soldOutIds: number[]): string[] => {
+        const names: string[] = [];
+        soldOutIds.forEach(id => {
+            const orderElement = document.querySelector(`.order[data-result_id="${id}"]`);
+            if (orderElement) {
+                const name =
+                    orderElement.querySelector(".alcohol_name")?.textContent?.trim() ??
+                    orderElement.querySelector(".food_name")?.textContent?.trim() ??
+                    `ID: ${id}`;
+                names.push(name);
+            }
+        });
+        return names;
     }
 
     private send = async (orderEntityList: { [key: string]: number }[]) => {
