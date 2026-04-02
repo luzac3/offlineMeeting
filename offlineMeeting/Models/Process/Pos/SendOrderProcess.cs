@@ -130,7 +130,7 @@ namespace offlineMeeting.Models.Process.Pos
                 orderResultId = await SendOrder(
                     orderPostEntity: nonAlcoholOrderPostEntityList.FirstOrDefault()!,
                     userCd: userCd,
-                    coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
+                    coins: nonAlcoholOrderPostEntityList.Sum(x => x.OrderCoins),
                     isAlcohol: false
                 );
                 orderResultIdList.Add(orderResultId);
