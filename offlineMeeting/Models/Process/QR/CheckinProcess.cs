@@ -53,7 +53,7 @@ namespace offlineMeeting.Models.Process.QR
             }
 
             // SignalR でチェックイン完了を通知
-            await _hubContext.Clients.All.SendAsync("CheckinComplete", new Dictionary<string, string>
+            await _hubContext.Clients.Group($"event_{_eventId}").SendAsync("CheckinComplete", new Dictionary<string, string>
             {
                 { "userCd", userCd.ToString() },
                 { "userName", userName },
