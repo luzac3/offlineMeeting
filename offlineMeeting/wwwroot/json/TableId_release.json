@@ -8,5 +8,6 @@
   "AnswerSiteId": 56373,
   "ExtraSiteId": 56482,
   "RawFoodSiteId": 56393,
-  "EventFoodSiteId": 51840
+  "EventFoodSiteId": 51840,
+  "CheckinSiteId": 56394
 }

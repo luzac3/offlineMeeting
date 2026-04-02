@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.QR;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
@@ -19,7 +20,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
-        private const long CheckinSiteId = 59523;
+        private long CheckinSiteId;
 
         public QRController(
             ILogger<QRController> logger,
@@ -32,6 +33,8 @@ namespace offlineMeeting.Controllers
             _hubContext = hubContext;
             _bridge = bridge;
             _pleasanterRepository = pleasanterRepository;
+            TableIdProperty tableIdProperty = new();
+            CheckinSiteId = tableIdProperty.CheckinSiteId;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
