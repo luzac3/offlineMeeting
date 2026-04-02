@@ -11,7 +11,7 @@ export class CheckinNotify {
             // QRコード表示エリアを更新
             this.showQr(parsedData.userName, parsedData.qrUrl);
 
-            // Electron印刷を要求
+            // 印刷を要求
             this.requestPrint(parsedData.userCd);
         });
     }
@@ -38,7 +38,11 @@ export class CheckinNotify {
 
     private requestPrint = (userCd: string) => {
         if (window.electronAPI && window.electronAPI.printCheckinQr) {
+            // PC (Electron)
             window.electronAPI.printCheckinQr({ userCd });
+        } else if (window.webkit?.messageHandlers?.printCheckinQr) {
+            // iOS (SwiftUI WKWebView)
+            window.webkit.messageHandlers.printCheckinQr.postMessage({ userCd });
         }
     }
 }

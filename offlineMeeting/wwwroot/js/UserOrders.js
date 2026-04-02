@@ -4029,16 +4029,18 @@ __webpack_require__.r(__webpack_exports__);
 /// <reference path="../../types/electron.d.ts" />
 class PrintOrder {
 }
-// Electron が利用可能ならテンプレート印刷を要求する
+// アプリ (Electron / iOS) が利用可能ならテンプレート印刷を要求する
 PrintOrder.RequestElectronPrint = (orderIds) => {
     const args = {
         resultIds: orderIds
     };
     if (window.electronAPI && window.electronAPI.printReceipt) {
+        // PC (Electron)
         window.electronAPI.printReceipt(args);
     }
-    else {
-        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
+    else if (window.webkit?.messageHandlers?.printReceipt) {
+        // iOS (SwiftUI WKWebView)
+        window.webkit.messageHandlers.printReceipt.postMessage(args);
     }
 };
 

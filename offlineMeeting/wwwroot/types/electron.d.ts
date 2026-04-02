@@ -8,8 +8,19 @@ declare global {
         printCheckinQr: (args: { userCd: string }) => Promise<void>;
     }
 
+    // iOS WKWebView メッセージハンドラ
+    interface WKMessageHandler {
+        postMessage: (body: any) => void;
+    }
+
     interface Window {
         electronAPI?: ElectronAPI;
+        webkit?: {
+            messageHandlers?: {
+                printReceipt?: WKMessageHandler;
+                printCheckinQr?: WKMessageHandler;
+            };
+        };
     }
 }
 
