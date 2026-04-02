@@ -7,6 +7,7 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Collection;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 
 namespace offlineMeeting.Controllers
@@ -15,17 +16,20 @@ namespace offlineMeeting.Controllers
     {
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<CollectionController> _logger;
+        private readonly IPleasanterRepository _pleasanterRepository;
         private CollectionViewModel CollectionViewModel;
-        private int SakeSiteId;
-        private int OrderSiteId;
+        private long SakeSiteId;
+        private long OrderSiteId;
 
         public CollectionController(
             ILogger<CollectionController> logger,
-            IHubContext<MyHub> hubContext
+            IHubContext<MyHub> hubContext,
+            IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
+            _pleasanterRepository = pleasanterRepository;
             CollectionViewModel = new ();
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
@@ -35,13 +39,18 @@ namespace offlineMeeting.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext);
+            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             base.OnActionExecuting(context);
         }
 
         public IActionResult Index()
         {
-            AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
+            AlcoholDataProcess alcoholDataProcess = new(
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository,
+                sakeSiteId: SakeSiteId,
+                orderSiteId: OrderSiteId
+            );
             SiteSettingsProcess siteSettingsProcess = new();
 
             CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId)));
@@ -49,9 +58,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet("Collection/AlcoholDetail/{alcoholId}")]
-        public IActionResult AlcoholDetail(int alcoholId)
+        public IActionResult AlcoholDetail(long alcoholId)
         {
-            AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
+            AlcoholDataProcess alcoholDataProcess = new(
+                httpContext: HttpContext, 
+                pleasanterRepository: _pleasanterRepository,
+                sakeSiteId: SakeSiteId, 
+                orderSiteId: OrderSiteId
+            );
             SiteSettingsProcess siteSettingsProcess = new();
 
             CollectionViewModel.setAlcoholDataEntity(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), alcoholId));

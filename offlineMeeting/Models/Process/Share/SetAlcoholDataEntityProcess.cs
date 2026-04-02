@@ -1,78 +1,78 @@
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
-using System.Text.Json;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Share
 {
-    public class SetAlcoholDataEntityProcess : ResultsProcess
+    public class SetAlcoholDataEntityProcess
     {
-        private int SakeSiteId;
-        private int OrderSiteId;
-        private string EventId;
-        private string UserCd;
+        private long SakeSiteId;
+        private long OrderSiteId;
+        private long EventId;
+        private long UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
+        private readonly IPleasanterRepository _repository;
 
-        public SetAlcoholDataEntityProcess(int sakeSiteId, int orderSiteId, string eventId, string userCd)
+        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, long sakeSiteId, long orderSiteId, long eventId, long userCd)
         {
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;
             EventId = eventId;
             UserCd = userCd;
             AlcoholDataEntityList = new List<AlcoholDataEntity> { };
+            _repository = repository;
         }
 
         public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
         {
+            var where = new Dictionary<string, object>
+            {
+                { "ClassH", new string[] {EventId.ToString()} }
+            };
+
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
-            List<ResultsEntity> results = 
-                GetFromSiteId(SakeSiteId)
-                .Where(x =>
-                    !string.IsNullOrEmpty(x.ClassH) &&
-                    JsonSerializer.Deserialize<string[]>(x.ClassH)?.Contains(EventId) == true
-                )
-                .ToList();
+            List<TablesEntity> results = _repository.Select(SakeSiteId, where, true);
 
             GetAlcoholDataEntityList(results, choicesTextDic);
 
             return AlcoholDataEntityList;
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, List<int> resultId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, List<long> resultIds)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
-            List<ResultsEntity> results = 
-                GetFromSiteId(SakeSiteId, resultId)
-                .Where(x =>
-                    !string.IsNullOrEmpty(x.ClassH) &&
-                    JsonSerializer.Deserialize<string[]>(x.ClassH)?.Contains(EventId) == true
-                )
-                .ToList();
+            List<TablesEntity> results = _repository.Select(resultIds, true);
 
             GetAlcoholDataEntityList(results, choicesTextDic);
 
             return AlcoholDataEntityList;
         }
 
-        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, int resultId)
+        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, long resultId)
         {
             Dictionary<string, string> choicesTextDic = GetChoicesTextDic(json);
 
-            ResultsEntity result = 
-                GetSingleRecord(resultId.ToString());
+            TablesEntity? result = _repository.Select(resultId, true).FirstOrDefault();
 
-            GetAlcoholDataEntity(result, choicesTextDic);
+            if (result == null)
+            {
+                throw new InvalidOperationException("指定された resultId に該当するデータが見つかりません。");
+            }
 
             return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
-        public List<int> GetHidedIdList()
+        public List<long> GetHidedIdList()
         {
-            return GetFromSiteId(SakeSiteId)
-                .Where(x => x.CheckZ ?? false)
-                .Select(x => Convert.ToInt32(x.ResultId))
+            var where = new Dictionary<string, object>
+            {
+                { "CheckZ", true }
+            };
+            
+            return _repository.Select(SakeSiteId, where, true)
+                .Select(x => x.ReferenceId)
                 .ToList();
         }
 
@@ -101,34 +101,37 @@ namespace offlineMeeting.Models.Process.Share
             return choicesTextDic;
         }
 
-        private void GetAlcoholDataEntityList(List<ResultsEntity> results, Dictionary<string, string> choicesTextDic)
+        private void GetAlcoholDataEntityList(List<TablesEntity> results, Dictionary<string, string> choicesTextDic)
         {
-            foreach (ResultsEntity result in results)
+            foreach (TablesEntity result in results)
             {
                 AlcoholDataEntityList.Add(GetAlcoholDataEntity(result, choicesTextDic));
             }
         }
 
-        private AlcoholDataEntity GetAlcoholDataEntity(ResultsEntity result, Dictionary<string, string> choicesTextDic)
+        private AlcoholDataEntity GetAlcoholDataEntity(TablesEntity result, Dictionary<string, string> choicesTextDic)
         {
-            List<int> orderedResultsIdList = 
-                GetFromSiteId(OrderSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.ClassB == UserCd)
-                .Select(x => Convert.ToInt32(x.ClassC ?? "0"))
+            var where = new Dictionary<string, object>
+            {
+                { "ClassA", EventId.ToString() },
+                { "ClassD", UserCd.ToString() }
+            };
+
+            List<long> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)
+                .Select(x => Convert.ToInt64(x.ClassC ?? "0"))
                 .ToList();
 
-            ResultsEntity? brewery = string.IsNullOrEmpty(result.ClassC) ? null : GetSingleRecord(result.ClassC);
-            string? prefectures = string.IsNullOrEmpty(brewery?.ClassB) ? null : GetSingleRecord(brewery.ClassB).ClassA;
-            string[]? imageSplit = result!.DescriptionG?.Split("/");
-            string guid = "";
-            if (imageSplit != null && imageSplit?.Length > 2)
-            {
-                guid = string.IsNullOrEmpty(imageSplit?[2]) ? "" : imageSplit[2];
-            }
+            long breweryId = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
+            TablesEntity? brewery = _repository.Select(breweryId, true).FirstOrDefault();
 
-            GetBinariesProcess getBinariesProcess = new GetBinariesProcess();
-            string? image = getBinariesProcess.GetImage(guid);
+            long todohukenId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
+            string? prefectures = _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA;
+
+            string? image = null;
+            if (result?.DescriptionG != null && result.DescriptionG.Count > 0)
+            {
+                image = result.DescriptionG[0];
+            }
 
             string imageBase64 = "";
             string lowImageBase64 = "";
@@ -151,7 +154,7 @@ namespace offlineMeeting.Models.Process.Share
             }
 
             return new AlcoholDataEntity(
-                resultId: result.ResultId,
+                resultId: result!.ReferenceId,
                 image: imageBase64,
                 lowImage: lowImageBase64,
                 width: width,
@@ -171,12 +174,12 @@ namespace offlineMeeting.Models.Process.Share
                 leftAmount: Convert.ToInt32(result.NumH),
                 priority: result.CheckA ?? false,
                 hide: result.CheckB ?? false,
-                ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ResultId)),
-                taseting: result.DescriptionE?.Replace("\n", "<br>"),
-                rarityReason: result.DescriptionF?.Replace("\n", "<br>"),
-                explanation: result.DescriptionC?.Replace("\n", "<br>"),
-                mainLabel: brewery?.DescriptionA?.Replace("\n", "<br>"),
-                breweryFeatures: brewery?.DescriptionB?.Replace("\n", "<br>"),
+                ordered: orderedResultsIdList.Contains(Convert.ToInt32(result.ReferenceId)),
+                taseting: result.DescriptionE?[0].Replace("\n", "<br>"),
+                rarityReason: result.DescriptionF?[0].Replace("\n", "<br>"),
+                explanation: result.DescriptionC?[0].Replace("\n", "<br>"),
+                mainLabel: brewery?.DescriptionA?[0].Replace("\n", "<br>"),
+                breweryFeatures: brewery?.DescriptionB?[0].Replace("\n", "<br>"),
                 postCode: Convert.ToInt32(brewery?.NumA),
                 municipality: brewery?.ClassC,
                 address: brewery?.ClassD,

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>百酒会 - メニュー</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DotGothic16', 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .menu-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+            .menu-container h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .menu-btn {
+            display: block;
+            padding: 1.2rem 3rem;
+            font-size: 1.4rem;
+            font-family: inherit;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.15s, color 0.15s;
+        }
+
+            .menu-btn:hover {
+                background: #333;
+                color: #fff;
+            }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>百酒会</h1>
+        <div id="menu-list" class="menu-list"></div>
+    </div>
+    <script>// preloadから渡されたメニュー項目を描画
+        window.electronAPI.getMenuItems().then(items => {
+            const list = document.getElementById('menu-list');
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'menu-btn';
+                btn.textContent = item.name;
+                btn.addEventListener('click', () => {
+                    window.electronAPI.openPage(item.url);
+                });
+                list.appendChild(btn);
+            });
+        });</script>
+</body>
+</html>
