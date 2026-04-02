@@ -1,0 +1,30 @@
+name: OfflineMeeting
+options:
+  bundleIdPrefix: jp.wolfslab
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "2"  # iPad only
+    INFOPLIST_FILE: OfflineMeeting/Info.plist
+    PRODUCT_BUNDLE_IDENTIFIER: jp.wolfslab.offlinemeeting
+
+targets:
+  OfflineMeeting:
+    type: application
+    platform: iOS
+    sources:
+      - path: OfflineMeeting
+        excludes:
+          - Resources/**
+    resources:
+      - path: OfflineMeeting/Resources
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
+    info:
+      path: OfflineMeeting/Info.plist

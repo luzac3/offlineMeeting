@@ -5,21 +5,48 @@ Electron版と同等の機能を持つiOS (iPad) ネイティブアプリ。
 ## 機能
 - **メニュー画面**: setting.json に基づくページ遷移ボタン
 - **WebView**: WKWebView でWebアプリを表示
-- **JSブリッジ**: `window.electronAPI` 互換インターフェース（Web側の変更不要）
+- **JSブリッジ**: `window.webkit.messageHandlers` 経由で印刷指示を受信
 - **サイレント印刷**: 初回のみプリンタ選択、以降は保存したプリンタへ自動印刷
+- **設定画面**: URL・プリンタをアプリ内から変更可能
 
-## セットアップ
-1. Xcode で新規プロジェクト作成: **App** → Interface: **SwiftUI** → Language: **Swift**
-2. Product Name: `OfflineMeeting`
-3. `OfflineMeeting/` 配下のSwiftファイルを全てプロジェクトに追加
-4. `Resources/setting.json` をプロジェクトに追加（Copy items if needed にチェック）
-5. `Info.plist` に以下を追加:
-   - `NSLocalNetworkUsageDescription`: プリンタ検索のためにローカルネットワークへのアクセスが必要です
-   - `NSBonjourServices`: `_ipp._tcp`, `_ipps._tcp` (AirPrint用)
-   - `App Transport Security Settings` → `Allow Arbitrary Loads`: YES (開発用、本番ではドメイン指定)
+## 前提条件
+- macOS + Xcode 15以上
+- Homebrew (`brew`)
+
+## セットアップ & ビルド
+
+```bash
+# 初回セットアップ (XcodeGen インストール + プロジェクト生成)
+cd ios
+chmod +x setup.sh build.sh
+./setup.sh
+
+# シミュレータでビルド
+./build.sh simulator
+
+# シミュレータでビルド&起動
+./build.sh run
+
+# 実機用ビルド
+./build.sh device
+
+# リリース用アーカイブ
+./build.sh archive
+
+# クリーン
+./build.sh clean
+```
+
+## Xcode で直接開く場合
+```bash
+cd ios
+./setup.sh          # project.yml から .xcodeproj を生成
+open OfflineMeeting.xcodeproj
+```
 
 ## 設定ファイル (setting.json)
-Electron版と同じフォーマット:
+Electron版と同じフォーマット。初回起動時にアプリ内 UserDefaults へコピーされ、
+以降は設定画面から編集可能。
 ```json
 {
   "orderUrl": "https://sake.wolfslab.jp/Pos/UserOrders?eid=60473",
