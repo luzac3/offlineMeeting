@@ -53,12 +53,13 @@ namespace offlineMeeting.Controllers
                 manageEventId.SetEventId(eid);
             }
 
-            GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository);
+            long eventId = eid != 0 ? eid : manageEventId.GetEventId();
+            GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository, eventId);
             var joinerList = getJoinerListProcess.Get(CheckinSiteId);
 
             QRViewModel viewModel = new()
             {
-                EventId = eid != 0 ? eid : manageEventId.GetEventId(),
+                EventId = eventId,
                 JoinerList = joinerList
             };
 
@@ -94,7 +95,7 @@ namespace offlineMeeting.Controllers
             ManageEventId manageEventId = new(HttpContext);
             manageEventId.SetEventId(eid);
 
-            GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository);
+            GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository, eid);
             var joinerList = getJoinerListProcess.Get(CheckinSiteId);
             var joiner = joinerList.FirstOrDefault(j => j.UserCd == userCd.ToString());
 
