@@ -274,8 +274,8 @@ namespace offlineMeeting.Models.Process.Pos
             {
                 // purchaseId
                 TablesEntity? tablesEntity = long.TryParse(sendOrderPurchaseEntity.ClassC, out long purchaseId) ? 
-                    null : 
-                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault();
+                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault() : 
+                    null;
 
                 orderPurchaseTableEntity
                     .Add(
