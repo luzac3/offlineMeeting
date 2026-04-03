@@ -1,7 +1,8 @@
 using offlineMeeting.Models.Entity.Pos.SendOrderCompletedEntity;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Share;
-using System.Collections.Generic;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.APIBridge.Contracts;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -9,22 +10,24 @@ namespace offlineMeeting.Models.Process.Pos
     public class OrderCompleteProcess
     {
         private List<int> CompletedResultIdList;
+        private readonly IPleasanterApiBridge _bridge;
 
-        public OrderCompleteProcess(List<int>? completedResultIdList)
+        public OrderCompleteProcess(List<int>? completedResultIdList, IPleasanterApiBridge bridge)
         {
             CompletedResultIdList = completedResultIdList ?? new List<int> { };
+            _bridge = bridge;
         }
 
         public async Task<List<Dictionary<string, string>>> Send()
         {
-            PleasanterApi pleasanterApi = new();
+            SendOrderCompletedEntity sendOrderCompletedEntity = new();
 
             var dic = CompletedResultIdList.ToDictionary(
                 id => id.ToString(),
-                id => new { CheckA = false }
+                id => (object)new { CheckA = false }
             );
 
-            List<PleasanterApiResponseEntity> results = await pleasanterApi.BulkUpdate(dic);
+            List<PleasanterApiResponse> results = await _bridge.BulkUpdate(dic);
 
             JsonSerializerOptions options = new JsonSerializerOptions
             {
