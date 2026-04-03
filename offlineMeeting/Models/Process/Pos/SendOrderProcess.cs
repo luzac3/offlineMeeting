@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
@@ -62,7 +61,7 @@ namespace offlineMeeting.Models.Process.Pos
             }
 
             // コインが足りることを確認する
-            int totalCoins = 0;
+            int totalCoins = OrderPostEntityList.Sum(x => x.OrderCoins);
 
             GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
