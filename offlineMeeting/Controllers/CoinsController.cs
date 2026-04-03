@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Coins;
+using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Coins;
 using offlineMeeting.Models.Process.Share;
@@ -78,6 +79,20 @@ namespace offlineMeeting.Controllers
             Dictionary<string, string> result = await giveCoinsProcess.Send();
 
             return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult TogglePaypalMode()
+        {
+            JoinerEntity? userData = ViewData["UserData"] as JoinerEntity;
+            if (userData == null || !userData.IsAdmin)
+            {
+                return Forbid();
+            }
+
+            PaypalProperty.ToggleMode();
+            string referer = Request.Headers.Referer.ToString();
+            return Redirect(string.IsNullOrEmpty(referer) ? "/" : referer);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
