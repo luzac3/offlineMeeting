@@ -130,7 +130,7 @@ namespace offlineMeeting.Models.Process.Pos
                 orderResultId = await SendOrder(
                     orderPostEntity: nonAlcoholOrderPostEntityList.FirstOrDefault()!,
                     userCd: userCd,
-                    coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
+                    coins: nonAlcoholOrderPostEntityList.Sum(x => x.OrderCoins),
                     isAlcohol: false
                 );
                 orderResultIdList.Add(orderResultId);
@@ -161,7 +161,7 @@ namespace offlineMeeting.Models.Process.Pos
                 ErrorCheck(response);
 
                 // 正常終了時、OrderListに通知
-                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() {
+                await _hubContext.Clients.Group($"event_{EventId}").SendAsync("NewOrder", new Dictionary<string, string>() {
                     { "userName", userName },
                     { "orderTableEntityList", JsonSerializer.Serialize(orderTableEntityList) }
                 });

@@ -10,10 +10,17 @@ namespace offlineMeeting.Models.Process.QR
         private readonly IPleasanterRepository _repository;
         private readonly long _eventId;
 
-        public GetJoinerListProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository)
+        public GetJoinerListProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long eventId = 0)
         {
-            ManageEventId manageEventId = new ManageEventId(httpContext);
-            _eventId = manageEventId.GetEventId();
+            if (eventId != 0)
+            {
+                _eventId = eventId;
+            }
+            else
+            {
+                ManageEventId manageEventId = new ManageEventId(httpContext);
+                _eventId = manageEventId.GetEventId();
+            }
             _repository = pleasanterRepository;
         }
 

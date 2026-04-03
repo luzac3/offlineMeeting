@@ -75,7 +75,7 @@ namespace offlineMeeting.Models.Process.Quiz
                 var resultId = response.Id.ToString();
                 try
                 {
-                    await _hubContext.Clients.All.SendAsync("UserAnswerId", new Dictionary<string, string> { { "ResultId", resultId } });
+                    await _hubContext.Clients.Group($"event_{EventId}").SendAsync("UserAnswerId", new Dictionary<string, string> { { "ResultId", resultId } });
                 }
                 catch
                 {
