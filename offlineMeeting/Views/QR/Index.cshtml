@@ -1,6 +1,11 @@
 @using offlineMeeting.Models.Entity.Share;
 
 @{
+    ElectronEntity? electron = ViewData["Electron"] as ElectronEntity;
+    @if (electron?.IsElectron == true)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
     ViewData["Title"] = "QR発行";
 }
 @section Styles {
