@@ -59,19 +59,27 @@ namespace offlineMeeting.Models.Process.Pos
             ManageUserCd manageUserCd = new (httpContext);
             long userCd = manageUserCd.GetUserCd();
 
-            SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new(
-                ExtraFoodSiteId,
-                EventFoodSiteId,
-                RawFoodSiteId,
-                orderSiteId,
-                EventId,
-                userCd,
-                _pleasanterRepository
-            );
-            List<PurchaseDataEntity> purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
+            List<PurchaseDataEntity> purchaseDataEntityList = [];
+            if (purchaseResultIdList.Count > 0)
+            {
+                SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new(
+                    ExtraFoodSiteId,
+                    EventFoodSiteId,
+                    RawFoodSiteId,
+                    orderSiteId,
+                    EventId,
+                    userCd,
+                    _pleasanterRepository
+                );
+                purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
+            }
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(_pleasanterRepository, SakeSiteId, orderSiteId, EventId, userCd);
-            List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
+            List<AlcoholDataEntity> alcoholDataEntityList = [];
+            if (alcoholResultIdList.Count > 0)
+            {
+                SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(_pleasanterRepository, SakeSiteId, orderSiteId, EventId, userCd);
+                alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
+            }
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {
