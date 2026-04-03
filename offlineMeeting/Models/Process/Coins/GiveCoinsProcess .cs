@@ -36,7 +36,7 @@ namespace offlineMeeting.Models.Process.Coins
             {
                 return new Dictionary<string, string> {
                     {"StatusCode", responseGive.StatusCode.ToString() },
-                    {"Message", "receive coins failue"}
+                    {"Message", "give coins failue"}
                 };
                 throw new Exception("give coins failue");
             }
