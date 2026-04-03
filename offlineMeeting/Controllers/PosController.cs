@@ -8,6 +8,7 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.APIBridge;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 using System.Text.Json;
@@ -19,6 +20,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private readonly IWebHostEnvironment _env;
+        private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
@@ -34,12 +36,14 @@ namespace offlineMeeting.Controllers
             ILogger<PosController> logger,
             IHubContext<MyHub> hubContext,
             IWebHostEnvironment env,
+            IPleasanterApiBridge bridge,
             IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
             _env = env;
+            _bridge = bridge;
             _pleasanterRepository = pleasanterRepository;
             PosViewModel = new ();
             ResponseLogProcess = new (_logger);
@@ -144,6 +148,7 @@ namespace offlineMeeting.Controllers
                 joinerSiteId: JoinerSiteId,
                 httpContext: HttpContext,
                 hubContext: _hubContext,
+                bridge: _bridge,
                 pleasanterRepository: _pleasanterRepository
             );
 
@@ -202,7 +207,7 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public string OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
         {
-            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
+            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList, _bridge);
 
             _ = Task.Run(async () =>
             {
