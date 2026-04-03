@@ -41,6 +41,12 @@ namespace offlineMeeting.Controllers
         {
             SetViewDataProcess setViewDataProcess = new();
             ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
+
+            bool isElectron = context.HttpContext.Request.Query.ContainsKey("eid")
+                && long.TryParse(context.HttpContext.Request.Query["eid"], out var eid)
+                && eid != 0;
+            ViewData["Electron"] = setViewDataProcess.SetElectron(isElectron);
+
             base.OnActionExecuting(context);
         }
 
