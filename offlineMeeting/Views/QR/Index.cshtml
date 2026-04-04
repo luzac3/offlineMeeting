@@ -1,3 +1,4 @@
+@using offlineMeeting.Models.Entity.QR;
 @using offlineMeeting.Models.Entity.Share;
 
 @{
@@ -29,9 +30,9 @@
     {
         @foreach (var joiner in Model.JoinerList)
         {
-            <div class="joiner_row" data-usercd="@joiner.UserCd" data-username="@joiner.UserName"
-                 data-qrurl="@(Model.BaseUrl)?eid=@(Model.EventId)&uid=@(joiner.UserCd)">
-                <span>@joiner.UserName</span>
+            <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name"
+                 data-qrurl="@joiner.Url">
+                <span>@joiner.Name</span>
                 <button class="btn_checkin" type="button">チェックイン</button>
             </div>
         }

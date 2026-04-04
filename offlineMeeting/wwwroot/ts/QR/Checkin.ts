@@ -8,10 +8,12 @@ export class Checkin {
             if (!btn) return;
 
             btn.addEventListener('click', async () => {
+                const id = row.dataset.id;
                 const userCd = row.dataset.usercd;
                 const userName = row.dataset.username;
+                const qrUrl = row.dataset.qrurl;
 
-                if (!userCd || !userName) return;
+                if (!id || !userCd || !userName || !qrUrl) return;
 
                 btn.disabled = true;
                 btn.textContent = '処理中...';
@@ -22,7 +24,7 @@ export class Checkin {
                         '/QR/Checkin',
                         'POST',
                         { "Content-Type": "application/json" },
-                        { UserCd: Number(userCd), UserName: userName }
+                        { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl }
                     ) as { success: boolean };
 
                     if (result?.success) {

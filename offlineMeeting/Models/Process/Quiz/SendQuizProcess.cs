@@ -44,7 +44,6 @@ namespace offlineMeeting.Models.Process.Quiz
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
             long userCd = manageUserCd.GetUserCd();
 
-            HttpClient httpClient = new HttpClient();
             PleasanterApiResponse response;
             SendQuizEntity sendQuizEntity = new(false);
 
