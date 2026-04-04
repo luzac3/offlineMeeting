@@ -57,7 +57,7 @@ namespace offlineMeeting.Models.Process.Quiz
                     sendQuizEntity
                 );
 
-                if (!response.StatusCode.Equals(HttpStatusCode.OK))
+                if (response.StatusCode != (int)HttpStatusCode.OK)
                 {
                     return JsonSerializer.Serialize(new Dictionary<string, string> {
                         { "status", "500" },
@@ -73,7 +73,7 @@ namespace offlineMeeting.Models.Process.Quiz
                 sendQuizEntity
             );
 
-            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 return JsonSerializer.Serialize(new Dictionary<string, string> { 
                     { "status", "500" },

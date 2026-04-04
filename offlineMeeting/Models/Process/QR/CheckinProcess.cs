@@ -33,7 +33,7 @@ namespace offlineMeeting.Models.Process.QR
             };
             var response = await _bridge.Update(id, updateData);
 
-            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 return false;
             }
