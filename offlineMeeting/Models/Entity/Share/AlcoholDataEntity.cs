@@ -73,7 +73,7 @@ namespace offlineMeeting.Models.Entity.Share
             Width = width;
             Height = height;
             AlcoholName = alcoholName;
-            Abbreviation = abreviation;
+            Abbreviation = string.IsNullOrEmpty(abreviation) ? alcoholName : abreviation;
             Brewery = brewery;
             Prefectures = prefectures;
             GenryoMai = genryoMai;
