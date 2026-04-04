@@ -13,6 +13,7 @@ body{
     margin-left: 1%;
 }
 #print {
+    left: 10px;
     width: 70mm;
     margin:0;
 }
