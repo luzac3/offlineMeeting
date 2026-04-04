@@ -193,3 +193,68 @@ body {
     .blur-up.loaded {
         filter: blur(0);
     }
+
+/* PayPal toggle switch */
+.paypal-toggle-form {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    margin: 0;
+    padding: .5rem 1rem;
+    white-space: nowrap;
+}
+
+.paypal-toggle {
+    position: relative;
+    display: inline-block;
+    width: 2.4em;
+    height: 1.3em;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.paypal-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.paypal-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background-color: #ff9800;
+    border-radius: 1.3em;
+    transition: background-color 0.3s;
+}
+
+.paypal-toggle-slider::before {
+    content: "";
+    position: absolute;
+    left: 0.15em;
+    bottom: 0.15em;
+    width: 1em;
+    height: 1em;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.paypal-toggle input:checked + .paypal-toggle-slider {
+    background-color: #0070ba;
+}
+
+.paypal-toggle input:checked + .paypal-toggle-slider::before {
+    transform: translateX(1.1em);
+}
+
+.paypal-mode-label {
+    font-size: 0.75em;
+}
+
+.paypal-mode-label.sandbox {
+    color: #ff9800 !important;
+}
+
+.paypal-mode-label.live {
+    color: #0070ba !important;
+}
