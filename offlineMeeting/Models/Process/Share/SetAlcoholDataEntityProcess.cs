@@ -122,10 +122,10 @@ namespace offlineMeeting.Models.Process.Share
                 .ToList();
 
             long breweryId = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
-            TablesEntity? brewery = _repository.Select(breweryId, true).FirstOrDefault();
+            TablesEntity? brewery = breweryId > 0 ? _repository.Select(breweryId, true).FirstOrDefault() : null;
 
             long todohukenId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
-            string? prefectures = _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA;
+            string? prefectures = todohukenId > 0 ? _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA : null;
 
             string? image = null;
             if (result?.DescriptionG != null && result.DescriptionG.Count > 0)
