@@ -75,20 +75,13 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkin([FromBody] CheckinRequest request)
         {
-            ManageEventId manageEventId = new(HttpContext);
-            long eventId = manageEventId.GetEventId();
-
-            QRViewModel viewModel = new() { EventId = eventId };
-            string qrUrl = $"{viewModel.BaseUrl}?eid={eventId}&uid={request.UserCd}";
-
             CheckinProcess checkinProcess = new(
                 httpContext: HttpContext,
                 hubContext: _hubContext,
-                bridge: _bridge,
-                repository: _pleasanterRepository
+                bridge: _bridge
             );
 
-            bool result = await checkinProcess.Execute(CheckinSiteId, request.UserCd, request.UserName, qrUrl);
+            bool result = await checkinProcess.Execute(request.Id, request.UserCd, request.UserName, request.QrUrl);
 
             return Json(new { success = result });
         }
@@ -105,11 +98,8 @@ namespace offlineMeeting.Controllers
             var joinerList = getJoinerListProcess.Get(CheckinSiteId);
             var joiner = joinerList.FirstOrDefault(j => j.UserCd == userCd.ToString());
 
-            QRViewModel viewModel = new() { EventId = eid };
-            string qrUrl = $"{viewModel.BaseUrl}?eid={eid}&uid={userCd}";
-
-            ViewBag.UserName = joiner?.UserName ?? "";
-            ViewBag.QrUrl = qrUrl;
+            ViewBag.UserName = joiner?.Name ?? "";
+            ViewBag.QrUrl = joiner?.Url ?? "";
 
             return View();
         }
@@ -123,7 +113,9 @@ namespace offlineMeeting.Controllers
 
     public class CheckinRequest
     {
+        public long Id { get; set; }
         public long UserCd { get; set; }
         public string UserName { get; set; } = "";
+        public string QrUrl { get; set; } = "";
     }
 }
