@@ -32,7 +32,7 @@ namespace offlineMeeting.Models.Process.Coins
                 coins: GiveCoinsEntity.Coins * -1
             );
 
-            if (!responseGive.StatusCode.Equals(HttpStatusCode.OK))
+            if (responseGive.StatusCode != (int)HttpStatusCode.OK)
             {
                 return new Dictionary<string, string> {
                     {"StatusCode", responseGive.StatusCode.ToString() },
@@ -49,7 +49,7 @@ namespace offlineMeeting.Models.Process.Coins
                 coins: (int)GiveCoinsEntity.Coins - coinsRate
             );
 
-            if (!responseReceive.StatusCode.Equals(HttpStatusCode.OK))
+            if (responseReceive.StatusCode != (int)HttpStatusCode.OK)
             {
                 return new Dictionary<string, string> {
                     {"StatusCode", responseReceive.StatusCode.ToString() },

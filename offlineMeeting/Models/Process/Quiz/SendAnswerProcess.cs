@@ -66,7 +66,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
             PleasanterApiResponse response = await _bridge.Insert(AnswerSiteId, sendAnswerEntity);
 
-            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 return JsonSerializer.Serialize(response);
             }
