@@ -39,7 +39,7 @@ namespace offlineMeeting.Models.Process.Coins
             // なのでIDのチェックはしない
             var response = await _bridge.Insert(CoinsSiteId, sendCoinsEntity);
 
-            return response.StatusCode.Equals(HttpStatusCode.OK);
+            return response.StatusCode == (int)HttpStatusCode.OK;
         }
     }
 }
