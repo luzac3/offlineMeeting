@@ -1,4 +1,5 @@
 @using offlineMeeting.Models.Entity.Share;
+@using offlineMeeting.Models.JsonDataProperty;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +19,15 @@
     </head>
     <body class="nodisplay">
         <header>
+            @{
+                bool isSandbox = PaypalProperty.GetIsSandbox();
+            }
+            @if (isSandbox)
+            {
+                <div id="sandbox_banner" style="background-color: #ff9800; color: #fff; text-align: center; padding: 4px 0; font-weight: bold; font-size: 14px;">
+                    ⚠ Sandbox モード
+                </div>
+            }
             <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div id="menu" class="container-fluid">
                     @{
@@ -69,6 +79,16 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="QR" asp-action="Index">チェックイン</a>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Coins" asp-action="TogglePaypalMode" method="post" class="paypal-toggle-form nav-link">
+                                    <span class="text-dark dot">PayPal</span>
+                                    <label class="paypal-toggle">
+                                        <input type="checkbox" @(!isSandbox ? "checked" : "") onchange="this.form.submit()">
+                                        <span class="paypal-toggle-slider"></span>
+                                    </label>
+                                    <span class="text-dark dot paypal-mode-label @(isSandbox ? "sandbox" : "live")">@(isSandbox ? "Sandbox" : "Live")</span>
+                                </form>
                             </li>
                             }
                             <li class="nav-item">
