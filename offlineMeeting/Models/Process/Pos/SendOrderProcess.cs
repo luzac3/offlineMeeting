@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
@@ -7,6 +6,8 @@ using offlineMeeting.Models.Entity.Pos.SendOrderPurchaseEntity;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.APIBridge.Contracts;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
@@ -24,6 +25,7 @@ namespace offlineMeeting.Models.Process.Pos
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
+        private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
 
         public SendOrderProcess(
@@ -33,6 +35,7 @@ namespace offlineMeeting.Models.Process.Pos
             long joinerSiteId,
             HttpContext httpContext, 
             IHubContext<MyHub> hubContext,
+            IPleasanterApiBridge bridge,
             IPleasanterRepository pleasanterRepository
         )
         {
@@ -46,6 +49,7 @@ namespace offlineMeeting.Models.Process.Pos
             HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
             _hubContext = hubContext;
+            _bridge = bridge;
             _pleasanterRepository = pleasanterRepository;
         }
 
@@ -58,23 +62,23 @@ namespace offlineMeeting.Models.Process.Pos
             long userCd = manageUserCd.GetUserCd();
             if (userCd == 0)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„É¶„Éº„Ç∂„Ç≥„Éº„Éâ„Åå„ÅÇ„Çä„Åæ„Åõ„Çì" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉÜÅ[ÉUÉRÅ[ÉhÇ™Ç†ÇËÇ‹ÇπÇÒ" } });
             }
 
-            // „Ç≥„Ç§„É≥„ÅåË∂≥„Çä„Çã„Åì„Å®„ÇíÁ¢∫Ë™ç„Åô„Çã
-            int totalCoins = 0;
+            // ÉRÉCÉìÇ™ë´ÇËÇÈÇ±Ç∆ÇämîFÇ∑ÇÈ
+            int totalCoins = OrderPostEntityList.Sum(x => x.OrderCoins);
 
             GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             if (userData.Coins < totalCoins)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„Ç≥„Ç§„É≥„Åå‰∏çË∂≥„Åó„Å¶„ÅÑ„Åæ„Åô" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉRÉCÉìÇ™ïsë´ÇµÇƒÇ¢Ç‹Ç∑" } });
             }
 
             try
             {
-                PleasanterApiResponseEntity response = await SendOrder(
+                PleasanterApiResponse response = await SendOrder(
                     orderPostEntityList: OrderPostEntityList,
                     sakeSiteId: sakeSiteId,
                     userCd: userCd,
@@ -89,7 +93,7 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        private async Task<PleasanterApiResponseEntity> SendOrder(
+        private async Task<PleasanterApiResponse> SendOrder(
             List<OrderPostEntity> orderPostEntityList,
             long sakeSiteId,
             long userCd,
@@ -103,7 +107,7 @@ namespace offlineMeeting.Models.Process.Pos
             List<OrderPostEntity> alcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category == 2).ToList();
             List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
 
-            // „Ç¢„É´„Ç≥„Éº„É´„ÅÆÁôªÈå≤
+            // ÉAÉãÉRÅ[ÉãÇÃìoò^
             if (alcoholOrderPostEntityList.Count() > 0)
             {
                 orderResultId = await SendOrder(
@@ -124,7 +128,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
             );
 
-            // „Ç¢„É´„Ç≥„Éº„É´‰ª•Â§ñ„ÅÆÁôªÈå≤
+            // ÉAÉãÉRÅ[Éãà»äOÇÃìoò^
             if (nonAlcoholOrderPostEntityList.Count() > 0)
             {
                 orderResultId = await SendOrder(
@@ -145,7 +149,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
             );
 
-            // Âç∞Âà∑(Ë°®Á§∫)Áî®„É™„Çπ„Éà„ÅÆ‰ΩúÊàê
+            // àÛç¸(ï\é¶)ópÉäÉXÉgÇÃçÏê¨
             List<OrderTableEntity> orderTableEntityList = CreateBackOrderTableEntityList(
                 sendOrderPurchaseEntityList: sendOrderPurchaseEntityList,
                 orderResultIdList: orderResultIdList,
@@ -153,14 +157,12 @@ namespace offlineMeeting.Models.Process.Pos
                 userName: userName
             );
 
-            PleasanterApi pleasanterApi = new();
-
             try
             {
-                PleasanterApiResponseEntity response = await pleasanterApi.BulkInsert(sendOrderPurchaseEntityList, OrderPurchaseSiteId.ToString());
+                PleasanterApiResponse response = await _bridge.BulkInsert(OrderPurchaseSiteId, sendOrderPurchaseEntityList);
                 ErrorCheck(response);
 
-                // Ê≠£Â∏∏ÁµÇ‰∫ÜÊôÇ„ÄÅOrderList„Å´ÈÄöÁü•
+                // ê≥èÌèIóπéûÅAOrderListÇ…í ím
                 await _hubContext.Clients.Group($"event_{EventId}").SendAsync("NewOrder", new Dictionary<string, string>() {
                     { "userName", userName },
                     { "orderTableEntityList", JsonSerializer.Serialize(orderTableEntityList) }
@@ -182,8 +184,8 @@ namespace offlineMeeting.Models.Process.Pos
                 orderCoins: coins,
                 isAlcohol: isAlcohol
             );
-            PleasanterApi pleasanterApi = new();
-            PleasanterApiResponseEntity response = await pleasanterApi.Insert(sendOrderEntity, OrderSiteId.ToString());
+
+            PleasanterApiResponse response = await _bridge.Insert(OrderSiteId, sendOrderEntity);
             try
             {
                 ErrorCheck(response);
@@ -274,8 +276,8 @@ namespace offlineMeeting.Models.Process.Pos
             {
                 // purchaseId
                 TablesEntity? tablesEntity = long.TryParse(sendOrderPurchaseEntity.ClassC, out long purchaseId) ? 
-                    null : 
-                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault();
+                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault() : 
+                    null;
 
                 orderPurchaseTableEntity
                     .Add(
@@ -299,7 +301,7 @@ namespace offlineMeeting.Models.Process.Pos
             return orderPurchaseTableEntity;
         }
 
-        private string JsonSerialize(PleasanterApiResponseEntity response)
+        private string JsonSerialize(PleasanterApiResponse response)
         {
             var options = new JsonSerializerOptions
             {
@@ -313,9 +315,9 @@ namespace offlineMeeting.Models.Process.Pos
             }, options);
         }
 
-        private void ErrorCheck(PleasanterApiResponseEntity response)
+        private void ErrorCheck(PleasanterApiResponse response)
         {
-            if (!response.StatusCode.Equals(HttpStatusCode.OK) && response.StatusCode != 200)
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 throw new HttpRequestException(
                     JsonSerialize(response)

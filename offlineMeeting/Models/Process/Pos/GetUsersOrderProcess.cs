@@ -1,8 +1,5 @@
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.JsonDataProperty;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using PleasanterBridge.src.DataRepository.Entity;
@@ -56,7 +53,7 @@ namespace offlineMeeting.Models.Process.Pos
                 { "CheckA", true }
             };
 
-            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(JoinerSiteId, where, true)
+            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(OrderSiteId, where, true)
                 .OrderByDescending(x => x.ReferenceId)
                 .ToList();
 
@@ -137,10 +134,10 @@ namespace offlineMeeting.Models.Process.Pos
                 .OrderByDescending(x=>x.ReferenceId)
                 .ToList();
 
-            List<OrderPurchaseTableEntity> orderPurchaseTableEntity = (List<OrderPurchaseTableEntity>)tablesEntities.Select(tablesEntity => {
-                TablesEntity? purchaseData = int.TryParse(tablesEntity.ClassC, out int userCd) ?
-                    null :
-                    _pleasanterRepository.Select(userCd, true).FirstOrDefault();
+            List<OrderPurchaseTableEntity> orderPurchaseTableEntityList = tablesEntities.Select(tablesEntity => {
+                TablesEntity? purchaseData = int.TryParse(tablesEntity.ClassC, out int purchaseCd) ?
+                    _pleasanterRepository.Select(purchaseCd, true).FirstOrDefault() :
+                    null;
 
                 string? purchaseName = Int32.TryParse(purchaseData?.ClassA, out int pursedPurchaseData) ?
                     _pleasanterRepository.Select(pursedPurchaseData, true).FirstOrDefault()?.Title :
@@ -161,9 +158,9 @@ namespace offlineMeeting.Models.Process.Pos
                             isAlcohol: tablesEntity.CheckA ?? false,
                             hide: tablesEntity.CheckZ ?? false
                         );
-            });
+            }).ToList();
 
-            return orderPurchaseTableEntity;
+            return orderPurchaseTableEntityList;
         }
     }
 }
