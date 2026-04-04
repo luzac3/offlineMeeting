@@ -3903,15 +3903,17 @@ class Checkin {
                 if (!btn)
                     return;
                 btn.addEventListener('click', async () => {
+                    const id = row.dataset.id;
                     const userCd = row.dataset.usercd;
                     const userName = row.dataset.username;
-                    if (!userCd || !userName)
+                    const qrUrl = row.dataset.qrurl;
+                    if (!id || !userCd || !userName || !qrUrl)
                         return;
                     btn.disabled = true;
                     btn.textContent = '処理中...';
                     try {
                         const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
-                        const result = await fetchApi.send('/QR/Checkin', 'POST', { "Content-Type": "application/json" }, { UserCd: Number(userCd), UserName: userName });
+                        const result = await fetchApi.send('/QR/Checkin', 'POST', { "Content-Type": "application/json" }, { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl });
                         if (result?.success) {
                             btn.textContent = '✓ 完了';
                             btn.classList.add('checked_in');
