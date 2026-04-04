@@ -57,7 +57,7 @@ namespace offlineMeeting.Models.Process.Quiz
                         answerId,
                         new SendPointEntity(point: point)
                     );
-                if (!response.StatusCode.Equals(HttpStatusCode.OK))
+                if (response.StatusCode != (int)HttpStatusCode.OK)
                 {
                     flag = false;
                 }
