@@ -10,10 +10,9 @@ body{
 .electron_body {
     width: 75mm;
     position: relative;
-    margin-left: 1%;
+    margin-left: 3%;
 }
 #print {
-    left: 10px;
     width: 70mm;
     margin:0;
 }
