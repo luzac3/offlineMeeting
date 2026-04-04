@@ -5,7 +5,7 @@
   "checkinName": "チェックイン",
   "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=60473&resultId=",
   "checkinPrintUrlBase": "https://sake.wolfslab.jp/QR/PrintQr?eid=60473&userCd=",
-  "deviceName": "POS-80C",
+  "deviceName": "EPSON TM-m30 Receipt",
   "printOptions": {
     "margins": {
       "marginType": "none"
