@@ -1,50 +1,44 @@
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Collection
 {
     public class AlcoholDataProcess
     {
-        private int SakeSiteId;
-        private int OrderSiteId;
-        private string EventId;
         private HttpContext HttpContext;
+        private IPleasanterRepository _pleasanterRepository;
+        private long SakeSiteId;
+        private long OrderSiteId;
+        private long EventId;
+        private long UserCd;
 
-        public AlcoholDataProcess(int sakeSiteId, int orderSiteId, HttpContext httpContext)
+        public AlcoholDataProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long sakeSiteId, long orderSiteId)
         {
+            _pleasanterRepository = pleasanterRepository;
+            UserCd = new ManageUserCd(httpContext).GetUserCd();
             ManageEventId manageEventId = new (httpContext);
 
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;
             EventId = manageEventId.GetEventId();
-            if(EventId == "0")
-            {
-                CreateLogProcess.Error("COLLECTION_003", "イベントIDが不正です");
-                throw new DataException("イベントIDが不正です");
-            }
             HttpContext = httpContext;
         }
 
         public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
         {
-            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
-
-            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (SakeSiteId, OrderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (_pleasanterRepository, SakeSiteId, OrderSiteId, EventId, UserCd);
             return setAlcoholDataEntityProcess
                 .Get(json)
                 .OrderBy(x=>x.Rarity)
                 .ToList();
         }
 
-        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, int resultId)
+        public AlcoholDataEntity Get(System.Text.Json.Nodes.JsonNode? json, long resultId)
         {
-            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
-
-            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(SakeSiteId, OrderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(_pleasanterRepository, SakeSiteId, OrderSiteId, EventId, UserCd);
             return setAlcoholDataEntityProcess.Get(json, resultId);
         }
     }

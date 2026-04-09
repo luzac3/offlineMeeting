@@ -1,27 +1,36 @@
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Pos
 {
     // オーダーを取得するように変更し、必要がない場合は商品のみを取得する
-    public class GetUsersOrderProcess : ResultsProcess
+    public class GetUsersOrderProcess
     {
         private HttpContext HttpContext;
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
-        private string EventId;
+        private readonly IPleasanterRepository _pleasanterRepository;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
+        private long EventId;
 
-        public GetUsersOrderProcess(int orderSiteId, int orderPurchaseSiteId, int joinerSiteId, HttpContext httpContext, string electronEid = "")
+        public GetUsersOrderProcess(
+            long orderSiteId,
+            long orderPurchaseSiteId,
+            long joinerSiteId, 
+            HttpContext httpContext, 
+            IPleasanterRepository pleasanterRepository,
+            long electronEid = 0
+        )
         {
             HttpContext = httpContext;
+            _pleasanterRepository = pleasanterRepository;
 
-            if(!string.IsNullOrEmpty(electronEid))
+            if (electronEid != 0)
             {
                 EventId = electronEid;
             }
@@ -31,12 +40,6 @@ namespace offlineMeeting.Models.Process.Pos
                 EventId = manageEventId.GetEventId();
             }
 
-            if (EventId == "0")
-            {
-                CreateLogProcess.Error("POS_013", "イベントIDが不正です");
-                throw new DataException("イベントIDが不正です");
-            }
-
             OrderSiteId = orderSiteId;
             OrderPurchaseSiteId = orderPurchaseSiteId;
             JoinerSiteId = joinerSiteId;
@@ -44,52 +47,56 @@ namespace offlineMeeting.Models.Process.Pos
 
         public List<OrderTableEntity> Get()
         {
-            List<ResultsEntity> resultsEntityList = base
-                .GetFromSiteId(OrderSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.CheckA == true)
-                .OrderByDescending(x => x.ResultId)
-                .ToList();
-
-            return GetOrder(resultsEntityList);
-        }
-
-        public List<OrderTableEntity> Get(string resultId)
-        {
-            List<ResultsEntity> resultsEntityList = new List<ResultsEntity>()
+            var where = new Dictionary<string, object>
             {
-                base.GetSingleRecord(resultId)
+                { "ClassA", EventId.ToString() },
+                { "CheckA", true }
             };
 
-            return GetOrder(resultsEntityList);
+            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(OrderSiteId, where, true)
+                .OrderByDescending(x => x.ReferenceId)
+                .ToList();
+
+
+            return GetOrder(tablesEntities);
+        }
+
+        public List<OrderTableEntity> Get(long resultId)
+        {
+            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(resultId, true);
+
+            return GetOrder(tablesEntities);
         }
 
         public List<OrderTableEntity> GetOwn(HttpContext httpContext)
         {
             ManageUserCd manageUserCd = new(httpContext);
-            string userCd = manageUserCd.GetUserCd();
+            long userCd = manageUserCd.GetUserCd();
+            var where = new Dictionary<string, object>
+            {
+                { "ClassA", EventId.ToString() },
+                { "ClassD", userCd.ToString() }
+            };
 
-            List<ResultsEntity> resultsEntityList = base
-                .GetFromSiteId(OrderSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.ClassD == userCd)
-                .OrderByDescending(x => x.ResultId)
+            List<TablesEntity> resultsEntityList = _pleasanterRepository.Select(OrderSiteId, where, true)
+                .OrderByDescending(x => x.ReferenceId)
                 .ToList();
 
             return GetOrder(resultsEntityList);
         }
 
-        private List<OrderTableEntity> GetOrder(List<ResultsEntity> resultsEntityList)
+        private List<OrderTableEntity> GetOrder(List<TablesEntity> tablesEntities)
         {
 
             List<OrderTableEntity> orderTableEntity = new List<OrderTableEntity>();
 
-            foreach (ResultsEntity resultsEntity in resultsEntityList)
+            foreach (TablesEntity tablesEntity in tablesEntities)
             {
-                GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
-                JoinerEntity userData = getUsersProcess.GetUserData(resultsEntity.ClassD ?? string.Empty);
+                GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
+                int.TryParse(tablesEntity.ClassD, out int userCd);
+                JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
-                string? orderNumber = resultsEntity?.ClassB?.ToString();
+                string? orderNumber = tablesEntity?.ClassB?.ToString();
                 string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
                 if (orderNumbers.Length >= 3)
                 {
@@ -99,14 +106,14 @@ namespace offlineMeeting.Models.Process.Pos
                 orderTableEntity
                     .Add(
                         new OrderTableEntity(
-                            resultId: resultsEntity!.ResultId.ToString(),
-                            userCd: resultsEntity.ClassD,
+                            resultId: tablesEntity!.ReferenceId.ToString(),
+                            userCd: tablesEntity.ClassD,
                             userName: userData.UserName,
                             orderNumber: orderNumber,
-                            coins: Convert.ToInt32(resultsEntity.NumA),
-                            isAlcohol: resultsEntity.CheckB ?? false,
-                            unProvided: resultsEntity.CheckA ?? false,
-                            orderPurchaseTableEntityList: GetPurchase(resultsEntity.ResultId.ToString()!, userData.UserName ?? "")
+                            coins: Convert.ToInt32(tablesEntity.NumA),
+                            isAlcohol: tablesEntity.CheckB ?? false,
+                            unProvided: tablesEntity.CheckA ?? false,
+                            orderPurchaseTableEntityList: GetPurchase(tablesEntity.ReferenceId.ToString()!, userData.UserName ?? "")
                         )
                     );
             }
@@ -116,44 +123,44 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderPurchaseTableEntity> GetPurchase(string resultId, string userName)
         {
+            var where = new Dictionary<string, object>
+            {
+                { "ClassA", EventId.ToString() },
+                { "ClassE", resultId.ToString() }
+            };
+
             // resultIdのリストで取得する
-            List<ResultsEntity> resultsEntityList = base
-                .GetFromSiteId(OrderPurchaseSiteId)
-                .Where(x => x.ClassA == EventId)
-                .Where(x => x.ClassE == resultId)
-                .OrderByDescending(x=>x.ResultId)
+            List<TablesEntity> tablesEntities = _pleasanterRepository.Select(OrderPurchaseSiteId, where, true)
+                .OrderByDescending(x=>x.ReferenceId)
                 .ToList();
 
-            List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
-
-            foreach (ResultsEntity resultsEntity in resultsEntityList)
-            {
-                ResultsEntity? purchaseData = String.IsNullOrEmpty(resultsEntity.ClassC) ? null : base.GetSingleRecord(resultsEntity.ClassC);
+            List<OrderPurchaseTableEntity> orderPurchaseTableEntityList = tablesEntities.Select(tablesEntity => {
+                TablesEntity? purchaseData = int.TryParse(tablesEntity.ClassC, out int purchaseCd) ?
+                    _pleasanterRepository.Select(purchaseCd, true).FirstOrDefault() :
+                    null;
 
                 string? purchaseName = Int32.TryParse(purchaseData?.ClassA, out int pursedPurchaseData) ?
-                    base.GetSingleRecord(pursedPurchaseData.ToString()).Title :
+                    _pleasanterRepository.Select(pursedPurchaseData, true).FirstOrDefault()?.Title :
                     purchaseData?.ClassA;
 
-                orderPurchaseTableEntity
-                    .Add(
-                        new OrderPurchaseTableEntity(
-                            resultId: resultsEntity.ResultId.ToString(),
-                            userCd: resultsEntity.ClassB,
+                return new OrderPurchaseTableEntity(
+                            resultId: tablesEntity.ReferenceId.ToString(),
+                            userCd: tablesEntity.ClassB,
                             userName: userName,
-                            purchaseCd: resultsEntity.ClassC,
+                            purchaseCd: tablesEntity.ClassC,
                             purchaseName: purchaseName,
                             purchaseRead: purchaseData?.ClassJ,
                             purchaseAbbreviation: purchaseData?.ClassI,
-                            number: Convert.ToInt32(resultsEntity.NumA),
-                            unit: resultsEntity.ClassD,
-                            coins: Convert.ToInt32(resultsEntity.NumB),
-                            alcoholQuantity: Convert.ToInt32(resultsEntity.NumC),
-                            isAlcohol: resultsEntity.CheckA ?? false,
-                            hide: resultsEntity.CheckZ ?? false
-                        )
-                    );
-            }
-            return orderPurchaseTableEntity;
+                            number: Convert.ToInt32(tablesEntity.NumA),
+                            unit: tablesEntity.ClassD,
+                            coins: Convert.ToInt32(tablesEntity.NumB),
+                            alcoholQuantity: Convert.ToInt32(tablesEntity.NumC),
+                            isAlcohol: tablesEntity.CheckA ?? false,
+                            hide: tablesEntity.CheckZ ?? false
+                        );
+            }).ToList();
+
+            return orderPurchaseTableEntityList;
         }
     }
 }

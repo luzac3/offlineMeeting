@@ -1,27 +1,24 @@
 using offlineMeeting.Models.Entity.Quiz;
-using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Quiz
 {
     public class GetQuizProcess
     {
-        private string EventId;
+        private readonly IPleasanterRepository _pleasanterRepository;
+        private long EventId;
         private SetQuizEntityProcess SetQuizEntityProcess;
 
-        public GetQuizProcess(HttpContext httpContext, int quizSiteId) {
+        public GetQuizProcess(HttpContext httpContext, IPleasanterRepository pleasanterRepository, long quizSiteId) {
 
+            _pleasanterRepository = pleasanterRepository;
             ManageEventId manageEventId = new(httpContext);
 
             EventId = manageEventId.GetEventId();
-            if (EventId == "0")
-            {
-                CreateLogProcess.Error("QUIZ_019", "イベントIDが不正です");
-                throw new DataException("イベントIDが不正です");
-            }
 
-            SetQuizEntityProcess = new(quizSiteId, EventId);
+            SetQuizEntityProcess = new(_pleasanterRepository, quizSiteId, EventId);
         }
 
         public QuizEntity? Get()
@@ -29,12 +26,12 @@ namespace offlineMeeting.Models.Process.Quiz
             return SetQuizEntityProcess.Get();
         }
 
-        public QuizEntity Get(string resultId)
+        public QuizEntity Get(long resultId)
         {
             return SetQuizEntityProcess.Get(resultId);
         }
 
-        public List<QuizEntity> GetList(int quizSiteId)
+        public List<QuizEntity> GetList(long quizSiteId)
         {
             return SetQuizEntityProcess.GetList(quizSiteId);
         }

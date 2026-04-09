@@ -1,4 +1,5 @@
 @using offlineMeeting.Models.Entity.Share;
+@using offlineMeeting.Models.JsonDataProperty;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +15,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spinkit/2.0.1/spinkit.min.css">
+        @RenderSection("Styles", required: false)
     </head>
-    <body>
+    <body class="nodisplay">
         <header>
+            @{
+                bool isSandbox = PaypalProperty.GetIsSandbox();
+            }
+            @if (isSandbox)
+            {
+                <div id="sandbox_banner" style="background-color: #ff9800; color: #fff; text-align: center; padding: 4px 0; font-weight: bold; font-size: 14px;">
+                    ⚠ Sandbox モード
+                </div>
+            }
             <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div id="menu" class="container-fluid">
                     @{
@@ -35,7 +46,7 @@
                         </div>
                         <div id="coins_wrapper">
                             <a asp-area="" asp-controller="Coins" asp-action="Index">
-                                <img id="poncoin_img" src="/image/poncoin.png" />
+                                <img id="poncoin_img" src="/image/poncoin_192.png" />
                             </a>
                             <span id="poncoins">@userData?.Coins</span>
                         </div>
@@ -65,7 +76,20 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark dot" asp-area="" asp-controller="Quiz" asp-action="QuizList">クイズリスト</a>
-                                </li>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark dot" asp-area="" asp-controller="QR" asp-action="Index">チェックイン</a>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Coins" asp-action="TogglePaypalMode" method="post" class="paypal-toggle-form nav-link">
+                                    <span class="text-dark dot">PayPal</span>
+                                    <label class="paypal-toggle">
+                                        <input type="checkbox" @(!isSandbox ? "checked" : "") onchange="this.form.submit()">
+                                        <span class="paypal-toggle-slider"></span>
+                                    </label>
+                                    <span class="text-dark dot paypal-mode-label @(isSandbox ? "sandbox" : "live")">@(isSandbox ? "Sandbox" : "Live")</span>
+                                </form>
+                            </li>
                             }
                             <li class="nav-item">
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="Collection" asp-action="Index">ズカン</a>
@@ -88,6 +112,8 @@
                 }
             }
         </header>
+        <!-- navbarに関する処理 -->
+        <script src="~/js/Layout.js"></script>
         <div class="container">
             <div id="loading-overlay" class="loading-overlay nodisplay">
                 <div class="loading"></div>
@@ -103,7 +129,6 @@
                 &copy; 2025 - offlineMeeting
             </div>
         </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/signalR/hubs"></script>
         @await RenderSectionAsync("Scripts", required: false)

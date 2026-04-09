@@ -8,6 +8,8 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -17,23 +19,32 @@ namespace offlineMeeting.Controllers
     {
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
+        private readonly IWebHostEnvironment _env;
+        private readonly IPleasanterApiBridge _bridge;
+        private readonly IPleasanterRepository _pleasanterRepository;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
-        private int SakeSiteId;
-        private int ExtraSiteId;
-        private int EventFoodSiteId;
-        private int RawFoodSiteId;
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
+        private long SakeSiteId;
+        private long ExtraSiteId;
+        private long EventFoodSiteId;
+        private long RawFoodSiteId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
 
         public PosController(
             ILogger<PosController> logger,
-            IHubContext<MyHub> hubContext
+            IHubContext<MyHub> hubContext,
+            IWebHostEnvironment env,
+            IPleasanterApiBridge bridge,
+            IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
+            _env = env;
+            _bridge = bridge;
+            _pleasanterRepository = pleasanterRepository;
             PosViewModel = new ();
             ResponseLogProcess = new (_logger);
             TableIdProperty tableIdProperty = new ();
@@ -44,12 +55,13 @@ namespace offlineMeeting.Controllers
             OrderSiteId = tableIdProperty.OrderSiteId;
             OrderPurchaseSiteId = tableIdProperty.OrderPurchaseSiteId;
             JoinerSiteId = tableIdProperty.JoinerSiteId;
+
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             SetViewDataProcess setViewDataProcess = new();
-            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext);
+            ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             ViewData["Electron"] = setViewDataProcess.SetElectron();
             base.OnActionExecuting(context);
         }
@@ -71,7 +83,7 @@ namespace offlineMeeting.Controllers
                 AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
                 SiteSettingsProcess siteSettingsProcess = new ();
 
-                PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
+                PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId));
                 return View(PosViewModel);
             }
             catch (Exception ex)
@@ -89,7 +101,8 @@ namespace offlineMeeting.Controllers
                     extraSiteId: ExtraSiteId,
                     eventFoodSiteId: EventFoodSiteId,
                     rawFoorSiteId: RawFoodSiteId,
-                    httpContext: HttpContext
+                    httpContext: HttpContext,
+                    pleasanterRepository: _pleasanterRepository
                 );
                 SiteSettingsProcess siteSettingsProcess = new();
 
@@ -111,7 +124,8 @@ namespace offlineMeeting.Controllers
                     extraSiteId: ExtraSiteId,
                     eventFoodSiteId: EventFoodSiteId,
                     rawFoorSiteId: RawFoodSiteId,
-                    httpContext: HttpContext
+                    httpContext: HttpContext,
+                    pleasanterRepository: _pleasanterRepository
                 );
                 SiteSettingsProcess siteSettingsProcess = new();
 
@@ -135,15 +149,16 @@ namespace offlineMeeting.Controllers
         {
             try
             {
-                OrderListProcess orderListProcess = new (
+                OrderListProcess orderListProcess = new(
                     orderPostEntityList: orderPostEntityList,
                     sakeSiteId: SakeSiteId,
                     extraFoodSiteId: ExtraSiteId,
                     eventFoodSiteId: EventFoodSiteId,
                     rawFoodSiteId: RawFoodSiteId,
-                    httpContext: HttpContext
+                    httpContext: HttpContext,
+                    pleasanterRepository: _pleasanterRepository
                 );
-                SiteSettingsProcess siteSettingsProcess = new ();
+                SiteSettingsProcess siteSettingsProcess = new();
 
                 PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
                 return PartialView("_OrderListContents", PosViewModel);
@@ -166,7 +181,9 @@ namespace offlineMeeting.Controllers
                     orderPurchseSiteId: OrderPurchaseSiteId,
                     joinerSiteId: JoinerSiteId,
                     httpContext: HttpContext,
-                    hubContext: _hubContext
+                    hubContext: _hubContext,
+                    bridge: _bridge,
+                    pleasanterRepository: _pleasanterRepository
                 );
 
                 _ = Task.Run(async () =>
@@ -196,14 +213,14 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrders([FromQuery] string eid)
+        public IActionResult UserOrders([FromQuery] long eid)
         {
-            bool isElectron = !string.IsNullOrEmpty(eid);
+            bool isElectron = eid != 0;
             try
             {
                 SetViewDataProcess setViewDataProcess = new();
                 // electron経由で表示する場合
-                if (isElectron)
+                if (eid != 0)
                 {
                     ViewData["Electron"] = setViewDataProcess.SetElectron(true);
                 }
@@ -213,6 +230,7 @@ namespace offlineMeeting.Controllers
                     OrderPurchaseSiteId,
                     JoinerSiteId,
                     HttpContext,
+                    _pleasanterRepository,
                     eid
                 );
                 PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
@@ -227,9 +245,9 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult UserOrdersPartial([FromQuery] string eid)
+        public IActionResult UserOrdersPartial([FromQuery] long eid)
         {
-            bool isElectron = !string.IsNullOrEmpty(eid);
+            bool isElectron = eid != 0;
             try
             {
                 GetUsersOrderProcess getUsersOrderProcess = new(
@@ -237,6 +255,7 @@ namespace offlineMeeting.Controllers
                     OrderPurchaseSiteId,
                     JoinerSiteId,
                     HttpContext,
+                    _pleasanterRepository,
                     eid
                 );
                 PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
@@ -255,7 +274,7 @@ namespace offlineMeeting.Controllers
         {
             try
             {
-                OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
+                OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList, _bridge);
 
                 _ = Task.Run(async () =>
                 {
@@ -294,9 +313,11 @@ namespace offlineMeeting.Controllers
                     OrderSiteId,
                     OrderPurchaseSiteId,
                     JoinerSiteId,
-                    HttpContext
+                    HttpContext,
+                    _pleasanterRepository
                 );
                 PosViewModel.setOrderTableEntityList(getUsersOrderProcess.GetOwn(HttpContext));
+
 
                 return View(PosViewModel);
             }
@@ -308,9 +329,9 @@ namespace offlineMeeting.Controllers
         }
 
         [HttpGet]
-        public IActionResult PrintOrders([FromQuery] string eid, string resultId)
+        public IActionResult PrintOrders([FromQuery] long eid, long resultId)
         {
-            bool isElectron = !string.IsNullOrEmpty(eid);
+            bool isElectron = eid != 0;
             try
             {
                 GetUsersOrderProcess getUsersOrderProcess = new(
@@ -318,9 +339,36 @@ namespace offlineMeeting.Controllers
                     OrderPurchaseSiteId,
                     JoinerSiteId,
                     HttpContext,
+                    _pleasanterRepository,
                     eid
                 );
                 PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
+
+                return View(PosViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("POS_010", ex, isElectron);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult PrintQrOrders([FromQuery] long eid, long resultId)
+        {
+            bool isElectron = eid != 0;
+            try
+            {
+                GetUsersOrderProcess getUsersOrderProcess = new(
+                    OrderSiteId,
+                    OrderPurchaseSiteId,
+                    JoinerSiteId,
+                    HttpContext,
+                    _pleasanterRepository,
+                    eid
+                );
+                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
+                PosViewModel.setPrintUrl($"https://sake.wolfslab.jp/Pos/PrintOrders?eid={eid}&resultId={resultId}");
 
                 return View(PosViewModel);
             }

@@ -1,39 +1,36 @@
 ﻿using offlineMeeting.Models.Entity.Coins;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.APIBridge;
 using System.Net;
-using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Coins
 {
     public class SendCoinsProcess
     {
+        private readonly IPleasanterApiBridge _bridge;
         private CoinsEntity CoinsEntity;
-        private int CoinsSiteId;
-        private string EventId;
-        private string UserCd;
+        private long CoinsSiteId;
+        private long EventId;
+        private long UserCd;
 
-        public SendCoinsProcess(CoinsEntity coinsEntity, int coinsSiteId, HttpContext httpContext)
+        public SendCoinsProcess(HttpContext httpContext, IPleasanterApiBridge bridge, CoinsEntity coinsEntity, long coinsSiteId)
         {
+            _bridge = bridge;
             ManageEventId manageEventId = new ManageEventId(httpContext);
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
             CoinsEntity = coinsEntity;
             CoinsSiteId = coinsSiteId;
             EventId = manageEventId.GetEventId();
-            UserCd = manageUserCd.GetUserCd().ToString();
+            UserCd = manageUserCd.GetUserCd();
         }
 
         public async Task<bool> Send()
         {
-            #if DEBUG
-                string pleasanterUrlBase = "http://localhost:59802";
-            #else
-                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
-            #endif
             SendCoinsEntity sendCoinsEntity = new SendCoinsEntity
             (
-                eventNumber: EventId,
-                userCd: UserCd,
+                eventNumber: EventId.ToString(),
+                userCd: UserCd.ToString(),
                 gar: "100",
                 coins: CoinsEntity.Coins,
                 value: CoinsEntity.Value
@@ -41,19 +38,14 @@ namespace offlineMeeting.Models.Process.Coins
             // 課金の場合、ユーザがいなかったらUndefinedUserとして課金情報だけは保存する必要がある
             // これはイベントIDも同じ
             // なのでIDのチェックはしない
+            var response = await _bridge.Insert(CoinsSiteId, sendCoinsEntity);
 
-            string json = JsonSerializer.Serialize(sendCoinsEntity);
-            StringContent content = new (json, System.Text.Encoding.UTF8, "application/json");
-
-            HttpClient httpClient = new ();
-            var response = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
-
-            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 CreateLogProcess.Error("COINS_006", $"send coins failure StatusCode={response.StatusCode}");
             }
 
-            return response.StatusCode.Equals(HttpStatusCode.OK);
+            return response.StatusCode == (int)HttpStatusCode.OK;
         }
     }
 }

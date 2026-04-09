@@ -6,19 +6,30 @@
     {
         @if (orderEntity.AlcoholDataEntity != null)
         {
-            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
+            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order order_list" data-result_id="@orderEntity.OrderPostEntity.ResultId">
                 <input class="category nodisplay" value="2" />
                 <div class="image_container">
                     @if (@orderEntity.AlcoholDataEntity?.Image != null)
                     {
                         @if ((@orderEntity.AlcoholDataEntity.Image) == "")
                         {
-                            <img src="" alt="image" />
+                            <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                 data-src="/image/noImage.jpg"
+                                 class="food_image blur-up"
+                                 width="@orderEntity.AlcoholDataEntity.Width"
+                                 height="@orderEntity.AlcoholDataEntity.Height"
+                                 loading="lazy" />
                         }
                         else
                         {
                             <a href="@(orderEntity.AlcoholDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                <img src="@(orderEntity.AlcoholDataEntity.Image)" class="food_image" />
+                                <img 
+                                    src="@(orderEntity.AlcoholDataEntity.LowImage)" 
+                                    data-src="@(orderEntity.AlcoholDataEntity.Image)"
+                                     class="food_image blur-up"
+                                     width="@orderEntity.AlcoholDataEntity.Width"
+                                     height="@orderEntity.AlcoholDataEntity.Height"
+                                    loading="lazy" />
                             </a>
                         }
                     }
@@ -42,37 +53,49 @@
                                 ;
                                 break;
                         }
-                        <input type="text" class="alcohol_amount nodisplay" value="@(orderEntity.OrderPostEntity.AlcoholAmount)" />
+                        <input class="alcohol_amount nodisplay" value="@(orderEntity.OrderPostEntity.AlcoholAmount)" />
                     </p>
                     <p class="counter">
                         <span>注文数:</span>
                         <button type="button" class="counter_decrement">-</button>
-                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
+                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="5" />
                         <button type="button" class="counter_increment">+</button>
                     </p>
                     <p>
-                        <img class="poncoin_img" src="/image/poncoin.png" />
-                        <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
-                        <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
+                        <img class="poncoin_img" src="/image/poncoin_192.png" />
+                        <span>×</span>
+                        <span class="coin_number_show">@(orderEntity.OrderPostEntity.OrderCoins)</span>
+                        <input class="purhcase_coin_number nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" disabled />
+                        <input class="coin_number nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
                     </p>
                 </div>
             </div>
         }
         else if (orderEntity.PurchaseDataEntity != null)
         {
-            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order" data-result_id="@orderEntity.OrderPostEntity.ResultId">
+            <div id="alchol_@orderEntity.OrderPostEntity.ResultId" class="order order_list" data-result_id="@orderEntity.OrderPostEntity.ResultId">
                 <input class="category nodisplay" value="1" />
                 <div class="image_container">
                     @if (@orderEntity.PurchaseDataEntity?.Image != null)
                     {
                         @if ((@orderEntity.PurchaseDataEntity.Image) == "")
                         {
-                            <img src="" alt="image" />
+                            <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                 data-src="/image/noImage.jpg"
+                                 class="food_image blur-up"
+                                 width="@orderEntity.PurchaseDataEntity.Width"
+                                 height="@orderEntity.PurchaseDataEntity.Height"
+                                 loading="lazy" />
                         }
                         else
                         {
                             <a href="@(orderEntity.PurchaseDataEntity!.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                <img src="@(orderEntity.PurchaseDataEntity.Image)" class="food_image" />
+                                <img src="@(orderEntity.PurchaseDataEntity.LowImage)"
+                                     data-src="@(orderEntity.PurchaseDataEntity.Image)"
+                                     class="food_image blur-up"
+                                     width="@orderEntity.PurchaseDataEntity.Width"
+                                     height="@orderEntity.PurchaseDataEntity.Height"
+                                     loading="lazy" />
                             </a>
                         }
                     }
@@ -84,13 +107,15 @@
                     <p class="counter">
                         <span>注文数:</span>
                         <button type="button" class="counter_decrement">-</button>
-                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="@(orderEntity.OrderPostEntity.OrderNumber)" />
+                        <input type="number" class="order_number counter_number" value="@(orderEntity.OrderPostEntity.OrderNumber)" min="0" max="5" />
                         <button type="button" class="counter_increment">+</button>
                     </p>
                     <p>
-                        <img class="poncoin_img" src="/image/poncoin.png" />
-                        <span>×@(orderEntity.OrderPostEntity.OrderCoins)</span>
-                        <input type="text" class="order_coins nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
+                        <img class="poncoin_img" src="/image/poncoin_192.png" />
+                        <span>×</span>
+                        <span class="coin_number_show">@(orderEntity.OrderPostEntity.OrderCoins)</span>
+                        <input class="purhcase_coin_number nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" disabled />
+                        <input class="coin_number nodisplay" value="@(orderEntity.OrderPostEntity.OrderCoins)" />
                     </p>
                 </div>
             </div>

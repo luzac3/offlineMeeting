@@ -39,7 +39,7 @@ namespace offlineMeeting.Models.Process.Login
             if (response.StatusCode.Equals(HttpStatusCode.OK))
             {
                 // SignalRを使ってクライアントに通知
-                await _hubContext.Clients.All.SendAsync("RegisterSuccess", new Dictionary<string, string>()
+                await _hubContext.Clients.Group($"event_{EventId}").SendAsync("RegisterSuccess", new Dictionary<string, string>()
                 {
                     {"url", $"{urlBase}/Login/Index?eid={EventId}&uid={UserCd}"}
                 });
