@@ -17,6 +17,7 @@ namespace offlineMeeting.Models.JsonDataProperty
         public long RawFoodSiteId { get; set; }
         public long EventFoodSiteId { get; set; }
         public long CheckinSiteId { get; set; }
+        public long EventListSiteId { get; set; }
     }
 
     public class TableIdProperty : TableIdEntity
@@ -41,6 +42,7 @@ namespace offlineMeeting.Models.JsonDataProperty
             RawFoodSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.RawFoodSiteId ?? throw new NullReferenceException("json read error");
             EventFoodSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.EventFoodSiteId ?? throw new NullReferenceException("json read error");
             CheckinSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.CheckinSiteId ?? throw new NullReferenceException("json read error");
+            EventListSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.EventListSiteId ?? throw new NullReferenceException("json read error");
         }
     }
 }

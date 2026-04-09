@@ -1,0 +1,33 @@
+@using offlineMeeting.Models.Entity.QR;
+@using offlineMeeting.Models.Entity.Share;
+
+@{
+    ElectronEntity? electron = ViewData["Electron"] as ElectronEntity;
+    @if (electron?.IsElectron == true)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
+    ViewData["Title"] = "イベント選択";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/QR/EventList.css" asp-append-version="true" />
+}
+@model List<EventListEntity>;
+
+<h2 class="dot">イベント選択</h2>
+
+<div id="event_list">
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="event_row">
+                <a href="@Url.Action("Index", "QR", new { eid = item.EventId })">@item.EventName</a>
+            </div>
+        }
+    }
+    else
+    {
+        <p>イベントが見つかりませんでした。</p>
+    }
+</div>

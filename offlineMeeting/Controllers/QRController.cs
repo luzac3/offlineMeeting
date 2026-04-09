@@ -21,6 +21,7 @@ namespace offlineMeeting.Controllers
         private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
         private long CheckinSiteId;
+        private long EventListSiteId;
 
         public QRController(
             ILogger<QRController> logger,
@@ -35,6 +36,7 @@ namespace offlineMeeting.Controllers
             _pleasanterRepository = pleasanterRepository;
             TableIdProperty tableIdProperty = new();
             CheckinSiteId = tableIdProperty.CheckinSiteId;
+            EventListSiteId = tableIdProperty.EventListSiteId;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -48,6 +50,13 @@ namespace offlineMeeting.Controllers
             ViewData["Electron"] = setViewDataProcess.SetElectron(isElectron);
 
             base.OnActionExecuting(context);
+        }
+
+        public IActionResult EventList()
+        {
+            GetEventListProcess getEventListProcess = new(_pleasanterRepository);
+            var eventList = getEventListProcess.Get(EventListSiteId);
+            return View(eventList);
         }
 
         public IActionResult Index([FromQuery] long eid)
