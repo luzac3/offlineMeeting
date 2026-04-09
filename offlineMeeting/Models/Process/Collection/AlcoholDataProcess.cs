@@ -21,6 +21,7 @@ namespace offlineMeeting.Models.Process.Collection
             EventId = manageEventId.GetEventId();
             if(EventId == "0")
             {
+                CreateLogProcess.Error("COLLECTION_003", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             HttpContext = httpContext;

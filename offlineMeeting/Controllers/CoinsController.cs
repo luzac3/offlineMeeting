@@ -45,28 +45,52 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Give()
         {
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
-            GiveCoinsViewModel giveCoinsViewModel = new(getUsersProcess.GetUsers());
-            return View(giveCoinsViewModel);
+            try
+            {
+                GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+                GiveCoinsViewModel giveCoinsViewModel = new(getUsersProcess.GetUsers());
+                return View(giveCoinsViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("COINS_001", ex);
+                throw;
+            }
         }
         
         [HttpPost]
         public async Task<IActionResult> PaymentComplete([FromBody] CoinsEntity coinsEntity)
         {
-            SendCoinsProcess sendCoinsProcess = new (coinsEntity: coinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
+            try
+            {
+                SendCoinsProcess sendCoinsProcess = new (coinsEntity: coinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
 
-            bool result = await sendCoinsProcess.Send();
-            return Json(result.ToString());
+                bool result = await sendCoinsProcess.Send();
+                return Json(result.ToString());
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("COINS_002", ex);
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> GiveCoins([FromBody] GiveCoinsEntity giveCoinsEntity)
         {
-            GiveCoinsProcess giveCoinsProcess = new (giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
+            try
+            {
+                GiveCoinsProcess giveCoinsProcess = new (giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId, httpContext: HttpContext);
 
-            Dictionary<string, string> result = await giveCoinsProcess.Send();
+                Dictionary<string, string> result = await giveCoinsProcess.Send();
 
-            return Json(result);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("COINS_003", ex);
+                throw;
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

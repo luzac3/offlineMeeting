@@ -1,4 +1,5 @@
 using offlineMeeting.Models.Entity.Pos;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -25,6 +26,7 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = manageEventId.GetEventId();
             if(EventId == "0")
             {
+                CreateLogProcess.Error("POS_016", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
         }

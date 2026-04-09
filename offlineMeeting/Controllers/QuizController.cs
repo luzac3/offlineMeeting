@@ -49,90 +49,162 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Index()
         {
-            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setQuizEntity(getQuizProcess.Get());
+            try
+            {
+                GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setQuizEntity(getQuizProcess.Get());
 
-            return View(quizViewModel);
+                return View(quizViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_001", ex);
+                throw;
+            }
         }
 
         public IActionResult QuizList()
         {
-            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
+            try
+            {
+                GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setQuizEntityList(getQuizProcess.GetList(QuizSiteId));
 
-            return View(quizViewModel);
+                return View(quizViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_002", ex);
+                throw;
+            }
         }
 
         [HttpGet("Quiz/GetQuiz/{quizId}")]
         public async Task<IActionResult> GetQuiz(int quizId)
         {
-            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setQuizEntity(getQuizProcess.Get(quizId.ToString()));
+            try
+            {
+                GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setQuizEntity(getQuizProcess.Get(quizId.ToString()));
 
-            var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_Quiz", quizViewModel);
-            return Content(html, "text/html");
+                var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_Quiz", quizViewModel);
+                return Content(html, "text/html");
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_003", ex);
+                throw;
+            }
         }
 
         [HttpGet("Quiz/Orner/{resultId}")]
         public IActionResult Orner(string resultId)
         {
-            GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
-            GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setQuizEntity(getQuizProcess.Get(resultId));
-            quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
+            try
+            {
+                GetQuizProcess getQuizProcess = new(HttpContext, QuizSiteId);
+                GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setQuizEntity(getQuizProcess.Get(resultId));
+                quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
 
-            return View(quizViewModel);
+                return View(quizViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_004", ex);
+                throw;
+            }
         }
 
         [HttpGet("Quiz/SendQuiz/{resultId}")]
         public IActionResult SendQuiz(string resultId)
         {
-            SendQuizProcess sendQuizProcess = new(_hubContext, QuizSiteId, HttpContext);
+            try
+            {
+                SendQuizProcess sendQuizProcess = new(_hubContext, QuizSiteId, HttpContext);
 
-            return Json(sendQuizProcess.Send(Convert.ToInt32(resultId)));
+                return Json(sendQuizProcess.Send(Convert.ToInt32(resultId)));
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_005", ex);
+                throw;
+            }
         }
 
         [HttpGet("Quiz/ShowQuiz/{resultId}")]
         public IActionResult ShowQuiz(string resultId)
         {
-            GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
+            try
+            {
+                GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setAnswerEntityList(getAnswerProcess.GetList(AnswerSiteId, resultId));
 
-            return View(quizViewModel);
+                return View(quizViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_006", ex);
+                throw;
+            }
         }
 
         [HttpGet("Quiz/GetAnswer/{resultId}")]
         public async Task<IActionResult> GetAnswer(string resultId)
         {
-            GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
-            QuizViewModel quizViewModel = new QuizViewModel();
-            quizViewModel.setAnswerEntity(getAnswerProcess.Get(resultId));
+            try
+            {
+                GetAnswerProcess getAnswerProcess = new(HttpContext, JoinerSiteId);
+                QuizViewModel quizViewModel = new QuizViewModel();
+                quizViewModel.setAnswerEntity(getAnswerProcess.Get(resultId));
 
-            var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_UserAnswer", quizViewModel);
-            return Content(html, "text/html");
+                var html = await _viewRenderHelperProcess.RenderToStringAsync(this, "_UserAnswer", quizViewModel);
+                return Content(html, "text/html");
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_007", ex);
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> SendAnswer([FromBody] AnswerPostEntity answerPostEntity)
         {
-            SendAnswerProcess sendAnswerProcess = new(hubContext: _hubContext, answerPostEntity: answerPostEntity, answerSiteId: AnswerSiteId, httpContext: HttpContext);
-            string result = await sendAnswerProcess.Send();
+            try
+            {
+                SendAnswerProcess sendAnswerProcess = new(hubContext: _hubContext, answerPostEntity: answerPostEntity, answerSiteId: AnswerSiteId, httpContext: HttpContext);
+                string result = await sendAnswerProcess.Send();
 
-            return Json(result.ToString());
+                return Json(result.ToString());
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_008", ex);
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> SendPoints([FromBody] List<PointPostEntity> pointPostEntityList)
         {
-            SendPointProcess sendAnswerProcess = new(hubContext: _hubContext, pointPostEntityList: pointPostEntityList, answerSiteId: AnswerSiteId, httpContext: HttpContext);
-            string result = await sendAnswerProcess.Send();
+            try
+            {
+                SendPointProcess sendAnswerProcess = new(hubContext: _hubContext, pointPostEntityList: pointPostEntityList, answerSiteId: AnswerSiteId, httpContext: HttpContext);
+                string result = await sendAnswerProcess.Send();
 
-            return Json(result.ToString());
+                return Json(result.ToString());
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("QUIZ_009", ex);
+                throw;
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

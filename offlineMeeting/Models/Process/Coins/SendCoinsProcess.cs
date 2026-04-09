@@ -1,4 +1,5 @@
 ﻿using offlineMeeting.Models.Entity.Coins;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Net;
 using System.Text.Json;
@@ -46,6 +47,11 @@ namespace offlineMeeting.Models.Process.Coins
 
             HttpClient httpClient = new ();
             var response = await httpClient.PostAsync($"{pleasanterUrlBase}/api/items/{CoinsSiteId}/create", content);
+
+            if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            {
+                CreateLogProcess.Error("COINS_006", $"send coins failure StatusCode={response.StatusCode}");
+            }
 
             return response.StatusCode.Equals(HttpStatusCode.OK);
         }

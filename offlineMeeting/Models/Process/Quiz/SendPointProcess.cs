@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Process.DBProcess;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 using System.Net;
@@ -26,6 +27,7 @@ namespace offlineMeeting.Models.Process.Quiz
             EventId = manageEventId.GetEventId();
             if (EventId == "0")
             {
+                CreateLogProcess.Error("QUIZ_018", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             AnswerSiteId = answerSiteId.ToString();
@@ -68,6 +70,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
                 if (!response.StatusCode.Equals(HttpStatusCode.OK))
                 {
+                    CreateLogProcess.Error("QUIZ_015", $"SendPoint failure StatusCode={response.StatusCode} AnswerId={pointPostEntity.AnswerId}");
                     flag = false;
                 }
             }

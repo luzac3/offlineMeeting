@@ -31,6 +31,7 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = manageEventId.GetEventId();
             if (EventId == "0")
             {
+                CreateLogProcess.Error("POS_012", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             OrderSiteId = orderSiteId;
@@ -77,6 +78,7 @@ namespace offlineMeeting.Models.Process.Pos
             }
             catch (HttpRequestException ex)
             {
+                CreateLogProcess.Error("POS_011", ex);
                 return ex.ToString();
             }
         }

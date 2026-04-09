@@ -1,4 +1,5 @@
 using offlineMeeting.Models.Entity.Coins;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Net;
 using System.Text.Json;
@@ -48,6 +49,7 @@ namespace offlineMeeting.Models.Process.Coins
 
             if (!responseGive.StatusCode.Equals(HttpStatusCode.OK))
             {
+                CreateLogProcess.Error("COINS_004", $"give coins failure StatusCode={responseGive.StatusCode}");
                 return new Dictionary<string, string> {
                     {"StatusCode", responseGive.StatusCode.ToString() },
                     {"Message", "receive coins failue"}
@@ -73,6 +75,7 @@ namespace offlineMeeting.Models.Process.Coins
 
             if (!responseReceive.StatusCode.Equals(HttpStatusCode.OK))
             {
+                CreateLogProcess.Error("COINS_005", $"receive coins failure StatusCode={responseReceive.StatusCode}");
                 return new Dictionary<string, string> {
                     {"StatusCode", responseReceive.StatusCode.ToString() },
                     {"Message", "receive coins failue"}

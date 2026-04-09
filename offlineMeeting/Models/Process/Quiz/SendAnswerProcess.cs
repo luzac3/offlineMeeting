@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Process.DBProcess;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 using System.Net;
@@ -26,6 +27,7 @@ namespace offlineMeeting.Models.Process.Quiz
             EventId = manageEventId.GetEventId();
             if (EventId == "0")
             {
+                CreateLogProcess.Error("QUIZ_016", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             AnswerSiteId = answerSiteId.ToString();
@@ -77,6 +79,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
             if (!response.StatusCode.Equals(HttpStatusCode.OK))
             {
+                CreateLogProcess.Error("QUIZ_012", $"SendAnswer failure StatusCode={response.StatusCode} url={url}");
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "注文の送信に失敗しました" }, { "url", url }, { "sendData", json } });
             }
             else
@@ -97,8 +100,9 @@ namespace offlineMeeting.Models.Process.Quiz
 
                     await _hubContext.Clients.All.SendAsync("UserAnswerId", new Dictionary<string, string> { { "ResultId", resultId } });
                 }
-                catch
+                catch (Exception ex)
                 {
+                    CreateLogProcess.Error("QUIZ_010", ex);
                     resultId = "";
                 }
 

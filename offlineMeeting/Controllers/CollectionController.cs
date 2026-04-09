@@ -41,21 +41,37 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Index()
         {
-            AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new();
+            try
+            {
+                AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
+                SiteSettingsProcess siteSettingsProcess = new();
 
-            CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId)));
-            return View(CollectionViewModel);
+                CollectionViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId)));
+                return View(CollectionViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("COLLECTION_001", ex);
+                throw;
+            }
         }
 
         [HttpGet("Collection/AlcoholDetail/{alcoholId}")]
         public IActionResult AlcoholDetail(int alcoholId)
         {
-            AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
-            SiteSettingsProcess siteSettingsProcess = new();
+            try
+            {
+                AlcoholDataProcess alcoholDataProcess = new(sakeSiteId: SakeSiteId, orderSiteId: OrderSiteId, httpContext: HttpContext);
+                SiteSettingsProcess siteSettingsProcess = new();
 
-            CollectionViewModel.setAlcoholDataEntity(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), alcoholId));
-            return View(CollectionViewModel);
+                CollectionViewModel.setAlcoholDataEntity(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), alcoholId));
+                return View(CollectionViewModel);
+            }
+            catch (Exception ex)
+            {
+                CreateLogProcess.Error("COLLECTION_002", ex);
+                throw;
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Quiz;
 using offlineMeeting.Models.Process.DBProcess;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 using System.Net;
@@ -25,6 +26,7 @@ namespace offlineMeeting.Models.Process.Quiz
             EventId = manageEventId.GetEventId();
             if (EventId == "0")
             {
+                CreateLogProcess.Error("QUIZ_017", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             QuizSiteId = quizSiteId;
@@ -69,6 +71,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
                 if (!response.StatusCode.Equals(HttpStatusCode.OK))
                 {
+                    CreateLogProcess.Error("QUIZ_013", $"SendQuiz stop old quiz failure StatusCode={response.StatusCode} url={url}");
                     return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "古いクイズの停止に失敗しました" }, { "url", url }, { "sendData", json } });
                 }
             }
@@ -83,6 +86,7 @@ namespace offlineMeeting.Models.Process.Quiz
 
             if (!response.StatusCode.Equals(HttpStatusCode.OK))
             {
+                CreateLogProcess.Error("QUIZ_014", $"SendQuiz start failure StatusCode={response.StatusCode} url={url}");
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "クイズの開始に失敗しました" }, { "url", url }, { "sendData", json } });
             }
             else
@@ -103,8 +107,9 @@ namespace offlineMeeting.Models.Process.Quiz
 
                     await _hubContext.Clients.All.SendAsync("ReceiveQuizId", new Dictionary<string, string> { { "QuizId", quizId.ToString() } });
                 }
-                catch
+                catch (Exception ex)
                 {
+                    CreateLogProcess.Error("QUIZ_011", ex);
                     resultId = "";
                 }
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "クイズを開始しました" }, { "ResultId", resultId } });

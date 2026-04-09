@@ -1,4 +1,5 @@
 using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Process.Share;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Share
@@ -71,7 +72,7 @@ namespace offlineMeeting.Models.Share
             }
             catch (HttpRequestException ex)
             {
-                var error = ex.Message;
+                CreateLogProcess.Error("API_001", ex);
             }
 
             return info;

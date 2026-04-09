@@ -18,6 +18,7 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = manageEventId.GetEventId();
             if(EventId == "0")
             {
+                CreateLogProcess.Error("POS_014", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
         }
