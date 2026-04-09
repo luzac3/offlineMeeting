@@ -1,4 +1,5 @@
 using offlineMeeting.Models.Entity.Quiz;
+using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using System.Data;
 
@@ -15,6 +16,7 @@ namespace offlineMeeting.Models.Process.Quiz
             EventId = manageEventId.GetEventId();
             if (EventId == "0")
             {
+                CreateLogProcess.Error("QUIZ_020", "イベントIDが不正です");
                 throw new DataException("イベントIDが不正です");
             }
             SetAnswerEntityProcess = new(EventId, joinerSiteId, httpContext);

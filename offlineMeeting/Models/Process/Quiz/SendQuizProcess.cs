@@ -47,6 +47,7 @@ namespace offlineMeeting.Models.Process.Quiz
             string userCd = manageUserCd.GetUserCd().ToString();
             if (userCd == "0")
             {
+                CreateLogProcess.Error("QUIZ_022", "ユーザコードがありません");
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ユーザコードがありません" } });
             }
 

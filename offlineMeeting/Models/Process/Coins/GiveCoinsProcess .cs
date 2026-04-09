@@ -54,7 +54,6 @@ namespace offlineMeeting.Models.Process.Coins
                     {"StatusCode", responseGive.StatusCode.ToString() },
                     {"Message", "receive coins failue"}
                 };
-                throw new Exception("give coins failue");
             }
 
             int coinsRate = (int)Math.Round(GiveCoinsEntity.Coins * 0.2) == 0 ? 1 : (int)Math.Round(GiveCoinsEntity.Coins * 0.2);
@@ -80,7 +79,6 @@ namespace offlineMeeting.Models.Process.Coins
                     {"StatusCode", responseReceive.StatusCode.ToString() },
                     {"Message", "receive coins failue"}
                 };
-                throw new Exception("receive coins failue");
             }
 
             return new Dictionary<string, string> {

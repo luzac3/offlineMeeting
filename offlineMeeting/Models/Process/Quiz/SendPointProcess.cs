@@ -55,12 +55,9 @@ namespace offlineMeeting.Models.Process.Quiz
 
                 if (pointPostEntity.AnswerId == null || pointPostEntity.Point == null)
                 {
+                    CreateLogProcess.Error("QUIZ_023", $"点数の送信に失敗しました AnswerId={pointPostEntity.AnswerId} Point={pointPostEntity.Point}");
                     return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "点数の送信に失敗しました" }, { "url", url } });
                 }
-
-                new SendPointEntity(
-                    point: pointPostEntity.Point!
-                );
 
                 string json = JsonSerializer.Serialize(new SendPointEntity(
                     point: pointPostEntity.Point!

@@ -51,6 +51,7 @@ namespace offlineMeeting.Models.Process.Pos
             string userCd = manageUserCd.GetUserCd().ToString();
             if (userCd == "0")
             {
+                CreateLogProcess.Error("POS_017", "ユーザコードがありません");
                 return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ユーザコードがありません" } });
             }
 
