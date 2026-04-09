@@ -1,5 +1,4 @@
 /// <reference path="../../types/electron.d.ts" />
-declare var QRCode: any;
 
 import { SignalR } from "@root/share/SignalR";
 
@@ -8,31 +7,39 @@ export class CheckinNotify {
         signalR.get("CheckinComplete", (data) => {
             const parsedData = data as { userCd: string; userName: string; qrUrl: string };
 
-            // QRコード表示エリアを更新
-            this.showQr(parsedData.userName, parsedData.qrUrl);
+            // joiner_row のボタンをチェック済み状態に更新
+            this.updateRow(parsedData.userCd);
 
             // Electron印刷を要求
             this.requestPrint(parsedData.userCd);
         });
     }
 
-    private showQr = (userName: string, qrUrl: string) => {
-        const display = document.getElementById('qr_display');
-        const nameEl = document.getElementById('qr_user_name_display');
-        const qrEl = document.getElementById('qr_code_display');
+    private updateRow = (userCd: string) => {
+        const rows = document.querySelectorAll<HTMLElement>('.joiner_row');
+        rows.forEach((row) => {
+            if (row.dataset.usercd !== userCd) return;
 
-        if (!display || !nameEl || !qrEl) return;
+            const btn = row.querySelector('.btn_checkin') as HTMLButtonElement;
+            if (btn && !btn.classList.contains('checked_in')) {
+                btn.textContent = '✓ 完了';
+                btn.classList.add('checked_in');
+                btn.disabled = true;
 
-        display.classList.remove('nodisplay');
-        nameEl.textContent = userName;
-
-        // 既存のQRをクリアして再生成
-        qrEl.innerHTML = '';
-        new QRCode(qrEl, {
-            text: qrUrl,
-            width: 200,
-            height: 200,
-            correctLevel: QRCode.CorrectLevel.H
+                // 再印刷ボタンを追加
+                const actionsDiv = btn.parentElement;
+                if (actionsDiv && !actionsDiv.querySelector('.btn_reprint')) {
+                    const reprintBtn = document.createElement('button');
+                    reprintBtn.className = 'btn_reprint';
+                    reprintBtn.type = 'button';
+                    reprintBtn.dataset.usercd = userCd;
+                    reprintBtn.textContent = '再印刷';
+                    reprintBtn.addEventListener('click', () => {
+                        this.requestPrint(userCd);
+                    });
+                    actionsDiv.appendChild(reprintBtn);
+                }
+            }
         });
     }
 
