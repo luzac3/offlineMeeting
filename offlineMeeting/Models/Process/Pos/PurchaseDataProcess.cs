@@ -1,38 +1,42 @@
+using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Share;
-using System.Data;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Pos
 {
     public class PurchaseDataProcess
     {
-        private int ExtraSiteId;
-        private int EventFoodSiteId;
-        private int RawFoorSiteId;
-        private string EventId;
+        private long ExtraSiteId;
+        private long EventFoodSiteId;
+        private long RawFoorSiteId;
+        private long EventId;
+        private readonly IPleasanterRepository _pleasanterRepository;
+        private readonly IWebHostEnvironment? _env;
 
         public PurchaseDataProcess(
-            int extraSiteId,
-            int eventFoodSiteId,
-            int rawFoorSiteId,
-            HttpContext httpContext)
+            long extraSiteId,
+            long eventFoodSiteId,
+            long rawFoorSiteId,
+            HttpContext httpContext,
+            IPleasanterRepository pleasanterRepository,
+            IWebHostEnvironment? env = null
+        )
         {
             ManageEventId manageEventId = new (httpContext);
+            _pleasanterRepository = pleasanterRepository;
 
             ExtraSiteId = extraSiteId;
             EventFoodSiteId = eventFoodSiteId;
             RawFoorSiteId = rawFoorSiteId;
             EventId = manageEventId.GetEventId();
-            if(EventId == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
+            _env = env;
         }
 
-        public List<PurchaseDataEntity> Get(HttpContext httpContext, int orderSiteId, int category)
+        public List<PurchaseDataEntity> Get(HttpContext httpContext, long orderSiteId, int category)
         {
             ManageUserCd manageUserCd = new ManageUserCd(httpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
+            long userCd = manageUserCd.GetUserCd();
 
             SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new (
                 ExtraSiteId,
@@ -40,7 +44,9 @@ namespace offlineMeeting.Models.Process.Pos
                 RawFoorSiteId,
                 orderSiteId,
                 EventId,
-                userCd
+                userCd,
+                _pleasanterRepository,
+                _env
             );
             return setPurchaseDataEntityListProcess
                 .Get(category)

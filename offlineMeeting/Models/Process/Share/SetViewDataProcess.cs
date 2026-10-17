@@ -1,6 +1,7 @@
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 
 namespace offlineMeeting.Models.Process.Share
 {
@@ -9,15 +10,15 @@ namespace offlineMeeting.Models.Process.Share
 
         public SetViewDataProcess() { }
 
-        public JoinerEntity SetUserData(HttpContext httpContext)
+        public JoinerEntity SetUserData(HttpContext httpContext, IPleasanterRepository pleasanterRepository)
         {
             TableIdProperty tableIdProperty = new();
             ManageUserCd manageUserCd = new(httpContext);
 
-            string userCd = manageUserCd.GetUserCd();
-            GetUsersProcess getUsersProcess = new GetUsersProcess(tableIdProperty.JoinerSiteId, httpContext);
+            long userCd = manageUserCd.GetUserCd();
+            GetUsersProcess getUsersProcess = new GetUsersProcess(httpContext, pleasanterRepository, tableIdProperty.JoinerSiteId);
 
-            if (userCd == "0")
+            if (userCd == 0)
             {
                 return getUsersProcess.GetUserData();
             }
@@ -30,6 +31,33 @@ namespace offlineMeeting.Models.Process.Share
         public ElectronEntity SetElectron(bool isElectron = false)
         {
             return new ElectronEntity(isElectron: isElectron);
+        }
+
+        /// <summary>
+        /// イベント(EventId)に紐づくSessionId(ClassB)を取得し、Cookieへ同期する。
+        /// EventId/UserCdと同様に持ち回るための処理。Cookieが無ければ付与する。
+        /// </summary>
+        public string SetSessionId(HttpContext httpContext, IPleasanterRepository pleasanterRepository)
+        {
+            ManageSessionId manageSessionId = new(httpContext);
+
+            httpContext.Request.Cookies.TryGetValue("EventId", out string? eventIdStr);
+            if (!long.TryParse(eventIdStr, out long eventId) || eventId == 0)
+            {
+                return manageSessionId.GetSessionId() ?? "";
+            }
+
+            string? sessionId = pleasanterRepository.Select(eventId, true).FirstOrDefault()?.ClassB;
+
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                // 無効化済み（SessionIdなし）の場合はCookieをクリア
+                manageSessionId.ClearSessionId();
+                return "";
+            }
+
+            manageSessionId.SetSessionId(sessionId);
+            return sessionId;
         }
     }
 }

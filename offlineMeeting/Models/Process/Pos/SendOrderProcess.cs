@@ -1,72 +1,84 @@
 using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
 using offlineMeeting.Models.Entity.Pos.SendOrderPurchaseEntity;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.APIBridge.Contracts;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 using System.Net;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SendOrderProcess : ResultsProcess
+    public class SendOrderProcess
     {
-        private int OrderSiteId;
-        private int OrderPurchaseSiteId;
-        private int JoinerSiteId;
-        private string EventId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
+        private long EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
+        private readonly IPleasanterApiBridge _bridge;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId,int orderPurchseSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
+        public SendOrderProcess(
+            List<OrderPostEntity> orderPostEntityList,
+            long orderSiteId,
+            long orderPurchseSiteId,
+            long joinerSiteId,
+            HttpContext httpContext, 
+            IHubContext<MyHub> hubContext,
+            IPleasanterApiBridge bridge,
+            IPleasanterRepository pleasanterRepository
+        )
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
             EventId = manageEventId.GetEventId();
-            if (EventId == "0")
-            {
-                throw new DataException("„Ç§„Éô„É≥„ÉàID„Åå‰∏çÊ≠£„Åß„Åô");
-            }
+
             OrderSiteId = orderSiteId;
             OrderPurchaseSiteId = orderPurchseSiteId;
             JoinerSiteId = joinerSiteId;
             HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
             _hubContext = hubContext;
+            _bridge = bridge;
+            _pleasanterRepository = pleasanterRepository;
         }
 
 
-        public async Task<string> Send(int sakeSiteId)
+        public async Task<string> Send(long sakeSiteId)
         {
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
             List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
-            if (userCd == "0")
+            long userCd = manageUserCd.GetUserCd();
+            if (userCd == 0)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„É¶„Éº„Ç∂„Ç≥„Éº„Éâ„Åå„ÅÇ„Çä„Åæ„Åõ„Çì" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉÜÅ[ÉUÉRÅ[ÉhÇ™Ç†ÇËÇ‹ÇπÇÒ" } });
             }
 
-            // „Ç≥„Ç§„É≥„ÅåË∂≥„Çä„Çã„Åì„Å®„ÇíÁ¢∫Ë™ç„Åô„Çã
-            int totalCoins = 0;
+            // ÉRÉCÉìÇ™ë´ÇËÇÈÇ±Ç∆ÇämîFÇ∑ÇÈ
+            int totalCoins = OrderPostEntityList.Sum(x => x.OrderCoins);
 
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+            GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             if (userData.Coins < totalCoins)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„Ç≥„Ç§„É≥„Åå‰∏çË∂≥„Åó„Å¶„ÅÑ„Åæ„Åô" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉRÉCÉìÇ™ïsë´ÇµÇƒÇ¢Ç‹Ç∑" } });
             }
 
             try
             {
-                PleasanterApiResponseEntity response = await SendOrder(
+                PleasanterApiResponse response = await SendOrder(
                     orderPostEntityList: OrderPostEntityList,
                     sakeSiteId: sakeSiteId,
                     userCd: userCd,
@@ -81,21 +93,21 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        private async Task<PleasanterApiResponseEntity> SendOrder(
+        private async Task<PleasanterApiResponse> SendOrder(
             List<OrderPostEntity> orderPostEntityList,
-            int sakeSiteId,
-            string userCd,
+            long sakeSiteId,
+            long userCd,
             string userName
         )
         {
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
-            int orderResultId = 0;
-            List<int> orderResultIdList = new ();
+            long orderResultId = 0;
+            List<long> orderResultIdList = new ();
 
             List<OrderPostEntity> alcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category == 2).ToList();
             List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
 
-            // „Ç¢„É´„Ç≥„Éº„É´„ÅÆÁôªÈå≤
+            // ÉAÉãÉRÅ[ÉãÇÃìoò^
             if (alcoholOrderPostEntityList.Count() > 0)
             {
                 orderResultId = await SendOrder(
@@ -116,13 +128,13 @@ namespace offlineMeeting.Models.Process.Pos
                 )
             );
 
-            // „Ç¢„É´„Ç≥„Éº„É´‰ª•Â§ñ„ÅÆÁôªÈå≤
+            // ÉAÉãÉRÅ[Éãà»äOÇÃìoò^
             if (nonAlcoholOrderPostEntityList.Count() > 0)
             {
                 orderResultId = await SendOrder(
                     orderPostEntity: nonAlcoholOrderPostEntityList.FirstOrDefault()!,
                     userCd: userCd,
-                    coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
+                    coins: nonAlcoholOrderPostEntityList.Sum(x => x.OrderCoins),
                     isAlcohol: false
                 );
                 orderResultIdList.Add(orderResultId);
@@ -137,7 +149,7 @@ namespace offlineMeeting.Models.Process.Pos
                 )
             );
 
-            // Âç∞Âà∑(Ë°®Á§∫)Áî®„É™„Çπ„Éà„ÅÆ‰ΩúÊàê
+            // àÛç¸(ï\é¶)ópÉäÉXÉgÇÃçÏê¨
             List<OrderTableEntity> orderTableEntityList = CreateBackOrderTableEntityList(
                 sendOrderPurchaseEntityList: sendOrderPurchaseEntityList,
                 orderResultIdList: orderResultIdList,
@@ -145,15 +157,13 @@ namespace offlineMeeting.Models.Process.Pos
                 userName: userName
             );
 
-            PleasanterApi pleasanterApi = new();
-
             try
             {
-                PleasanterApiResponseEntity response = await pleasanterApi.BulkInsert(sendOrderPurchaseEntityList, OrderPurchaseSiteId.ToString());
+                PleasanterApiResponse response = await _bridge.BulkInsert(OrderPurchaseSiteId, sendOrderPurchaseEntityList);
                 ErrorCheck(response);
 
-                // Ê≠£Â∏∏ÁµÇ‰∫ÜÊôÇ„ÄÅOrderList„Å´ÈÄöÁü•
-                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() {
+                // ê≥èÌèIóπéûÅAOrderListÇ…í ím
+                await _hubContext.Clients.Group($"event_{EventId}").SendAsync("NewOrder", new Dictionary<string, string>() {
                     { "userName", userName },
                     { "orderTableEntityList", JsonSerializer.Serialize(orderTableEntityList) }
                 });
@@ -166,16 +176,16 @@ namespace offlineMeeting.Models.Process.Pos
             }
         }
 
-        private async Task<int> SendOrder(OrderPostEntity orderPostEntity, string userCd, int coins, bool isAlcohol)
+        private async Task<long> SendOrder(OrderPostEntity orderPostEntity, long userCd, int coins, bool isAlcohol)
         {   
             SendOrderEntity sendOrderEntity = new(
-                eventNumber: EventId,
-                userCd: userCd,
+                eventNumber: EventId.ToString(),
+                userCd: userCd.ToString(),
                 orderCoins: coins,
                 isAlcohol: isAlcohol
             );
-            PleasanterApi pleasanterApi = new();
-            PleasanterApiResponseEntity response = await pleasanterApi.Insert(sendOrderEntity, OrderSiteId.ToString());
+
+            PleasanterApiResponse response = await _bridge.Insert(OrderSiteId, sendOrderEntity);
             try
             {
                 ErrorCheck(response);
@@ -190,15 +200,15 @@ namespace offlineMeeting.Models.Process.Pos
         private List<SendOrderPurchaseEntity> CreateSendOrderPurchaseEntities(
             List<OrderPostEntity> orderPostEntityList,
             string orderResultId,
-            string userCd,
+            long userCd,
             bool isAlcohol
         )
         {
             return orderPostEntityList.Select(orderPostEntity =>
                 new SendOrderPurchaseEntity(
-                    eventNumber: EventId,
+                    eventNumber: EventId.ToString(),
                     orderResultId: orderResultId,
-                    userCd: userCd,
+                    userCd: userCd.ToString(),
                     purchaseResultId: orderPostEntity.ResultId.ToString(),
                     orderNumber: orderPostEntity.OrderNumber,
                     orderCoins: orderPostEntity.OrderCoins,
@@ -210,8 +220,8 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderTableEntity> CreateBackOrderTableEntityList(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            List<int> orderResultIdList,
-            string userCd,
+            List<long> orderResultIdList,
+            long userCd,
             string userName
         )
         {
@@ -220,9 +230,9 @@ namespace offlineMeeting.Models.Process.Pos
             orderResultIdList.ForEach(orderResultId =>
             {
 
-                ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderResultId.ToString()) ? null : base.GetSingleRecord(orderResultId.ToString());
+                TablesEntity? tablesEntity = _pleasanterRepository.Select(orderResultId, true).FirstOrDefault();
 
-                string? orderNumber = resultsEntity?.ClassC?.ToString();
+                string? orderNumber = tablesEntity?.ClassC?.ToString();
 
                 string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
 
@@ -233,18 +243,18 @@ namespace offlineMeeting.Models.Process.Pos
 
                 orderTableEntityList.Add(
                     new OrderTableEntity(
-                        resultId: resultsEntity?.ResultId.ToString(),
-                        userCd: userCd,
+                        resultId: tablesEntity?.ReferenceId.ToString(),
+                        userCd: userCd.ToString(),
                         userName: userName,
                         orderNumber: orderNumber,
-                        isAlcohol: resultsEntity?.CheckB ?? false,
+                        isAlcohol: tablesEntity?.CheckB ?? false,
                         orderPurchaseTableEntityList: CreateBackOrderPurchaseTableEntity(
                             sendOrderPurchaseEntityList: sendOrderPurchaseEntityList
-                                .Where(x => x.CheckHash.CheckA == (resultsEntity?.CheckB ?? false))
+                                .Where(x => x.CheckA == (tablesEntity?.CheckB ?? false))
                                 .ToList(),
                             userCd: userCd,
                             userName: userName,
-                            isAlcohol: resultsEntity?.CheckB ?? false
+                            isAlcohol: tablesEntity?.CheckB ?? false
                         )
                     )
                 );
@@ -255,7 +265,7 @@ namespace offlineMeeting.Models.Process.Pos
 
         private List<OrderPurchaseTableEntity> CreateBackOrderPurchaseTableEntity(
             List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
-            string userCd,
+            long userCd,
             string userName,
             bool isAlcohol
         )
@@ -264,23 +274,26 @@ namespace offlineMeeting.Models.Process.Pos
 
             sendOrderPurchaseEntityList.ForEach(sendOrderPurchaseEntity =>
             {
-                ResultsEntity? resultsEntity = String.IsNullOrEmpty(sendOrderPurchaseEntity.ClassHash.ClassC.ToString()) ? null : base.GetSingleRecord(sendOrderPurchaseEntity.ClassHash.ClassC.ToString());
+                // purchaseId
+                TablesEntity? tablesEntity = long.TryParse(sendOrderPurchaseEntity.ClassC, out long purchaseId) ? 
+                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault() : 
+                    null;
 
                 orderPurchaseTableEntity
                     .Add(
                         new OrderPurchaseTableEntity(
                             resultId: "",
-                            userCd: userCd,
+                            userCd: userCd.ToString(),
                             userName: userName,
-                            purchaseCd: sendOrderPurchaseEntity.ClassHash.ClassC.ToString(),
-                            purchaseName: resultsEntity?.ClassA,
-                            purchaseRead: resultsEntity?.ClassJ,
-                            number: sendOrderPurchaseEntity.NumHash.NumA,
+                            purchaseCd: sendOrderPurchaseEntity.ClassC.ToString(),
+                            purchaseName: tablesEntity?.ClassA,
+                            purchaseRead: tablesEntity?.ClassJ,
+                            number: sendOrderPurchaseEntity.NumA,
                             unit: "",
-                            coins: sendOrderPurchaseEntity.NumHash.NumB,
-                            alcoholQuantity: sendOrderPurchaseEntity.NumHash.NumC,
+                            coins: sendOrderPurchaseEntity.NumB,
+                            alcoholQuantity: sendOrderPurchaseEntity.NumC,
                             isAlcohol: isAlcohol,
-                            hide: resultsEntity?.CheckZ ?? false
+                            hide: tablesEntity?.CheckZ ?? false
                         )
                     );
             });
@@ -288,7 +301,7 @@ namespace offlineMeeting.Models.Process.Pos
             return orderPurchaseTableEntity;
         }
 
-        private string JsonSerialize(PleasanterApiResponseEntity response)
+        private string JsonSerialize(PleasanterApiResponse response)
         {
             var options = new JsonSerializerOptions
             {
@@ -302,9 +315,9 @@ namespace offlineMeeting.Models.Process.Pos
             }, options);
         }
 
-        private void ErrorCheck(PleasanterApiResponseEntity response)
+        private void ErrorCheck(PleasanterApiResponse response)
         {
-            if (!response.StatusCode.Equals(HttpStatusCode.OK) && response.StatusCode != 200)
+            if (response.StatusCode != (int)HttpStatusCode.OK)
             {
                 throw new HttpRequestException(
                     JsonSerialize(response)

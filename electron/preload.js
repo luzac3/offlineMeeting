@@ -1,1 +1,1 @@
-(()=>{"use strict";const e=require("electron");e.contextBridge.exposeInMainWorld("electronAPI",{printReceipt:r=>e.ipcRenderer.invoke("printReceipt",r)})})();
+(()=>{"use strict";const e=require("electron");e.contextBridge.exposeInMainWorld("electronAPI",{printReceipt:n=>e.ipcRenderer.invoke("printReceipt",n),printCheckinQr:n=>e.ipcRenderer.invoke("printCheckinQr",n),getMenuItems:()=>e.ipcRenderer.invoke("getMenuItems"),openPage:n=>e.ipcRenderer.invoke("openPage",n)})})();

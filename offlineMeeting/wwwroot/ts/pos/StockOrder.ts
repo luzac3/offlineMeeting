@@ -51,6 +51,7 @@ export class StockOrder {
             const key = `${item.ResultId}_${item.AlcoholAmount}`;
             if (map.has(key)) {
                 map.get(key)!.OrderNumber += item.OrderNumber;
+                map.get(key)!.OrderCoins += item.OrderCoins;
             } else {
                 map.set(key, { ...item });
             }

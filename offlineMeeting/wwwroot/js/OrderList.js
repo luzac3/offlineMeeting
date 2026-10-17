@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/OrderList/CaliculateTotalCoins.ts":
+/***/ "./wwwroot/ts/OrderList/CaliculateTotalCoins.ts"
 /*!******************************************************!*\
   !*** ./wwwroot/ts/OrderList/CaliculateTotalCoins.ts ***!
   \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -32,13 +32,13 @@ class CaliculateTotalCoins {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/OrderList/GetOrderList.ts":
+/***/ "./wwwroot/ts/OrderList/GetOrderList.ts"
 /*!**********************************************!*\
   !*** ./wwwroot/ts/OrderList/GetOrderList.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -97,13 +97,13 @@ class GetOrderList {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/OrderList/SendOrder.ts":
+/***/ "./wwwroot/ts/OrderList/SendOrder.ts"
 /*!*******************************************!*\
   !*** ./wwwroot/ts/OrderList/SendOrder.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -137,6 +137,17 @@ class SendOrder {
                         OrderCoins: order.OrderCoins,
                         AlcoholAmount: order.AlcoholAmount
                     })).filter(x => x.OrderNumber != 0);
+                    // 品切れチェック
+                    const resultIds = orderObjectList.map(x => x.ResultId);
+                    const soldOutIds = await this.checkSoldOut(resultIds);
+                    if (soldOutIds.length > 0) {
+                        const soldOutNames = this.getSoldOutNames(soldOutIds);
+                        const message = `以下の商品は品切れとなっております:\n${soldOutNames.join("\n")}\n\nよろしいですか？`;
+                        if (!window.confirm(message)) {
+                            orderButton.disabled = false;
+                            return;
+                        }
+                    }
                     this.send(orderObjectList).then((data) => {
                         const result = JSON.parse(data);
                         if (result.status == "200") {
@@ -152,6 +163,28 @@ class SendOrder {
                     });
                 }
             });
+        };
+        this.checkSoldOut = async (resultIds) => {
+            const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
+            try {
+                return await fetchApi.send('/Pos/CheckSoldOut', 'POST', this.headers, resultIds, 'json');
+            }
+            catch {
+                return [];
+            }
+        };
+        this.getSoldOutNames = (soldOutIds) => {
+            const names = [];
+            soldOutIds.forEach(id => {
+                const orderElement = document.querySelector(`.order[data-result_id="${id}"]`);
+                if (orderElement) {
+                    const name = orderElement.querySelector(".alcohol_name")?.textContent?.trim() ??
+                        orderElement.querySelector(".food_name")?.textContent?.trim() ??
+                        `ID: ${id}`;
+                    names.push(name);
+                }
+            });
+            return names;
         };
         this.send = async (orderEntityList) => {
             const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_1__.FetchApi();
@@ -172,13 +205,13 @@ class SendOrder {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
+/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts"
 /*!************************************************!*\
   !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -283,13 +316,13 @@ class CaliculateCoinNumber {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/***/ "./wwwroot/ts/pos/OrderEntity.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -306,13 +339,13 @@ class OrderEntity {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BackButton.ts":
+/***/ "./wwwroot/ts/share/BackButton.ts"
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -330,13 +363,13 @@ class BackButton {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BlurImage.ts":
+/***/ "./wwwroot/ts/share/BlurImage.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/share/BlurImage.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -381,13 +414,13 @@ class BlurImage {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/Counter.ts":
+/***/ "./wwwroot/ts/share/Counter.ts"
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/Counter.ts ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -448,13 +481,13 @@ class Counter {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/FetchApi.ts":
+/***/ "./wwwroot/ts/share/FetchApi.ts"
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -528,13 +561,13 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/LocalStrage.ts":
+/***/ "./wwwroot/ts/share/LocalStrage.ts"
 /*!*****************************************!*\
   !*** ./wwwroot/ts/share/LocalStrage.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -569,13 +602,13 @@ class LocalStrage {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/SetEventListner.ts":
+/***/ "./wwwroot/ts/share/SetEventListner.ts"
 /*!*********************************************!*\
   !*** ./wwwroot/ts/share/SetEventListner.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -614,7 +647,7 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 };
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -636,6 +669,12 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
