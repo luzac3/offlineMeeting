@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Caching.Memory;
 using System.Data;
-using System.Text.Json;
 
 namespace offlineMeeting.Models.Share
 {
     public class ManageUserCd
     {
+        private const string CacheName = "UserCd";
         HttpContext HttpContext;
 
         public ManageUserCd(HttpContext httpContext)
@@ -15,23 +15,32 @@ namespace offlineMeeting.Models.Share
 
         public void SetUserCd(long userCd)
         {
-            HttpContext.Response.Cookies.Append("UserCd", userCd.ToString());
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
+            cache.Set(key, userCd, SessionCacheHelper.TodayJstOptions());
         }
 
         public long GetUserCd()
         {
-            HttpContext.Request.Cookies.TryGetValue("UserCd", out string? userCd);
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
 
-            if (userCd == "0")
+            if (cache.TryGetValue(key, out long userCd))
             {
-                throw new DataException("ユーザコードがありません");
+                if (userCd == 0)
+                {
+                    throw new DataException("ユーザコードがありません");
+                }
+                return userCd;
             }
-            return long.TryParse(userCd, out var result) ? result : 0;
+            return 0;
         }
 
         public void ClearUserCd()
         {
-            HttpContext.Response.Cookies.Delete("UserCd");
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
+            cache.Remove(key);
         }
     }
 }
