@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Share;
@@ -34,15 +35,16 @@ namespace offlineMeeting.Models.Process.Share
         }
 
         /// <summary>
-        /// イベント(EventId)に紐づくSessionId(ClassB)を取得し、Cookieへ同期する。
-        /// EventId/UserCdと同様に持ち回るための処理。Cookieが無ければ付与する。
+        /// イベント(EventId)に紐づくSessionId(ClassB)を取得し、IMemoryCacheへ同期する。
+        /// EventId/UserCdと同様に持ち回るための処理。キャッシュが無ければ付与する。
         /// </summary>
         public string SetSessionId(HttpContext httpContext, IPleasanterRepository pleasanterRepository)
         {
             ManageSessionId manageSessionId = new(httpContext);
 
-            httpContext.Request.Cookies.TryGetValue("EventId", out string? eventIdStr);
-            if (!long.TryParse(eventIdStr, out long eventId) || eventId == 0)
+            var cache = global::offlineMeeting.Models.Share.SessionCacheHelper.GetCache(httpContext);
+            string eventIdKey = global::offlineMeeting.Models.Share.SessionCacheHelper.BuildKey(httpContext, "EventId");
+            if (!cache.TryGetValue(eventIdKey, out long eventId) || eventId == 0)
             {
                 return manageSessionId.GetSessionId() ?? "";
             }
@@ -51,7 +53,7 @@ namespace offlineMeeting.Models.Process.Share
 
             if (string.IsNullOrEmpty(sessionId))
             {
-                // 無効化済み（SessionIdなし）の場合はCookieをクリア
+                // 無効化済み（SessionIdなし）の場合はキャッシュをクリア
                 manageSessionId.ClearSessionId();
                 return "";
             }
