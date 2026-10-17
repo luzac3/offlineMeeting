@@ -2,6 +2,7 @@
     ViewData["Title"] = "管理画面";
     bool isActivated = (bool)(ViewData["IsActivated"] ?? false);
     string sessionId = (string)(ViewData["SessionId"] ?? "");
+    bool isSandbox = (bool)(ViewData["IsSandbox"] ?? false);
 }
 
 <div id="admin">
@@ -43,5 +44,17 @@
                 <button type="submit" class="admin-btn admin-btn-deactivate">無効化</button>
             </form>
         }
+    </div>
+
+    <div class="admin-paypal">
+        <h2>PayPal モード</h2>
+        <form asp-controller="Admin" asp-action="TogglePaypalMode" method="post" class="paypal-toggle-form">
+            <span class="dot">PayPal</span>
+            <label class="paypal-toggle">
+                <input type="checkbox" @(!isSandbox ? "checked" : "") onchange="this.form.submit()">
+                <span class="paypal-toggle-slider"></span>
+            </label>
+            <span class="dot paypal-mode-label @(isSandbox ? "sandbox" : "live")">@(isSandbox ? "Sandbox" : "Live")</span>
+        </form>
     </div>
 </div>

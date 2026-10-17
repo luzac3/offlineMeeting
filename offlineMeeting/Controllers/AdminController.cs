@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Admin;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
@@ -47,8 +49,22 @@ namespace offlineMeeting.Controllers
 
             ViewData["IsActivated"] = eventRecord?.CheckB ?? false;
             ViewData["SessionId"] = eventRecord?.ClassB ?? "";
+            ViewData["IsSandbox"] = PaypalProperty.GetIsSandbox();
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult TogglePaypalMode()
+        {
+            JoinerEntity? userData = ViewData["UserData"] as JoinerEntity;
+            if (userData == null || !userData.IsAdmin)
+            {
+                return Forbid();
+            }
+
+            PaypalProperty.ToggleMode();
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
