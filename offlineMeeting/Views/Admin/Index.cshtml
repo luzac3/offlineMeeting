@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "管理画面";
+    bool isActivated = (bool)(ViewData["IsActivated"] ?? false);
+    string sessionId = (string)(ViewData["SessionId"] ?? "");
+}
+
+<div id="admin">
+    <h1>イベント管理</h1>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="admin-error">@TempData["Error"]</div>
+    }
+
+    <div class="admin-status">
+        <p>
+            状態:
+            @if (isActivated)
+            {
+                <span class="admin-status-on">有効</span>
+            }
+            else
+            {
+                <span class="admin-status-off">無効</span>
+            }
+        </p>
+        @if (isActivated && !string.IsNullOrEmpty(sessionId))
+        {
+            <p>SessionID: <code>@sessionId</code></p>
+        }
+    </div>
+
+    <div class="admin-actions">
+        @if (!isActivated)
+        {
+            <form asp-controller="Admin" asp-action="Activate" method="post">
+                <button type="submit" class="admin-btn admin-btn-activate">有効化</button>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="Admin" asp-action="Deactivate" method="post">
+                <button type="submit" class="admin-btn admin-btn-deactivate">無効化</button>
+            </form>
+        }
+    </div>
+</div>
