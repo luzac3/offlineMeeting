@@ -1,9 +1,11 @@
-﻿using System.Data;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System.Data;
 
 namespace offlineMeeting.Models.Share
 {
     public class ManageEventId
     {
+        private const string CacheName = "EventId";
         HttpContext HttpContext;
 
         public ManageEventId(HttpContext httpContext)
@@ -13,13 +15,17 @@ namespace offlineMeeting.Models.Share
 
         public void SetEventId(long eventId)
         {
-            HttpContext.Response.Cookies.Append("EventId", eventId.ToString());
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
+            cache.Set(key, eventId, SessionCacheHelper.TodayJstOptions());
         }
 
         public long GetEventId()
         {
-            HttpContext.Request.Cookies.TryGetValue("EventId", out string? eventIdstr);
-            long.TryParse(eventIdstr, out var eventId);
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
+
+            cache.TryGetValue(key, out long eventId);
 
             if (eventId == 0)
             {
@@ -31,7 +37,9 @@ namespace offlineMeeting.Models.Share
 
         public void ClearEventId()
         {
-            HttpContext.Response.Cookies.Delete("EventId");
+            IMemoryCache cache = SessionCacheHelper.GetCache(HttpContext);
+            string key = SessionCacheHelper.BuildKey(HttpContext, CacheName);
+            cache.Remove(key);
         }
     }
 }
