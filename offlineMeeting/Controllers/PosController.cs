@@ -63,6 +63,7 @@ namespace offlineMeeting.Controllers
             SetViewDataProcess setViewDataProcess = new();
             ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             ViewData["Electron"] = setViewDataProcess.SetElectron();
+            ViewData["SessionId"] = setViewDataProcess.SetSessionId(HttpContext, _pleasanterRepository);
             base.OnActionExecuting(context);
         }
 
@@ -78,65 +79,43 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Alcohol()
         {
-            try
-            {
-                AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
-                SiteSettingsProcess siteSettingsProcess = new ();
+            AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
+            SiteSettingsProcess siteSettingsProcess = new ();
 
-                PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId));
-                return View(PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_001", ex);
-                throw;
-            }
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId, _env));
+            return View(PosViewModel);
         }
 
         public IActionResult Extra()
         {
-            try
-            {
-                PurchaseDataProcess purchaseDataProcess = new(
-                    extraSiteId: ExtraSiteId,
-                    eventFoodSiteId: EventFoodSiteId,
-                    rawFoorSiteId: RawFoodSiteId,
-                    httpContext: HttpContext,
-                    pleasanterRepository: _pleasanterRepository
-                );
-                SiteSettingsProcess siteSettingsProcess = new();
+            PurchaseDataProcess purchaseDataProcess = new(
+                extraSiteId: ExtraSiteId,
+                eventFoodSiteId: EventFoodSiteId,
+                rawFoorSiteId: RawFoodSiteId,
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
+            );
+            SiteSettingsProcess siteSettingsProcess = new();
 
-                PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 0));
-                return View("Purchase", PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_002", ex);
-                throw;
-            }
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 0));
+            return View("Purchase", PosViewModel);
         }
 
         public IActionResult Food()
         {
-            try
-            {
-                PurchaseDataProcess purchaseDataProcess = new(
-                    extraSiteId: ExtraSiteId,
-                    eventFoodSiteId: EventFoodSiteId,
-                    rawFoorSiteId: RawFoodSiteId,
-                    httpContext: HttpContext,
-                    pleasanterRepository: _pleasanterRepository
-                );
-                SiteSettingsProcess siteSettingsProcess = new();
+            PurchaseDataProcess purchaseDataProcess = new(
+                extraSiteId: ExtraSiteId,
+                eventFoodSiteId: EventFoodSiteId,
+                rawFoorSiteId: RawFoodSiteId,
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
+            );
+            SiteSettingsProcess siteSettingsProcess = new();
 
-                PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 1));
-                return View("Purchase", PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_003", ex);
-                throw;
-            }
+            PosViewModel.setPurchaseDataList(purchaseDataProcess.Get(HttpContext, OrderSiteId, 1));
+            return View("Purchase", PosViewModel);
         }
 
         public IActionResult OrderList()
@@ -147,156 +126,101 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public IActionResult OrderListContents([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            try
-            {
-                OrderListProcess orderListProcess = new(
-                    orderPostEntityList: orderPostEntityList,
-                    sakeSiteId: SakeSiteId,
-                    extraFoodSiteId: ExtraSiteId,
-                    eventFoodSiteId: EventFoodSiteId,
-                    rawFoodSiteId: RawFoodSiteId,
-                    httpContext: HttpContext,
-                    pleasanterRepository: _pleasanterRepository
-                );
-                SiteSettingsProcess siteSettingsProcess = new();
+            OrderListProcess orderListProcess = new (
+                orderPostEntityList: orderPostEntityList,
+                sakeSiteId: SakeSiteId,
+                extraFoodSiteId: ExtraSiteId,
+                eventFoodSiteId: EventFoodSiteId,
+                rawFoodSiteId: RawFoodSiteId,
+                httpContext: HttpContext,
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
+            );
+            SiteSettingsProcess siteSettingsProcess = new ();
 
-                PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
-                return PartialView("_OrderListContents", PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_004", ex);
-                throw;
-            }
+            PosViewModel.setOrderEntityList(orderListProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, OrderSiteId));
+            return PartialView("_OrderListContents", PosViewModel);
         }
 
         [HttpPost]
         public string SendOrder([FromBody] List<OrderPostEntity> orderPostEntityList)
         {
-            try
+            SendOrderProcess sendOrderProcess = new(
+                orderPostEntityList,
+                orderSiteId: OrderSiteId,
+                orderPurchseSiteId: OrderPurchaseSiteId,
+                joinerSiteId: JoinerSiteId,
+                httpContext: HttpContext,
+                hubContext: _hubContext,
+                bridge: _bridge,
+                pleasanterRepository: _pleasanterRepository
+            );
+
+            _ = Task.Run(async () =>
             {
-                SendOrderProcess sendOrderProcess = new(
-                    orderPostEntityList,
-                    orderSiteId: OrderSiteId,
-                    orderPurchseSiteId: OrderPurchaseSiteId,
-                    joinerSiteId: JoinerSiteId,
-                    httpContext: HttpContext,
-                    hubContext: _hubContext,
-                    bridge: _bridge,
-                    pleasanterRepository: _pleasanterRepository
-                );
+                string result = await sendOrderProcess.Send(SakeSiteId);
 
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        string result = await sendOrderProcess.Send(SakeSiteId);
+                var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                string status = dict?["status"] ?? "";
 
-                        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
-                        string status = dict?["status"] ?? "";
+                ResponseLogProcess.OutputResponseLog(status, result ?? "");
+            });
 
-                        ResponseLogProcess.OutputResponseLog(status, result ?? "");
-                    }
-                    catch (Exception ex)
-                    {
-                        CreateLogProcess.Error("POS_005", ex);
-                    }
-                });
-
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "送信完了" } });
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_005", ex);
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", ex.Message } });
-            }
+            return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "送信完了" } });
         }
 
         [HttpGet]
         public IActionResult UserOrders([FromQuery] long eid)
         {
-            bool isElectron = eid != 0;
-            try
+            SetViewDataProcess setViewDataProcess = new();
+            // electron経由で表示する場合
+            if (eid != 0)
             {
-                SetViewDataProcess setViewDataProcess = new();
-                // electron経由で表示する場合
-                if (eid != 0)
-                {
-                    ViewData["Electron"] = setViewDataProcess.SetElectron(true);
-                }
-
-                GetUsersOrderProcess getUsersOrderProcess = new(
-                    OrderSiteId,
-                    OrderPurchaseSiteId,
-                    JoinerSiteId,
-                    HttpContext,
-                    _pleasanterRepository,
-                    eid
-                );
-                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
-
-                return View(PosViewModel);
+                ViewData["Electron"] = setViewDataProcess.SetElectron(true);
             }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_006", ex, isElectron);
-                throw;
-            }
+
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                _pleasanterRepository,
+                eid
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
+
+            return View(PosViewModel);
         }
 
         [HttpGet]
         public IActionResult UserOrdersPartial([FromQuery] long eid)
         {
-            bool isElectron = eid != 0;
-            try
-            {
-                GetUsersOrderProcess getUsersOrderProcess = new(
-                    OrderSiteId,
-                    OrderPurchaseSiteId,
-                    JoinerSiteId,
-                    HttpContext,
-                    _pleasanterRepository,
-                    eid
-                );
-                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                _pleasanterRepository,
+                eid
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get());
 
-                return PartialView("_UserOrderContents", PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_007", ex, isElectron);
-                throw;
-            }
+            return PartialView("_UserOrderContents", PosViewModel);
         }
 
         [HttpPost]
         public string OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
         {
-            try
+            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList, _bridge);
+
+            _ = Task.Run(async () =>
             {
-                OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList, _bridge);
+                List<Dictionary<string, string>> results = await orderCompleteProcess.Send();
 
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        List<Dictionary<string, string>> results = await orderCompleteProcess.Send();
+                ResponseLogProcess.OrderCompleteLog(results);
+            });
 
-                        ResponseLogProcess.OrderCompleteLog(results);
-                    }
-                    catch (Exception ex)
-                    {
-                        CreateLogProcess.Error("POS_008", ex);
-                    }
-                });
-
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" } });
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_008", ex);
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", ex.Message } });
-            }
+            return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" } });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -307,76 +231,73 @@ namespace offlineMeeting.Controllers
 
         public IActionResult OrderHistory()
         {
-            try
-            {
-                GetUsersOrderProcess getUsersOrderProcess = new(
-                    OrderSiteId,
-                    OrderPurchaseSiteId,
-                    JoinerSiteId,
-                    HttpContext,
-                    _pleasanterRepository
-                );
-                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.GetOwn(HttpContext));
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                _pleasanterRepository
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.GetOwn(HttpContext));
 
-
-                return View(PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_009", ex);
-                throw;
-            }
+            return View(PosViewModel);
         }
 
         [HttpGet]
         public IActionResult PrintOrders([FromQuery] long eid, long resultId)
         {
-            bool isElectron = eid != 0;
-            try
-            {
-                GetUsersOrderProcess getUsersOrderProcess = new(
-                    OrderSiteId,
-                    OrderPurchaseSiteId,
-                    JoinerSiteId,
-                    HttpContext,
-                    _pleasanterRepository,
-                    eid
-                );
-                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                _pleasanterRepository,
+                eid
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
 
-                return View(PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_010", ex, isElectron);
-                throw;
-            }
+            return View(PosViewModel);
         }
 
         [HttpGet]
         public IActionResult PrintQrOrders([FromQuery] long eid, long resultId)
         {
-            bool isElectron = eid != 0;
-            try
-            {
-                GetUsersOrderProcess getUsersOrderProcess = new(
-                    OrderSiteId,
-                    OrderPurchaseSiteId,
-                    JoinerSiteId,
-                    HttpContext,
-                    _pleasanterRepository,
-                    eid
-                );
-                PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
-                PosViewModel.setPrintUrl($"https://sake.wolfslab.jp/Pos/PrintOrders?eid={eid}&resultId={resultId}");
+            GetUsersOrderProcess getUsersOrderProcess = new(
+                OrderSiteId,
+                OrderPurchaseSiteId,
+                JoinerSiteId,
+                HttpContext,
+                _pleasanterRepository,
+                eid
+            );
+            PosViewModel.setOrderTableEntityList(getUsersOrderProcess.Get(resultId));
+            PosViewModel.setPrintUrl($"https://sake.wolfslab.jp/Pos/PrintOrders?eid={eid}&resultId={resultId}");
 
-                return View(PosViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("POS_010", ex, isElectron);
-                throw;
-            }
+            return View(PosViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult NoImageRender([FromQuery] string src)
+        {
+            using ImageHelper imageHelper = new ImageHelper(System.IO.File.ReadAllBytes(
+                    PathHelper.WebPathToPhysicalPath(_env, src)
+                )
+            );
+
+            byte[]? bytes = imageHelper.GetLowQualityBytes();
+            return File(bytes, "image/webp");
+        }
+
+        [HttpPost]
+        public IActionResult CheckSoldOut([FromBody] List<long> resultIds)
+        {
+            var items = _pleasanterRepository.Select(resultIds, true);
+            var soldOutIds = items
+                .Where(x => Convert.ToInt32(x.NumH) <= 0)
+                .Select(x => x.ReferenceId)
+                .ToList();
+
+            return Json(soldOutIds);
         }
     }
 }

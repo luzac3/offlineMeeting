@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Process.Home;
 using offlineMeeting.Models.Process.Login;
-using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
 using offlineMeeting.Models.ViewModel;
 using PleasanterBridge.src.DataRepository.Service;
@@ -30,28 +29,20 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public IActionResult Index([FromQuery] long uid, long eid)
         {
-            try
-            {
-                ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-                ManageEventId manageEventId = new ManageEventId(HttpContext);
-                CheckUserJoin checkUserJoin = new CheckUserJoin(_pleasanterRepository, uid);
-                manageUserCd.SetUserCd(uid);
-                manageEventId.SetEventId(eid);
+            ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
+            ManageEventId manageEventId = new ManageEventId(HttpContext);
+            CheckUserJoin checkUserJoin = new CheckUserJoin(_pleasanterRepository, uid);
+            manageUserCd.SetUserCd(uid);
+            manageEventId.SetEventId(eid);
 
-                // ユーザが登録状態であるかどうか
-                if (checkUserJoin.Check())
-                {
-                    return Redirect($"~/Home/Index");
-                }
-                else
-                {
-                    return Redirect($"~/Login/Qr?eid={eid}&uid={uid}");
-                }
-            }
-            catch (Exception ex)
+            // ユーザが登録状態であるかどうか
+            if (checkUserJoin.Check())
             {
-                CreateLogProcess.Error("LOGIN_001", ex);
-                throw;
+                return Redirect($"~/Home/Index");
+            }
+            else
+            {
+                return Redirect($"~/Login/Qr?eid={eid}&uid={uid}");
             }
         }
 
@@ -77,27 +68,19 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public async Task<IActionResult> QrRegister([FromQuery] string eid, string uid)
         {
-            try
+            // 特定日時の設定
+            var openDate = new DateTime(2025, 9, 7, 10, 0, 0);
+
+            // 現在時刻がopenDateより前ならリダイレクト
+            if (DateTime.Now < openDate)
             {
-                // 特定日時の設定
-                var openDate = new DateTime(2025, 9, 7, 10, 0, 0);
-
-                // 現在時刻がopenDateより前ならリダイレクト
-                if (DateTime.Now < openDate)
-                {
-                    return Redirect("~/Login/ComingSoon");
-                }
-
-                SendRegisterProcess sendRegisterProcess = new (hubContext: _hubContext, eventId: eid, userCd: uid);
-                RegisterViewModel registerViewModel = new (await sendRegisterProcess.Send());
-
-                return View(registerViewModel);
+                return Redirect("~/Login/ComingSoon");
             }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("LOGIN_002", ex);
-                throw;
-            }
+
+            SendRegisterProcess sendRegisterProcess = new (hubContext: _hubContext, eventId: eid, userCd: uid);
+            RegisterViewModel registerViewModel = new (await sendRegisterProcess.Send());
+
+            return View(registerViewModel);
         }
 
         public IActionResult ComingSoon()

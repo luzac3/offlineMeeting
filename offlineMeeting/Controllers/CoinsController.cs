@@ -52,55 +52,33 @@ namespace offlineMeeting.Controllers
 
         public IActionResult Give()
         {
-            try
-            {
-                GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
-                GiveCoinsViewModel giveCoinsViewModel = new(getUsersProcess.GetUsers());
-                return View(giveCoinsViewModel);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("COINS_001", ex);
-                throw;
-            }
+            GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
+            GiveCoinsViewModel giveCoinsViewModel = new(getUsersProcess.GetUsers());
+            return View(giveCoinsViewModel);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> PaymentComplete([FromBody] CoinsEntity coinsEntity)
         {
-            try
-            {
-                SendCoinsProcess sendCoinsProcess = new(
-                    httpContext: HttpContext,
-                    bridge: _bridge,
-                    coinsEntity: coinsEntity,
-                    coinsSiteId: CoinsSiteId
-                );
+            SendCoinsProcess sendCoinsProcess = new(
+                httpContext: HttpContext,
+                bridge: _bridge,
+                coinsEntity: coinsEntity,
+                coinsSiteId: CoinsSiteId
+            );
 
-                bool result = await sendCoinsProcess.Send();
-                return Json(result.ToString());
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("COINS_002", ex);
-                throw;
-            }
+            bool result = await sendCoinsProcess.Send();
+            return Json(result.ToString());
         }
 
         [HttpPost]
         public async Task<IActionResult> GiveCoins([FromBody] GiveCoinsEntity giveCoinsEntity)
         {
-            try
-            {
-                GiveCoinsProcess giveCoinsProcess = new(httpContext: HttpContext, bridge: _bridge, giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId);
-                Dictionary<string, string> result = await giveCoinsProcess.Send();
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                CreateLogProcess.Error("COINS_003", ex);
-                throw;
-            }
+            GiveCoinsProcess giveCoinsProcess = new (httpContext: HttpContext, bridge: _bridge, giveCoinsEntity: giveCoinsEntity, coinsSiteId: CoinsSiteId);
+
+            Dictionary<string, string> result = await giveCoinsProcess.Send();
+
+            return Json(result);
         }
 
         [HttpPost]

@@ -1,6 +1,6 @@
 {
   "name": "offlineMeeting",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "main": "",
   "scripts": {
     "build": "webpack --mode development",
@@ -15,8 +15,8 @@
     "@types/bootbox": "^4.4.36",
     "@types/bootstrap": "^5.1.6",
     "@types/eonasdan-bootstrap-datetimepicker": "^4.17.29",
-    "@types/hls.js": "",
     "@types/node": "^13.13.52",
+    "@types/hls.js": "",
     "eslint": "",
     "glob": "^13.0.0",
     "json-loader": "^0.5.7",
@@ -34,7 +34,7 @@
     "@microsoft/signalr": "^8.0.0",
     "@types/qrcodejs": "",
     "install": "^0.13.0",
-    "msw": "^2.13.2",
+    "msw": "^0.35.0",
     "npm": "",
     "npm-run-all": "",
     "rimraf": "^3.0.2",

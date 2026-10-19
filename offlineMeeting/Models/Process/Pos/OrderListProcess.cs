@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
@@ -16,6 +17,7 @@ namespace offlineMeeting.Models.Process.Pos
         private long EventId;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IPleasanterRepository _pleasanterRepository;
+        private readonly IWebHostEnvironment? _env;
 
         public OrderListProcess(
             List<OrderPostEntity> orderPostEntityList,
@@ -24,7 +26,8 @@ namespace offlineMeeting.Models.Process.Pos
             long eventFoodSiteId,
             long rawFoodSiteId,
             HttpContext httpContext,
-            IPleasanterRepository pleasanterRepository
+            IPleasanterRepository pleasanterRepository,
+            IWebHostEnvironment? env = null
         )
         {
             ManageEventId manageEventId = new (httpContext);
@@ -37,6 +40,7 @@ namespace offlineMeeting.Models.Process.Pos
             RawFoodSiteId= rawFoodSiteId;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
             _pleasanterRepository = pleasanterRepository;
+            _env = env;
         }
 
         public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, long orderSiteId)
@@ -69,7 +73,8 @@ namespace offlineMeeting.Models.Process.Pos
                     orderSiteId,
                     EventId,
                     userCd,
-                    _pleasanterRepository
+                    _pleasanterRepository,
+                    _env
                 );
                 purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
             }
@@ -77,7 +82,7 @@ namespace offlineMeeting.Models.Process.Pos
             List<AlcoholDataEntity> alcoholDataEntityList = [];
             if (alcoholResultIdList.Count > 0)
             {
-                SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(_pleasanterRepository, SakeSiteId, orderSiteId, EventId, userCd);
+                SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(_pleasanterRepository, SakeSiteId, orderSiteId, EventId, userCd, _env);
                 alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
             }
 
