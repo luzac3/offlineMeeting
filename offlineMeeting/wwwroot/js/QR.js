@@ -3902,6 +3902,11 @@ class Checkin {
                 const btn = row.querySelector('.btn_checkin');
                 if (!btn)
                     return;
+                // 既にチェックイン済みの場合はスキップ
+                if (btn.classList.contains('checked_in')) {
+                    this.setReprintButton(row);
+                    return;
+                }
                 btn.addEventListener('click', async () => {
                     const id = row.dataset.id;
                     const userCd = row.dataset.usercd;
@@ -3917,6 +3922,17 @@ class Checkin {
                         if (result?.success) {
                             btn.textContent = '✓ 完了';
                             btn.classList.add('checked_in');
+                            // 再印刷ボタンを追加
+                            const actionsDiv = btn.parentElement;
+                            if (actionsDiv) {
+                                const reprintBtn = document.createElement('button');
+                                reprintBtn.className = 'btn_reprint';
+                                reprintBtn.type = 'button';
+                                reprintBtn.dataset.usercd = userCd;
+                                reprintBtn.textContent = '再印刷';
+                                actionsDiv.appendChild(reprintBtn);
+                                this.setReprintButton(row);
+                            }
                         }
                         else {
                             btn.textContent = '失敗';
@@ -3928,6 +3944,17 @@ class Checkin {
                         btn.disabled = false;
                     }
                 });
+            });
+        };
+        this.setReprintButton = (row) => {
+            const reprintBtn = row.querySelector('.btn_reprint');
+            if (!reprintBtn)
+                return;
+            reprintBtn.addEventListener('click', () => {
+                const userCd = reprintBtn.dataset.usercd;
+                if (userCd && window.electronAPI && window.electronAPI.printCheckinQr) {
+                    window.electronAPI.printCheckinQr({ userCd });
+                }
             });
         };
     }
@@ -3953,66 +3980,42 @@ class CheckinNotify {
         this.listen = (signalR) => {
             signalR.get("CheckinComplete", (data) => {
                 const parsedData = data;
-                // QRコード表示エリアを更新
-                this.showQr(parsedData.userName, parsedData.qrUrl);
+                // joiner_row のボタンをチェック済み状態に更新
+                this.updateRow(parsedData.userCd);
                 // Electron印刷を要求
                 this.requestPrint(parsedData.userCd);
             });
         };
-        this.showQr = (userName, qrUrl) => {
-            const display = document.getElementById('qr_display');
-            const nameEl = document.getElementById('qr_user_name_display');
-            const qrEl = document.getElementById('qr_code_display');
-            if (!display || !nameEl || !qrEl)
-                return;
-            display.classList.remove('nodisplay');
-            nameEl.textContent = userName;
-            // 既存のQRをクリアして再生成
-            qrEl.innerHTML = '';
-            new QRCode(qrEl, {
-                text: qrUrl,
-                width: 200,
-                height: 200,
-                correctLevel: QRCode.CorrectLevel.H
+        this.updateRow = (userCd) => {
+            const rows = document.querySelectorAll('.joiner_row');
+            rows.forEach((row) => {
+                if (row.dataset.usercd !== userCd)
+                    return;
+                const btn = row.querySelector('.btn_checkin');
+                if (btn && !btn.classList.contains('checked_in')) {
+                    btn.textContent = '✓ 完了';
+                    btn.classList.add('checked_in');
+                    btn.disabled = true;
+                    // 再印刷ボタンを追加
+                    const actionsDiv = btn.parentElement;
+                    if (actionsDiv && !actionsDiv.querySelector('.btn_reprint')) {
+                        const reprintBtn = document.createElement('button');
+                        reprintBtn.className = 'btn_reprint';
+                        reprintBtn.type = 'button';
+                        reprintBtn.dataset.usercd = userCd;
+                        reprintBtn.textContent = '再印刷';
+                        reprintBtn.addEventListener('click', () => {
+                            this.requestPrint(userCd);
+                        });
+                        actionsDiv.appendChild(reprintBtn);
+                    }
+                }
             });
         };
         this.requestPrint = (userCd) => {
             if (window.electronAPI && window.electronAPI.printCheckinQr) {
                 window.electronAPI.printCheckinQr({ userCd });
             }
-        };
-    }
-}
-
-
-/***/ }),
-
-/***/ "./wwwroot/ts/QR/GenerateQrList.ts":
-/*!*****************************************!*\
-  !*** ./wwwroot/ts/QR/GenerateQrList.ts ***!
-  \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GenerateQrList: () => (/* binding */ GenerateQrList)
-/* harmony export */ });
-class GenerateQrList {
-    constructor() {
-        this.generate = () => {
-            const qrElements = document.querySelectorAll('.qr_code');
-            qrElements.forEach((element) => {
-                const url = element.dataset.url;
-                if (url) {
-                    new QRCode(element, {
-                        text: url,
-                        width: 128,
-                        height: 128,
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                }
-            });
         };
     }
 }
@@ -4296,20 +4299,16 @@ var __webpack_exports__ = {};
   !*** ./wwwroot/ts/QR/Index.ts ***!
   \********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _GenerateQrList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GenerateQrList */ "./wwwroot/ts/QR/GenerateQrList.ts");
-/* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
-/* harmony import */ var _Checkin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Checkin */ "./wwwroot/ts/QR/Checkin.ts");
-/* harmony import */ var _CheckinNotify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CheckinNotify */ "./wwwroot/ts/QR/CheckinNotify.ts");
-
+/* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
+/* harmony import */ var _Checkin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Checkin */ "./wwwroot/ts/QR/Checkin.ts");
+/* harmony import */ var _CheckinNotify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CheckinNotify */ "./wwwroot/ts/QR/CheckinNotify.ts");
 
 
 
 (() => {
-    const generateQrList = new _GenerateQrList__WEBPACK_IMPORTED_MODULE_0__.GenerateQrList();
-    generateQrList.generate();
-    const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_1__.SignalR();
-    const checkin = new _Checkin__WEBPACK_IMPORTED_MODULE_2__.Checkin();
-    const checkinNotify = new _CheckinNotify__WEBPACK_IMPORTED_MODULE_3__.CheckinNotify();
+    const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
+    const checkin = new _Checkin__WEBPACK_IMPORTED_MODULE_1__.Checkin();
+    const checkinNotify = new _CheckinNotify__WEBPACK_IMPORTED_MODULE_2__.CheckinNotify();
     signalR.activate().then(() => {
         checkin.setButtons();
         checkinNotify.listen(signalR);
