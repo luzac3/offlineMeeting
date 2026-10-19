@@ -58,7 +58,8 @@ namespace offlineMeeting.Models.Process.QR
                 id: c.ReferenceId,
                 userCd: c.ClassB ?? "",
                 name: userNameMap.GetValueOrDefault(c.ClassB ?? "", ""),
-                url: c.ClassC ?? ""
+                url: c.ClassC ?? "",
+                checkedIn: c.CheckB ?? false
             )).ToList();
         }
     }

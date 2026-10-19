@@ -1,5 +1,5 @@
 import { FetchApi } from "@root/share/FetchApi"
-import { SetEventListner } from "@root/share/SetEventListner";
+import { SetEventListener } from "@root/share/SetEventListener";
 
 export class OrderComplete {
     private url: string;
@@ -28,8 +28,8 @@ export class OrderComplete {
         });
     }
 
-    private Complete = () => {
-        SetEventListner.setEventAll(this.parentElement, 'click', '.completed', (e: Event) => {
+    private Complete =() => {
+        SetEventListener.setEventAll(this.parentElement, 'click', '.completed', (e: Event) => {
             const target = e.target as HTMLElement;
             const resultId = (<HTMLInputElement>target.nextElementSibling).value;
             this.send({ "ResultIdList": [resultId]}).then((data) => {

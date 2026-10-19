@@ -1,4 +1,4 @@
-import { SetEventListner } from "@root/share/SetEventListner"
+import { SetEventListener } from "@root/share/SetEventListener"
 
 export class CaliculateCoinNumber {
     setCoin = () => {
@@ -15,7 +15,7 @@ export class CaliculateCoinNumber {
                 return;
             }
 
-            SetEventListner.setEvent(
+            SetEventListener.setEvent(
                 <HTMLElement>element,
                 "change",
                 ".order_number",
@@ -28,7 +28,7 @@ export class CaliculateCoinNumber {
                 }
             );
 
-            SetEventListner.setEvent(
+            SetEventListener.setEvent(
                 <HTMLElement>element,
                 "change",
                 ".alcohol_amount",
@@ -41,7 +41,7 @@ export class CaliculateCoinNumber {
                 }
             );
             /*
-            SetEventListner.setEvent(
+            SetEventListener.setEvent(
                 <HTMLElement>element,
                 "change",
                 ".order_number_modal",
@@ -54,7 +54,7 @@ export class CaliculateCoinNumber {
                 }
             );
 
-            SetEventListner.setEvent(
+            SetEventListener.setEvent(
                 <HTMLElement>element,
                 "change",
                 ".alcohol_amount_modal",

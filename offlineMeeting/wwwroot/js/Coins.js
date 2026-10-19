@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/Coins/CreatePaypalButton.ts"
+/***/ "./wwwroot/ts/Coins/CreatePaypalButton.ts":
 /*!************************************************!*\
   !*** ./wwwroot/ts/Coins/CreatePaypalButton.ts ***!
   \************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -51,13 +51,13 @@ class CreatePaypalButton {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/Coins/GiveCoins.ts"
+/***/ "./wwwroot/ts/Coins/GiveCoins.ts":
 /*!***************************************!*\
   !*** ./wwwroot/ts/Coins/GiveCoins.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -112,13 +112,13 @@ class GiveCoins {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/Coins/SendCoins.ts"
+/***/ "./wwwroot/ts/Coins/SendCoins.ts":
 /*!***************************************!*\
   !*** ./wwwroot/ts/Coins/SendCoins.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -159,13 +159,13 @@ class SendCoins {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/BackButton.ts"
+/***/ "./wwwroot/ts/share/BackButton.ts":
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -183,13 +183,13 @@ class BackButton {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/Counter.ts"
+/***/ "./wwwroot/ts/share/Counter.ts":
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/Counter.ts ***!
   \*************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -250,13 +250,13 @@ class Counter {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/FetchApi.ts"
+/***/ "./wwwroot/ts/share/FetchApi.ts":
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -266,50 +266,40 @@ var _a;
 class FetchApi {
     constructor() {
         this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
-            let request;
-            if (method == "GET") {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers
-                });
-            }
-            else {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers,
-                    body: JSON.stringify(body)
-                });
-            }
+            const request = new Request(url, {
+                method: method,
+                headers: headers,
+                // GET以外で、bodyが存在する場合のみJSON化する
+                body: method !== "GET" && body !== undefined ? JSON.stringify(body) : null
+            });
             ManageLoadElement.set();
-            const response = await fetch(request).catch(e => { throw e; });
-            if (!response.ok) {
-                ManageLoadElement.remove();
-                throw new Error(response.statusText);
+            try {
+                // fetch自体のネットワークエラー等もここで受ける
+                const response = await fetch(request);
+                if (!response.ok) {
+                    // HTTPエラー（400, 500など）
+                    throw new Error(response.statusText);
+                }
+                if (!needResponseData) {
+                    return;
+                }
+                // response.json() 自体がPromiseを返すので、そのままawaitして返すだけでOK
+                switch (responseKind) {
+                    case "json":
+                        return await response.json();
+                    case "text":
+                        return await response.text();
+                }
             }
-            if (!needResponseData) {
-                ManageLoadElement.remove();
-                return;
+            catch (error) {
+                console.error("FetchError:", error);
+                throw error; // そのまま上に投げる
             }
-            switch (responseKind) {
-                case "json":
-                    return await this.fetchResonse(response.json()).catch(e => { throw e; });
-                case "text":
-                    return await this.fetchResonse(response.text()).catch(e => { throw e; });
+            finally {
+                // 必ず最後に1回だけここを通ってローディングを解除
+                ManageLoadElement.remove();
             }
         };
-    }
-    async fetchResonse(response) {
-        return await response.then(data => {
-            return data;
-        })
-            .catch(error => {
-            // エラー処理
-            console.log(error);
-            throw error;
-        })
-            .finally(() => {
-            ManageLoadElement.remove();
-        });
     }
 }
 class ManageLoadElement {
@@ -330,7 +320,7 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ }
+/***/ })
 
 /******/ 	});
 /************************************************************************/
@@ -352,12 +342,6 @@ ManageLoadElement.remove = () => {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module

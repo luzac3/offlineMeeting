@@ -122,9 +122,17 @@
     border: 2px solid #000; /* 黒いふち */
     border-radius: 16px; /* 角を丸く */
     box-sizing: border-box;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    padding: 8px;
 }
-    .order_list > div {
-        width: 48%;
+    .order_list > .image_container {
+        width: 35%;
+    }
+    .order_list > .caption {
+        width: 60%;
     }
 
 table {
