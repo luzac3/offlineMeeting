@@ -13,7 +13,7 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/UserOrders.js" defer></script>
+    <script src="~/js/UserOrders.js" defer></script>
     <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
     <script>
          document.addEventListener('DOMContentLoaded', function () {
@@ -22,15 +22,13 @@
     </script>
 }
 
-@model offlineMeeting.Models.ViewModel.PosViewModel;
-<button id="play-audio" type="button">オーダー受信起動</button>
-<button id="batch_processing" type="button">まとめて提供済</button>
 <table id="user_order_list">
     <thead>
         <tr>
-            <th rowspan="2"></th>
-            <th colspan="4">連番 ユーザー名</th>
-            <th rowspan="2">提供済</th>
+            <th colspan="4">
+                <button id="reload" type="button">リロード</button>
+                <span>連番 ユーザー名</span>
+            </th>
         </tr>
         <tr>
             <th>オーダーID</th>
@@ -39,9 +37,7 @@
             <th>数量(分量)</th>
         </tr>
     </thead>
-    <tbody id="contents">
-        <partial name="/Views/Pos/_UserOrderContents.cshtml" />
-    </tbody>
+    <partial name="/Views/Pos/_UserOrderContents.cshtml" />
 </table>
 <div>
     @if (!electron!.IsElectron)

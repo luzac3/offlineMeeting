@@ -1,6 +1,6 @@
 {
   "name": "offlineMeeting",
-  "version": "1.1.6_beta",
+  "version": "4.0.1",
   "main": "",
   "scripts": {
     "build": "webpack --mode development",
@@ -15,13 +15,10 @@
     "@types/bootbox": "^4.4.36",
     "@types/bootstrap": "^5.1.6",
     "@types/eonasdan-bootstrap-datetimepicker": "^4.17.29",
-    "@types/jquery": "^3.5.9",
-    "@types/jquery.ui.datetimepicker": "^0.3.30",
     "@types/node": "^13.13.52",
     "@types/hls.js": "",
     "eslint": "",
-    "glob": "^7.2.0",
-    "jquery": "^3.6.0",
+    "glob": "^13.0.0",
     "json-loader": "^0.5.7",
     "npm-run-all": "",
     "rimraf": "^3.0.2",
@@ -29,9 +26,9 @@
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.1.8",
     "typescript": "",
-    "webpack": "^5.44.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.2.1"
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
     "@microsoft/signalr": "^8.0.0",

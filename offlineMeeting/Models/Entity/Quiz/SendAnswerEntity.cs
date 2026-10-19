@@ -1,13 +1,15 @@
 using offlineMeeting.Models.Entity.Share;
+using PleasanterBridge.src.APIBridge.Entity;
 
 namespace offlineMeeting.Models.Entity.Quiz
 {
     public class SendAnswerEntity : ApiEntity
     {
-        public ClassHashEntity ClassHash { get; set; }
-        public DateHashEntity DateHash { get; set; }
-        public DescriptionHashEntity DescriptionHash { get; set; }
-        public ImageHashEntity ImageHash { get; set; }
+        public string ClassA { get; set; }
+        public string ClassB { get; set; }
+        public string ClassC { get; set; }
+        public DateTime DateA { get; set; }
+        public Dictionary<string, ImageEntity> Image { get; set; }
         public SendAnswerEntity(
             string eventNumber,
             string userCd,
@@ -15,66 +17,14 @@ namespace offlineMeeting.Models.Entity.Quiz
             string base64Image
         )
         {
-            ClassHash = new ClassHashEntity(
-                eventNumber: eventNumber,
-                userCd: userCd,
-                quizId: quizId
-            );
-            DateHash = new DateHashEntity();
-            DescriptionHash = new DescriptionHashEntity();
-            ImageHash = new ImageHashEntity(base64Image: base64Image);
-        }
-
-        public class ClassHashEntity
-        {
-            public string ClassA { get; set; }
-            public string ClassB { get; set; }
-            public string ClassC { get; set; }
-            public ClassHashEntity(
-                string eventNumber,
-                string userCd,
-                string quizId
-            )
+            ClassA = eventNumber;
+            ClassB = userCd;
+            ClassC = quizId;
+            DateA = DateTime.UtcNow.AddHours(9);
+            Image = new Dictionary<string, ImageEntity>
             {
-                ClassA = eventNumber;
-                ClassB = userCd;
-                ClassC = quizId;
-            }
-        }
-
-        public class DateHashEntity
-        {
-            public DateTime DateA { get; set; }
-            public DateHashEntity()
-            {
-                DateA = DateTime.UtcNow.AddHours(9);
-            }
-        }
-
-        public class DescriptionHashEntity
-        {
-            public string DescriptionA { get; set; }
-            public DescriptionHashEntity()
-            {
-                DescriptionA = "";
-            }
-        }
-
-        public class ImageHashEntity
-        {
-            public Dictionary<string, object> DescriptionA { get; set; }
-            public ImageHashEntity(
-                string base64Image
-            )
-            {
-                DescriptionA = new Dictionary<string, object>
-                {
-                    {"HeadNewLine", false },
-                    {"EndNewLine", false },
-                    {"Extension", ".png" },
-                    {"Base64", base64Image }
-                };
-            }
+                { "DescriptionA", new ImageEntity(base64Image) }
+            };
         }
     }
 }

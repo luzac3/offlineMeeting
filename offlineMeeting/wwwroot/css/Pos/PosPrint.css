@@ -10,12 +10,15 @@ body{
 .electron_body {
     width: 75mm;
     position: relative;
-    margin-left: 1%;
+    margin-left: 3%;
 }
 #print {
     width: 70mm;
     margin:0;
 }
+    #print table {
+        width: 100%;
+    }
     #print h1 {
         font-size: 2em;
     }
@@ -32,4 +35,8 @@ body{
 .order_number {
     width: 10%;
     text-align: right;
+}
+
+.nodisplay {
+    display: none !important;
 }

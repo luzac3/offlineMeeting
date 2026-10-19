@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.JsonDataProperty;
+using PleasanterBridge.src.Configuration;
+using PleasanterBridge.src.APIBridge.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,32 @@ builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// サーバー側メモリキャッシュ（UserCd/EventId/SessionId の保存先）
+builder.Services.AddMemoryCache();
+
+// セッションID をキャッシュのキーとして利用するためのセッション設定
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromHours(24);
+});
+
+// PleasanterSettings を JSON ファイルからロード
+var pleasanterSettingsProperty = new PleasanterSettingsProperty(builder.Environment.ContentRootPath);
+var settings = new PleasanterSettings(
+    apiKey: pleasanterSettingsProperty.ApiKey ?? throw new InvalidOperationException("ApiKey is required"),
+    url: pleasanterSettingsProperty.Url ?? throw new InvalidOperationException("Url is required"),
+    server: pleasanterSettingsProperty.Server ?? throw new InvalidOperationException("Server is required"),
+    database: pleasanterSettingsProperty.Database ?? throw new InvalidOperationException("Database is required"),
+    userId: pleasanterSettingsProperty.UserId ?? throw new InvalidOperationException("UserId is required"),
+    password: pleasanterSettingsProperty.Password ?? throw new InvalidOperationException("Password is required")
+);
+
+// PleasanterBridge を DI コンテナに登録
+builder.Services.AddPleasanterBridge(settings);
 
 var app = builder.Build();
 
@@ -40,6 +69,8 @@ app.UseHttpsRedirection();
 //app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
