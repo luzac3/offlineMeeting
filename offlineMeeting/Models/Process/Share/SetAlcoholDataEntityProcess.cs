@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Share;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
@@ -69,6 +68,7 @@ namespace offlineMeeting.Models.Process.Share
             return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
+        //fixme 隠すデータを読み込む処理は後で
         public List<long> GetHidedIdList()
         {
             var where = new Dictionary<string, object>
