@@ -5,11 +5,14 @@
     ViewData["Title"] = "Purchase";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+}
+
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/Pos.js" defer></script>
-    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script src="~/js/Pos.js" defer></script>
     <script>
          document.addEventListener('DOMContentLoaded', function () {
             new SmartPhoto(".js-smartPhoto");
@@ -26,18 +29,28 @@
                 JoinerEntity? userData = ViewData["UserData"] as offlineMeeting.Models.Entity.Share.JoinerEntity;
                 @if (purchaseDataEntity.FoodCategory != "1" && purchaseDataEntity.FoodCategory != "2")
                 {
-                    <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                    <div class="order purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                         <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
                             <input class="category nodisplay" value="1" />
                             <div class="open_modal">
                                 <p class="food_image_container">
                                     @if (@purchaseDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             width="@purchaseDataEntity.Width"
+                                             height="@purchaseDataEntity.Height"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
-                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                        <img src="@(purchaseDataEntity.LowImage)"
+                                             data-src="@(purchaseDataEntity.Image)"
+                                             class="food_image blur-up"
+                                             width="@purchaseDataEntity.Width"
+                                             height="@purchaseDataEntity.Height"
+                                             loading="lazy" />
                                     }
                                     @if (purchaseDataEntity.Ordered)
                                     {
@@ -48,9 +61,10 @@
                                     <span>@(purchaseDataEntity.PurchaseName)</span>
                                 </p>
                                 <p>
-                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <img class="poncoin_img" src="/image/poncoin_192.png" />
                                     <span> × </span>
                                     <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                    <input class="purhcase_coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                                     <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                                 </p>
                                 <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />
@@ -79,31 +93,43 @@
                 }
                 else
                 {
-                    <div class="purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                    <div class="order purchase_order food_order modal_parent @(purchaseDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                         <div id="alchol_@purchaseDataEntity.ResultId" class="alchol_info" data-result_id="@purchaseDataEntity.ResultId">
                             <input class="category nodisplay" value="1" />
                             <div class="open_modal">
                                 <p class="food_image_container">
                                     @if (@purchaseDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             width="@purchaseDataEntity.Width"
+                                             height="@purchaseDataEntity.Height"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
-                                        <img src="@(purchaseDataEntity.Image)" class="food_image" />
+                                        <img src="@(purchaseDataEntity.LowImage)"
+                                             data-src="@(purchaseDataEntity.Image)"
+                                             class="food_image blur-up"
+                                             width="@purchaseDataEntity.Width"
+                                             height="@purchaseDataEntity.Height"
+                                             loading="lazy" />
+
                                     }
                                     @if (purchaseDataEntity.Ordered)
                                     {
                                         <img src="/image/ordered.png" class="orderd" alt="image" />
                                     }
                                 </p>
-                                <p class="alcoholName">
-                                    <span>ごはん　@(purchaseDataEntity.PurchaseName)</span>
+                                <p class="purchaseName">
+                                    <span>@(purchaseDataEntity.PurchaseName)</span>
                                 </p>
                                 <p>
-                                    <img class="poncoin_img" src="/image/poncoin.png" />
+                                    <img class="poncoin_img" src="/image/poncoin_192.png" />
                                     <span> × </span>
                                     <span class="coin_number_show">@(purchaseDataEntity.CoinNumber)</span>
+                                    <input class="purhcase_coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                                     <input class="coin_number nodisplay" value="@(purchaseDataEntity.CoinNumber)" disabled />
                                 </p>
                                 <input type="text" class="left_amount nodisplay" value="@(purchaseDataEntity.LeftAmount)" />

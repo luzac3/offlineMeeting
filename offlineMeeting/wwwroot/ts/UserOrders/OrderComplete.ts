@@ -17,26 +17,19 @@ export class OrderComplete {
         };
         this.responseKind = "text";
 
-        this.Batch();
+        this.Reload();
         this.Complete();
     }
 
-    private Batch = () => {
-        const batchButtonElement = document.getElementById("batch_processing") as HTMLButtonElement;
-        batchButtonElement.addEventListener("click", () => {
-            const checkedResultElements = Array.from(
-                this.parentElement?.querySelectorAll('.completed_check[type="checkbox"]:checked + input') ?? []
-            );
-            const checkedResultIdArray = checkedResultElements.map(el => (<HTMLInputElement>el).value);
-
-            this.send({ "ResultIdList": checkedResultIdArray }).then((data) => {
-                this.OrderCompleted(data, checkedResultElements as HTMLElement[]);
-            });
+    private Reload = () => {
+        const reloadButtonElement = document.getElementById("reload") as HTMLButtonElement;
+        reloadButtonElement.addEventListener("click", () => {
+            location.reload();
         });
     }
 
     private Complete = () => {
-        SetEventListner.setEvent(this.parentElement, 'click', '.completed', (e: Event) => {
+        SetEventListner.setEventAll(this.parentElement, 'click', '.completed', (e: Event) => {
             const target = e.target as HTMLElement;
             const resultId = (<HTMLInputElement>target.nextElementSibling).value;
             this.send({ "ResultIdList": [resultId]}).then((data) => {
@@ -65,12 +58,11 @@ export class OrderComplete {
         const result = JSON.parse(data) as { [key: string]: string };
         if (result.status == "200") {
             elements.forEach(element => {
-                const tr = element.closest("tr");
-                if (tr) {
-                    tr.remove();
+                const tbody = element.closest("tbody");
+                if (tbody) {
+                    tbody.remove();
                 }
             });
         }
-        window.alert(result.message);
     }
 }

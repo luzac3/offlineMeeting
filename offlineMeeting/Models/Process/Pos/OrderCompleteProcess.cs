@@ -1,5 +1,5 @@
-using offlineMeeting.Models.Entity.Pos.SendOrderCompletedEntity;
-using System.Net;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.APIBridge.Contracts;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
@@ -7,45 +7,39 @@ namespace offlineMeeting.Models.Process.Pos
     public class OrderCompleteProcess
     {
         private List<int> CompletedResultIdList;
+        private readonly IPleasanterApiBridge _bridge;
 
-        public OrderCompleteProcess(List<int>? completedResultIdList)
+        public OrderCompleteProcess(List<int>? completedResultIdList, IPleasanterApiBridge bridge)
         {
             CompletedResultIdList = completedResultIdList ?? new List<int> { };
+            _bridge = bridge;
         }
 
-        public async Task<Dictionary<string, string>> Send()
+        public async Task<List<Dictionary<string, string>>> Send()
         {
-            #if DEBUG
-                string pleasanterUrlBase = "http://localhost:59802";
-            #else
-                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
-            #endif
-
-            HttpClient httpClient = new();
-            bool isError = false;
-            foreach (int resultId in CompletedResultIdList)
+            var updateData = new Dictionary<string, object>
             {
-                string json = JsonSerializer.Serialize(new SendOrderCompletedEntity());
-                StringContent content = new(json, System.Text.Encoding.UTF8, "application/json");
-                string url = $"{pleasanterUrlBase}/api/items/{resultId}/update";
-                var response = await httpClient.PostAsync(url, content);
+                { "CheckA", false }
+            };
 
-                if (!response.StatusCode.Equals(HttpStatusCode.OK))
+            var tasks = CompletedResultIdList.Select(id =>
+                _bridge.Update(id, updateData)
+            );
+
+            PleasanterApiResponse[] results = await Task.WhenAll(tasks);
+
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+
+            return results.Select(x =>
+                new Dictionary<string, string>()
                 {
-                    isError = true;
+                    {"status", x.StatusCode.ToString() },
+                    {"response", JsonSerializer.Serialize(x, options) }
                 }
-            }
-
-            if (!isError)
-            {
-                return new Dictionary<string, string> { { "status", "200" }, { "message", "注文完了を更新しました" } };
-
-            }
-            else
-            {
-                return new Dictionary<string, string> { { "status", "500" }, { "message", "注文完了の更新に失敗しました" } };
-
-            }
+            ).ToList();
         }
     }
 }

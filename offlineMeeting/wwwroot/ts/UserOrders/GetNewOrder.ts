@@ -1,6 +1,6 @@
 import { SignalR } from "@root/share/SignalR";
 import { FetchApi } from "@root/share/FetchApi"
-import { ManagedVoiceVox } from "@root/share/ManagedVoiceVox";
+import { PrintOrder } from "./PrintOrder";
 
 export class GetNewOrder {
     private url: string;
@@ -9,8 +9,16 @@ export class GetNewOrder {
     private responseKind: string;
 
     constructor() {
-        this.url = '/Pos/UserOrdersPartial';
-        this.method = 'POST';
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        if (params.has('eid')) {
+            this.url = `/Pos/UserOrdersPartial?eid=${params.get('eid')}`;
+        } else {
+            this.url = '/Pos/UserOrdersPartial';
+        }
+        this.method = 'GET';
+
         this.headers = {
             "Content-Type": "application/json",
             'X-Requested-With': 'XMLHttpRequest'
@@ -21,31 +29,27 @@ export class GetNewOrder {
     GetNewOrder = (signalR: SignalR, ctx: AudioContext) => {
         signalR.get("NewOrder", async (data) => {
             const parsedData = <{ [key: string]: string }>data;
-            // 読み上げる
-            console.log(parsedData.userName);
+            const orderTableEntityList = JSON.parse(parsedData.orderTableEntityList) as { [key: string]: string }[];
+            const resultIds = orderTableEntityList.map(x => x.ResultId);
 
-            const managedVoiceVox = new ManagedVoiceVox();
-            this.send().then((data) => {
-                document.getElementById("contents")!.innerHTML = data;
+            this.send().then((orderdata) => {
+                this.updateTableBody(orderdata);
+                PrintOrder.RequestElectronPrint(resultIds);
             });
-            let readText = `${parsedData.userName}から新しいオーダーが入ったのだ。`;
-
-            JSON.parse(parsedData.orderTableEntity).forEach(async (order: { [key: string]: string | number }) => {
-                if (order.Hide) {
-                    return;
-                }
-                readText += `注文番号、${order.PurchaseCd}。`;
-                readText += `商品名、${order.PurchaseRead}。`;
-                if (order.AlcoholQuantity == 36) {
-                    readText += `分量、${Number(order.Number) * 2}勺。`;
-                } else if (order.AlcoholQuantity == 180) {
-                    readText += `分量、${order.Number}合。`;
-                } else {
-                    readText += `オーダー数、${order.Number}。`;
-                }
-            });
-            await managedVoiceVox.playVoiceVox(readText, 3, ctx);
         });
+    }
+
+    private updateTableBody(newHtml: string): void {
+        const table = document.getElementById("user_order_list");
+        if (!table) return;
+
+        const thead = table.querySelector('thead');
+        if (!thead) return;
+
+        const tbodies = table.querySelectorAll('tbody');
+        tbodies.forEach(tbody => tbody.remove());
+
+        thead.insertAdjacentHTML('afterend', newHtml);
     }
 
     private send = async () => {

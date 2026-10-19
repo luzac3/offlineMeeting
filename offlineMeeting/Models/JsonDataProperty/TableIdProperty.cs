@@ -6,15 +6,17 @@ namespace offlineMeeting.Models.JsonDataProperty
 {
     public class TableIdEntity
     {
-        public int SakeSiteId { get; set; }
-        public int OrderSiteId { get; set; }
-        public int JoinerSiteId { get; set; }
-        public int CoinsSiteId { get; set; }
-        public int QuizSiteId { get; set; }
-        public int AnswerSiteId { get; set; }
-        public int ExtraSiteId { get; set; }
-        public int RawFoodSiteId { get; set; }
-        public int EventFoodSiteId { get; set; }
+        public long SakeSiteId { get; set; }
+        public long OrderSiteId { get; set; }
+        public long OrderPurchaseSiteId { get; set; }
+        public long JoinerSiteId { get; set; }
+        public long CoinsSiteId { get; set; }
+        public long QuizSiteId { get; set; }
+        public long AnswerSiteId { get; set; }
+        public long ExtraSiteId { get; set; }
+        public long RawFoodSiteId { get; set; }
+        public long EventFoodSiteId { get; set; }
+        public long CheckinSiteId { get; set; }
     }
 
     public class TableIdProperty : TableIdEntity
@@ -30,6 +32,7 @@ namespace offlineMeeting.Models.JsonDataProperty
 
             SakeSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.SakeSiteId ?? throw new NullReferenceException("json read error");
             OrderSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.OrderSiteId ?? throw new NullReferenceException("json read error");
+            OrderPurchaseSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.OrderPurchaseSiteId ?? throw new NullReferenceException("json read error");
             JoinerSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.JoinerSiteId ?? throw new NullReferenceException("json read error");
             CoinsSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.CoinsSiteId ?? throw new NullReferenceException("json read error");
             QuizSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.QuizSiteId ?? throw new NullReferenceException("json read error");
@@ -37,6 +40,7 @@ namespace offlineMeeting.Models.JsonDataProperty
             ExtraSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.ExtraSiteId ?? throw new NullReferenceException("json read error");
             RawFoodSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.RawFoodSiteId ?? throw new NullReferenceException("json read error");
             EventFoodSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.EventFoodSiteId ?? throw new NullReferenceException("json read error");
+            CheckinSiteId = JsonSerializer.Deserialize<TableIdEntity>(jsonData)?.CheckinSiteId ?? throw new NullReferenceException("json read error");
         }
     }
 }
