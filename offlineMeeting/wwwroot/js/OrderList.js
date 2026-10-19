@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/OrderList/CaliculateTotalCoins.ts"
+/***/ "./wwwroot/ts/OrderList/CaliculateTotalCoins.ts":
 /*!******************************************************!*\
   !*** ./wwwroot/ts/OrderList/CaliculateTotalCoins.ts ***!
   \******************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -32,13 +32,13 @@ class CaliculateTotalCoins {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/OrderList/GetOrderList.ts"
+/***/ "./wwwroot/ts/OrderList/GetOrderList.ts":
 /*!**********************************************!*\
   !*** ./wwwroot/ts/OrderList/GetOrderList.ts ***!
   \**********************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -97,13 +97,13 @@ class GetOrderList {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/OrderList/SendOrder.ts"
+/***/ "./wwwroot/ts/OrderList/SendOrder.ts":
 /*!*******************************************!*\
   !*** ./wwwroot/ts/OrderList/SendOrder.ts ***!
   \*******************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -205,19 +205,19 @@ class SendOrder {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts"
+/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
 /*!************************************************!*\
   !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
   \************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   CaliculateCoinNumber: () => (/* binding */ CaliculateCoinNumber)
 /* harmony export */ });
-/* harmony import */ var _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListner */ "./wwwroot/ts/share/SetEventListner.ts");
+/* harmony import */ var _root_share_SetEventListener__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SetEventListener */ "./wwwroot/ts/share/SetEventListener.ts");
 
 class CaliculateCoinNumber {
     constructor() {
@@ -231,14 +231,14 @@ class CaliculateCoinNumber {
                 if (coinNumberElement == null) {
                     return;
                 }
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".order_number", async (event) => {
+                _root_share_SetEventListener__WEBPACK_IMPORTED_MODULE_0__.SetEventListener.setEvent(element, "change", ".order_number", async (event) => {
                     //(<HTMLInputElement>element.querySelector(".order_number_modal")).value = (<HTMLInputElement>event.target).value;
                     coinNumber = this.caliculate(htmlElement, event.currentTarget.classList.contains('alcohol_order'));
                     coinNumberElement.value = coinNumber.toString();
                     coinNumberShowElement.innerText = coinNumber.toString();
                     // coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
-                _root_share_SetEventListner__WEBPACK_IMPORTED_MODULE_0__.SetEventListner.setEvent(element, "change", ".alcohol_amount", async (event) => {
+                _root_share_SetEventListener__WEBPACK_IMPORTED_MODULE_0__.SetEventListener.setEvent(element, "change", ".alcohol_amount", async (event) => {
                     // (<HTMLInputElement>element.querySelector(".alcohol_amount_modal")).value = (<HTMLInputElement>event.target).value;
                     coinNumber = this.caliculate(htmlElement, true);
                     coinNumberElement.value = coinNumber.toString();
@@ -246,7 +246,7 @@ class CaliculateCoinNumber {
                     // coinNumberModalShowElement.innerText = coinNumber.toString();
                 });
                 /*
-                SetEventListner.setEvent(
+                SetEventListener.setEvent(
                     <HTMLElement>element,
                     "change",
                     ".order_number_modal",
@@ -259,7 +259,7 @@ class CaliculateCoinNumber {
                     }
                 );
     
-                SetEventListner.setEvent(
+                SetEventListener.setEvent(
                     <HTMLElement>element,
                     "change",
                     ".alcohol_amount_modal",
@@ -316,13 +316,13 @@ class CaliculateCoinNumber {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/pos/OrderEntity.ts"
+/***/ "./wwwroot/ts/pos/OrderEntity.ts":
 /*!***************************************!*\
   !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -339,13 +339,13 @@ class OrderEntity {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/BackButton.ts"
+/***/ "./wwwroot/ts/share/BackButton.ts":
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -363,13 +363,13 @@ class BackButton {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/BlurImage.ts"
+/***/ "./wwwroot/ts/share/BlurImage.ts":
 /*!***************************************!*\
   !*** ./wwwroot/ts/share/BlurImage.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -414,13 +414,13 @@ class BlurImage {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/Counter.ts"
+/***/ "./wwwroot/ts/share/Counter.ts":
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/Counter.ts ***!
   \*************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -481,13 +481,13 @@ class Counter {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/FetchApi.ts"
+/***/ "./wwwroot/ts/share/FetchApi.ts":
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -497,50 +497,40 @@ var _a;
 class FetchApi {
     constructor() {
         this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
-            let request;
-            if (method == "GET") {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers
-                });
-            }
-            else {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers,
-                    body: JSON.stringify(body)
-                });
-            }
+            const request = new Request(url, {
+                method: method,
+                headers: headers,
+                // GET以外で、bodyが存在する場合のみJSON化する
+                body: method !== "GET" && body !== undefined ? JSON.stringify(body) : null
+            });
             ManageLoadElement.set();
-            const response = await fetch(request).catch(e => { throw e; });
-            if (!response.ok) {
-                ManageLoadElement.remove();
-                throw new Error(response.statusText);
+            try {
+                // fetch自体のネットワークエラー等もここで受ける
+                const response = await fetch(request);
+                if (!response.ok) {
+                    // HTTPエラー（400, 500など）
+                    throw new Error(response.statusText);
+                }
+                if (!needResponseData) {
+                    return;
+                }
+                // response.json() 自体がPromiseを返すので、そのままawaitして返すだけでOK
+                switch (responseKind) {
+                    case "json":
+                        return await response.json();
+                    case "text":
+                        return await response.text();
+                }
             }
-            if (!needResponseData) {
-                ManageLoadElement.remove();
-                return;
+            catch (error) {
+                console.error("FetchError:", error);
+                throw error; // そのまま上に投げる
             }
-            switch (responseKind) {
-                case "json":
-                    return await this.fetchResonse(response.json()).catch(e => { throw e; });
-                case "text":
-                    return await this.fetchResonse(response.text()).catch(e => { throw e; });
+            finally {
+                // 必ず最後に1回だけここを通ってローディングを解除
+                ManageLoadElement.remove();
             }
         };
-    }
-    async fetchResonse(response) {
-        return await response.then(data => {
-            return data;
-        })
-            .catch(error => {
-            // エラー処理
-            console.log(error);
-            throw error;
-        })
-            .finally(() => {
-            ManageLoadElement.remove();
-        });
     }
 }
 class ManageLoadElement {
@@ -561,13 +551,13 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/LocalStrage.ts"
+/***/ "./wwwroot/ts/share/LocalStrage.ts":
 /*!*****************************************!*\
   !*** ./wwwroot/ts/share/LocalStrage.ts ***!
   \*****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -602,52 +592,56 @@ class LocalStrage {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/SetEventListner.ts"
-/*!*********************************************!*\
-  !*** ./wwwroot/ts/share/SetEventListner.ts ***!
-  \*********************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ "./wwwroot/ts/share/SetEventListener.ts":
+/*!**********************************************!*\
+  !*** ./wwwroot/ts/share/SetEventListener.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   SetEventListner: () => (/* binding */ SetEventListner)
+/* harmony export */   SetEventListener: () => (/* binding */ SetEventListener)
 /* harmony export */ });
-class SetEventListner {
+var _a;
+class SetEventListener {
 }
-SetEventListner.setEvent = (parentElement, type, targetName, callback, atOnce = false) => {
-    const returnHandler = (event) => {
-        const targetElement = parentElement?.querySelector(targetName);
-        if (event.target == targetElement) {
-            callback(event);
+_a = SetEventListener;
+SetEventListener.setEvent = (parentElement, type, selector, // targetName というより selector なので名前変更
+// 第2引数で「実際にマッチした要素」を返してあげると jQueryの this のように使えて超便利
+callback, atOnce = false) => {
+    if (!parentElement)
+        return null;
+    const handler = (event) => {
+        const clickedElement = event.target;
+        // クリックされた要素自身、またはその親を遡ってセレクタに一致する要素を探す
+        const matchedElement = clickedElement.closest(selector);
+        // マッチした要素が存在し、かつ parentElement の管轄内である場合のみ発火
+        if (matchedElement && parentElement.contains(matchedElement)) {
+            // コールバックに「発火したEvent」と「マッチした要素」の両方を渡す
+            callback(event, matchedElement);
             if (atOnce) {
-                parentElement?.removeEventListener(type, returnHandler);
+                parentElement.removeEventListener(type, handler);
             }
         }
     };
-    parentElement?.addEventListener(type, returnHandler);
-    return returnHandler;
+    parentElement.addEventListener(type, handler);
+    return handler;
 };
-SetEventListner.setEventAll = (parentElement, type, targetName, callback, atOnce = false) => {
-    const returnHandler = (event) => {
-        const targetElements = parentElement?.querySelectorAll(targetName);
-        if (targetElements && Array.from(targetElements).includes(event.target)) {
-            callback(event);
-            if (atOnce) {
-                parentElement?.removeEventListener(type, returnHandler);
-            }
-        }
-    };
-    parentElement?.addEventListener(type, returnHandler);
-    return returnHandler;
+// fixme　呼び出し元からSetEventAllを消していくこと
+SetEventListener.setEventAll = (parentElement, type, selector, callback, atOnce = false) => {
+    return _a.setEvent(parentElement, type, selector, callback, atOnce);
 };
-SetEventListner.removeEvent = (parentElement, type, handler) => {
-    parentElement?.removeEventListener(type, handler);
+SetEventListener.removeEvent = (parentElement, type, handler // 戻り値の型に合わせる
+) => {
+    if (!parentElement || !handler)
+        return;
+    parentElement.removeEventListener(type, handler);
 };
 
 
-/***/ }
+/***/ })
 
 /******/ 	});
 /************************************************************************/
@@ -669,12 +663,6 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
