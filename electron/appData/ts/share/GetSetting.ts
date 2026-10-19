@@ -7,6 +7,7 @@ export class GetSetting {
         const prodPath = path.join(path.dirname(process.execPath), 'config', '/setting.json');
         const devPath = path.join(__dirname, 'appData/json/setting.json');
         const settingPath = isDev ? devPath : prodPath;
+        const isRaspberryPi = false;
         try {
             const bufferData = fs.readFileSync(settingPath);
             return JSON.parse(bufferData.toString());

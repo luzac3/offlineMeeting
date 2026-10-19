@@ -16,7 +16,6 @@ export class Printer {
                 contextIsolation: true
             }
         });
-
     }
 
     Print = async () => {
@@ -42,6 +41,18 @@ export class Printer {
         try {
             const printOptions = this.data.printOptions || {};
 
+            // raspie
+            if (this.data.isRaspberryPi) {
+                this.PrintRaspberryPi(printOptions, (success, failureReason) => {
+                    if (!success) {
+                        const msg = `Printer.Print: raspberry pi print failed url=${this.url} reason=${failureReason}`;
+                        CreateLog.WriteLog(msg);
+                    }
+                    try { this.printWindow.close(); } catch (e) { /* ignore */ }
+                });
+                return;
+            }
+
             this.printWindow.webContents.print({
                 silent: true,
                 deviceName: this.data.deviceName,
@@ -58,6 +69,42 @@ export class Printer {
             const msg = `Printer.Print: print exception url=${this.url} err=${errMsg}`;
             CreateLog.WriteLog(msg);
             try { this.printWindow.close(); } catch (e) { /* ignore */ }
+        }
+    }
+
+    private PrintRaspberryPi = async (printOptions: any, callback: (success: boolean, failureReason?: string) => void) => {
+        const fs = require('fs');
+        const { exec } = require('child_process');
+
+        let tempPath: string | undefined;
+        try {
+            // 画面をPDF化してlpコマンドへ渡す
+            const pdfData = await this.printWindow.webContents.printToPDF({
+                marginsType: 1,
+                printBackground: true,
+                ...printOptions
+            });
+
+            tempPath = `/tmp/print_${Date.now()}.pdf`;
+            await fs.promises.writeFile(tempPath, pdfData);
+
+            const printerName = this.data.deviceName || 'Generic_ESC_POS';
+            exec(`lp -d ${printerName} ${tempPath}`, (error: Error | null, stdout: string, stderr: string) => {
+                if (error) {
+                    callback(false, stderr || error.message);
+                } else {
+                    callback(true);
+                }
+                if (tempPath) {
+                    fs.promises.unlink(tempPath).catch(() => { /* ignore */ });
+                }
+            });
+        } catch (err: unknown) {
+            const errMsg = err instanceof Error ? (err.stack ?? err.message) : String(err);
+            callback(false, errMsg);
+            if (tempPath) {
+                fs.promises.unlink(tempPath).catch(() => { /* ignore */ });
+            }
         }
     }
 }
