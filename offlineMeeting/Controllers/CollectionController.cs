@@ -17,6 +17,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<CollectionController> _logger;
         private readonly IPleasanterRepository _pleasanterRepository;
+        private readonly IWebHostEnvironment _env;
         private CollectionViewModel CollectionViewModel;
         private long SakeSiteId;
         private long OrderSiteId;
@@ -24,12 +25,14 @@ namespace offlineMeeting.Controllers
         public CollectionController(
             ILogger<CollectionController> logger,
             IHubContext<MyHub> hubContext,
-            IPleasanterRepository pleasanterRepository
+            IPleasanterRepository pleasanterRepository,
+            IWebHostEnvironment env
         )
         {
             _logger = logger;
             _hubContext = hubContext;
             _pleasanterRepository = pleasanterRepository;
+            _env = env;
             CollectionViewModel = new ();
             TableIdProperty tableIdProperty = new ();
             SakeSiteId = tableIdProperty.SakeSiteId;
@@ -40,6 +43,7 @@ namespace offlineMeeting.Controllers
         {
             SetViewDataProcess setViewDataProcess = new();
             ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
+            ViewData["SessionId"] = setViewDataProcess.SetSessionId(HttpContext, _pleasanterRepository);
             base.OnActionExecuting(context);
         }
 
@@ -49,7 +53,8 @@ namespace offlineMeeting.Controllers
                 httpContext: HttpContext,
                 pleasanterRepository: _pleasanterRepository,
                 sakeSiteId: SakeSiteId,
-                orderSiteId: OrderSiteId
+                orderSiteId: OrderSiteId,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -64,7 +69,8 @@ namespace offlineMeeting.Controllers
                 httpContext: HttpContext, 
                 pleasanterRepository: _pleasanterRepository,
                 sakeSiteId: SakeSiteId, 
-                orderSiteId: OrderSiteId
+                orderSiteId: OrderSiteId,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 

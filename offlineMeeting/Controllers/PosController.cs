@@ -63,6 +63,7 @@ namespace offlineMeeting.Controllers
             SetViewDataProcess setViewDataProcess = new();
             ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             ViewData["Electron"] = setViewDataProcess.SetElectron();
+            ViewData["SessionId"] = setViewDataProcess.SetSessionId(HttpContext, _pleasanterRepository);
             base.OnActionExecuting(context);
         }
 
@@ -81,7 +82,7 @@ namespace offlineMeeting.Controllers
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new ();
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId, _env));
             return View(PosViewModel);
         }
 
@@ -92,7 +93,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -107,7 +109,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -130,7 +133,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoodSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new ();
 
