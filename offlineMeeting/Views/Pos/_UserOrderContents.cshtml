@@ -5,18 +5,12 @@
     int row = @orderTableEntity!.OrderPurchaseTableEntityList?.Count() ?? 0;
     <tbody>
         <tr>
-            <th rowspan="@(row + 1)">
-                <input type="checkbox" class="completed_check" name="completed_check" />
-                <input type="text" value="@(orderTableEntity.ResultId)" class="nodisplay" />
-            </th>
             <th colspan="4">
+                <button type="button" class="completed">提供済</button>
+                <input type="text" value="@(orderTableEntity.ResultId)" class="nodisplay" />
                 <span>@orderTableEntity.OrderNumber </span>
                 <span>@orderTableEntity.UserName </span>
                 <span>@(orderTableEntity.IsAlcohol ? "(飲)" : "")</span>
-            </th>
-            <th rowspan="@(row + 1)">
-                <button type="button" class="completed">提供済</button>
-                <input type="text" value="@(orderTableEntity?.ResultId)" class="nodisplay" />
             </th>
         </tr>
         @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })

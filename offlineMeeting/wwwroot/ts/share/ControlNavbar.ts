@@ -8,6 +8,7 @@ export class ControlNavbar {
         const navbar = document.querySelector('.navbar') as HTMLElement;
         let subbarHeight = 0;
         if (navbar) {
+            document.body.classList.remove('nodisplay'); 
             const subbar = document.querySelector('.navbar-sub') as HTMLElement;
             if (subbar) {
                 subbarHeight = navbar.offsetHeight;
