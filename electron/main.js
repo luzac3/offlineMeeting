@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 class CreateWindow {
     constructor() {
         this.CreateWindow = (url, show = true) => {
-            electron__WEBPACK_IMPORTED_MODULE_1__.app.whenReady().then(async () => {
+            return electron__WEBPACK_IMPORTED_MODULE_1__.app.whenReady().then(async () => {
                 console.log('createWindow ready');
                 const win = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
                     width: 800,
@@ -46,8 +46,8 @@ class CreateWindow {
                         win.show();
                 });
                 try {
-                    console.log(`start loda url:${url}`);
-                    win.loadURL(url);
+                    console.log(`start load url:${url}`);
+                    await win.loadURL(url);
                 }
                 catch (err) {
                     const errMsg = err instanceof Error ? (err.stack ?? err.message) : String(err);
@@ -58,6 +58,32 @@ class CreateWindow {
                     const msg = `did-fail-load url=${validatedURL} code=${errorCode} desc=${errorDescription} isMainFrame=${isMainFrame}`;
                     _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
                 });
+                return win;
+            });
+        };
+        this.CreateWindowFromFile = (filePath, show = true) => {
+            return electron__WEBPACK_IMPORTED_MODULE_1__.app.whenReady().then(async () => {
+                const win = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
+                    width: 600,
+                    height: 500,
+                    show: false,
+                    webPreferences: {
+                        preload: path__WEBPACK_IMPORTED_MODULE_2___default().join(__dirname, "preload.js"),
+                        contextIsolation: true,
+                        nodeIntegration: false
+                    }
+                });
+                win.once('ready-to-show', () => {
+                    if (show)
+                        win.show();
+                });
+                try {
+                    await win.loadFile(filePath);
+                }
+                catch (err) {
+                    const errMsg = err instanceof Error ? (err.stack ?? err.message) : String(err);
+                    _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(`loadFile failed path=${filePath} err=${errMsg}`);
+                }
                 return win;
             });
         };
@@ -85,7 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Printer {
-    constructor(resultId) {
+    constructor(id, urlBase) {
         this.Print = async () => {
             try {
                 this.printWindow.webContents.once('did-finish-load', () => {
@@ -134,7 +160,7 @@ class Printer {
             }
         };
         this.data = _share_GetSetting__WEBPACK_IMPORTED_MODULE_2__.GetSetting.Setting();
-        this.url = this.data.printUrlBase + resultId;
+        this.url = (urlBase ?? this.data.printUrlBase) + id;
         ;
         this.printWindow = new electron__WEBPACK_IMPORTED_MODULE_1__.BrowserWindow({
             show: false,
@@ -163,6 +189,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! electron */ "electron");
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _share_GetSetting__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../share/GetSetting */ "./appData/ts/share/GetSetting.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -172,12 +201,39 @@ class SetElectron {
         console.log('start set electron');
         const data = _share_GetSetting__WEBPACK_IMPORTED_MODULE_3__.GetSetting.Setting();
         const createWindow = new _CreateWindow__WEBPACK_IMPORTED_MODULE_0__.CreateWindow();
-        createWindow.CreateWindow(data.url);
-        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printReceipt', (event, args) => {
+        // メニュー項目を構築
+        const menuItems = [];
+        if (data.orderUrl && data.orderName) {
+            menuItems.push({ name: data.orderName, url: data.orderUrl });
+        }
+        if (data.checkinUrl && data.checkinName) {
+            menuItems.push({ name: data.checkinName, url: data.checkinUrl });
+        }
+        // メニュー画面を表示
+        const isDev =  true || 0;
+        const menuPath = isDev
+            ? path__WEBPACK_IMPORTED_MODULE_4___default().join(__dirname, 'appData/menu.html')
+            : path__WEBPACK_IMPORTED_MODULE_4___default().join(path__WEBPACK_IMPORTED_MODULE_4___default().dirname(process.execPath), 'config', 'menu.html');
+        createWindow.CreateWindowFromFile(menuPath);
+        // メニュー項目取得
+        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('getMenuItems', () => {
+            return menuItems;
+        });
+        // メニューからページを開く
+        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('openPage', (_event, url) => {
+            createWindow.CreateWindow(url);
+        });
+        // 注文印刷
+        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printReceipt', (_event, args) => {
             args.resultIds.forEach((resultId) => {
-                const printer = new _Printer__WEBPACK_IMPORTED_MODULE_1__.Printer(resultId);
+                const printer = new _Printer__WEBPACK_IMPORTED_MODULE_1__.Printer(resultId, data.printUrlBase);
                 printer.Print();
             });
+        });
+        // チェックインQR印刷
+        electron__WEBPACK_IMPORTED_MODULE_2__.ipcMain.handle('printCheckinQr', (_event, args) => {
+            const printer = new _Printer__WEBPACK_IMPORTED_MODULE_1__.Printer(args.userCd, data.checkinPrintUrlBase);
+            printer.Print();
         });
     }
 }
@@ -281,11 +337,18 @@ class GetSetting {
 }
 GetSetting.Setting = () => {
     const isDev =  true || 0;
-    const settingPath = isDev
-        ? path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, 'appData/json/setting.json')
-        : path__WEBPACK_IMPORTED_MODULE_0___default().join(path__WEBPACK_IMPORTED_MODULE_0___default().dirname(process.execPath), 'setting.json');
-    const bufferData = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(settingPath);
-    return JSON.parse(bufferData.toString());
+    const prodPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(path__WEBPACK_IMPORTED_MODULE_0___default().dirname(process.execPath), 'config', '/setting.json');
+    const devPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, 'appData/json/setting.json');
+    const settingPath = isDev ? devPath : prodPath;
+    try {
+        const bufferData = fs__WEBPACK_IMPORTED_MODULE_1___default().readFileSync(settingPath);
+        return JSON.parse(bufferData.toString());
+    }
+    catch (error) {
+        console.error(`Failed to read setting file at: ${settingPath}`, error);
+        // ファイルが存在しない/読み取りエラーの場合のデフォルト設定を返す
+        return { /* default settings */};
+    }
 };
 
 

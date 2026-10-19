@@ -12,9 +12,16 @@ builder.build({
                 ]
             }
         },
-        extraFiles: {
-            from: "./appData/json/setting.json",
-            to: "./" // exeと同じ場所に展開
-        }
+        extraFiles: [
+            {
+                from: "./appData/json/setting.json",
+                to: "./config/setting.json"
+            },
+            {
+                from: "./appData/menu.html",
+                to: "./config/menu.html"
+            }
+        ],
+        'asar': true
     }
 });

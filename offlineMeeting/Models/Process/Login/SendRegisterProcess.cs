@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Process.Share;
 using System.Net;
 using System.Text.Json;
 
@@ -38,10 +39,14 @@ namespace offlineMeeting.Models.Process.Login
             if (response.StatusCode.Equals(HttpStatusCode.OK))
             {
                 // SignalRを使ってクライアントに通知
-                await _hubContext.Clients.All.SendAsync("RegisterSuccess", new Dictionary<string, string>()
+                await _hubContext.Clients.Group($"event_{EventId}").SendAsync("RegisterSuccess", new Dictionary<string, string>()
                 {
                     {"url", $"{urlBase}/Login/Index?eid={EventId}&uid={UserCd}"}
                 });
+            }
+            else
+            {
+                CreateLogProcess.Error("LOGIN_003", $"register failure StatusCode={response.StatusCode} UserCd={UserCd}");
             }
             return response.StatusCode.Equals(HttpStatusCode.OK);
         }

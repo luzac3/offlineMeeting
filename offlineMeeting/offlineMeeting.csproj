@@ -1,27 +1,37 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <SatelliteResourceLanguages>en-us;jp</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Entity\Collection\**" />
     <Compile Remove="Templates\**" />
     <Compile Remove="Views\Streaming\**" />
+    <Compile Remove="wwwroot\js\dist\**" />
+    <Content Remove="Models\Entity\Collection\**" />
     <Content Remove="Templates\**" />
     <Content Remove="Views\Streaming\**" />
+    <Content Remove="wwwroot\js\dist\**" />
+    <EmbeddedResource Remove="Models\Entity\Collection\**" />
     <EmbeddedResource Remove="Templates\**" />
     <EmbeddedResource Remove="Views\Streaming\**" />
+    <EmbeddedResource Remove="wwwroot\js\dist\**" />
+    <None Remove="Models\Entity\Collection\**" />
     <None Remove="Templates\**" />
     <None Remove="Views\Streaming\**" />
+    <None Remove="wwwroot\js\dist\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Entity\Collection\" />
+    <Content Include="Models\Process\Share\PathHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Properties\bk\" />
-    <Folder Include="wwwroot\js\dist\" />
     <Folder Include="wwwroot\plugins\" />
     <Folder Include="wwwroot\log\" />
   </ItemGroup>
@@ -33,11 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
     <PackageReference Include="Npm" Version="3.5.2" />
+    <PackageReference Include="PleasanterBridge" Version="1.4.0-local" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="System.Text.Json" Version="9.0.11" />
     <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="9.103.9.2" />
   </ItemGroup>
 

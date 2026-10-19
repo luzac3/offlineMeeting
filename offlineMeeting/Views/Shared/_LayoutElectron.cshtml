@@ -13,6 +13,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+        @await RenderSectionAsync("Styles", required: false)
     </head>
     <body>
         <header>
@@ -25,7 +26,6 @@
             </main>
         </div>
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/signalR/hubs"></script>
         @await RenderSectionAsync("Scripts", required: false)

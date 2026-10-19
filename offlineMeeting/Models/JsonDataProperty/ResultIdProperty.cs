@@ -6,7 +6,7 @@ namespace offlineMeeting.Models.JsonDataProperty
 {
     public class ResultIdEntity
     {
-        public int EventId { get; set; }
+        public long EventId { get; set; }
     }
 
     public class ResultIdProperty : ResultIdEntity

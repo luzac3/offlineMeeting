@@ -2,74 +2,84 @@ using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Share;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 
 namespace offlineMeeting.Models.Process.Pos
 {
     public class OrderListProcess
     {
-        private int ExtraFoodSiteId;
-        private int SakeSiteId;
-        private int EventFoodSiteId;
-        private int RawFoodSiteId;
-        private string EventId;
+        private long ExtraFoodSiteId;
+        private long SakeSiteId;
+        private long EventFoodSiteId;
+        private long RawFoodSiteId;
+        private long EventId;
         private List<OrderPostEntity> OrderPostEntityList;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
         public OrderListProcess(
             List<OrderPostEntity> orderPostEntityList,
-            int extraFoodSiteId,
-            int sakeSiteId,
-            int eventFoodSiteId,
-            int rawFoodSiteId,
-            HttpContext httpContext
+            long extraFoodSiteId,
+            long sakeSiteId,
+            long eventFoodSiteId,
+            long rawFoodSiteId,
+            HttpContext httpContext,
+            IPleasanterRepository pleasanterRepository
         )
         {
             ManageEventId manageEventId = new (httpContext);
 
             EventId = manageEventId.GetEventId();
-            if (EventId == "0")
-            {
-                throw new DataException("イベントIDが不正です");
-            }
+
             ExtraFoodSiteId = extraFoodSiteId;
             SakeSiteId = sakeSiteId;
             EventFoodSiteId = eventFoodSiteId;
             RawFoodSiteId= rawFoodSiteId;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
+            _pleasanterRepository = pleasanterRepository;
         }
 
-        public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, int orderSiteId)
+        public List<OrderEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, long orderSiteId)
         {
             List<OrderEntity> orderEntityList = new List<OrderEntity>();
 
-            List<int> purchaseResultIdList = OrderPostEntityList
+            List<long> purchaseResultIdList = OrderPostEntityList
                 .Where(x => x.Category != 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
-            List<int> alcoholResultIdList = OrderPostEntityList
+            List<long> alcoholResultIdList = OrderPostEntityList
                 .Where(x => x.Category == 2)
                 .Select(x => x.ResultId)
                 .ToList();
 
-            Dictionary<int, int> categoryDic = OrderPostEntityList
-                .ToDictionary(x => x.ResultId, x => x.Category);
+            Dictionary<string, int> categoryDic = OrderPostEntityList
+                .ToDictionary(x => $"{x.ResultId}_{x.AlcoholAmount}", x => x.Category);
 
             ManageUserCd manageUserCd = new (httpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
+            long userCd = manageUserCd.GetUserCd();
 
-            SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new(
-                ExtraFoodSiteId,
-                EventFoodSiteId,
-                RawFoodSiteId,
-                orderSiteId,
-                EventId,
-                userCd
-            );
-            List<PurchaseDataEntity> purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
+            List<PurchaseDataEntity> purchaseDataEntityList = [];
+            if (purchaseResultIdList.Count > 0)
+            {
+                SetPurchaseDataEntityListProcess setPurchaseDataEntityListProcess = new(
+                    ExtraFoodSiteId,
+                    EventFoodSiteId,
+                    RawFoodSiteId,
+                    orderSiteId,
+                    EventId,
+                    userCd,
+                    _pleasanterRepository
+                );
+                purchaseDataEntityList = setPurchaseDataEntityListProcess.Get(purchaseResultIdList, categoryDic);
+            }
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(SakeSiteId, orderSiteId, EventId, userCd);
-            List<AlcoholDataEntity> alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
+            List<AlcoholDataEntity> alcoholDataEntityList = [];
+            if (alcoholResultIdList.Count > 0)
+            {
+                SetAlcoholDataEntityProcess setAlcoholDataEntityListProcess = new(_pleasanterRepository, SakeSiteId, orderSiteId, EventId, userCd);
+                alcoholDataEntityList = setAlcoholDataEntityListProcess.Get(json, alcoholResultIdList);
+            }
 
             foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
             {

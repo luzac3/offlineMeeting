@@ -91,7 +91,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
 
 electron__WEBPACK_IMPORTED_MODULE_0__.contextBridge.exposeInMainWorld('electronAPI', {
-    printReceipt: (args) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('printReceipt', args)
+    printReceipt: (args) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('printReceipt', args),
+    printCheckinQr: (args) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('printCheckinQr', args),
+    getMenuItems: () => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('getMenuItems'),
+    openPage: (url) => electron__WEBPACK_IMPORTED_MODULE_0__.ipcRenderer.invoke('openPage', url)
 });
 
 })();
