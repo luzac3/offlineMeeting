@@ -19,11 +19,11 @@ namespace offlineMeeting.Models.Process.Pos
             EventId = manageEventId.GetEventId();
         }
 
-        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, IPleasanterRepository repository, long orderSiteId)
+        public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json, HttpContext httpContext, IPleasanterRepository repository, long orderSiteId, IWebHostEnvironment? env = null)
         {
             long userCd = new ManageUserCd(httpContext).GetUserCd();
 
-            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (repository, SakeSiteId, orderSiteId, EventId, userCd);
+            SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new (repository, SakeSiteId, orderSiteId, EventId, userCd, env);
             return setAlcoholDataEntityProcess
                 .Get(json)
                 .Where(x => !x.Hide)

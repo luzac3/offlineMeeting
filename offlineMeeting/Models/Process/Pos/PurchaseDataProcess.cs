@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Share;
 using PleasanterBridge.src.DataRepository.Service;
@@ -11,13 +12,15 @@ namespace offlineMeeting.Models.Process.Pos
         private long RawFoorSiteId;
         private long EventId;
         private readonly IPleasanterRepository _pleasanterRepository;
+        private readonly IWebHostEnvironment? _env;
 
         public PurchaseDataProcess(
             long extraSiteId,
             long eventFoodSiteId,
             long rawFoorSiteId,
             HttpContext httpContext,
-            IPleasanterRepository pleasanterRepository
+            IPleasanterRepository pleasanterRepository,
+            IWebHostEnvironment? env = null
         )
         {
             ManageEventId manageEventId = new (httpContext);
@@ -27,6 +30,7 @@ namespace offlineMeeting.Models.Process.Pos
             EventFoodSiteId = eventFoodSiteId;
             RawFoorSiteId = rawFoorSiteId;
             EventId = manageEventId.GetEventId();
+            _env = env;
         }
 
         public List<PurchaseDataEntity> Get(HttpContext httpContext, long orderSiteId, int category)
@@ -41,7 +45,8 @@ namespace offlineMeeting.Models.Process.Pos
                 orderSiteId,
                 EventId,
                 userCd,
-                _pleasanterRepository
+                _pleasanterRepository,
+                _env
             );
             return setPurchaseDataEntityListProcess
                 .Get(category)
