@@ -1,19 +1,17 @@
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats.Webp;
+using SkiaSharp;
 
 namespace offlineMeeting.Models.Process.Share
 {
     public class ImageHelper : IDisposable
     {
         byte[] ImageBytes;
-        Image ImageObject;
+        SKBitmap ImageObject;
         private bool disposed = false;
 
         public ImageHelper(byte[] imageBytes)
         {
             ImageBytes = imageBytes;
-            ImageObject = Image.Load(ImageBytes);
+            ImageObject = SKBitmap.Decode(imageBytes);
         }
 
         public string GetLowQualityBase64()
@@ -35,16 +33,21 @@ namespace offlineMeeting.Models.Process.Share
 
         private MemoryStream ConvertToMemoryStream()
         {
-            Image image = ImageObject;
-            image.Mutate(x => x.Resize(new ResizeOptions
+            int targetWidth = Math.Min(100, ImageObject.Width);
+            int targetHeight = (int)Math.Round(ImageObject.Height * (targetWidth / (double)ImageObject.Width));
+            if (targetHeight < 1)
             {
-                Size = new Size(100, 0),
-                Mode = ResizeMode.Max
-            }));
+                targetHeight = 1;
+            }
 
-            WebpEncoder encoder = new WebpEncoder { FileFormat = WebpFileFormatType.Lossy, Quality = 10 };
+            using SKBitmap resized = ImageObject.Resize(
+                new SKImageInfo(targetWidth, targetHeight),
+                new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.Linear));
+            using SKImage image = SKImage.FromBitmap(resized);
+            using SKData data = image.Encode(SKEncodedImageFormat.Webp, 10);
+
             MemoryStream ms = new MemoryStream();
-            image.Save(ms, encoder);
+            data.SaveTo(ms);
             ms.Position = 0;
             return ms;
         }
