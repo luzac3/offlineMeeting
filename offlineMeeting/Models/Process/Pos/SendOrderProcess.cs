@@ -1,155 +1,327 @@
 using Microsoft.AspNetCore.SignalR;
-using offlineMeeting.Models.DBProperty;
 using offlineMeeting.Models.Entity.Login;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Entity.Pos.SendOrderEntity;
+using offlineMeeting.Models.Entity.Pos.SendOrderPurchaseEntity;
 using offlineMeeting.Models.Entity.Share;
-using offlineMeeting.Models.Process.DBProcess;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.Share;
+using PleasanterBridge.src.APIBridge;
+using PleasanterBridge.src.APIBridge.Contracts;
+using PleasanterBridge.src.DataRepository.Entity;
+using PleasanterBridge.src.DataRepository.Service;
 using System.Data;
 using System.Net;
 using System.Text.Json;
 
 namespace offlineMeeting.Models.Process.Pos
 {
-    public class SendOrderProcess : ResultsProcess
+    public class SendOrderProcess
     {
-        private int OrderSiteId;
-        private int JoinerSiteId;
-        private string EventId;
+        private long OrderSiteId;
+        private long OrderPurchaseSiteId;
+        private long JoinerSiteId;
+        private long EventId;
         private HttpContext HttpContext;
         private List<OrderPostEntity> OrderPostEntityList;
         private readonly IHubContext<MyHub> _hubContext;
+        private readonly IPleasanterApiBridge _bridge;
+        private readonly IPleasanterRepository _pleasanterRepository;
 
-        public SendOrderProcess(List<OrderPostEntity> orderPostEntityList, int orderSiteId, int joinerSiteId, HttpContext httpContext, IHubContext<MyHub> hubContext)
+        public SendOrderProcess(
+            List<OrderPostEntity> orderPostEntityList,
+            long orderSiteId,
+            long orderPurchseSiteId,
+            long joinerSiteId,
+            HttpContext httpContext, 
+            IHubContext<MyHub> hubContext,
+            IPleasanterApiBridge bridge,
+            IPleasanterRepository pleasanterRepository
+        )
         {
             ManageEventId manageEventId = new ManageEventId(httpContext);
 
             EventId = manageEventId.GetEventId();
-            if (EventId == "0")
-            {
-                throw new DataException("„Ç§„Éô„É≥„ÉàID„Åå‰∏çÊ≠£„Åß„Åô");
-            }
+
             OrderSiteId = orderSiteId;
+            OrderPurchaseSiteId = orderPurchseSiteId;
             JoinerSiteId = joinerSiteId;
             HttpContext = httpContext;
             OrderPostEntityList = orderPostEntityList.OrderBy(x => x.ResultId).ToList();
             _hubContext = hubContext;
+            _bridge = bridge;
+            _pleasanterRepository = pleasanterRepository;
         }
 
 
-        public async Task<string> Send(int sakeSiteId)
+        public async Task<string> Send(long sakeSiteId)
         {
-            #if DEBUG
-                string pleasanterUrlBase = "http://localhost:59802";
-            #else
-                string pleasanterUrlBase = "https://pleasanter.wolfslab.jp";
-            #endif
-            List<SendOrderEntity> sendOrderEntityList = new List<SendOrderEntity>();
-            List<OrderTableEntity> orderTableEntity = new List<OrderTableEntity>();
+            List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
+            List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
             ManageUserCd manageUserCd = new ManageUserCd(HttpContext);
-            string userCd = manageUserCd.GetUserCd().ToString();
-            if (userCd == "0")
+            long userCd = manageUserCd.GetUserCd();
+            if (userCd == 0)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„É¶„Éº„Ç∂„Ç≥„Éº„Éâ„Åå„ÅÇ„Çä„Åæ„Åõ„Çì" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉÜÅ[ÉUÉRÅ[ÉhÇ™Ç†ÇËÇ‹ÇπÇÒ" } });
             }
 
-            // „Ç≥„Ç§„É≥„ÅåË∂≥„Çä„Çã„Åì„Å®„ÇíÁ¢∫Ë™ç„Åô„Çã
-            int totalCoins = 0;
+            // ÉRÉCÉìÇ™ë´ÇËÇÈÇ±Ç∆ÇämîFÇ∑ÇÈ
+            int totalCoins = OrderPostEntityList.Sum(x => x.OrderCoins);
 
-
-            GetUsersProcess getUsersProcess = new(JoinerSiteId, HttpContext);
+            GetUsersProcess getUsersProcess = new(HttpContext, _pleasanterRepository, JoinerSiteId);
             JoinerEntity userData = getUsersProcess.GetUserData(userCd);
 
             if (userData.Coins < totalCoins)
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "„Ç≥„Ç§„É≥„Åå‰∏çË∂≥„Åó„Å¶„ÅÑ„Åæ„Åô" } });
+                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "400" }, { "message", "ÉRÉCÉìÇ™ïsë´ÇµÇƒÇ¢Ç‹Ç∑" } });
             }
 
-            foreach (OrderPostEntity orderPostEntity in OrderPostEntityList)
+            try
             {
-                // extra„Ç™„Éº„ÉÄ„Éº„ÅÆ„ÉÅ„Çß„ÉÉ„ÇØ
-                // ‰ªäÂõû„ÅØ„Ç™„Éº„ÉÄ„ÉºNO„ÅßÁÆ°ÁêÜ„Åô„Çã„Çà„Çä‰ªïÊñπ„Å™„ÅÑ
+                PleasanterApiResponse response = await SendOrder(
+                    orderPostEntityList: OrderPostEntityList,
+                    sakeSiteId: sakeSiteId,
+                    userCd: userCd,
+                    userName: userData.UserName ?? ""
+                );
 
-                #if DEBUG
-                    int extraId = 1014;
-                #else
-                    int extraId = 56483;
-                #endif
-                if (orderPostEntity.ResultId == extraId)
+                return JsonSerialize(response);
+            }
+            catch (HttpRequestException ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+        private async Task<PleasanterApiResponse> SendOrder(
+            List<OrderPostEntity> orderPostEntityList,
+            long sakeSiteId,
+            long userCd,
+            string userName
+        )
+        {
+            List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList = new List<SendOrderPurchaseEntity>();
+            long orderResultId = 0;
+            List<long> orderResultIdList = new ();
+
+            List<OrderPostEntity> alcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category == 2).ToList();
+            List<OrderPostEntity> nonAlcoholOrderPostEntityList = orderPostEntityList.Where(x => x.Category != 2).ToList();
+
+            // ÉAÉãÉRÅ[ÉãÇÃìoò^
+            if (alcoholOrderPostEntityList.Count() > 0)
+            {
+                orderResultId = await SendOrder(
+                    orderPostEntity: alcoholOrderPostEntityList.FirstOrDefault()!,
+                    userCd :userCd,
+                    coins: alcoholOrderPostEntityList.Sum(x => x.OrderCoins),
+                    isAlcohol: true
+                );
+                orderResultIdList.Add(orderResultId);
+            }
+
+            sendOrderPurchaseEntityList.AddRange(
+                CreateSendOrderPurchaseEntities(
+                    orderPostEntityList: alcoholOrderPostEntityList,
+                    orderResultId: orderResultId.ToString(),
+                    userCd: userCd,
+                    isAlcohol: true
+                )
+            );
+
+            // ÉAÉãÉRÅ[Éãà»äOÇÃìoò^
+            if (nonAlcoholOrderPostEntityList.Count() > 0)
+            {
+                orderResultId = await SendOrder(
+                    orderPostEntity: nonAlcoholOrderPostEntityList.FirstOrDefault()!,
+                    userCd: userCd,
+                    coins: nonAlcoholOrderPostEntityList.Sum(x => x.OrderCoins),
+                    isAlcohol: false
+                );
+                orderResultIdList.Add(orderResultId);
+            }
+
+            sendOrderPurchaseEntityList.AddRange(
+                CreateSendOrderPurchaseEntities(
+                    orderPostEntityList: nonAlcoholOrderPostEntityList,
+                    orderResultId: orderResultId.ToString(),
+                    userCd: userCd,
+                    isAlcohol: false
+                )
+            );
+
+            // àÛç¸(ï\é¶)ópÉäÉXÉgÇÃçÏê¨
+            List<OrderTableEntity> orderTableEntityList = CreateBackOrderTableEntityList(
+                sendOrderPurchaseEntityList: sendOrderPurchaseEntityList,
+                orderResultIdList: orderResultIdList,
+                userCd: userCd,
+                userName: userName
+            );
+
+            try
+            {
+                PleasanterApiResponse response = await _bridge.BulkInsert(OrderPurchaseSiteId, sendOrderPurchaseEntityList);
+                ErrorCheck(response);
+
+                // ê≥èÌèIóπéûÅAOrderListÇ…í ím
+                await _hubContext.Clients.Group($"event_{EventId}").SendAsync("NewOrder", new Dictionary<string, string>() {
+                    { "userName", userName },
+                    { "orderTableEntityList", JsonSerializer.Serialize(orderTableEntityList) }
+                });
+
+                return response;
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+        }
+
+        private async Task<long> SendOrder(OrderPostEntity orderPostEntity, long userCd, int coins, bool isAlcohol)
+        {   
+            SendOrderEntity sendOrderEntity = new(
+                eventNumber: EventId.ToString(),
+                userCd: userCd.ToString(),
+                orderCoins: coins,
+                isAlcohol: isAlcohol
+            );
+
+            PleasanterApiResponse response = await _bridge.Insert(OrderSiteId, sendOrderEntity);
+            try
+            {
+                ErrorCheck(response);
+            }catch (HttpRequestException)
+            {
+                throw;
+            }
+
+            return response.Id;
+        }
+
+        private List<SendOrderPurchaseEntity> CreateSendOrderPurchaseEntities(
+            List<OrderPostEntity> orderPostEntityList,
+            string orderResultId,
+            long userCd,
+            bool isAlcohol
+        )
+        {
+            return orderPostEntityList.Select(orderPostEntity =>
+                new SendOrderPurchaseEntity(
+                    eventNumber: EventId.ToString(),
+                    orderResultId: orderResultId,
+                    userCd: userCd.ToString(),
+                    purchaseResultId: orderPostEntity.ResultId.ToString(),
+                    orderNumber: orderPostEntity.OrderNumber,
+                    orderCoins: orderPostEntity.OrderCoins,
+                    alcoholAmount: orderPostEntity.AlcoholAmount,
+                    isAlcohol: isAlcohol
+                )
+            ).ToList();
+        }
+
+        private List<OrderTableEntity> CreateBackOrderTableEntityList(
+            List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
+            List<long> orderResultIdList,
+            long userCd,
+            string userName
+        )
+        {
+            List<OrderTableEntity> orderTableEntityList = new List<OrderTableEntity>();
+
+            orderResultIdList.ForEach(orderResultId =>
+            {
+
+                TablesEntity? tablesEntity = _pleasanterRepository.Select(orderResultId, true).FirstOrDefault();
+
+                string? orderNumber = tablesEntity?.ClassC?.ToString();
+
+                string[] orderNumbers = string.IsNullOrEmpty(orderNumber) ? [] : orderNumber.Split('-');
+
+                if (orderNumbers.Length >= 3)
                 {
-                    SetAlcoholDataEntityProcess setAlcoholDataEntityProcess = new(sakeSiteId, OrderSiteId, EventId, userCd);
-                    List<int> extraAlcoholIdList = setAlcoholDataEntityProcess.GetHidedIdList();
-                    foreach (int extraAlcoholId in extraAlcoholIdList)
-                    {
-                        sendOrderEntityList.Add(
-                                new SendOrderEntity
-                                (
-                                    eventNumber: EventId,
-                                    userCd: userCd,
-                                    resultId: extraAlcoholId.ToString(),
-                                    orderNumber: 1,
-                                    orderCoins: 0,
-                                    alcoholAmount: 36
-                                )
-                            );
-                    }
-
+                    orderNumber = $"{orderNumbers[2]}";
                 }
-                    sendOrderEntityList.Add(
-                    new SendOrderEntity
-                    (
-                        eventNumber: EventId,
-                        userCd: userCd,
-                        resultId: orderPostEntity.ResultId.ToString(),
-                        orderNumber: orderPostEntity.OrderNumber,
-                        orderCoins: orderPostEntity.OrderCoins,
-                        alcoholAmount: orderPostEntity.AlcoholAmount
+
+                orderTableEntityList.Add(
+                    new OrderTableEntity(
+                        resultId: tablesEntity?.ReferenceId.ToString(),
+                        userCd: userCd.ToString(),
+                        userName: userName,
+                        orderNumber: orderNumber,
+                        isAlcohol: tablesEntity?.CheckB ?? false,
+                        orderPurchaseTableEntityList: CreateBackOrderPurchaseTableEntity(
+                            sendOrderPurchaseEntityList: sendOrderPurchaseEntityList
+                                .Where(x => x.CheckA == (tablesEntity?.CheckB ?? false))
+                                .ToList(),
+                            userCd: userCd,
+                            userName: userName,
+                            isAlcohol: tablesEntity?.CheckB ?? false
+                        )
                     )
                 );
-                totalCoins += orderPostEntity.OrderCoins;
+            });
 
-                // ÈÄÅ‰ø°Áî®
-                ResultsEntity? resultsEntity = String.IsNullOrEmpty(orderPostEntity.ResultId.ToString()) ? null : base.GetSingleRecord(orderPostEntity.ResultId.ToString());
+            return orderTableEntityList;
+        }
 
-                orderTableEntity
+        private List<OrderPurchaseTableEntity> CreateBackOrderPurchaseTableEntity(
+            List<SendOrderPurchaseEntity> sendOrderPurchaseEntityList,
+            long userCd,
+            string userName,
+            bool isAlcohol
+        )
+        {
+            List<OrderPurchaseTableEntity> orderPurchaseTableEntity = new List<OrderPurchaseTableEntity>();
+
+            sendOrderPurchaseEntityList.ForEach(sendOrderPurchaseEntity =>
+            {
+                // purchaseId
+                TablesEntity? tablesEntity = long.TryParse(sendOrderPurchaseEntity.ClassC, out long purchaseId) ? 
+                    _pleasanterRepository.Select(purchaseId, true).FirstOrDefault() : 
+                    null;
+
+                orderPurchaseTableEntity
                     .Add(
-                        new OrderTableEntity(
+                        new OrderPurchaseTableEntity(
                             resultId: "",
-                            userCd: userCd,
-                            userName: userData.UserName,
-                            purchaseCd: orderPostEntity.ResultId.ToString(),
-                            purchaseName: resultsEntity?.ClassA,
-                            purchaseRead: resultsEntity?.ClassJ,
-                            number: orderPostEntity.OrderNumber,
+                            userCd: userCd.ToString(),
+                            userName: userName,
+                            purchaseCd: sendOrderPurchaseEntity.ClassC.ToString(),
+                            purchaseName: tablesEntity?.ClassA,
+                            purchaseRead: tablesEntity?.ClassJ,
+                            number: sendOrderPurchaseEntity.NumA,
                             unit: "",
-                            coins: orderPostEntity.OrderCoins,
-                            alcoholQuantity: orderPostEntity.AlcoholAmount,
-                            unProvided: true,
-                            hide: resultsEntity?.CheckZ ?? false
+                            coins: sendOrderPurchaseEntity.NumB,
+                            alcoholQuantity: sendOrderPurchaseEntity.NumC,
+                            isAlcohol: isAlcohol,
+                            hide: tablesEntity?.CheckZ ?? false
                         )
                     );
-            }
+            });
 
-            BulkApiEntity sendPlesanterApiEntity = new(data: sendOrderEntityList.Cast<object>().ToList());
+            return orderPurchaseTableEntity;
+        }
 
-            string json = JsonSerializer.Serialize(sendPlesanterApiEntity);
-
-            HttpClient httpClient = new HttpClient();
-            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            string url = $"{pleasanterUrlBase}/api/items/{OrderSiteId}/bulkupsert";
-            HttpResponseMessage response = await httpClient.PostAsync(url, content);
-
-            if(!response.StatusCode.Equals(HttpStatusCode.OK))
+        private string JsonSerialize(PleasanterApiResponse response)
+        {
+            var options = new JsonSerializerOptions
             {
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "500" }, { "message", "Ê≥®Êñá„ÅÆÈÄÅ‰ø°„Å´Â§±Êïó„Åó„Åæ„Åó„Åü" }, { "url", url }, { "sendData", json } });
-            }
-            else
-            {
-                await _hubContext.Clients.All.SendAsync("NewOrder", new Dictionary<string, string>() { {"userName", userData.UserName ?? ""}, { "orderTableEntity", JsonSerializer.Serialize(orderTableEntity) } });
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            return JsonSerializer.Serialize(new Dictionary<string, string> {
+                { "status", response.StatusCode.ToString() },
+                { "message", response.Message ?? "" },
+                { "targeturl", response.Url ?? "" },
+                { "sendData", response.SendData ?? "" }
+            }, options);
+        }
 
-                return JsonSerializer.Serialize(new Dictionary<string, string> { { "status", "200" }, { "message", "Ê≥®Êñá„ÇíÈÄÅ‰ø°„Åó„Åæ„Åó„Åü" }, { "url", url }, { "userCd", userCd }, { "sendData", json } });
+        private void ErrorCheck(PleasanterApiResponse response)
+        {
+            if (response.StatusCode != (int)HttpStatusCode.OK)
+            {
+                throw new HttpRequestException(
+                    JsonSerialize(response)
+                );
             }
         }
     }

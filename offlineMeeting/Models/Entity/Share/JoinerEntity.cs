@@ -20,7 +20,7 @@ namespace offlineMeeting.Models.Entity.Share
             string? userName,
             string? sex,
             string? contact,
-            string handoverNotes,
+            string? handoverNotes,
             int coins,
             int exp,
             int expNext,

@@ -1,13 +1,19 @@
+@using offlineMeeting.Models.Entity.Share;
 @using offlineMeeting.Models.Entity.Pos;
 
 @{
+    ElectronEntity? electron = ViewData["Electron"] as offlineMeeting.Models.Entity.Share.ElectronEntity;
+    @if (electron!.IsElectron)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
     ViewData["Title"] = "ユーザーオーダー";
 }
 
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/UserOrders.js" defer></script>
+    <script src="~/js/UserOrders.js" defer></script>
     <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
     <script>
          document.addEventListener('DOMContentLoaded', function () {
@@ -16,25 +22,27 @@
     </script>
 }
 
-@model offlineMeeting.Models.ViewModel.PosViewModel;
-<button id="play-audio" type="button">オーダー受信起動</button>
-<button id="batch_processing" type="button">まとめて提供済</button>
 <table id="user_order_list">
     <thead>
         <tr>
-            <th></th>
+            <th colspan="4">
+                <button id="reload" type="button">リロード</button>
+                <span>連番 ユーザー名</span>
+            </th>
+        </tr>
+        <tr>
             <th>オーダーID</th>
-            <th>ユーザー名</th>
             <th>商品番号</th>
             <th>商品名</th>
             <th>数量(分量)</th>
-            <th>提供済</th>
         </tr>
     </thead>
-    <tbody id="contents">
-        <partial name="/Views/Pos/_UserOrderContents.cshtml" />
-    </tbody>
+    <partial name="/Views/Pos/_UserOrderContents.cshtml" />
 </table>
 <div>
-    <br /><button id="back" type="button">戻る</button>
+    @if (!electron!.IsElectron)
+    {
+        <br />
+        <button id="back" type="button">戻る</button>
+    }
 </div>

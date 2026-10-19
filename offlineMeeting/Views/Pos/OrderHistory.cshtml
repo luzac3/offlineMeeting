@@ -7,7 +7,7 @@
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/UserOrders.js" defer></script>
+    <script src="~/js/UserOrders.js" defer></script>
     <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
     <script>
          document.addEventListener('DOMContentLoaded', function () {
@@ -28,23 +28,26 @@
     <tbody id="contents">
         @foreach (OrderTableEntity orderTableEntity in Model.OrderTableEntityList ?? new List<OrderTableEntity> { })
         {
-            <tr>
-                <td>@orderTableEntity?.PurchaseName</td>
-                <td>
-                    @if (orderTableEntity?.AlcoholQuantity == 36)
-                    {
-                        @($"{orderTableEntity?.Number * 2}勺")
-                    }
-                    else if (orderTableEntity?.AlcoholQuantity == 180)
-                    {
-                        @($"{orderTableEntity?.Number}合")
-                    }
-                    else
-                    {
-                        @($"{orderTableEntity?.Number}")
-                    }
-                </td>
-            </tr>
+            @foreach (OrderPurchaseTableEntity orderPurchaseTableEntity in orderTableEntity!.OrderPurchaseTableEntityList ?? new List<OrderPurchaseTableEntity> { })
+            {
+                <tr>
+                    <td>@orderPurchaseTableEntity?.PurchaseName</td>
+                    <td>
+                        @if (orderPurchaseTableEntity?.AlcoholQuantity == 36)
+                        {
+                            @($"{orderPurchaseTableEntity?.Number * 2}勺")
+                        }
+                        else if (orderPurchaseTableEntity?.AlcoholQuantity == 180)
+                        {
+                            @($"{orderPurchaseTableEntity?.Number}合")
+                        }
+                        else
+                        {
+                            @($"{orderPurchaseTableEntity?.Number}")
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

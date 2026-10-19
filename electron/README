@@ -1,0 +1,3 @@
+パッケージ化する際は
+npx electron-forge import
+を行ってからnpm run makeを実行する

@@ -4,12 +4,14 @@
 @{
     ViewData["Title"] = "Alcohol";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+}
 
 @section Scripts {
     <link rel="stylesheet" href="https://unpkg.com/smartphoto@latest/css/smartphoto.min.css">
     <script src="https://unpkg.com/smartphoto@latest/js/smartphoto.min.js"></script>
-    <script src="~/js/dist/Pos.js" defer></script>
-    <link rel="stylesheet" href="~/css/Pos/Index.css" asp-append-version="true" />
+    <script src="~/js/Pos.js" defer></script>
     <script>
          document.addEventListener('DOMContentLoaded', function () {
             new SmartPhoto(".js-smartPhoto");
@@ -30,18 +32,28 @@
                 if (alcoholDataEntity.Rarity == 0){
                     continue;
                 }
-                <div class="purchase_order alcohol_order modal_parent @(alcoholDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
+                <div class="order purchase_order alcohol_order modal_parent @(alcoholDataEntity.LeftAmount <= 0 ? "stop_order" : "")">
                     <div id="alchol_@alcoholDataEntity.ResultId" class="alchol_info" data-result_id="@alcoholDataEntity.ResultId">
                         <input class="category nodisplay" value="2" />
                         <div class="open_modal">
                             <p class="food_image_container">
                                 @if (@alcoholDataEntity.Image == "")
                                 {
-                                    <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                    <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                         data-src="/image/noImage.jpg"
+                                         class="food_image blur-up"
+                                         width="@alcoholDataEntity.Width"
+                                         height="@alcoholDataEntity.Height"
+                                         loading="lazy" />
                                 }
                                 else
                                 {
-                                    <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                    <img src="@(alcoholDataEntity.LowImage)"
+                                         data-src="@(alcoholDataEntity.Image)"
+                                         class="food_image blur-up"
+                                         width="@alcoholDataEntity.Width"
+                                         height="@alcoholDataEntity.Height"
+                                         loading="lazy" />
                                 }
                                 @if (alcoholDataEntity.Ordered)
                                 {
@@ -76,7 +88,7 @@
                                 <span>@(alcoholDataEntity.Priority ? "☆" : "")@(alcoholDataEntity.Abbreviation != "" ? alcoholDataEntity.Abbreviation : alcoholDataEntity.AlcoholName)</span>
                             </p>
                             <p class="alcohol_poncoin">
-                                <img src="/image/poncoin.png" alt="image" />
+                                <img src="/image/poncoin_192.png" alt="image" />
                                 <span> × </span>
                                 <span class="coin_number_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 <input class="coin_number nodisplay" value="@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)" disabled />
@@ -115,12 +127,22 @@
                                 <p class="food_image_modal_container">
                                     @if (@alcoholDataEntity.Image == "")
                                     {
-                                        <img src="/image/noImage.jpg" class="food_image" alt="image" />
+                                        <img src="/Pos/NoImageRender?src=/image/noImage.jpg"
+                                             data-src="/image/noImage.jpg"
+                                             class="food_image blur-up"
+                                             width="@alcoholDataEntity.Width"
+                                             height="@alcoholDataEntity.Height"
+                                             loading="lazy" />
                                     }
                                     else
                                     {
                                         <a href="@(alcoholDataEntity.Image)" class="food_image_wrapper js-smartPhoto" data-caption="test" data-id="test" data-group="sake">
-                                            <img src="@(alcoholDataEntity.Image)" class="food_image" />
+                                            <img src="@(alcoholDataEntity.LowImage)"
+                                                 data-src="@(alcoholDataEntity.Image)"
+                                                 class="food_image blur-up"
+                                                 width="@alcoholDataEntity.Width"
+                                                 height="@alcoholDataEntity.Height"
+                                                 loading="lazy" />
                                         </a>
                                     }
                                     @if (alcoholDataEntity.Ordered)
@@ -156,7 +178,7 @@
                                     <span>@alcoholDataEntity.AlcoholName</span>
                                 </p>
                                 <p class="alcohol_modal_poncoin">
-                                    <img src="/image/poncoin.png" alt="image" />
+                                    <img src="/image/poncoin_192.png" alt="image" />
                                     <span> × </span>
                                     <span class="coin_number_modal_show">@(alcoholDataEntity.CoinNumber * 5 - alcoholDataEntity.CoinNumber)</span>
                                 </p>

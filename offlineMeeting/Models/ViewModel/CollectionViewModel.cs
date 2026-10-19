@@ -8,7 +8,7 @@ namespace offlineMeeting.Models.ViewModel
         public List<AlcoholDataEntity>? AlcoholDataEntityList { get; set; }
         public AlcoholDataEntity? AlcoholDataEntity { get; set; }
         public List<OrderEntity>? OrderEntityList { get; set; }
-        public List<OrderTableEntity>? OrderTableEntityList { get; set; }
+        public List<OrderPurchaseTableEntity>? OrderPurchaseTableEntity { get; set; }
 
         public CollectionViewModel() { }
 
@@ -27,9 +27,9 @@ namespace offlineMeeting.Models.ViewModel
             OrderEntityList = orderEntityList;
         }
 
-        public void setOrderTableEntityList(List<OrderTableEntity> orderTableEntityList)
+        public void setOrderPurchaseTableEntityList(List<OrderPurchaseTableEntity> orderPurchaseTableEntity)
         {
-            OrderTableEntityList = orderTableEntityList;
+            OrderPurchaseTableEntity = orderPurchaseTableEntity;
         }
     }
 }

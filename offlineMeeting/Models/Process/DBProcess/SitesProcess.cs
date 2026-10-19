@@ -15,10 +15,10 @@ namespace offlineMeeting.Models.Process.DBProcess
             return Sites.ToList();
         }
 
-        protected SitesEntity Get(int siteId)
+        protected SitesEntity Get(long siteId)
         {
             return Sites
-                .Where(x => Convert.ToInt32(x.SiteId) == siteId)
+                .Where(x => x.SiteId == siteId)
                 .FirstOrDefault() ?? throw new Exception("invalid userCd");
         }
     }

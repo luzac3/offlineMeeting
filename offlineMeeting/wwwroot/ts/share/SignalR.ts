@@ -15,8 +15,25 @@ export class SignalR {
 
         await this.connectionStart();
 
+        // EventIdのグループに参加
+        const eventId = this.getEventId();
+        if (eventId) {
+            await this.connection.invoke("JoinEvent", eventId);
+        }
+
         // hiddenの解除
         document.getElementsByTagName("body").item(0)!.style.visibility = "visible";
+    }
+
+    private getEventId = (): string | null => {
+        // URLクエリパラメータから取得
+        const params = new URLSearchParams(window.location.search);
+        const eid = params.get("eid");
+        if (eid) return eid;
+
+        // Cookieから取得
+        const match = document.cookie.match(/(?:^|;\s*)EventId=(\d+)/);
+        return match ? match[1] : null;
     }
 
     private connectionStart = async () => {
@@ -30,7 +47,7 @@ export class SignalR {
         this.connection.send(sendProcessName, ...args);
     }
 
-    get = (getProcessName: string, callback: (json: { [key: string]: string | number | boolean } | { [key: string]: string | number }[]) => void) => {
+    get = (getProcessName: string, callback: (json: any) => void) => {
         this.connection.on(getProcessName, (
             strJson: any
         ) => {
