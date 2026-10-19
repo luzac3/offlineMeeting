@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/Coins/CreatePaypalButton.ts":
+/***/ "./wwwroot/ts/Coins/CreatePaypalButton.ts"
 /*!************************************************!*\
   !*** ./wwwroot/ts/Coins/CreatePaypalButton.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -51,13 +51,13 @@ class CreatePaypalButton {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/Coins/GiveCoins.ts":
+/***/ "./wwwroot/ts/Coins/GiveCoins.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/Coins/GiveCoins.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -112,13 +112,13 @@ class GiveCoins {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/Coins/SendCoins.ts":
+/***/ "./wwwroot/ts/Coins/SendCoins.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/Coins/SendCoins.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -159,13 +159,13 @@ class SendCoins {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BackButton.ts":
+/***/ "./wwwroot/ts/share/BackButton.ts"
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -183,13 +183,13 @@ class BackButton {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/Counter.ts":
+/***/ "./wwwroot/ts/share/Counter.ts"
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/Counter.ts ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -250,13 +250,13 @@ class Counter {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/FetchApi.ts":
+/***/ "./wwwroot/ts/share/FetchApi.ts"
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -330,7 +330,7 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -352,6 +352,12 @@ ManageLoadElement.remove = () => {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module

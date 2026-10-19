@@ -1,6 +1,12 @@
+@using offlineMeeting.Models.Entity.QR;
 @using offlineMeeting.Models.Entity.Share;
 
 @{
+    ElectronEntity? electron = ViewData["Electron"] as ElectronEntity;
+    @if (electron?.IsElectron == true)
+    {
+        Layout = "~/Views/Shared/_LayoutElectron.cshtml";
+    }
     ViewData["Title"] = "QR発行";
 }
 @section Styles {
@@ -24,9 +30,9 @@
     {
         @foreach (var joiner in Model.JoinerList)
         {
-            <div class="joiner_row" data-usercd="@joiner.UserCd" data-username="@joiner.UserName"
-                 data-qrurl="@(Model.BaseUrl)?eid=@(Model.EventId)&uid=@(joiner.UserCd)">
-                <span>@joiner.UserName</span>
+            <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name"
+                 data-qrurl="@joiner.Url">
+                <span>@joiner.Name</span>
                 <button class="btn_checkin" type="button">チェックイン</button>
             </div>
         }

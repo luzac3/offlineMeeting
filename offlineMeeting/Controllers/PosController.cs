@@ -8,6 +8,7 @@ using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Pos;
 using offlineMeeting.Models.Process.Share;
 using offlineMeeting.Models.ViewModel;
+using PleasanterBridge.src.APIBridge;
 using PleasanterBridge.src.DataRepository.Service;
 using System.Diagnostics;
 using System.Text.Json;
@@ -19,6 +20,7 @@ namespace offlineMeeting.Controllers
         private readonly IHubContext<MyHub> _hubContext;
         private readonly ILogger<PosController> _logger;
         private readonly IWebHostEnvironment _env;
+        private readonly IPleasanterApiBridge _bridge;
         private readonly IPleasanterRepository _pleasanterRepository;
         private PosViewModel PosViewModel;
         private ResponseLogProcess ResponseLogProcess;
@@ -34,12 +36,14 @@ namespace offlineMeeting.Controllers
             ILogger<PosController> logger,
             IHubContext<MyHub> hubContext,
             IWebHostEnvironment env,
+            IPleasanterApiBridge bridge,
             IPleasanterRepository pleasanterRepository
         )
         {
             _logger = logger;
             _hubContext = hubContext;
             _env = env;
+            _bridge = bridge;
             _pleasanterRepository = pleasanterRepository;
             PosViewModel = new ();
             ResponseLogProcess = new (_logger);
@@ -59,6 +63,7 @@ namespace offlineMeeting.Controllers
             SetViewDataProcess setViewDataProcess = new();
             ViewData["UserData"] = setViewDataProcess.SetUserData(HttpContext, _pleasanterRepository);
             ViewData["Electron"] = setViewDataProcess.SetElectron();
+            ViewData["SessionId"] = setViewDataProcess.SetSessionId(HttpContext, _pleasanterRepository);
             base.OnActionExecuting(context);
         }
 
@@ -77,7 +82,7 @@ namespace offlineMeeting.Controllers
             AlcoholDataProcess alcoholDataProcess = new (sakeSiteId: SakeSiteId, httpContext: HttpContext);
             SiteSettingsProcess siteSettingsProcess = new ();
 
-            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId));
+            PosViewModel.setAlcoholDataList(alcoholDataProcess.Get(siteSettingsProcess.Get(siteId: SakeSiteId), HttpContext, _pleasanterRepository, OrderSiteId, _env));
             return View(PosViewModel);
         }
 
@@ -88,7 +93,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -103,7 +109,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoorSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new();
 
@@ -126,7 +133,8 @@ namespace offlineMeeting.Controllers
                 eventFoodSiteId: EventFoodSiteId,
                 rawFoodSiteId: RawFoodSiteId,
                 httpContext: HttpContext,
-                pleasanterRepository: _pleasanterRepository
+                pleasanterRepository: _pleasanterRepository,
+                env: _env
             );
             SiteSettingsProcess siteSettingsProcess = new ();
 
@@ -144,6 +152,7 @@ namespace offlineMeeting.Controllers
                 joinerSiteId: JoinerSiteId,
                 httpContext: HttpContext,
                 hubContext: _hubContext,
+                bridge: _bridge,
                 pleasanterRepository: _pleasanterRepository
             );
 
@@ -202,7 +211,7 @@ namespace offlineMeeting.Controllers
         [HttpPost]
         public string OrderComplete([FromBody] OrderCompletePostEntity orderCompletePostEntity)
         {
-            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList);
+            OrderCompleteProcess orderCompleteProcess = new(orderCompletePostEntity.ResultIdList, _bridge);
 
             _ = Task.Run(async () =>
             {

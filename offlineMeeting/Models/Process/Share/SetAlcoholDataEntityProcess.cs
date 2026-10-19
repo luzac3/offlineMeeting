@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Share;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
@@ -12,8 +13,10 @@ namespace offlineMeeting.Models.Process.Share
         private long UserCd;
         List<AlcoholDataEntity> AlcoholDataEntityList;
         private readonly IPleasanterRepository _repository;
+        private readonly IWebHostEnvironment? _env;
+        private readonly string? _sessionId;
 
-        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, long sakeSiteId, long orderSiteId, long eventId, long userCd)
+        public SetAlcoholDataEntityProcess(IPleasanterRepository repository, long sakeSiteId, long orderSiteId, long eventId, long userCd, IWebHostEnvironment? env = null)
         {
             SakeSiteId = sakeSiteId;
             OrderSiteId = orderSiteId;
@@ -21,6 +24,8 @@ namespace offlineMeeting.Models.Process.Share
             UserCd = userCd;
             AlcoholDataEntityList = new List<AlcoholDataEntity> { };
             _repository = repository;
+            _env = env;
+            _sessionId = _repository.Select(eventId, true).FirstOrDefault()?.ClassB;
         }
 
         public List<AlcoholDataEntity> Get(System.Text.Json.Nodes.JsonNode? json)
@@ -122,10 +127,10 @@ namespace offlineMeeting.Models.Process.Share
                 .ToList();
 
             long breweryId = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
-            TablesEntity? brewery = _repository.Select(breweryId, true).FirstOrDefault();
+            TablesEntity? brewery = breweryId > 0 ? _repository.Select(breweryId, true).FirstOrDefault() : null;
 
             long todohukenId = string.IsNullOrEmpty(brewery?.ClassB) ? 0 : Convert.ToInt64(brewery.ClassB);
-            string? prefectures = _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA;
+            string? prefectures = todohukenId > 0 ? _repository.Select(todohukenId, true).FirstOrDefault()?.ClassA : null;
 
             string? image = null;
             if (result?.DescriptionG != null && result.DescriptionG.Count > 0)
@@ -138,7 +143,29 @@ namespace offlineMeeting.Models.Process.Share
             int width = 1475;
             int height = 1258;
 
-            if (!string.IsNullOrEmpty(image))
+            // SessionIDフォルダに展開済みの画像があれば、そのURLパスを優先利用する
+            string? folderImagePath = _env != null
+                ? EventImageResolver.ResolveImageWebPath(_env, _sessionId, SakeSiteId, result!.ReferenceId, 0)
+                : null;
+
+            if (folderImagePath != null)
+            {
+                imageBase64 = folderImagePath;
+                lowImageBase64 = folderImagePath;
+                if (!string.IsNullOrEmpty(image))
+                {
+                    try
+                    {
+                        using ImageHelper imageHelper = new ImageHelper(Convert.FromBase64String(image));
+                        (width, height) = imageHelper.GetSize();
+                    }
+                    catch
+                    {
+                        // fixme エラー処理
+                    }
+                }
+            }
+            else if (!string.IsNullOrEmpty(image))
             {
                 try
                 {
