@@ -81,14 +81,7 @@
                                 <a class="nav-link text-dark dot" asp-area="" asp-controller="QR" asp-action="Index">チェックイン</a>
                             </li>
                             <li class="nav-item">
-                                <form asp-controller="Coins" asp-action="TogglePaypalMode" method="post" class="paypal-toggle-form nav-link">
-                                    <span class="text-dark dot">PayPal</span>
-                                    <label class="paypal-toggle">
-                                        <input type="checkbox" @(!isSandbox ? "checked" : "") onchange="this.form.submit()">
-                                        <span class="paypal-toggle-slider"></span>
-                                    </label>
-                                    <span class="text-dark dot paypal-mode-label @(isSandbox ? "sandbox" : "live")">@(isSandbox ? "Sandbox" : "Live")</span>
-                                </form>
+                                <a class="nav-link text-dark dot" asp-area="" asp-controller="Admin" asp-action="Index">カンリ</a>
                             </li>
                             }
                             <li class="nav-item">
