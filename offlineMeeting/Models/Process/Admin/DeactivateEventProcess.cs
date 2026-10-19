@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using offlineMeeting.Models.Entity.Admin;
 using offlineMeeting.Models.Process.Share;
 using PleasanterBridge.src.APIBridge;
 using PleasanterBridge.src.APIBridge.Contracts;
@@ -46,9 +44,15 @@ namespace offlineMeeting.Models.Process.Admin
                 EventImageResolver.DeleteSessionFolder(_env, sessionId);
             }
 
+            Dictionary<string, object> updateData = new Dictionary<string, object>
+            {
+                { "ClassB", "" },
+                { "CheckB", false }
+            };
+
             PleasanterApiResponse response = await _bridge.Update(
                 _eventId,
-                new SendEventActivationEntity(active: false, sessionId: "")
+                updateData
             );
 
             if (response.StatusCode != (int)HttpStatusCode.OK)

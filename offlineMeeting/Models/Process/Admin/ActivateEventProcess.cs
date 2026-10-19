@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using offlineMeeting.Models.Entity.Admin;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.Share;
 using PleasanterBridge.src.APIBridge;
@@ -10,11 +8,6 @@ using System.Net;
 
 namespace offlineMeeting.Models.Process.Admin
 {
-    /// <summary>
-    /// イベント有効化処理。
-    /// イベント(EventId)に紐づく各画像テーブルのBase64画像を SessionID フォルダに展開し、
-    /// イベントレコードの CheckB(有効化) と ClassB(SessionId) を更新する。
-    /// </summary>
     public class ActivateEventProcess
     {
         private readonly IWebHostEnvironment _env;
@@ -35,9 +28,6 @@ namespace offlineMeeting.Models.Process.Admin
             _eventId = eventId;
         }
 
-        /// <summary>
-        /// 画像を展開し、イベントレコードを有効化する。発行した SessionId を返す。
-        /// </summary>
         public async Task<string> Activate()
         {
             string sessionId = Guid.NewGuid().ToString("N");
@@ -68,15 +58,21 @@ namespace offlineMeeting.Models.Process.Admin
                         }
                         catch
                         {
-                            // 不正なBase64はスキップ
+                            // fixme 不審なBase64が握りつぶされてるので修正
                         }
                     }
                 }
             }
 
+            Dictionary<string, object> updateData = new Dictionary<string, object>
+            {
+                { "ClassB", sessionId },
+                { "CheckB", true }
+            };
+
             PleasanterApiResponse response = await _bridge.Update(
                 _eventId,
-                new SendEventActivationEntity(active: true, sessionId: sessionId)
+                updateData
             );
 
             if (response.StatusCode != (int)HttpStatusCode.OK)
