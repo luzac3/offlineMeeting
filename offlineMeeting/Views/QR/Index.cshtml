@@ -13,17 +13,11 @@
     <link rel="stylesheet" href="~/css/QR/Index.css" asp-append-version="true" />
 }
 @section Scripts {
-    <script src="~/plugins/qrcode.min.js"></script>
     <script src="~/js/QR.js" defer></script>
 }
 @model offlineMeeting.Models.ViewModel.QRViewModel;
 
 <h2 class="dot">チェックイン</h2>
-
-<div id="qr_display" class="nodisplay">
-    <h3 id="qr_user_name_display" class="dot"></h3>
-    <div id="qr_code_display"></div>
-</div>
 
 <div id="joiner_list">
     @if (Model?.JoinerList != null && Model.JoinerList.Count > 0)
@@ -33,7 +27,19 @@
             <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name"
                  data-qrurl="@joiner.Url">
                 <span>@joiner.Name</span>
-                <button class="btn_checkin" type="button">チェックイン</button>
+                @if (joiner.CheckedIn)
+                {
+                    <div class="joiner_actions">
+                        <button class="btn_checkin checked_in" type="button" disabled>✓ 完了</button>
+                        <button class="btn_reprint" type="button" data-usercd="@joiner.UserCd">再印刷</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="joiner_actions">
+                        <button class="btn_checkin" type="button">チェックイン</button>
+                    </div>
+                }
             </div>
         }
     }
