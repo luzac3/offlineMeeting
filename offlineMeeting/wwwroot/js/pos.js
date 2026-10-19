@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts":
+/***/ "./wwwroot/ts/pos/CaliculateCoinNumber.ts"
 /*!************************************************!*\
   !*** ./wwwroot/ts/pos/CaliculateCoinNumber.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -111,13 +111,13 @@ class CaliculateCoinNumber {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/pos/OrderEntity.ts":
+/***/ "./wwwroot/ts/pos/OrderEntity.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/pos/OrderEntity.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -134,13 +134,13 @@ class OrderEntity {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/pos/StockOrder.ts":
+/***/ "./wwwroot/ts/pos/StockOrder.ts"
 /*!**************************************!*\
   !*** ./wwwroot/ts/pos/StockOrder.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -194,13 +194,13 @@ class StockOrder {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BackButton.ts":
+/***/ "./wwwroot/ts/share/BackButton.ts"
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -218,13 +218,13 @@ class BackButton {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BlurImage.ts":
+/***/ "./wwwroot/ts/share/BlurImage.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/share/BlurImage.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -269,13 +269,13 @@ class BlurImage {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/ControlModal.ts":
+/***/ "./wwwroot/ts/share/ControlModal.ts"
 /*!******************************************!*\
   !*** ./wwwroot/ts/share/ControlModal.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -319,13 +319,13 @@ class ControlModal {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/LocalStrage.ts":
+/***/ "./wwwroot/ts/share/LocalStrage.ts"
 /*!*****************************************!*\
   !*** ./wwwroot/ts/share/LocalStrage.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -360,13 +360,13 @@ class LocalStrage {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/SetEventListner.ts":
+/***/ "./wwwroot/ts/share/SetEventListner.ts"
 /*!*********************************************!*\
   !*** ./wwwroot/ts/share/SetEventListner.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -405,7 +405,7 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 };
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -427,6 +427,12 @@ SetEventListner.removeEvent = (parentElement, type, handler) => {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
