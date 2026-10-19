@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Share;
 using PleasanterBridge.src.DataRepository.Entity;
 using PleasanterBridge.src.DataRepository.Service;
@@ -69,6 +68,7 @@ namespace offlineMeeting.Models.Process.Share
             return GetAlcoholDataEntity(result, choicesTextDic);
         }
 
+        //fixme 隠すデータを読み込む処理は後で
         public List<long> GetHidedIdList()
         {
             var where = new Dictionary<string, object>
@@ -106,15 +106,7 @@ namespace offlineMeeting.Models.Process.Share
             return choicesTextDic;
         }
 
-        private void GetAlcoholDataEntityList(List<TablesEntity> results, Dictionary<string, string> choicesTextDic)
-        {
-            foreach (TablesEntity result in results)
-            {
-                AlcoholDataEntityList.Add(GetAlcoholDataEntity(result, choicesTextDic));
-            }
-        }
-
-        private AlcoholDataEntity GetAlcoholDataEntity(TablesEntity result, Dictionary<string, string> choicesTextDic)
+        private List<long> GetOrderedResultsIdList()
         {
             var where = new Dictionary<string, object>
             {
@@ -122,9 +114,24 @@ namespace offlineMeeting.Models.Process.Share
                 { "ClassD", UserCd.ToString() }
             };
 
-            List<long> orderedResultsIdList = _repository.Select(OrderSiteId, where, true)
+            return _repository.Select(OrderSiteId, where, true)
                 .Select(x => Convert.ToInt64(x.ClassC ?? "0"))
                 .ToList();
+        }
+
+        private void GetAlcoholDataEntityList(List<TablesEntity> results, Dictionary<string, string> choicesTextDic)
+        {
+            List<long> orderedResultsIdList = GetOrderedResultsIdList();
+
+            foreach (TablesEntity result in results)
+            {
+                AlcoholDataEntityList.Add(GetAlcoholDataEntity(result, choicesTextDic, orderedResultsIdList));
+            }
+        }
+
+        private AlcoholDataEntity GetAlcoholDataEntity(TablesEntity result, Dictionary<string, string> choicesTextDic, List<long>? orderedResultsIdList = null)
+        {
+            orderedResultsIdList ??= GetOrderedResultsIdList();
 
             long breweryId = string.IsNullOrEmpty(result.ClassC) ? 0 : Convert.ToInt64(result.ClassC);
             TablesEntity? brewery = breweryId > 0 ? _repository.Select(breweryId, true).FirstOrDefault() : null;
