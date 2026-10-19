@@ -1,11 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/AbortController.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/AbortController.js"
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/AbortController.js ***!
   \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -41,13 +41,13 @@ class AbortController {
 }
 //# sourceMappingURL=AbortController.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js"
 /*!***************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js ***!
   \***************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -103,13 +103,13 @@ class AccessTokenHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.Htt
 }
 //# sourceMappingURL=AccessTokenHttpClient.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js"
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js ***!
   \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -163,13 +163,13 @@ class DefaultHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_2__.HttpCli
 }
 //# sourceMappingURL=DefaultHttpClient.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js"
 /*!****************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js ***!
   \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -191,13 +191,13 @@ class DefaultReconnectPolicy {
 }
 //# sourceMappingURL=DefaultReconnectPolicy.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js"
 /*!********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js ***!
   \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -254,13 +254,13 @@ function getEventSource() {
 }
 //# sourceMappingURL=DynamicImports.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Errors.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Errors.js"
 /*!************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Errors.js ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -409,13 +409,13 @@ class AggregateErrors extends Error {
 }
 //# sourceMappingURL=Errors.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js"
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js ***!
   \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -567,13 +567,13 @@ function deserializeContent(response, responseType) {
 }
 //# sourceMappingURL=FetchHttpClient.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js"
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js ***!
   \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -634,13 +634,13 @@ class HandshakeProtocol {
 }
 //# sourceMappingURL=HandshakeProtocol.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js"
 /*!*****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js ***!
   \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -655,13 +655,13 @@ HeaderNames.Authorization = "Authorization";
 HeaderNames.Cookie = "Cookie";
 //# sourceMappingURL=HeaderNames.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js"
 /*!****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HttpClient.js ***!
   \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -717,13 +717,13 @@ class HttpClient {
 }
 //# sourceMappingURL=HttpClient.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js"
 /*!********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js ***!
   \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1310,13 +1310,13 @@ class PromiseSource {
 }
 //# sourceMappingURL=HttpConnection.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js"
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HubConnection.js ***!
   \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2269,13 +2269,13 @@ class HubConnection {
 }
 //# sourceMappingURL=HubConnection.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js"
 /*!**************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js ***!
   \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2434,13 +2434,13 @@ function isLogger(logger) {
 }
 //# sourceMappingURL=HubConnectionBuilder.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js"
 /*!******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js ***!
   \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2471,13 +2471,13 @@ var MessageType;
 })(MessageType || (MessageType = {}));
 //# sourceMappingURL=IHubProtocol.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js"
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ILogger.js ***!
   \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2510,13 +2510,13 @@ var LogLevel;
 })(LogLevel || (LogLevel = {}));
 //# sourceMappingURL=ILogger.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js"
 /*!****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ITransport.js ***!
   \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2549,13 +2549,13 @@ var TransferFormat;
 })(TransferFormat || (TransferFormat = {}));
 //# sourceMappingURL=ITransport.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js"
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js ***!
   \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2687,13 +2687,13 @@ class JsonHubProtocol {
 }
 //# sourceMappingURL=JsonHubProtocol.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js"
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Loggers.js ***!
   \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2714,13 +2714,13 @@ class NullLogger {
 NullLogger.instance = new NullLogger();
 //# sourceMappingURL=Loggers.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js"
 /*!**************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js ***!
   \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2916,13 +2916,13 @@ class LongPollingTransport {
 }
 //# sourceMappingURL=LongPollingTransport.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js"
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js ***!
   \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3126,13 +3126,13 @@ class BufferedItem {
 }
 //# sourceMappingURL=MessageBuffer.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js"
 /*!*******************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js ***!
   \*******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3246,13 +3246,13 @@ class ServerSentEventsTransport {
 }
 //# sourceMappingURL=ServerSentEventsTransport.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Subject.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Subject.js"
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Subject.js ***!
   \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3294,13 +3294,13 @@ class Subject {
 }
 //# sourceMappingURL=Subject.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js"
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js ***!
   \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3328,13 +3328,13 @@ TextMessageFormat.RecordSeparatorCode = 0x1e;
 TextMessageFormat.RecordSeparator = String.fromCharCode(TextMessageFormat.RecordSeparatorCode);
 //# sourceMappingURL=TextMessageFormat.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Utils.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Utils.js"
 /*!***********************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Utils.js ***!
   \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3605,13 +3605,13 @@ function getGlobalThis() {
 }
 //# sourceMappingURL=Utils.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js"
 /*!************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js ***!
   \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3778,13 +3778,13 @@ class WebSocketTransport {
 }
 //# sourceMappingURL=WebSocketTransport.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js":
+/***/ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js"
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js ***!
   \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3879,13 +3879,13 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpClient 
 }
 //# sourceMappingURL=XhrHttpClient.js.map
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/QuizUser/Canvas.ts":
+/***/ "./wwwroot/ts/QuizUser/Canvas.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/QuizUser/Canvas.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4014,13 +4014,13 @@ class Canvas {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/QuizUser/GetQuiz.ts":
+/***/ "./wwwroot/ts/QuizUser/GetQuiz.ts"
 /*!****************************************!*\
   !*** ./wwwroot/ts/QuizUser/GetQuiz.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4055,13 +4055,13 @@ class GetQuiz {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/QuizUser/SendAnswer.ts":
+/***/ "./wwwroot/ts/QuizUser/SendAnswer.ts"
 /*!*******************************************!*\
   !*** ./wwwroot/ts/QuizUser/SendAnswer.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4108,13 +4108,13 @@ class SendAnswer {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BackButton.ts":
+/***/ "./wwwroot/ts/share/BackButton.ts"
 /*!****************************************!*\
   !*** ./wwwroot/ts/share/BackButton.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4133,13 +4133,13 @@ class BackButton {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/BlurImage.ts":
+/***/ "./wwwroot/ts/share/BlurImage.ts"
 /*!***************************************!*\
   !*** ./wwwroot/ts/share/BlurImage.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4185,13 +4185,13 @@ class BlurImage {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/FetchApi.ts":
+/***/ "./wwwroot/ts/share/FetchApi.ts"
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4266,13 +4266,13 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ }),
+/***/ },
 
-/***/ "./wwwroot/ts/share/SignalR.ts":
+/***/ "./wwwroot/ts/share/SignalR.ts"
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/SignalR.ts ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4335,67 +4335,67 @@ class SignalR {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ "?1b30":
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
-/***/ (() => {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ "?6cf0":
+/***/ "?6cf0"
 /*!**********************************!*\
   !*** abort-controller (ignored) ***!
   \**********************************/
-/***/ (() => {
+() {
 
 /* (ignored) */
 
-/***/ }),
+/***/ },
 
-/***/ "?7cbe":
-/*!******************************!*\
-  !*** tough-cookie (ignored) ***!
-  \******************************/
-/***/ (() => {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ "?b287":
+/***/ "?b287"
 /*!*****************************!*\
   !*** eventsource (ignored) ***!
   \*****************************/
-/***/ (() => {
+() {
 
 /* (ignored) */
 
-/***/ }),
+/***/ },
 
-/***/ "?c710":
+/***/ "?c710"
 /*!******************************!*\
   !*** fetch-cookie (ignored) ***!
   \******************************/
-/***/ (() => {
+() {
 
 /* (ignored) */
 
-/***/ }),
+/***/ },
 
-/***/ "?d2dd":
+/***/ "?d2dd"
 /*!****************************!*\
   !*** node-fetch (ignored) ***!
   \****************************/
-/***/ (() => {
+() {
 
 /* (ignored) */
 
-/***/ })
+/***/ },
+
+/***/ "?7cbe"
+/*!******************************!*\
+  !*** tough-cookie (ignored) ***!
+  \******************************/
+() {
+
+/* (ignored) */
+
+/***/ },
+
+/***/ "?1b30"
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+() {
+
+/* (ignored) */
+
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -4417,6 +4417,12 @@ class SignalR {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
