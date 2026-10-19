@@ -16,6 +16,18 @@ builder.Services.AddSignalR();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// サーバー側メモリキャッシュ（UserCd/EventId/SessionId の保存先）
+builder.Services.AddMemoryCache();
+
+// セッションID をキャッシュのキーとして利用するためのセッション設定
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromHours(24);
+});
+
 // PleasanterSettings を JSON ファイルからロード
 var pleasanterSettingsProperty = new PleasanterSettingsProperty(builder.Environment.ContentRootPath);
 var settings = new PleasanterSettings(
@@ -57,6 +69,8 @@ app.UseHttpsRedirection();
 //app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

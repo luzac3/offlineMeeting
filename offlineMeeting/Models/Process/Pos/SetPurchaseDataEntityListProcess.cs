@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using offlineMeeting.Models.Entity.Pos;
 using offlineMeeting.Models.Process.Share;
 using PleasanterBridge.src.DataRepository.Entity;
@@ -16,6 +17,8 @@ namespace offlineMeeting.Models.Process.Pos
         private long UserCd;
         List<PurchaseDataEntity> PurchaseDataEntityList;
         private readonly IPleasanterRepository _pleasanterRepository;
+        private readonly IWebHostEnvironment? _env;
+        private readonly string? _sessionId;
 
         public SetPurchaseDataEntityListProcess(
             long extraFoodSiteId,
@@ -24,7 +27,8 @@ namespace offlineMeeting.Models.Process.Pos
             long orderSiteId,
             long eventId,
             long userCd,
-            IPleasanterRepository pleasanterRepository
+            IPleasanterRepository pleasanterRepository,
+            IWebHostEnvironment? env = null
         )
         {
             ExtraFoodSiteId = extraFoodSiteId;
@@ -35,6 +39,8 @@ namespace offlineMeeting.Models.Process.Pos
             UserCd = userCd;
             PurchaseDataEntityList = new List<PurchaseDataEntity> { };
             _pleasanterRepository = pleasanterRepository;
+            _env = env;
+            _sessionId = pleasanterRepository.Select(eventId, true).FirstOrDefault()?.ClassB;
         }
 
         public List<PurchaseDataEntity> Get(int category)
@@ -101,7 +107,29 @@ namespace offlineMeeting.Models.Process.Pos
                 int width = 1475;
                 int height = 1258;
 
-                if (!string.IsNullOrEmpty(image))
+                // SessionIDフォルダに展開済みの画像があれば、そのURLパスを優先利用する
+                string? folderImagePath = _env != null && tablesEntity?.SiteId != null
+                    ? EventImageResolver.ResolveImageWebPath(_env, _sessionId, tablesEntity.SiteId, tablesEntity.ReferenceId, 0)
+                    : null;
+
+                if (folderImagePath != null)
+                {
+                    imageBase64 = folderImagePath;
+                    lowImageBase64 = folderImagePath;
+                    if (!string.IsNullOrEmpty(image))
+                    {
+                        try
+                        {
+                            using ImageHelper imageHelper = new ImageHelper(Convert.FromBase64String(image));
+                            (width, height) = imageHelper.GetSize();
+                        }
+                        catch
+                        {
+                            // fixme エラー処理
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(image))
                 {
                     try
                     {
