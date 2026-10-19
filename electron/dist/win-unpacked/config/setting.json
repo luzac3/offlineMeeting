@@ -1,10 +1,10 @@
 {
-  "orderUrl": "https://sake.wolfslab.jp/Pos/UserOrders?eid=59450",
+  "orderUrl": "https://sake.wolfslab.jp/Pos/UserOrders?eid=60473",
   "orderName": "チュウモンイチラン",
-  "checkinUrl": "https://sake.wolfslab.jp/QR/Index?eid=59450",
+  "checkinUrl": "https://sake.wolfslab.jp/QR/Index?eid=60473",
   "checkinName": "チェックイン",
-  "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=59450&resultId=",
-  "checkinPrintUrlBase": "https://sake.wolfslab.jp/QR/PrintQr?eid=59450&userCd=",
+  "printUrlBase": "https://sake.wolfslab.jp/Pos/PrintOrders?eid=60473&resultId=",
+  "checkinPrintUrlBase": "https://sake.wolfslab.jp/QR/PrintQr?eid=60473&userCd=",
   "deviceName": "EPSON TM-m30 Receipt",
   "printOptions": {
     "margins": {

@@ -81,6 +81,20 @@ namespace offlineMeeting.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public IActionResult TogglePaypalMode()
+        {
+            JoinerEntity? userData = ViewData["UserData"] as JoinerEntity;
+            if (userData == null || !userData.IsAdmin)
+            {
+                return Forbid();
+            }
+
+            PaypalProperty.ToggleMode();
+            string referer = Request.Headers.Referer.ToString();
+            return Redirect(string.IsNullOrEmpty(referer) ? "/" : referer);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

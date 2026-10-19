@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Data;
+using System.Text.Json;
 
 namespace offlineMeeting.Models.Share
 {
