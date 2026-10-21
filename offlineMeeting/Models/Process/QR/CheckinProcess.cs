@@ -38,6 +38,10 @@ namespace offlineMeeting.Models.Process.QR
                 return false;
             }
 
+            // VOICEVOX で読み上げ（補助機能のため失敗しても本処理に影響させない）
+            VoiceVoxProcess voiceVoxProcess = new();
+            _ = voiceVoxProcess.Execute(userName + "さんが、チェックインするのだ");
+
             // SignalR でチェックイン完了を通知
             await _hubContext.Clients.Group($"event_{_eventId}").SendAsync("CheckinComplete", new Dictionary<string, string>
             {

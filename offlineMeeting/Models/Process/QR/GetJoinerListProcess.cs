@@ -54,13 +54,20 @@ namespace offlineMeeting.Models.Process.QR
                     u => u.ClassA ?? ""
                 );
 
-            return checkinRecords.Select(c => new CheckinJoinerEntity(
+            var joinerList = checkinRecords.Select(c => new CheckinJoinerEntity(
                 id: c.ReferenceId,
                 userCd: c.ClassB ?? "",
                 name: userNameMap.GetValueOrDefault(c.ClassB ?? "", ""),
                 url: c.ClassC ?? "",
                 checkedIn: c.CheckB ?? false
             )).ToList();
+
+            // VOICEVOX で読み上げ（補助機能のため失敗しても本処理に影響させない）
+            // メッセージ内容は仮置き。後で name 等を渡す想定。
+            VoiceVoxProcess voiceVoxProcess = new();
+            _ = voiceVoxProcess.Execute("こんにちはなのだ。　名前を選んでほしいのだ");
+
+            return joinerList;
         }
     }
 }

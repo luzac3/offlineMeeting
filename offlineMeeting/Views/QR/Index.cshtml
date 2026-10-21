@@ -1,4 +1,3 @@
-@using offlineMeeting.Models.Entity.QR;
 @using offlineMeeting.Models.Entity.Share;
 
 @{
@@ -7,44 +6,16 @@
     {
         Layout = "~/Views/Shared/_LayoutElectron.cshtml";
     }
-    ViewData["Title"] = "QR発行";
+    ViewData["Title"] = "スタート";
+    var startUrl = Url.Action("Start", "QR");
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/QR/Index.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/QR/Start.css" asp-append-version="true" />
 }
-@section Scripts {
-    <script src="~/js/QR.js" defer></script>
-}
-@model offlineMeeting.Models.ViewModel.QRViewModel;
 
-<h2 class="dot">チェックイン</h2>
+<a id="start_screen" href="@startUrl">
+    @* 背景画像は後で画面全体に配置する。ここは枠のみ用意 *@
+    <img id="start_bg" src="" alt="" />
 
-<div id="joiner_list">
-    @if (Model?.JoinerList != null && Model.JoinerList.Count > 0)
-    {
-        @foreach (var joiner in Model.JoinerList)
-        {
-            <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name"
-                 data-qrurl="@joiner.Url">
-                <span>@joiner.Name</span>
-                @if (joiner.CheckedIn)
-                {
-                    <div class="joiner_actions">
-                        <button class="btn_checkin checked_in" type="button" disabled>✓ 完了</button>
-                        <button class="btn_reprint" type="button" data-usercd="@joiner.UserCd">再印刷</button>
-                    </div>
-                }
-                else
-                {
-                    <div class="joiner_actions">
-                        <button class="btn_checkin" type="button">チェックイン</button>
-                    </div>
-                }
-            </div>
-        }
-    }
-    else
-    {
-        <p>参加者が見つかりませんでした。</p>
-    }
-</div>
+    <div id="start_touch">TOUCH START</div>
+</a>

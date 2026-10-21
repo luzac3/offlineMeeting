@@ -1,0 +1,44 @@
+#start_screen {
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    text-decoration: none;
+    background: #000;
+    cursor: pointer;
+}
+
+/* 背景画像は後で画面全体に配置する。ここは枠のみ用意 */
+#start_bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#start_touch {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2rem;
+    text-align: center;
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.3em;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    animation: start_touch_blink 1.5s ease-in-out infinite;
+}
+
+@@keyframes start_touch_blink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}

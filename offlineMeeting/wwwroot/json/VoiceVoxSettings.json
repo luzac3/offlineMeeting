@@ -1,0 +1,11 @@
+{
+  "BaseUrl": "http://127.0.0.1:50021",
+  "Speaker": 3,
+  "SpeedScale": 1.0,
+  "PitchScale": 0.0,
+  "IntonationScale": 1.0,
+  "VolumeScale": 1.0,
+  "PrePhonemeLength": 0.1,
+  "PostPhonemeLength": 0.1,
+  "TimeoutSeconds": 10
+}

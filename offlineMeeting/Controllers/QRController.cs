@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using offlineMeeting.Models;
 using offlineMeeting.Models.Entity.Login;
+using offlineMeeting.Models.Entity.Share;
+using offlineMeeting.Models.Entity.QR;
 using offlineMeeting.Models.JsonDataProperty;
 using offlineMeeting.Models.Process.QR;
 using offlineMeeting.Models.Process.Share;
@@ -50,7 +52,44 @@ namespace offlineMeeting.Controllers
             base.OnActionExecuting(context);
         }
 
+        /// <summary>
+        /// スタート(待機)画面を表示する。画面タッチでStartへ遷移する。
+        /// ElectronのMenuからcheckinUrl(eid付き)で呼ばれる想定。
+        /// </summary>
         public IActionResult Index([FromQuery] long eid)
+        {
+            // Electronから呼ばれているかのチェック(eidの有無で判定済み)
+            ElectronEntity? electron = ViewData["Electron"] as ElectronEntity;
+            if (electron?.IsElectron != true)
+            {
+                _logger.LogWarning("QR/Index はElectron以外から呼び出されました。eid={Eid}", eid);
+            }
+
+            // Electron経由で渡されたeidをセッションへ保持し、以降の動きをそろえる
+            if (eid != 0)
+            {
+                ManageEventId manageEventId = new(HttpContext);
+                manageEventId.SetEventId(eid);
+            }
+
+            return View();
+        }
+
+        /// <summary>
+        /// スタート画面からの遷移先。StartProcessで開始前処理を行い、QR画面を呼び出す。
+        /// </summary>
+        public IActionResult Start([FromQuery] long eid)
+        {
+            StartProcess startProcess = new(HttpContext, _pleasanterRepository, CheckinSiteId);
+            startProcess.Execute(eid);
+
+            return RedirectToAction("Qr", new { eid });
+        }
+
+        /// <summary>
+        /// QR(チェックイン)画面。通常呼び出しもStart経由の呼び出しも共通で使用する。
+        /// </summary>
+        public IActionResult Qr([FromQuery] long eid)
         {
             ManageEventId manageEventId = new(HttpContext);
 
@@ -60,6 +99,7 @@ namespace offlineMeeting.Controllers
             }
 
             long eventId = eid != 0 ? eid : manageEventId.GetEventId();
+
             GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository, eventId);
             var joinerList = getJoinerListProcess.Get(CheckinSiteId);
 
@@ -109,13 +149,5 @@ namespace offlineMeeting.Controllers
         {
             return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
-
-    public class CheckinRequest
-    {
-        public long Id { get; set; }
-        public long UserCd { get; set; }
-        public string UserName { get; set; } = "";
-        public string QrUrl { get; set; } = "";
     }
 }
