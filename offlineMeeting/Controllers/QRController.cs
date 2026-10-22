@@ -121,7 +121,7 @@ namespace offlineMeeting.Controllers
                 bridge: _bridge
             );
 
-            bool result = await checkinProcess.Execute(request.Id, request.UserCd, request.UserName, request.QrUrl);
+            bool result = await checkinProcess.Execute(request.Id, request.UserCd, request.UserName, request.PhoneticName, request.QrUrl);
 
             return Json(new { success = result });
         }
@@ -129,19 +129,12 @@ namespace offlineMeeting.Controllers
         /// <summary>
         /// Electron印刷用: ユーザ名とQRコードを表示する
         /// </summary>
-        public IActionResult PrintQr([FromQuery] long eid, long userCd)
+        public IActionResult PrintQr([FromQuery] long userCd)
         {
-            ManageEventId manageEventId = new(HttpContext);
-            manageEventId.SetEventId(eid);
+            PrintQR printQR = new(HttpContext, _pleasanterRepository, CheckinSiteId);
+            PrintQRViewModel viewModel = printQR.Execute(userCd);
 
-            GetJoinerListProcess getJoinerListProcess = new(HttpContext, _pleasanterRepository, eid);
-            var joinerList = getJoinerListProcess.Get(CheckinSiteId);
-            var joiner = joinerList.FirstOrDefault(j => j.UserCd == userCd.ToString());
-
-            ViewBag.UserName = joiner?.Name ?? "";
-            ViewBag.QrUrl = joiner?.Url ?? "";
-
-            return View();
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -246,6 +246,7 @@ namespace offlineMeeting.Controllers
         [HttpGet]
         public IActionResult PrintOrders([FromQuery] long eid, long resultId)
         {
+            // fixme そもそも処理が違うのでProcessを分けないとダメ
             GetUsersOrderProcess getUsersOrderProcess = new(
                 OrderSiteId,
                 OrderPurchaseSiteId,

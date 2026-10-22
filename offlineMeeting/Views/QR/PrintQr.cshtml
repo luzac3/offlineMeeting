@@ -19,8 +19,9 @@
         });
     </script>
 }
+@model offlineMeeting.Models.ViewModel.PrintQRViewModel
 
 <div id="print_qr">
-    <h1 class="print_user_name">@ViewBag.UserName</h1>
-    <div id="print_qr_code" data-url="@ViewBag.QrUrl"></div>
+    <h1 class="print_user_name">@Model.UserName</h1>
+    <div id="print_qr_code" data-url="@Model.QrUrl"></div>
 </div>

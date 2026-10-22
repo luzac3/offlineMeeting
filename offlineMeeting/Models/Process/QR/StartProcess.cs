@@ -25,7 +25,9 @@ namespace offlineMeeting.Models.Process.QR
         /// </summary>
         public void Execute(long eid)
         {
-            // TODO: 開始前の処理をここに挟み込む予定
+            // VOICEVOX で読み上げ（補助機能のため失敗しても本処理に影響させない）
+            VoiceVoxProcess voiceVoxProcess = new();
+            _ = voiceVoxProcess.Execute("いらっしゃいませなのだ");
 
             ManageEventId manageEventId = new(_httpContext);
 

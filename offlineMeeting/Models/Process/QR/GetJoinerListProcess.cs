@@ -27,7 +27,7 @@ namespace offlineMeeting.Models.Process.QR
         public List<CheckinJoinerEntity> Get(long siteId)
         {
             // EventIdを条件にサイト内レコードを検索
-            var where = new Dictionary<string, object>
+            Dictionary<string, object> where = new Dictionary<string, object>
             {
                 { "ClassA", new string[] { _eventId.ToString() } },
                 { "Status", 200 }
@@ -54,18 +54,18 @@ namespace offlineMeeting.Models.Process.QR
                     u => u.ClassA ?? ""
                 );
 
-            var joinerList = checkinRecords.Select(c => new CheckinJoinerEntity(
+            List<CheckinJoinerEntity> joinerList = checkinRecords.Select(c => new CheckinJoinerEntity(
                 id: c.ReferenceId,
                 userCd: c.ClassB ?? "",
                 name: userNameMap.GetValueOrDefault(c.ClassB ?? "", ""),
+                phoneticName: userNameMap.GetValueOrDefault(c.ClassD ?? "", ""),
                 url: c.ClassC ?? "",
                 checkedIn: c.CheckB ?? false
             )).ToList();
 
             // VOICEVOX で読み上げ（補助機能のため失敗しても本処理に影響させない）
-            // メッセージ内容は仮置き。後で name 等を渡す想定。
             VoiceVoxProcess voiceVoxProcess = new();
-            _ = voiceVoxProcess.Execute("こんにちはなのだ。　名前を選んでほしいのだ");
+            _ = voiceVoxProcess.Execute("こんにちはなのだ。　お金を払ったら、名前を選んでほしいのだ");
 
             return joinerList;
         }

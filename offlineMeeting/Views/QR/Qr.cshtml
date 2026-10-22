@@ -23,7 +23,7 @@
     {
         @foreach (var joiner in Model.JoinerList)
         {
-            <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name"
+            <div class="joiner_row" data-id="@joiner.Id" data-usercd="@joiner.UserCd" data-username="@joiner.Name" data-phoneticname="@joiner.PhoneticName"
                  data-qrurl="@joiner.Url">
                 <span>@joiner.Name</span>
                 @if (joiner.CheckedIn)

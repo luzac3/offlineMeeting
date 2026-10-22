@@ -17,6 +17,7 @@ export class Checkin {
                 const id = row.dataset.id;
                 const userCd = row.dataset.usercd;
                 const userName = row.dataset.username;
+                const phoneticName = row.dataset.phoneticname;
                 const qrUrl = row.dataset.qrurl;
 
                 if (!id || !userCd || !userName || !qrUrl) return;
@@ -30,7 +31,7 @@ export class Checkin {
                         '/QR/Checkin',
                         'POST',
                         { "Content-Type": "application/json" },
-                        { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl }
+                        { Id: Number(id), UserCd: Number(userCd), UserName: userName, PhoneticName: phoneticName, QrUrl: qrUrl }
                     ) as { success: boolean };
 
                     if (result?.success) {

@@ -24,7 +24,7 @@ namespace offlineMeeting.Models.Process.QR
             _eventId = manageEventId.GetEventId();
         }
 
-        public async Task<bool> Execute(long id, long userCd, string userName, string qrUrl)
+        public async Task<bool> Execute(long id, long userCd, string userName, string phoneticName, string qrUrl)
         {
             // idを指定して直接更新
             var updateData = new Dictionary<string, object>
@@ -38,9 +38,11 @@ namespace offlineMeeting.Models.Process.QR
                 return false;
             }
 
+            string name = string.IsNullOrEmpty(phoneticName) ? userName : phoneticName; 
+
             // VOICEVOX で読み上げ（補助機能のため失敗しても本処理に影響させない）
             VoiceVoxProcess voiceVoxProcess = new();
-            _ = voiceVoxProcess.Execute(userName + "さんが、チェックインするのだ");
+            _ = voiceVoxProcess.Execute(name + "さんが、ご来店なのだ");
 
             // SignalR でチェックイン完了を通知
             await _hubContext.Clients.Group($"event_{_eventId}").SendAsync("CheckinComplete", new Dictionary<string, string>

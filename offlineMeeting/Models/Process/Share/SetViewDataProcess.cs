@@ -42,7 +42,7 @@ namespace offlineMeeting.Models.Process.Share
         {
             ManageSessionId manageSessionId = new(httpContext);
 
-            var cache = global::offlineMeeting.Models.Share.SessionCacheHelper.GetCache(httpContext);
+            IMemoryCache cache = global::offlineMeeting.Models.Share.SessionCacheHelper.GetCache(httpContext);
             string eventIdKey = global::offlineMeeting.Models.Share.SessionCacheHelper.BuildKey(httpContext, "EventId");
             if (!cache.TryGetValue(eventIdKey, out long eventId) || eventId == 0)
             {

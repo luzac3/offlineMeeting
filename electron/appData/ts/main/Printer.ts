@@ -8,7 +8,7 @@ export class Printer {
     data: any;
     constructor(id: string, urlBase?: string) {
         this.data = GetSetting.Setting();
-        this.url = (urlBase ?? this.data.printUrlBase) + id;;
+        this.url = (urlBase ?? this.data.printUrlBase) + id;
 
         this.printWindow = new BrowserWindow({
             show: false,
