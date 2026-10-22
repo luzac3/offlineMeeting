@@ -4037,9 +4037,6 @@ PrintOrder.RequestElectronPrint = (orderIds) => {
     if (window.electronAPI && window.electronAPI.printReceipt) {
         window.electronAPI.printReceipt(args);
     }
-    else {
-        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
-    }
 };
 
 
