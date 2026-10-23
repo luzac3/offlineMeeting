@@ -3920,19 +3920,8 @@ class Checkin {
                         const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
                         const result = await fetchApi.send('/QR/Checkin', 'POST', { "Content-Type": "application/json" }, { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl });
                         if (result?.success) {
-                            btn.textContent = '✓ 完了';
-                            btn.classList.add('checked_in');
-                            // 再印刷ボタンを追加
-                            const actionsDiv = btn.parentElement;
-                            if (actionsDiv) {
-                                const reprintBtn = document.createElement('button');
-                                reprintBtn.className = 'btn_reprint';
-                                reprintBtn.type = 'button';
-                                reprintBtn.dataset.usercd = userCd;
-                                reprintBtn.textContent = '再印刷';
-                                actionsDiv.appendChild(reprintBtn);
-                                this.setReprintButton(row);
-                            }
+                            // 完了表示・再印刷ボタンはサーバーのCheckinComplete通知(SignalR)で切り替える
+                            btn.textContent = '処理中...';
                         }
                         else {
                             btn.textContent = '失敗';

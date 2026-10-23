@@ -21,7 +21,8 @@ export class Printer {
 
     Print = async () => {
         try {
-            this.printWindow.webContents.once('did-finish-load', () => {
+            this.printWindow.webContents.once('did-finish-load', async () => {
+                await this.WaitForRender();
                 this.LoadedPrint();
             });
 
@@ -34,6 +35,44 @@ export class Printer {
             }
         } catch (err) {
             const msg = `Printer.Print: unexpected error ${err && (err as any).stack ? (err as any).stack : String(err)}`;
+            CreateLog.WriteLog(msg);
+        }
+    }
+
+    // QRコードなどの非同期描画が完了し、レイアウトが確定してから印刷するために待機する。
+    // ページ内の全画像・フォントの読み込み完了と、描画フレームの反映を待つ。
+    // 失敗してもログを残して処理を継続し、印刷自体は止めない。
+    private WaitForRender = async (): Promise<void> => {
+        try {
+            await this.printWindow.webContents.executeJavaScript(`
+                new Promise((resolve) => {
+                    const done = () => {
+                        // レイアウト確定後の描画フレームを2回待ってから解決する
+                        requestAnimationFrame(() => requestAnimationFrame(resolve));
+                    };
+                    const waitForImages = () => {
+                        const images = Array.from(document.images || []);
+                        const pending = images
+                            .filter((img) => !img.complete || img.naturalWidth === 0)
+                            .map((img) => new Promise((res) => {
+                                img.addEventListener('load', res, { once: true });
+                                img.addEventListener('error', res, { once: true });
+                            }));
+                        const fonts = (document.fonts && document.fonts.ready)
+                            ? document.fonts.ready
+                            : Promise.resolve();
+                        Promise.all([...pending, fonts]).then(done);
+                    };
+                    if (document.readyState === 'complete') {
+                        waitForImages();
+                    } else {
+                        window.addEventListener('load', waitForImages, { once: true });
+                    }
+                });
+            `);
+        } catch (waitErr: unknown) {
+            const errMsg = waitErr instanceof Error ? (waitErr.stack ?? waitErr.message) : String(waitErr);
+            const msg = `Printer.WaitForRender: wait failed url=${this.url} err=${errMsg}`;
             CreateLog.WriteLog(msg);
         }
     }
