@@ -34,20 +34,8 @@ export class Checkin {
                     ) as { success: boolean };
 
                     if (result?.success) {
-                        btn.textContent = '✓ 完了';
-                        btn.classList.add('checked_in');
-
-                        // 再印刷ボタンを追加
-                        const actionsDiv = btn.parentElement;
-                        if (actionsDiv) {
-                            const reprintBtn = document.createElement('button');
-                            reprintBtn.className = 'btn_reprint';
-                            reprintBtn.type = 'button';
-                            reprintBtn.dataset.usercd = userCd;
-                            reprintBtn.textContent = '再印刷';
-                            actionsDiv.appendChild(reprintBtn);
-                            this.setReprintButton(row);
-                        }
+                        // 完了表示・再印刷ボタンはサーバーのCheckinComplete通知(SignalR)で切り替える
+                        btn.textContent = '処理中...';
                     } else {
                         btn.textContent = '失敗';
                         btn.disabled = false;
