@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./appData/ts/main/CreateWindow.ts"
+/***/ "./appData/ts/main/CreateWindow.ts":
 /*!*****************************************!*\
   !*** ./appData/ts/main/CreateWindow.ts ***!
   \*****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -87,13 +87,13 @@ class CreateWindow {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/main/Printer.ts"
+/***/ "./appData/ts/main/Printer.ts":
 /*!************************************!*\
   !*** ./appData/ts/main/Printer.ts ***!
   \************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -110,7 +110,8 @@ class Printer {
     constructor(id, urlBase) {
         this.Print = async () => {
             try {
-                this.printWindow.webContents.once('did-finish-load', () => {
+                this.printWindow.webContents.once('did-finish-load', async () => {
+                    await this.WaitForRender();
                     this.LoadedPrint();
                 });
                 try {
@@ -124,6 +125,44 @@ class Printer {
             }
             catch (err) {
                 const msg = `Printer.Print: unexpected error ${err && err.stack ? err.stack : String(err)}`;
+                _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
+            }
+        };
+        // QRコードなどの非同期描画が完了し、レイアウトが確定してから印刷するために待機する。
+        // ページ内の全画像・フォントの読み込み完了と、描画フレームの反映を待つ。
+        // 失敗してもログを残して処理を継続し、印刷自体は止めない。
+        this.WaitForRender = async () => {
+            try {
+                await this.printWindow.webContents.executeJavaScript(`
+                new Promise((resolve) => {
+                    const done = () => {
+                        // レイアウト確定後の描画フレームを2回待ってから解決する
+                        requestAnimationFrame(() => requestAnimationFrame(resolve));
+                    };
+                    const waitForImages = () => {
+                        const images = Array.from(document.images || []);
+                        const pending = images
+                            .filter((img) => !img.complete || img.naturalWidth === 0)
+                            .map((img) => new Promise((res) => {
+                                img.addEventListener('load', res, { once: true });
+                                img.addEventListener('error', res, { once: true });
+                            }));
+                        const fonts = (document.fonts && document.fonts.ready)
+                            ? document.fonts.ready
+                            : Promise.resolve();
+                        Promise.all([...pending, fonts]).then(done);
+                    };
+                    if (document.readyState === 'complete') {
+                        waitForImages();
+                    } else {
+                        window.addEventListener('load', waitForImages, { once: true });
+                    }
+                });
+            `);
+            }
+            catch (waitErr) {
+                const errMsg = waitErr instanceof Error ? (waitErr.stack ?? waitErr.message) : String(waitErr);
+                const msg = `Printer.WaitForRender: wait failed url=${this.url} err=${errMsg}`;
                 _share_CreateLog__WEBPACK_IMPORTED_MODULE_0__.CreateLog.WriteLog(msg);
             }
         };
@@ -168,13 +207,13 @@ class Printer {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/main/SetElectron.ts"
+/***/ "./appData/ts/main/SetElectron.ts":
 /*!****************************************!*\
   !*** ./appData/ts/main/SetElectron.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -235,13 +274,13 @@ class SetElectron {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/share/CreateLog.ts"
+/***/ "./appData/ts/share/CreateLog.ts":
 /*!***************************************!*\
   !*** ./appData/ts/share/CreateLog.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -303,13 +342,13 @@ CreateLog.MakeLogFilePath = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/share/GetSetting.ts"
+/***/ "./appData/ts/share/GetSetting.ts":
 /*!****************************************!*\
   !*** ./appData/ts/share/GetSetting.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -340,37 +379,37 @@ GetSetting.Setting = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "electron"
+/***/ "electron":
 /*!***************************!*\
   !*** external "electron" ***!
   \***************************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("electron");
 
-/***/ },
+/***/ }),
 
-/***/ "fs"
+/***/ "fs":
 /*!*********************!*\
   !*** external "fs" ***!
   \*********************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("fs");
 
-/***/ },
+/***/ }),
 
-/***/ "path"
+/***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
   \***********************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("path");
 
-/***/ }
+/***/ })
 
 /******/ 	});
 /************************************************************************/
@@ -392,12 +431,6 @@ module.exports = require("path");
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
