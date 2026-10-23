@@ -34,22 +34,7 @@ export class Checkin {
                         { Id: Number(id), UserCd: Number(userCd), UserName: userName, PhoneticName: phoneticName, QrUrl: qrUrl }
                     ) as { success: boolean };
 
-                    if (result?.success) {
-                        btn.textContent = '✓ 完了';
-                        btn.classList.add('checked_in');
-
-                        // 再印刷ボタンを追加
-                        const actionsDiv = btn.parentElement;
-                        if (actionsDiv) {
-                            const reprintBtn = document.createElement('button');
-                            reprintBtn.className = 'btn_reprint';
-                            reprintBtn.type = 'button';
-                            reprintBtn.dataset.usercd = userCd;
-                            reprintBtn.textContent = '再印刷';
-                            actionsDiv.appendChild(reprintBtn);
-                            this.setReprintButton(row);
-                        }
-                    } else {
+                    if (!result?.success) {
                         btn.textContent = '失敗';
                         btn.disabled = false;
                     }

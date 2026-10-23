@@ -2,11 +2,11 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./appData/ts/main/CreateWindow.ts"
+/***/ "./appData/ts/main/CreateWindow.ts":
 /*!*****************************************!*\
   !*** ./appData/ts/main/CreateWindow.ts ***!
   \*****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -87,13 +87,13 @@ class CreateWindow {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/main/Printer.ts"
+/***/ "./appData/ts/main/Printer.ts":
 /*!************************************!*\
   !*** ./appData/ts/main/Printer.ts ***!
   \************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -168,13 +168,13 @@ class Printer {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/main/SetElectron.ts"
+/***/ "./appData/ts/main/SetElectron.ts":
 /*!****************************************!*\
   !*** ./appData/ts/main/SetElectron.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -235,13 +235,13 @@ class SetElectron {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/share/CreateLog.ts"
+/***/ "./appData/ts/share/CreateLog.ts":
 /*!***************************************!*\
   !*** ./appData/ts/share/CreateLog.ts ***!
   \***************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -303,13 +303,13 @@ CreateLog.MakeLogFilePath = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "./appData/ts/share/GetSetting.ts"
+/***/ "./appData/ts/share/GetSetting.ts":
 /*!****************************************!*\
   !*** ./appData/ts/share/GetSetting.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -340,37 +340,37 @@ GetSetting.Setting = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "electron"
+/***/ "electron":
 /*!***************************!*\
   !*** external "electron" ***!
   \***************************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("electron");
 
-/***/ },
+/***/ }),
 
-/***/ "fs"
+/***/ "fs":
 /*!*********************!*\
   !*** external "fs" ***!
   \*********************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("fs");
 
-/***/ },
+/***/ }),
 
-/***/ "path"
+/***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
   \***********************/
-(module) {
+/***/ ((module) => {
 
 module.exports = require("path");
 
-/***/ }
+/***/ })
 
 /******/ 	});
 /************************************************************************/
@@ -392,12 +392,6 @@ module.exports = require("path");
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
