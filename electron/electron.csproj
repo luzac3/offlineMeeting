@@ -63,7 +63,6 @@
     <Content Include="appData\log\20251023-12-45-53.log" />
     <Content Include="appData\ts\main\CreateWindow.ts" />
     <Content Include="appData\ts\main\Index.ts" />
-    <Content Include="appData\ts\main\Printer.ts" />
     <Content Include="appData\ts\main\SetElectron.ts" />
     <Content Include="appData\ts\preload\Index.ts" />
     <Content Include="appData\ts\share\CreateLog.ts" />
