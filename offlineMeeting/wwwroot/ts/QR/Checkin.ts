@@ -33,10 +33,7 @@ export class Checkin {
                         { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl }
                     ) as { success: boolean };
 
-                    if (result?.success) {
-                        // 完了表示・再印刷ボタンはサーバーのCheckinComplete通知(SignalR)で切り替える
-                        btn.textContent = '処理中...';
-                    } else {
+                    if (!result?.success) {
                         btn.textContent = '失敗';
                         btn.disabled = false;
                     }
