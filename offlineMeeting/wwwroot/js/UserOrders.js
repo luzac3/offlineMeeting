@@ -4034,11 +4034,9 @@ PrintOrder.RequestElectronPrint = (orderIds) => {
     const args = {
         resultIds: orderIds
     };
+    // Electron 経由でない場合は印刷要求を投げない（通常ブラウザでは何もしない）
     if (window.electronAPI && window.electronAPI.printReceipt) {
         window.electronAPI.printReceipt(args);
-    }
-    else {
-        alert('Electron API が利用できません。通常のブラウザ印刷にフォールバックしてください。');
     }
 };
 
