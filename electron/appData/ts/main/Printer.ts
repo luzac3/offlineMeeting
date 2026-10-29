@@ -41,11 +41,11 @@ export class Printer {
         try {
             const printOptions = this.data.printOptions || {};
 
-            // raspie
-            if (this.data.isRaspberryPi) {
-                this.PrintRaspberryPi(printOptions, (success, failureReason) => {
+            // Linux (lp コマンド) 経由で印刷
+            if (this.data.isLinuxLpPrint) {
+                this.PrintWithLinuxLp(printOptions, (success, failureReason) => {
                     if (!success) {
-                        const msg = `Printer.Print: raspberry pi print failed url=${this.url} reason=${failureReason}`;
+                        const msg = `Printer.Print: linux lp print failed url=${this.url} reason=${failureReason}`;
                         CreateLog.WriteLog(msg);
                     }
                     try { this.printWindow.close(); } catch (e) { /* ignore */ }
@@ -72,7 +72,7 @@ export class Printer {
         }
     }
 
-    private PrintRaspberryPi = async (printOptions: any, callback: (success: boolean, failureReason?: string) => void) => {
+    private PrintWithLinuxLp = async (printOptions: any, callback: (success: boolean, failureReason?: string) => void) => {
         const fs = require('fs');
         const { exec } = require('child_process');
 
