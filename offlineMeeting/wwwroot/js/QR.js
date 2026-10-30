@@ -1,11 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/AbortController.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/AbortController.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/AbortController.js ***!
   \*********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -41,13 +41,13 @@ class AbortController {
 }
 //# sourceMappingURL=AbortController.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/AccessTokenHttpClient.js ***!
   \***************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -103,13 +103,13 @@ class AccessTokenHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.Htt
 }
 //# sourceMappingURL=AccessTokenHttpClient.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js":
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DefaultHttpClient.js ***!
   \***********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -163,13 +163,13 @@ class DefaultHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_2__.HttpCli
 }
 //# sourceMappingURL=DefaultHttpClient.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js":
 /*!****************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DefaultReconnectPolicy.js ***!
   \****************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -191,13 +191,13 @@ class DefaultReconnectPolicy {
 }
 //# sourceMappingURL=DefaultReconnectPolicy.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js":
 /*!********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/DynamicImports.js ***!
   \********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -254,13 +254,13 @@ function getEventSource() {
 }
 //# sourceMappingURL=DynamicImports.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Errors.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Errors.js":
 /*!************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Errors.js ***!
   \************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -409,13 +409,13 @@ class AggregateErrors extends Error {
 }
 //# sourceMappingURL=Errors.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/FetchHttpClient.js ***!
   \*********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -567,13 +567,13 @@ function deserializeContent(response, responseType) {
 }
 //# sourceMappingURL=FetchHttpClient.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js":
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HandshakeProtocol.js ***!
   \***********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -634,13 +634,13 @@ class HandshakeProtocol {
 }
 //# sourceMappingURL=HandshakeProtocol.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js":
 /*!*****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HeaderNames.js ***!
   \*****************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -655,13 +655,13 @@ HeaderNames.Authorization = "Authorization";
 HeaderNames.Cookie = "Cookie";
 //# sourceMappingURL=HeaderNames.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpClient.js":
 /*!****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HttpClient.js ***!
   \****************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -717,13 +717,13 @@ class HttpClient {
 }
 //# sourceMappingURL=HttpClient.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js":
 /*!********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HttpConnection.js ***!
   \********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1310,13 +1310,13 @@ class PromiseSource {
 }
 //# sourceMappingURL=HttpConnection.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnection.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HubConnection.js ***!
   \*******************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2269,13 +2269,13 @@ class HubConnection {
 }
 //# sourceMappingURL=HubConnection.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/HubConnectionBuilder.js ***!
   \**************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2434,13 +2434,13 @@ function isLogger(logger) {
 }
 //# sourceMappingURL=HubConnectionBuilder.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/IHubProtocol.js ***!
   \******************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2471,13 +2471,13 @@ var MessageType;
 })(MessageType || (MessageType = {}));
 //# sourceMappingURL=IHubProtocol.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ILogger.js":
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ILogger.js ***!
   \*************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2510,13 +2510,13 @@ var LogLevel;
 })(LogLevel || (LogLevel = {}));
 //# sourceMappingURL=ILogger.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ITransport.js":
 /*!****************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ITransport.js ***!
   \****************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2549,13 +2549,13 @@ var TransferFormat;
 })(TransferFormat || (TransferFormat = {}));
 //# sourceMappingURL=ITransport.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/JsonHubProtocol.js ***!
   \*********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2687,13 +2687,13 @@ class JsonHubProtocol {
 }
 //# sourceMappingURL=JsonHubProtocol.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Loggers.js":
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Loggers.js ***!
   \*************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2714,13 +2714,13 @@ class NullLogger {
 NullLogger.instance = new NullLogger();
 //# sourceMappingURL=Loggers.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/LongPollingTransport.js ***!
   \**************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2916,13 +2916,13 @@ class LongPollingTransport {
 }
 //# sourceMappingURL=LongPollingTransport.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/MessageBuffer.js ***!
   \*******************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3126,13 +3126,13 @@ class BufferedItem {
 }
 //# sourceMappingURL=MessageBuffer.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js":
 /*!*******************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/ServerSentEventsTransport.js ***!
   \*******************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3246,13 +3246,13 @@ class ServerSentEventsTransport {
 }
 //# sourceMappingURL=ServerSentEventsTransport.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Subject.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Subject.js":
 /*!*************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Subject.js ***!
   \*************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3294,13 +3294,13 @@ class Subject {
 }
 //# sourceMappingURL=Subject.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js":
 /*!***********************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/TextMessageFormat.js ***!
   \***********************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3328,13 +3328,13 @@ TextMessageFormat.RecordSeparatorCode = 0x1e;
 TextMessageFormat.RecordSeparator = String.fromCharCode(TextMessageFormat.RecordSeparatorCode);
 //# sourceMappingURL=TextMessageFormat.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/Utils.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/Utils.js":
 /*!***********************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/Utils.js ***!
   \***********************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3605,13 +3605,13 @@ function getGlobalThis() {
 }
 //# sourceMappingURL=Utils.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js":
 /*!************************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/WebSocketTransport.js ***!
   \************************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3778,13 +3778,13 @@ class WebSocketTransport {
 }
 //# sourceMappingURL=WebSocketTransport.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js"
+/***/ "./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@microsoft/signalr/dist/esm/XhrHttpClient.js ***!
   \*******************************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3879,13 +3879,13 @@ class XhrHttpClient extends _HttpClient__WEBPACK_IMPORTED_MODULE_1__.HttpClient 
 }
 //# sourceMappingURL=XhrHttpClient.js.map
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/QR/Checkin.ts"
+/***/ "./wwwroot/ts/QR/Checkin.ts":
 /*!**********************************!*\
   !*** ./wwwroot/ts/QR/Checkin.ts ***!
   \**********************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3902,6 +3902,11 @@ class Checkin {
                 const btn = row.querySelector('.btn_checkin');
                 if (!btn)
                     return;
+                // 既にチェックイン済みの場合はスキップ
+                if (btn.classList.contains('checked_in')) {
+                    this.setReprintButton(row);
+                    return;
+                }
                 btn.addEventListener('click', async () => {
                     const id = row.dataset.id;
                     const userCd = row.dataset.usercd;
@@ -3915,8 +3920,8 @@ class Checkin {
                         const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
                         const result = await fetchApi.send('/QR/Checkin', 'POST', { "Content-Type": "application/json" }, { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl });
                         if (result?.success) {
-                            btn.textContent = '✓ 完了';
-                            btn.classList.add('checked_in');
+                            // 完了表示・再印刷ボタンはサーバーのCheckinComplete通知(SignalR)で切り替える
+                            btn.textContent = '処理中...';
                         }
                         else {
                             btn.textContent = '失敗';
@@ -3930,17 +3935,28 @@ class Checkin {
                 });
             });
         };
+        this.setReprintButton = (row) => {
+            const reprintBtn = row.querySelector('.btn_reprint');
+            if (!reprintBtn)
+                return;
+            reprintBtn.addEventListener('click', () => {
+                const userCd = reprintBtn.dataset.usercd;
+                if (userCd && window.electronAPI && window.electronAPI.printCheckinQr) {
+                    window.electronAPI.printCheckinQr({ userCd });
+                }
+            });
+        };
     }
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/QR/CheckinNotify.ts"
+/***/ "./wwwroot/ts/QR/CheckinNotify.ts":
 /*!****************************************!*\
   !*** ./wwwroot/ts/QR/CheckinNotify.ts ***!
   \****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3953,27 +3969,36 @@ class CheckinNotify {
         this.listen = (signalR) => {
             signalR.get("CheckinComplete", (data) => {
                 const parsedData = data;
-                // QRコード表示エリアを更新
-                this.showQr(parsedData.userName, parsedData.qrUrl);
+                // joiner_row のボタンをチェック済み状態に更新
+                this.updateRow(parsedData.userCd);
                 // Electron印刷を要求
                 this.requestPrint(parsedData.userCd);
             });
         };
-        this.showQr = (userName, qrUrl) => {
-            const display = document.getElementById('qr_display');
-            const nameEl = document.getElementById('qr_user_name_display');
-            const qrEl = document.getElementById('qr_code_display');
-            if (!display || !nameEl || !qrEl)
-                return;
-            display.classList.remove('nodisplay');
-            nameEl.textContent = userName;
-            // 既存のQRをクリアして再生成
-            qrEl.innerHTML = '';
-            new QRCode(qrEl, {
-                text: qrUrl,
-                width: 200,
-                height: 200,
-                correctLevel: QRCode.CorrectLevel.H
+        this.updateRow = (userCd) => {
+            const rows = document.querySelectorAll('.joiner_row');
+            rows.forEach((row) => {
+                if (row.dataset.usercd !== userCd)
+                    return;
+                const btn = row.querySelector('.btn_checkin');
+                if (btn && !btn.classList.contains('checked_in')) {
+                    btn.textContent = '✓ 完了';
+                    btn.classList.add('checked_in');
+                    btn.disabled = true;
+                    // 再印刷ボタンを追加
+                    const actionsDiv = btn.parentElement;
+                    if (actionsDiv && !actionsDiv.querySelector('.btn_reprint')) {
+                        const reprintBtn = document.createElement('button');
+                        reprintBtn.className = 'btn_reprint';
+                        reprintBtn.type = 'button';
+                        reprintBtn.dataset.usercd = userCd;
+                        reprintBtn.textContent = '再印刷';
+                        reprintBtn.addEventListener('click', () => {
+                            this.requestPrint(userCd);
+                        });
+                        actionsDiv.appendChild(reprintBtn);
+                    }
+                }
             });
         };
         this.requestPrint = (userCd) => {
@@ -3985,46 +4010,13 @@ class CheckinNotify {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/QR/GenerateQrList.ts"
-/*!*****************************************!*\
-  !*** ./wwwroot/ts/QR/GenerateQrList.ts ***!
-  \*****************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GenerateQrList: () => (/* binding */ GenerateQrList)
-/* harmony export */ });
-class GenerateQrList {
-    constructor() {
-        this.generate = () => {
-            const qrElements = document.querySelectorAll('.qr_code');
-            qrElements.forEach((element) => {
-                const url = element.dataset.url;
-                if (url) {
-                    new QRCode(element, {
-                        text: url,
-                        width: 128,
-                        height: 128,
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                }
-            });
-        };
-    }
-}
-
-
-/***/ },
-
-/***/ "./wwwroot/ts/share/FetchApi.ts"
+/***/ "./wwwroot/ts/share/FetchApi.ts":
 /*!**************************************!*\
   !*** ./wwwroot/ts/share/FetchApi.ts ***!
   \**************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4035,50 +4027,40 @@ var _a;
 class FetchApi {
     constructor() {
         this.send = async (url, method, headers, body, responseKind = "json", needResponseData = true) => {
-            let request;
-            if (method == "GET") {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers
-                });
-            }
-            else {
-                request = new Request(url, {
-                    method: method,
-                    headers: headers,
-                    body: JSON.stringify(body)
-                });
-            }
+            const request = new Request(url, {
+                method: method,
+                headers: headers,
+                // GET以外で、bodyが存在する場合のみJSON化する
+                body: method !== "GET" && body !== undefined ? JSON.stringify(body) : null
+            });
             ManageLoadElement.set();
-            const response = await fetch(request).catch(e => { throw e; });
-            if (!response.ok) {
-                ManageLoadElement.remove();
-                throw new Error(response.statusText);
+            try {
+                // fetch自体のネットワークエラー等もここで受ける
+                const response = await fetch(request);
+                if (!response.ok) {
+                    // HTTPエラー（400, 500など）
+                    throw new Error(response.statusText);
+                }
+                if (!needResponseData) {
+                    return;
+                }
+                // response.json() 自体がPromiseを返すので、そのままawaitして返すだけでOK
+                switch (responseKind) {
+                    case "json":
+                        return await response.json();
+                    case "text":
+                        return await response.text();
+                }
             }
-            if (!needResponseData) {
-                ManageLoadElement.remove();
-                return;
+            catch (error) {
+                console.error("FetchError:", error);
+                throw error; // そのまま上に投げる
             }
-            switch (responseKind) {
-                case "json":
-                    return await this.fetchResonse(response.json()).catch(e => { throw e; });
-                case "text":
-                    return await this.fetchResonse(response.text()).catch(e => { throw e; });
+            finally {
+                // 必ず最後に1回だけここを通ってローディングを解除
+                ManageLoadElement.remove();
             }
         };
-    }
-    async fetchResonse(response) {
-        return await response.then(data => {
-            return data;
-        })
-            .catch(error => {
-            // エラー処理
-            console.log(error);
-            throw error;
-        })
-            .finally(() => {
-            ManageLoadElement.remove();
-        });
     }
 }
 class ManageLoadElement {
@@ -4099,13 +4081,13 @@ ManageLoadElement.remove = () => {
 };
 
 
-/***/ },
+/***/ }),
 
-/***/ "./wwwroot/ts/share/SignalR.ts"
+/***/ "./wwwroot/ts/share/SignalR.ts":
 /*!*************************************!*\
   !*** ./wwwroot/ts/share/SignalR.ts ***!
   \*************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4168,67 +4150,67 @@ class SignalR {
 }
 
 
-/***/ },
+/***/ }),
 
-/***/ "?6cf0"
-/*!**********************************!*\
-  !*** abort-controller (ignored) ***!
-  \**********************************/
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ "?b287"
-/*!*****************************!*\
-  !*** eventsource (ignored) ***!
-  \*****************************/
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ "?c710"
-/*!******************************!*\
-  !*** fetch-cookie (ignored) ***!
-  \******************************/
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ "?d2dd"
-/*!****************************!*\
-  !*** node-fetch (ignored) ***!
-  \****************************/
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ "?7cbe"
-/*!******************************!*\
-  !*** tough-cookie (ignored) ***!
-  \******************************/
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ "?1b30"
+/***/ "?1b30":
 /*!********************!*\
   !*** ws (ignored) ***!
   \********************/
-() {
+/***/ (() => {
 
 /* (ignored) */
 
-/***/ }
+/***/ }),
+
+/***/ "?6cf0":
+/*!**********************************!*\
+  !*** abort-controller (ignored) ***!
+  \**********************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?7cbe":
+/*!******************************!*\
+  !*** tough-cookie (ignored) ***!
+  \******************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?b287":
+/*!*****************************!*\
+  !*** eventsource (ignored) ***!
+  \*****************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?c710":
+/*!******************************!*\
+  !*** fetch-cookie (ignored) ***!
+  \******************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?d2dd":
+/*!****************************!*\
+  !*** node-fetch (ignored) ***!
+  \****************************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ })
 
 /******/ 	});
 /************************************************************************/
@@ -4250,12 +4232,6 @@ class SignalR {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -4312,20 +4288,16 @@ var __webpack_exports__ = {};
   !*** ./wwwroot/ts/QR/Index.ts ***!
   \********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _GenerateQrList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GenerateQrList */ "./wwwroot/ts/QR/GenerateQrList.ts");
-/* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
-/* harmony import */ var _Checkin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Checkin */ "./wwwroot/ts/QR/Checkin.ts");
-/* harmony import */ var _CheckinNotify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CheckinNotify */ "./wwwroot/ts/QR/CheckinNotify.ts");
-
+/* harmony import */ var _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @root/share/SignalR */ "./wwwroot/ts/share/SignalR.ts");
+/* harmony import */ var _Checkin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Checkin */ "./wwwroot/ts/QR/Checkin.ts");
+/* harmony import */ var _CheckinNotify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CheckinNotify */ "./wwwroot/ts/QR/CheckinNotify.ts");
 
 
 
 (() => {
-    const generateQrList = new _GenerateQrList__WEBPACK_IMPORTED_MODULE_0__.GenerateQrList();
-    generateQrList.generate();
-    const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_1__.SignalR();
-    const checkin = new _Checkin__WEBPACK_IMPORTED_MODULE_2__.Checkin();
-    const checkinNotify = new _CheckinNotify__WEBPACK_IMPORTED_MODULE_3__.CheckinNotify();
+    const signalR = new _root_share_SignalR__WEBPACK_IMPORTED_MODULE_0__.SignalR();
+    const checkin = new _Checkin__WEBPACK_IMPORTED_MODULE_1__.Checkin();
+    const checkinNotify = new _CheckinNotify__WEBPACK_IMPORTED_MODULE_2__.CheckinNotify();
     signalR.activate().then(() => {
         checkin.setButtons();
         checkinNotify.listen(signalR);
