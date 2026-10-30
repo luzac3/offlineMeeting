@@ -1,0 +1,7 @@
+Windows では tscompile.bat、Linux では tscompile.sh がビルド構成に応じて実行される。
+
+Linux で直接実行する場合:
+  bash ./tscompile.sh Debug
+  bash ./tscompile.sh Release
+
+パッケージ化する際は npx electron-forge import を行ってから npm run make を実行する。
