@@ -70,7 +70,8 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="tscompile.bat $(ConfigurationName)" />
+    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))" Command="tscompile.bat $(ConfigurationName)" />
+    <Exec Condition="!$([MSBuild]::IsOSPlatform('Windows'))" Command="bash &quot;$(MSBuildProjectDirectory)/tscompile.sh&quot; $(ConfigurationName)" />
   </Target>
 
 </Project>
