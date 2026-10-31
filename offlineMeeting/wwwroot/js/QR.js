@@ -3919,11 +3919,7 @@ class Checkin {
                     try {
                         const fetchApi = new _root_share_FetchApi__WEBPACK_IMPORTED_MODULE_0__.FetchApi();
                         const result = await fetchApi.send('/QR/Checkin', 'POST', { "Content-Type": "application/json" }, { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl });
-                        if (result?.success) {
-                            // 完了表示・再印刷ボタンはサーバーのCheckinComplete通知(SignalR)で切り替える
-                            btn.textContent = '処理中...';
-                        }
-                        else {
+                        if (!result?.success) {
                             btn.textContent = '失敗';
                             btn.disabled = false;
                         }

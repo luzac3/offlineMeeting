@@ -1,27 +1,49 @@
 const builder = require('electron-builder');
+const fs = require('fs/promises');
+const path = require('path');
 
-builder.build({
-    config: {
-        'appId': 'electorn-print',
-        'win':{
-            'target': {
-                'target': 'zip',
-                'arch': [
-                    'x64',
-                    'ia32',
-                ]
-            }
-        },
+async function build() {
+    const dist = path.join(__dirname, 'dist');
+    const release = path.join(__dirname, 'release');
+    await fs.rm(dist, { recursive: true, force: true });
+    const config = {
+        appId: 'electorn-print',
+        directories: { output: dist },
+        artifactName: 'offlineMeeting-${os}-${arch}.${ext}',
+        files: ['main.js', 'preload.js', 'appData/css/**/*', 'appData/lib/**/*'],
         extraFiles: [
-            {
-                from: "./appData/json/setting.json",
-                to: "./config/setting.json"
-            },
-            {
-                from: "./appData/menu.html",
-                to: "./config/menu.html"
-            }
+            { from: './appData/json/setting.json', to: './config/setting.json' },
+            { from: './appData/menu.html', to: './config/menu.html' }
         ],
-        'asar': true
+        asar: true
+    };
+
+    const artifacts = await builder.build({
+        projectDir: __dirname,
+        targets: builder.Platform.WINDOWS.createTarget(['zip'], builder.Arch.x64),
+        config: structuredClone(config)
+    });
+
+    artifacts.push(...await builder.build({
+        projectDir: __dirname,
+        targets: builder.Platform.LINUX.createTarget(['tar.gz'], builder.Arch.x64),
+        config: structuredClone(config)
+    }));
+
+    const archives = artifacts.filter(file => file.endsWith('.zip') || file.endsWith('.tar.gz'));
+    if (archives.length !== 2) {
+        throw new Error('Expected Windows ZIP and Linux tar.gz archives.');
     }
+    await fs.mkdir(release, { recursive: true });
+    for (const archive of archives) {
+        const destination = path.join(release, path.basename(archive));
+        await fs.copyFile(archive, destination);
+        console.log(`Output: ${destination}`);
+    }
+    await fs.rm(dist, { recursive: true, force: true });
+}
+
+build().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
 });
