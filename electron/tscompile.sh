@@ -11,7 +11,6 @@ case "${1:-}" in
 	;;
   Release)
 	npm run release
-	npx electron-forge import
 	npm run make
 	;;
   *)

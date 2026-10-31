@@ -1,3 +1,3 @@
-call cd ..\
-call npm run release
-call node build-win
+@echo off
+call "%~dp0..\build.bat"
+exit /b %ERRORLEVEL%

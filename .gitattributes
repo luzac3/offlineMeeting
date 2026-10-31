@@ -57,10 +57,5 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
-*.exe filter=lfs diff=lfs merge=lfs -text
-*.msi filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
-electron/dist/offlineMeeting-linux-x64/offlineMeeting-electron filter=lfs diff=lfs merge=lfs -text
-electron/dist/offlineMeeting-linux-x64/*.so filter=lfs diff=lfs merge=lfs -text
-*.pak filter=lfs diff=lfs merge=lfs -text
-*.bin filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
