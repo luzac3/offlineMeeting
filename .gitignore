@@ -370,3 +370,10 @@ offlineMeeting/wwwroot/json/*.local
 # Secret restore/backup helper scripts
 secrets-restore.bat
 secrets-backup.bat
+
+# Electron distribution archives
+/electron/dist/
+!/electron/release/
+/electron/release/*
+!/electron/release/*.zip
+!/electron/release/*.tar.gz

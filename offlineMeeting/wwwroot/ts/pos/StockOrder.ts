@@ -1,4 +1,4 @@
-import { SetEventListner } from "@root/share/SetEventListner"
+import { SetEventListener } from "@root/share/SetEventListener"
 import { LocalStrage } from "@root/share/LocalStrage"
 import { OrderEntity } from "./OrderEntity"
 
@@ -7,7 +7,7 @@ export class StockOrder {
         Array.from(document.getElementsByClassName("purchase_order")).forEach((element: Element) => {
             const htmlElement = <HTMLElement>element;
 
-            SetEventListner.setEvent(
+            SetEventListener.setEvent(
                 <HTMLElement>element,
                 "click",
                 ".order_button",
