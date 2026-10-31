@@ -7,6 +7,12 @@ export class Checkin {
             const btn = row.querySelector('.btn_checkin') as HTMLButtonElement;
             if (!btn) return;
 
+            // 既にチェックイン済みの場合はスキップ
+            if (btn.classList.contains('checked_in')) {
+                this.setReprintButton(row);
+                return;
+            }
+
             btn.addEventListener('click', async () => {
                 const id = row.dataset.id;
                 const userCd = row.dataset.usercd;
@@ -27,10 +33,7 @@ export class Checkin {
                         { Id: Number(id), UserCd: Number(userCd), UserName: userName, QrUrl: qrUrl }
                     ) as { success: boolean };
 
-                    if (result?.success) {
-                        btn.textContent = '✓ 完了';
-                        btn.classList.add('checked_in');
-                    } else {
+                    if (!result?.success) {
                         btn.textContent = '失敗';
                         btn.disabled = false;
                     }
@@ -39,6 +42,18 @@ export class Checkin {
                     btn.disabled = false;
                 }
             });
+        });
+    }
+
+    private setReprintButton = (row: HTMLElement) => {
+        const reprintBtn = row.querySelector('.btn_reprint') as HTMLButtonElement;
+        if (!reprintBtn) return;
+
+        reprintBtn.addEventListener('click', () => {
+            const userCd = reprintBtn.dataset.usercd;
+            if (userCd && window.electronAPI && window.electronAPI.printCheckinQr) {
+                window.electronAPI.printCheckinQr({ userCd });
+            }
         });
     }
 }

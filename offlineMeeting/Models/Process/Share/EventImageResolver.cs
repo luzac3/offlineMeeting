@@ -1,42 +1,38 @@
-using Microsoft.AspNetCore.Hosting;
+using SkiaSharp;
 
 namespace offlineMeeting.Models.Process.Share
 {
-    /// <summary>
-    /// イベント有効化時にDBのBase64画像をSessionIDフォルダへ展開し、
-    /// 以降はフォルダから画像を参照（URLパス）するためのヘルパー。
-    /// </summary>
     public static class EventImageResolver
     {
         private const string BaseFolder = "eventImages";
 
-        /// <summary>
-        /// SessionIDフォルダの物理パスを返す。
-        /// </summary>
+        // SessionIDフォルダの物理パスを返す。
         public static string GetSessionPhysicalPath(IWebHostEnvironment env, string sessionId)
         {
             return Path.Combine(env.WebRootPath, BaseFolder, sessionId);
         }
 
-        /// <summary>
-        /// 1枚の画像(Base64)をSessionIDフォルダに保存し、Web参照用のURLパスを返す。
-        /// </summary>
+        // WebP化により画像サイズを削減し、読み込みを高速化する。
         public static string SaveImage(IWebHostEnvironment env, string sessionId, long siteId, long resultId, int index, string base64)
         {
             string dir = Path.Combine(env.WebRootPath, BaseFolder, sessionId, siteId.ToString());
             Directory.CreateDirectory(dir);
 
-            string fileName = $"{resultId}_{index}.jpg";
+            string fileName = $"{resultId}_{index}.webp";
             string filePath = Path.Combine(dir, fileName);
 
-            File.WriteAllBytes(filePath, Convert.FromBase64String(base64));
+            using (SKBitmap bitmap = SKBitmap.Decode(Convert.FromBase64String(base64)))
+            using (SKImage image = SKImage.FromBitmap(bitmap))
+            using (SKData data = image.Encode(SKEncodedImageFormat.Webp, 75))
+            using (FileStream stream = File.OpenWrite(filePath))
+            {
+                data.SaveTo(stream);
+            }
 
             return BuildWebPath(sessionId, siteId, resultId, index);
         }
 
-        /// <summary>
-        /// SessionIDフォルダ内に該当画像が存在すればそのURLパスを返す。無ければ null。
-        /// </summary>
+        // SessionIDフォルダ内に該当画像が存在すればそのURLパスを返す。無ければ null。
         public static string? ResolveImageWebPath(IWebHostEnvironment env, string? sessionId, long siteId, long resultId, int index)
         {
             if (string.IsNullOrEmpty(sessionId))
@@ -44,15 +40,12 @@ namespace offlineMeeting.Models.Process.Share
                 return null;
             }
 
-            string fileName = $"{resultId}_{index}.jpg";
+            string fileName = $"{resultId}_{index}.webp";
             string filePath = Path.Combine(env.WebRootPath, BaseFolder, sessionId, siteId.ToString(), fileName);
 
             return File.Exists(filePath) ? BuildWebPath(sessionId, siteId, resultId, index) : null;
         }
 
-        /// <summary>
-        /// SessionIDフォルダごと削除する。
-        /// </summary>
         public static void DeleteSessionFolder(IWebHostEnvironment env, string sessionId)
         {
             if (string.IsNullOrEmpty(sessionId))
@@ -69,7 +62,7 @@ namespace offlineMeeting.Models.Process.Share
 
         private static string BuildWebPath(string sessionId, long siteId, long resultId, int index)
         {
-            return $"/{BaseFolder}/{sessionId}/{siteId}/{resultId}_{index}.jpg";
+            return $"/{BaseFolder}/{sessionId}/{siteId}/{resultId}_{index}.webp";
         }
     }
 }

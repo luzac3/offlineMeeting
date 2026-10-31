@@ -1,12 +1,13 @@
 {
   "name": "offlineMeeting-electron",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "build": "webpack --mode development",
     "watch": "webpack -w",
     "start": "webpack-dev-server --host=0.0.0.0 --hot --inline --progress --colors  --history-api-fallback",
     "release": "webpack --mode=production",
+    "make": "node build-win",
     "publish": "npm run release && dotnet publish -c Release"
   },
   "devDependencies": {

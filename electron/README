@@ -1,3 +1,22 @@
-パッケージ化する際は
-npx electron-forge import
-を行ってからnpm run makeを実行する
+Windows では tscompile.bat、Linux では tscompile.sh がビルド構成に応じて実行される。
+
+Windows で両OSの配布アーカイブを一括生成する場合:
+  electron フォルダで build.bat を実行する。
+  tscompileLinux.bat と appData/node.bat からも同じビルドを実行できる。
+  tscompile.bat Release も共通ビルドを実行する。
+
+出力先:
+  release/offlineMeeting-win-x64.zip
+  release/offlineMeeting-linux-x64.tar.gz
+
+Win32 (ia32) は生成しない。両アーカイブ生成成功後に dist フォルダを削除する。
+設定とメニューは展開後の実行ファイル横の config フォルダに格納される。
+Git LFS の対象は .zip と .tar.gz。既存Git履歴の書き換えは行わない。
+
+Windows の winCodeSign 展開でシンボリックリンク作成権限エラーが出る場合は、
+管理者権限のコマンドプロンプトから実行するか、Windows の開発者モードを有効にする。
+
+Linux経由で実行する場合
+実行権限を付与して起動する
+　chmod +x electron/dist/offlineMeeting-linux-x64/offlineMeeting-electron chrome-sandbox chrome_crashpad_handler
+   ./offlineMeeting-electron --no-sandbox
