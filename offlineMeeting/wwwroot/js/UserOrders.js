@@ -4034,6 +4034,7 @@ PrintOrder.RequestElectronPrint = (orderIds) => {
     const args = {
         resultIds: orderIds
     };
+    // Electron 経由でない場合は印刷要求を投げない（通常ブラウザでは何もしない）
     if (window.electronAPI && window.electronAPI.printReceipt) {
         // PC (Electron)
         window.electronAPI.printReceipt(args);

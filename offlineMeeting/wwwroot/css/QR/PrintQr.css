@@ -19,6 +19,22 @@ body {
     text-align: center;
 }
 
+/* QRサイズは固定(128x128)。描画完了前でもレイアウト高さが確定するよう枠を確保し、
+   印刷時のカット位置がブレないようにする。 */
+#print_qr_code {
+    width: 128px;
+    height: 128px;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+#print_qr_code img,
+#print_qr_code canvas,
+#print_qr_code table {
+    width: 128px;
+    height: 128px;
+}
+
 .print_user_name {
     font-size: 2em;
     margin-bottom: 0.5rem;
